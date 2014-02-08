@@ -16,9 +16,56 @@
 
 package ac.simons.biking2.persistence.entities;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * @author Michael J. Simons, 2014-02-08
  */
-public class User {
+@Entity
+@Table(name = "users")
+public class User implements Serializable {
+    private static final long serialVersionUID = 1572759385462830400L;
     
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    
+    @Column(name = "login", unique = true, length = 16, nullable = false)
+    @NotBlank
+    @Size(max = 16)
+    private String login;
+    
+    @Column(name = "password", length = 255, nullable = false)
+    @NotBlank
+    @Size(max = 255)
+    private String password;
+
+    public Integer getId() {
+	return id;
+    }
+
+    public String getLogin() {
+	return login;
+    }
+
+    public void setLogin(String login) {
+	this.login = login;
+    }
+
+    public String getPassword() {
+	return password;
+    }
+
+    public void setPassword(String password) {
+	this.password = password;
+    }    
 }
