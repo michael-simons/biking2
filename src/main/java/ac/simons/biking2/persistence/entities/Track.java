@@ -49,7 +49,7 @@ public class Track implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", unique = true, length = 512, nullable = false)
+    @Column(name = "name", length = 512, nullable = false)
     @NotBlank
     @Size(max = 512)
     private String name;
