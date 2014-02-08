@@ -13,13 +13,116 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.persistence.entities;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import static java.time.Instant.now;
+import java.util.Date;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
 /**
- *
  * @author Michael J. Simons, 2014-02-08
  */
-public class Location {
-    
+@Entity
+@Table(name = "locations")
+public class Location implements Serializable {
+
+    private static final long serialVersionUID = -9075950345524958606L;
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "latitude", precision = 18, scale = 15, nullable = false)
+    @NotNull
+    private BigDecimal latitude;
+
+    @Column(name = "longitude", precision = 18, scale = 15, nullable = false)
+    @NotNull
+    private BigDecimal longitude;
+
+    @Column(name = "description", length = 2048)
+    private String description;
+
+    @Column(name = "created_at", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
+    private Date createdAt;
+
+    @PrePersist
+    public void prePersist() {
+	if (this.createdAt == null) {
+	    this.createdAt = Date.from(now());
+	}
+    }
+
+    public Integer getId() {
+	return this.id;
+    }
+
+    public Date getCreatedAt() {
+	return this.createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+	this.createdAt = createdAt;
+    }
+
+    public BigDecimal getLatitude() {
+	return this.latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+	this.latitude = latitude;
+    }
+
+    public BigDecimal getLongitude() {
+	return this.longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+	this.longitude = longitude;
+    }
+
+    public String getDescription() {
+	return this.description;
+    }
+
+    public void setDescription(String description) {
+	this.description = description;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 41 * hash + Objects.hashCode(this.id);
+	return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final Location other = (Location) obj;
+	if (!Objects.equals(this.id, other.id)) {
+	    return false;
+	}
+	return true;
+    }
 }

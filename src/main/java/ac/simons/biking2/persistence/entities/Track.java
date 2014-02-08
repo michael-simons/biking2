@@ -38,7 +38,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity
 @Table(name = "tracks", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"when", "name"})
+    @UniqueConstraint(columnNames = {"covered_on", "name"})
 })
 public class Track implements Serializable {
 
@@ -54,12 +54,12 @@ public class Track implements Serializable {
     @Size(max = 512)
     private String name;
 
-    @Column(name = "when", nullable = false)
+    @Column(name = "covered_on", nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull
-    private Date when;
+    private Date coveredOn;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 2048)
     private String description;
 
     @Column(name = "minlat", precision = 18, scale = 15)
@@ -75,27 +75,27 @@ public class Track implements Serializable {
     private BigDecimal maxlon;
 
     public Integer getId() {
-	return id;
+	return this.id;
     }
 
     public String getName() {
-	return name;
+	return this.name;
     }
 
     public void setName(String name) {
 	this.name = name;
     }
 
-    public Date getWhen() {
-	return when;
+    public Date getCoveredOn() {
+	return this.coveredOn;
     }
 
-    public void setWhen(Date when) {
-	this.when = when;
+    public void setCoveredOn(Date coveredOn) {
+	this.coveredOn = coveredOn;
     }
 
     public String getDescription() {
-	return description;
+	return this.description;
     }
 
     public void setDescription(String description) {
@@ -103,7 +103,7 @@ public class Track implements Serializable {
     }
 
     public BigDecimal getMinlat() {
-	return minlat;
+	return this.minlat;
     }
 
     public void setMinlat(BigDecimal minlat) {
@@ -111,7 +111,7 @@ public class Track implements Serializable {
     }
 
     public BigDecimal getMinlon() {
-	return minlon;
+	return this.minlon;
     }
 
     public void setMinlon(BigDecimal minlon) {
@@ -119,7 +119,7 @@ public class Track implements Serializable {
     }
 
     public BigDecimal getMaxlat() {
-	return maxlat;
+	return this.maxlat;
     }
 
     public void setMaxlat(BigDecimal maxlat) {
@@ -127,7 +127,7 @@ public class Track implements Serializable {
     }
 
     public BigDecimal getMaxlon() {
-	return maxlon;
+	return this.maxlon;
     }
 
     public void setMaxlon(BigDecimal maxlon) {

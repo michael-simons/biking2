@@ -13,13 +13,84 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.persistence.entities;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
 /**
- *
  * @author Michael J. Simons, 2014-02-08
  */
-public class AssortedTrip {
-    
+@Entity
+@Table(name = "assorted_trips")
+public class AssortedTrip implements Serializable {
+
+    private static final long serialVersionUID = 3222189732938547117L;
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "covered_on", nullable = false)
+    @Temporal(TemporalType.DATE)
+    @NotNull
+    private Date coveredOn;
+
+    @Column(name = "distance", nullable = false, precision = 8, scale = 2)
+    @NotNull
+    private BigDecimal distance;
+
+    public Integer getId() {
+	return id;
+    }
+
+    public Date getCoveredOn() {
+	return coveredOn;
+    }
+
+    public void setCoveredOn(Date coveredOn) {
+	this.coveredOn = coveredOn;
+    }
+
+    public BigDecimal getDistance() {
+	return distance;
+    }
+
+    public void setDistance(BigDecimal distance) {
+	this.distance = distance;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 3;
+	hash = 79 * hash + Objects.hashCode(this.id);
+	return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final AssortedTrip other = (AssortedTrip) obj;
+	if (!Objects.equals(this.id, other.id)) {
+	    return false;
+	}
+	return true;
+    }
 }

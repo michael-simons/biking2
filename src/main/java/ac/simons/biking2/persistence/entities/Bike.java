@@ -16,14 +16,20 @@
 package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
-import java.time.Instant;
 import static java.time.Instant.now;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -54,8 +60,16 @@ public class Bike implements Serializable {
     @Column(name = "color", length = 6, nullable = false)
     @NotBlank
     @Size(max = 6)
-    private String color = "CCCCCC";
-
+    private String color = "CCCCCC";    
+    
+    @Column(name = "decommissioned_on")
+    @Temporal(TemporalType.DATE)    
+    private Date decommissionedOn;
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
+    @OrderBy("recordedOn asc")
+    private List<Milage> milages = new ArrayList<>();   
+    
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
@@ -67,4 +81,70 @@ public class Bike implements Serializable {
 	    this.createdAt = Date.from(now());
 	}
     }
+
+    public Integer getId() {
+	return this.id;
+    }
+    
+    public String getName() {
+	return this.name;
+    }
+
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public String getColor() {
+	return this.color;
+    }
+
+    public void setColor(String color) {
+	this.color = color;
+    }
+
+    public Date getDecommissionedOn() {
+	return this.decommissionedOn;
+    }
+
+    public void setDecommissionedOn(Date decommissionedOn) {
+	this.decommissionedOn = decommissionedOn;
+    }
+
+    public List<Milage> getMilages() {
+	return this.milages;
+    }
+
+    public void setMilages(List<Milage> milages) {
+	this.milages = milages;
+    }
+
+    public Date getCreatedAt() {
+	return this.createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+	this.createdAt = createdAt;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 17 * hash + Objects.hashCode(this.id);
+	return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final Bike other = (Bike) obj;
+	if (!Objects.equals(this.id, other.id)) {
+	    return false;
+	}
+	return true;
+    }   
 }
