@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-md-12">
+
+	<h2>Tracks</h2>
+
+	<div class="panel panel-default">
+	    <div class="panel-body">
+	    <form role="form" class="form-inline" >
+		<div class="form-group">
+		    <label class="sr-only" for="trackFilter">Filter</label>
+		    <input type="search" class="form-control" id="trackFilter" placeholder="Enter filter text" data-ng-model="trackFilter">
+		</div>  
+	    </form>
+	    </div>
+	</div>
+
+	<table class="table table-condensed table-bordered table-striped">
+	    <thead>
+		<tr>
+		    <th>Covered on</th>
+		    <th>Name</th>
+		    <th>Type</th>
+		    <th>GPX</th>
+		</tr>
+	    </thead>
+	    <tbody>
+		<tr ng-repeat="track in tracks| filter:trackFilter">
+		    <td>{{ track.coveredOn | date: 'dd.MM.yyyy' }}</td>
+		    <td><a data-ng-href="/tracks/{{track.id}}">{{ track.name }}</a></td>
+		    <td>{{ track.type }}</td>
+		    <td class="center"><a target="_self" href="/tracks/{{track.id}}.gpx">↓</a></td>
+		</tr>
+	    </tbody>
+	</table>
+    </div>
+</div>

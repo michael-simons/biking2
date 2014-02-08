@@ -1,0 +1,92 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+
+.anchor:before {
+  display: block;
+  content: "";
+  height: 40px;
+  margin: -40px 0 0; }
+
+.biking_picture img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+.left {
+    text-align: left; 
+}
+
+.right {
+    text-align: right;    
+}
+
+.center {
+    text-align: center;
+}
+
+#chart-current-year {
+    max-width: 640px;
+    height: 300px;
+    display: block;
+}
+
+#chart-history {
+    max-width: 640px;
+    height: 380px;
+    display: block;
+}
+
+.row0, .row0 td {
+    background-color: #ded7c9; 
+}
+
+tbody th.sum {
+    border-left: 1px solid black; 
+}
+
+tfoot th.sum {
+    border-top: 1px solid black;
+}
+
+table.trip_table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #cccccc;
+}
+
+table.track_table {
+    width: 100%;
+}
+
+th.period, td.period {
+    width: 85px; 
+}
+
+table.trip_table td, table.track_table td {
+    vertical-align: top;
+}
+
+#track-map {
+    width: 100%;
+    height: 480px;
+    border: 4px #fff solid;    
+    box-shadow: 0 0 5px -1px rgba(0, 0, 0, 1);
+}
+
+table.track_table a {
+    background: none !important;
+}
+
+.datepicker-popup table {
+    border-collapse: separate !important;
+    border-spacing: 5px !important;
+}
+
+.highcharts-tooltip table {
+    font-size: 12px;
+    min-width: 150px;
+    margin-bottom: 0px;
+}

@@ -1,0 +1,44 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">New milage</h4>
+</div>
+<div class="modal-body">    	
+    <form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
+	<div class="form-group" data-ng-show="badRequest">
+	    <div class="col-sm-offset-2 col-sm-10">      
+		<label class="text-danger">
+		    {{badRequest}}
+		</label>      
+	    </div>
+	</div>	
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputBike.$invalid,'has-success': theForm.inputBike.$valid}">
+	    <label for="inputBike" class="col-sm-2 control-label">Bike</label>
+	    <div class="col-sm-10">
+		<select id="inputBike" name="inputBike" class="form-control" data-ng-model="milage.bikeId" data-ng-required="true">
+		    <option data-ng-repeat="bike in bikes" value="{{ bike.id }}">{{ bike.name }}</option>		    
+		</select>		
+	    </div>
+	</div>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputDate.$invalid,'has-success': theForm.inputDate.$valid}">
+	    <label for="inputDate" class="col-sm-2 control-label">Date</label>
+	    <div class="col-sm-10">
+		<div class="input-group datepicker-popup">
+		    <input id="inputDate" name="inputDate" type="text" class="form-control" datepicker-popup="yyyy-MM-dd" data-ng-model="milage.recordedOn" data-is-open="recordedOnOptions.open" data-show-weeks="false" data-show-button-bar="false" data-min="recordedOnOptions.minimum" data-ng-required="true" />
+		    <span class="input-group-btn">
+			<button class="btn btn-default" ng-click="openRecordedOn($event);"><span class="glyphicon glyphicon-calendar"></span>&#xFEFF;</button>
+		    </span>
+		</div>
+	    </div>
+	</div>  	
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputMilage.$invalid,'has-success': theForm.inputMilage.$valid}">
+	    <label for="inputMilage" class="col-sm-2 control-label">Milage</label>
+	    <div class="col-sm-10">
+		<input id="inputMilage" name="inputMilage" type="number" class="form-control" data-ng-model="milage.amount" data-ng-required="true"/>
+	    </div>
+	</div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
+    <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid" data-ng-click="submit();">Save milage</button>
+</div>

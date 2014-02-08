@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core" 
+	  xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
+    <jsp:directive.page contentType="text/html; charset=utf-8"  pageEncoding="UTF-8" />	
+    <jsp:directive.page session="false" />	
+    <jsp:output omit-xml-declaration="true" />
+    <jsp:output doctype-root-element="html" doctype-system="about:legacy-compat" />
+
+    <html>
+	<head>
+	    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	    <meta content="Michael J. Simons" name="Author" />
+	    <title>biking.michael-simons.eu</title>
+
+	    <script type="text/javascript" src="/webjars/jquery/1.11.0/jquery.min.js"><jsp:text /></script>
+	    <script type="text/javascript" src="/webjars/openlayers/2.13.1/OpenLayers.js"><jsp:text /></script>
+	    <script type="text/javascript" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"><jsp:text /></script>	 
+
+	    <script src="/js/OpenLayersDeprecated.js"><jsp:text /></script>
+	    <script src="/js/embeddedTrack.js"><jsp:text /></script>
+	</head>
+	<body style="overflow: hidden; margin: 0px; padding: 0px;">	    
+	    <div id="map" 
+		 data-home-longitude="${home.longitude}"
+		 data-home-latitude="${home.latitude}"
+		 data-track-url="/tracks/${track.prettyId}.gpx"
+		 data-track-name="${track.name}"
+		 data-track-minlat="${track.minlat}"
+		 data-track-minlon="${track.minlon}"
+		 data-track-maxlat="${track.maxlat}"
+		 data-track-maxlon="${track.maxlon}"
+		 
+		 style="width:${width-2}px; height:${height-2}px border:1px solid black;"
+	    >
+		<jsp:text />
+	    </div>	    
+	</body>
+    </html>
+</jsp:root>

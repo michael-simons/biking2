@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">New bike</h4>
+</div>
+<div class="modal-body">    	
+    <form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
+	<div class="form-group" data-ng-show="badRequest">
+	    <div class="col-sm-offset-2 col-sm-10">      
+		<label class="text-danger">
+		    {{badRequest}}
+		</label>      
+	    </div>
+	</div>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputName.$invalid,'has-success': theForm.inputName.$valid}">
+	    <label for="inputName" class="col-sm-2 control-label">Name</label>
+	    <div class="col-sm-10">
+		<input id="inputName" name="inputName" type="text" class="form-control" data-ng-model="bike.name" data-ng-required="true"/>
+	    </div>
+	</div>	
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputBoughtOn.$invalid,'has-success': theForm.inputBoughtOn.$valid}">
+	    <label for="inputBoughtOn" class="col-sm-2 control-label">Date</label>
+	    <div class="col-sm-10">
+		<div class="input-group datepicker-popup">
+		    <input id="inputBoughtOn" name="inputBoughtOn" type="text" class="form-control" datepicker-popup="yyyy-MM-dd" data-ng-model="bike.boughtOn" data-is-open="boughtOnOptions.open" data-show-weeks="false" data-show-button-bar="false" data-min="boughtOnOptions.minimum" data-ng-required="true" />
+		    <span class="input-group-btn">
+			<button class="btn btn-default" data-ng-click="openBoughtOn($event);" type="button"><span class="glyphicon glyphicon-calendar"></span>&#xFEFF;</button>
+		    </span>
+		</div>
+	    </div>
+	</div>  
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputColor.$invalid,'has-success': theForm.inputColor.$valid}">
+	    <label for="inputName" class="col-sm-2 control-label">Color</label>
+	    <div class="col-sm-10">
+		<input id="inputColor" name="inputColor" type="text" class="form-control" data-ng-model="bike.color" data-ng-required="true" data-ng-maxlength="6"/>
+	    </div>
+	</div>	
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
+    <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid" data-ng-click="submit();">Save bike</button>
+</div>
