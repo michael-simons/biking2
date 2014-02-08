@@ -35,7 +35,7 @@ public class DataSourceConfig {
 	final JdbcDataSource rv = new JdbcDataSource();
 
 	final String defaultDatabaseFile = new File(System.getProperty("user.dir"), String.format("biking-%s", environment.acceptsProfiles("dev") ? "dev" : "prod")).getAbsolutePath();
-	rv.setUrl(String.format("jdbc:h2:file:%s", environment.getProperty("biking.database-file", defaultDatabaseFile)));
+	rv.setUrl(String.format("jdbc:h2:file:%s;FILE_LOCK=FS", environment.getProperty("biking.database-file", defaultDatabaseFile)));
 	rv.setUser("biking2");
 	rv.setPassword("biking2");
 
