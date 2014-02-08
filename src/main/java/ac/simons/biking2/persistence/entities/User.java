@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,18 +32,19 @@ import org.hibernate.validator.constraints.NotBlank;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
+
     private static final long serialVersionUID = 1572759385462830400L;
-    
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     @Column(name = "login", unique = true, length = 16, nullable = false)
     @NotBlank
     @Size(max = 16)
     private String login;
-    
+
     @Column(name = "password", length = 255, nullable = false)
     @NotBlank
     @Size(max = 255)
@@ -67,5 +68,27 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
 	this.password = password;
-    }    
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 29 * hash + Objects.hashCode(this.id);
+	return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final User other = (User) obj;
+	if (!Objects.equals(this.id, other.id)) {
+	    return false;
+	}
+	return true;
+    }
 }
