@@ -17,8 +17,7 @@
 package ac.simons.biking2.persistence.entities;
 
 /**
- *
- * @author Michael J. Simons
+ * @author Michael J. Simons, 2014-02-08
  */
 public class User {
     
