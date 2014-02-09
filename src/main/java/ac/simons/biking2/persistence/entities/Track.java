@@ -150,6 +150,10 @@ public class Track implements Serializable {
         this.type = type;
     }
     
+    public String getPrettyId() {
+        return Integer.toString(this.id, 36);
+    }
+    
     @Override
     public int hashCode() {
 	int hash = 5;
