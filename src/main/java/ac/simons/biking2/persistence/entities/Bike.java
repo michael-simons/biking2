@@ -17,10 +17,14 @@ package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
 import static java.time.Instant.now;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import static java.util.stream.Collectors.toList;
+import java.util.stream.IntStream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,6 +50,46 @@ import org.hibernate.validator.constraints.NotBlank;
 public class Bike implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
+    
+    public static class BikingPeriod {
+	public final LocalDate start;
+	public final Integer milage;
+
+	public BikingPeriod(LocalDate start, Integer milage) {
+	    this.start = start;
+	    this.milage = milage;
+	}
+	
+	public BikingPeriod(Date start, Integer milage) {
+	    this(start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), milage);
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = 7;
+	    hash = 79 * hash + Objects.hashCode(this.start);
+	    hash = 79 * hash + Objects.hashCode(this.milage);
+	    return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final BikingPeriod other = (BikingPeriod) obj;
+	    if (!Objects.equals(this.start, other.start)) {
+		return false;
+	    }
+	    if (!Objects.equals(this.milage, other.milage)) {
+		return false;
+	    }
+	    return true;
+	}
+    }
 
     @Id
     @Column(name = "id")
@@ -74,6 +118,9 @@ public class Bike implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Date createdAt;
+    
+    /** Contains all monthly periods that bike has been used */
+    private transient List<BikingPeriod> periods;
 
     @PrePersist
     public void prePersist() {
@@ -124,6 +171,17 @@ public class Bike implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
 	this.createdAt = createdAt;
+    }
+    
+    public List<BikingPeriod> getPeriods() {
+	if(this.periods == null) {	    
+	    this.periods = (this.milages == null || milages.size() == 1) ? new ArrayList<>() : IntStream.range(1, milages.size())
+		.mapToObj(i -> {
+		    final Milage left = milages.get(i-1);			
+		    return new BikingPeriod(left.getRecordedAt(), milages.get(i).getAmount().subtract(left.getAmount()).intValue());
+		}).collect(toList());
+	}
+	return this.periods;
     }
 
     @Override
