@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.IntStream;
+import static java.util.stream.IntStream.range;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -175,13 +175,17 @@ public class Bike implements Serializable {
     
     public List<BikingPeriod> getPeriods() {
 	if(this.periods == null) {	    
-	    this.periods = (this.milages == null || milages.size() == 1) ? new ArrayList<>() : IntStream.range(1, milages.size())
+	    this.periods = (this.milages == null || milages.size() == 1) ? new ArrayList<>() : range(1, milages.size())
 		.mapToObj(i -> {
 		    final Milage left = milages.get(i-1);			
 		    return new BikingPeriod(left.getRecordedAt(), milages.get(i).getAmount().subtract(left.getAmount()).intValue());
 		}).collect(toList());
 	}
 	return this.periods;
+    }
+    
+    public Integer getMilage() {
+	return this.getPeriods().parallelStream().mapToInt(period -> period.milage).sum();
     }
 
     @Override

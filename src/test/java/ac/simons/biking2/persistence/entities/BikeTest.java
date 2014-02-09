@@ -45,7 +45,7 @@ public class BikeTest {
      */
     @Test
     public void testGetPeriods() {
-	System.out.println("getPeriods");
+	
 	Bike instance = new Bike();	
 	List<Bike.BikingPeriod> expResult = new ArrayList<>();
 	List<Bike.BikingPeriod> result = instance.getPeriods();
@@ -77,5 +77,25 @@ public class BikeTest {
 	);
 	result = instance.getPeriods();
 	assertEquals(expResult, result);	
+    }
+    
+    public void testGetMilage() {	
+	Bike instance = new Bike();	
+	Milage m = new Milage(instance);
+	m.setRecordedAt(Date.from(LocalDate.of(2014, 1, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+	m.setAmount(BigDecimal.valueOf(0));
+	instance.getMilages().add(m);
+	
+	m = new Milage(instance);
+	m.setRecordedAt(Date.from(LocalDate.of(2014, 2, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+	m.setAmount(BigDecimal.valueOf(20));
+	instance.getMilages().add(m);
+	
+	m = new Milage(instance);
+	m.setRecordedAt(Date.from(LocalDate.of(2014, 3, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+	m.setAmount(BigDecimal.valueOf(50));
+	instance.getMilages().add(m);
+	
+	assertEquals(new Integer(50), instance.getMilage());
     }
 }
