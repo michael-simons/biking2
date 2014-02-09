@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,6 +46,8 @@ public class Track implements Serializable {
 
     private static final long serialVersionUID = 7630613853916630933L;
 
+    public static enum Type {biking, running}
+    
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,6 +78,10 @@ public class Track implements Serializable {
     @Column(name = "maxlon", precision = 18, scale = 15)
     private BigDecimal maxlon;
 
+    @Column(name="tyüe")
+    @Enumerated(EnumType.STRING)
+    private Type type = Type.biking;
+    
     public Integer getId() {
 	return this.id;
     }
@@ -134,6 +142,14 @@ public class Track implements Serializable {
 	this.maxlon = maxlon;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+    
     @Override
     public int hashCode() {
 	int hash = 5;
