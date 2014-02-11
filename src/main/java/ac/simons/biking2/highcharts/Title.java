@@ -16,9 +16,11 @@
 package ac.simons.biking2.highcharts;
 
 import ac.simons.biking2.misc.Sink;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
@@ -55,7 +57,8 @@ public class Title {
      */
     private final String text;
 
-    public Title(String text) {
+    @JsonCreator
+    public Title(@JsonProperty("text") String text) {
 	this.text = text;
     }
 

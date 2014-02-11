@@ -16,8 +16,10 @@
 package ac.simons.biking2.highcharts;
 
 import ac.simons.biking2.misc.Sink;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
@@ -61,7 +63,11 @@ public class Chart {
 
     private final String type;
 
-    public Chart(Integer borderWidth, String type) {
+    @JsonCreator
+    public Chart(
+	    @JsonProperty("borderWidth") Integer borderWidth, 
+	    @JsonProperty("type") String type
+    ) {
 	this.borderWidth = borderWidth;
 	this.type = type;
     }
