@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Chart {
 
-    public static class Builder<PB> {
+    static class Builder<PB> {
 
 	private final Sink<PB, Chart> sink;
 
