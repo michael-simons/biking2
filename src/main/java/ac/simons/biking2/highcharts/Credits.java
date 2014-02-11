@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Credits {
 
-    static class Builder<PB> {
+    public static class Builder<PB> {
 
 	private final Sink<PB, Credits> sink;
 

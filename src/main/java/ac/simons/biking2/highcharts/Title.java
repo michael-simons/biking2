@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Title {
 
-    static class Builder<PB> {
+    public static class Builder<PB> {
 
 	private final Sink<PB, Title> sink;
 

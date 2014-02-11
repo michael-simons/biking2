@@ -32,7 +32,7 @@ import java.util.Collection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Axis {
 
-    static class Builder<PB> {
+    public static class Builder<PB> {
 	private final Sink<PB, Axis> sink;
 	
 	private Collection<String> categories;
