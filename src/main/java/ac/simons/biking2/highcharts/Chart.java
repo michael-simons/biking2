@@ -38,7 +38,7 @@ public class Chart {
 
 	private String type;
 
-	public Builder(final Sink<PB, Chart> sink) {
+	Builder(final Sink<PB, Chart> sink) {
 	    this.sink = sink;
 	}
 
@@ -64,7 +64,7 @@ public class Chart {
     private final String type;
 
     @JsonCreator
-    public Chart(
+    Chart(
 	    @JsonProperty("borderWidth") Integer borderWidth, 
 	    @JsonProperty("type") String type
     ) {

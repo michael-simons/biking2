@@ -37,7 +37,7 @@ public class Title {
 
 	private String text;
 
-	public Builder(Sink<PB, Title> sink) {
+	Builder(Sink<PB, Title> sink) {
 	    this.sink = sink;
 	}
 
@@ -58,7 +58,7 @@ public class Title {
     private final String text;
 
     @JsonCreator
-    public Title(@JsonProperty("text") String text) {
+    Title(@JsonProperty("text") String text) {
 	this.text = text;
     }
 
