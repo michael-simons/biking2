@@ -28,17 +28,12 @@ public class TitleTest {
 
     @Test
     public void testBuilder() {
-	new Title.Builder<>(title -> {
-	    assertThat(title.getText(), is(nullValue()));
-	    return TitleTest.this;
-	})
-	.build();
+	Title title = new Title.Builder<>(object -> object).build();
+	assertThat(title.getText(), is(nullValue()));
 
-	new Title.Builder<>(title -> {
-	    assertThat(title.getText(), is(equalTo("test 123")));
-	    return TitleTest.this;
-	})
-		.withText("test 123")
+	title = new Title.Builder<>(object -> object)
+	    .withText("test 123")
 	.build();
+	assertThat(title.getText(), is(equalTo("test 123")));
     }
 }

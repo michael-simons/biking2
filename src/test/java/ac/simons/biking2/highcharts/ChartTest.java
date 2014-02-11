@@ -28,20 +28,16 @@ public class ChartTest {
 
     @Test
     public void testBuilder() {
-	new Chart.Builder<>(chart -> {
-	    assertThat(chart.getBorderWidth(), is(nullValue()));
-	    assertThat(chart.getType(), is(nullValue()));
-	    return ChartTest.this;
-	})
+	Chart chart = new Chart.Builder<>(object -> object).build();
+	assertThat(chart.getBorderWidth(), is(nullValue()));
+	assertThat(chart.getType(), is(nullValue()));
+	
+	chart = new Chart.Builder<>(object -> object)
+	    .withBorderWidth(1)
+	    .withType("line")
 	.build();
-
-	new Chart.Builder<>(chart -> {
-	    assertThat(chart.getBorderWidth(), is(equalTo(1)));
-	    assertThat(chart.getType(), is(equalTo("line")));
-	    return ChartTest.this;
-	})
-		.withBorderWidth(1)
-		.withType("line")
-	.build();
+	
+	assertThat(chart.getBorderWidth(), is(equalTo(1)));
+	assertThat(chart.getType(), is(equalTo("line")));
     }
 }
