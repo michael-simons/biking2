@@ -40,12 +40,12 @@ public class Chart {
 	    this.sink = sink;
 	}
 
-	public Builder withBorderWidth(final Integer borderWidth) {
+	public Builder<PB> withBorderWidth(final Integer borderWidth) {
 	    this.borderWidth = borderWidth;
 	    return this;
 	}
 
-	public Builder withType(final String type) {
+	public Builder<PB> withType(final String type) {
 	    this.type = type;
 	    return this;
 	}
