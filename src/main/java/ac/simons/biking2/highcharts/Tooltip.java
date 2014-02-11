@@ -16,8 +16,10 @@
 package ac.simons.biking2.highcharts;
 
 import ac.simons.biking2.misc.Sink;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
@@ -120,7 +122,14 @@ public class Tooltip {
      */
     private final Boolean useHTML;
 
-    public Tooltip(String footerFormat, String headerFormat, String pointFormat, Boolean shared, Boolean useHTML) {
+    @JsonCreator
+    Tooltip(
+	    @JsonProperty("footerFormat") String footerFormat, 
+	    @JsonProperty("headerFormat") String headerFormat, 
+	    @JsonProperty("pointFormat") String pointFormat, 
+	    @JsonProperty("shared") Boolean shared, 
+	    @JsonProperty("useHTML") Boolean useHTML
+    ) {
 	this.footerFormat = footerFormat;
 	this.headerFormat = headerFormat;
 	this.pointFormat = pointFormat;
