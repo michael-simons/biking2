@@ -42,14 +42,14 @@ public class PlotOptions {
 	    this.sink = sink;
 	}
 
-	public Column.Builder<PlotOptions.Builder<PB>> column() {
+	public Column.Builder<Builder<PB>> column() {
 	    return new Column.Builder<>(column -> {
 		Builder.this.column = column;
 		return Builder.this;
 	    });
 	}
 
-	public SeriesOptions.Builder<PlotOptions.Builder<PB>> series() {
+	public SeriesOptions.Builder<Builder<PB>> series() {
 	    return new SeriesOptions.Builder<>(series -> {
 		Builder.this.series = series;
 		return Builder.this;

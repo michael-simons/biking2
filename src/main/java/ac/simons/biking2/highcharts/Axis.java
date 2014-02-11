@@ -81,7 +81,7 @@ public class Axis {
 	    return this;
 	}
 	
-	public Title.Builder<Axis.Builder<PB>> title() {
+	public Title.Builder<Builder<PB>> title() {
 	    return new Title.Builder<>(title -> {
 		Builder.this.title = title;
 		return Builder.this;
