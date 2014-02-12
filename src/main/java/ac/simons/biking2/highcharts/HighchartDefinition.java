@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -53,6 +54,10 @@ public class HighchartDefinition {
 
 	Builder(Sink<HighchartDefinition, HighchartDefinition> sink) {
 	    this.sink = sink;
+	}
+	
+	public Number computeCurrentMaxYValue() {	    
+	    return series.stream().flatMap(series -> series.getData().stream()).max((a,b) -> Double.compare(a.doubleValue(), b.doubleValue())).get();
 	}
 	
 	public Chart.Builder<Builder> chart() {

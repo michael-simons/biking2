@@ -31,7 +31,7 @@ public class HighchartDefinitionTest {
 
     @Test
     public void testBuilder() {
-	HighchartDefinition definition = HighchartDefinition.define()
+	HighchartDefinition.Builder builder = HighchartDefinition.define()
 		.chart()
 		    .withBorderWidth(1)
 		    .build()
@@ -74,8 +74,11 @@ public class HighchartDefinitionTest {
 		    .build()
 		.series()
 		    .withData(3, 4)
-		    .build()
-		.build();
+		    .build();
+	
+	assertThat(builder.computeCurrentMaxYValue(), is(equalTo(4)));
+	
+	final HighchartDefinition definition = builder.build();		
 		
 	assertThat(definition.getChart().getBorderWidth(), is(equalTo(1)));
 	assertThat(definition.getCredits().isEnabled(), is(false));
@@ -97,6 +100,6 @@ public class HighchartDefinitionTest {
 	assertThat(definition.getSeries().size(), is(equalTo(2)));
 	final List<Series> hlp = new ArrayList<>(definition.getSeries());
 	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(1, 2))));
-	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3, 4))));
+	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3, 4))));	
     }
 }
