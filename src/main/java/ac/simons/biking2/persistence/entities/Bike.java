@@ -199,7 +199,7 @@ public class Bike implements Serializable {
      *
      * @return
      */
-    public Integer getMilage() {
+    public int getMilage() {
 	return this.getPeriods().values().parallelStream().collect(reducing(Integer::sum)).get();
     }
 
@@ -209,13 +209,13 @@ public class Bike implements Serializable {
      * @param period
      * @return
      */
-    public Integer getMilageInPeriod(final LocalDate period) {
+    public int getMilageInPeriod(final LocalDate period) {
 	return Optional.ofNullable(this.getPeriods().get(period)).orElse(0);
     }
     
-    public Integer[] getMilagesInYear(int year) {	
+    public int[] getMilagesInYear(int year) {	
 	final LocalDate january1st = LocalDate.of(year, Month.JANUARY, 1);
-	return rangeClosed(0, 12).boxed().map(i -> getMilageInPeriod(january1st.plusMonths(i))).limit(12).toArray(size -> new Integer[size]);
+	return rangeClosed(0, 12).map(i -> getMilageInPeriod(january1st.plusMonths(i))).limit(12).toArray();
     }
 
     @Override

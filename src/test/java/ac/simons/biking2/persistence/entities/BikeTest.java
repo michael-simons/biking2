@@ -66,7 +66,7 @@ public class BikeTest {
 
     @Test
     public void testGetMilage() {	
-	assertEquals(new Integer(50), defaultTestBike.getMilage());
+	assertEquals(50, defaultTestBike.getMilage());
     }
     
     @Test

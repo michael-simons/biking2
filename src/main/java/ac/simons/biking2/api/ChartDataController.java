@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import static java.util.stream.IntStream.generate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -46,8 +47,8 @@ public class ChartDataController {
 
 	final HighchartDefinition.Builder builder = HighchartDefinition.define();
 	
-	final Integer[] sums = bikes.stream().sequential().map(bike -> {
-	    final Integer[] milagesInYear = bike.getMilagesInYear(january1st.getYear());
+	final int[] sums = bikes.stream().sequential().map(bike -> {
+	    final int[] milagesInYear = bike.getMilagesInYear(january1st.getYear());
 	    builder.series()
 		    .withName(bike.getName())
 		    .withType("column")
@@ -55,12 +56,12 @@ public class ChartDataController {
 		    .build();
 	    return milagesInYear;
 	}).reduce((a, b) -> {
-	    Integer[] result = Arrays.copyOf(a, a.length);
+	    int[] result = Arrays.copyOf(a, a.length);
 	    for (int i = 0; i < result.length; ++i) {
 		result[i] += b[i];
 	    }
 	    return result;
-	}).get();
+	}).orElse(generate(() -> 0).limit(12).toArray());
 	
 	builder.series()
 		.withName("Sum")

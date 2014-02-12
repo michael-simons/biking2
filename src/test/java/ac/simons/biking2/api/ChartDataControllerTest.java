@@ -19,18 +19,17 @@ package ac.simons.biking2.api;
 import ac.simons.biking2.highcharts.HighchartDefinition;
 import ac.simons.biking2.highcharts.Series;
 import ac.simons.biking2.persistence.entities.Bike;
-import ac.simons.biking2.persistence.entities.Milage;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.generate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -45,7 +44,7 @@ import static org.mockito.Mockito.stub;
 public class ChartDataControllerTest {
    
     @Test
-    public void testGetCurrentData() {
+    public void testGetCurrentDataDataAvailable() {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	
 	final Map<String, Integer[]> testData = new TreeMap<>();
@@ -83,4 +82,19 @@ public class ChartDataControllerTest {
 	assertThat(hlp.get(3).getName(), is(equalTo("Sum")));
 	assertThat(hlp.get(3).getData(), is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 30, 10, 10, 30))));
     }    
+    
+    @Test
+    public void testGetCurrentDataNoData() {
+	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
+	
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	stub(bikeRepository.findActive(Date.from(january1st.atStartOfDay(ZoneId.systemDefault()).toInstant()))).toReturn(new ArrayList<>());
+		
+        final ChartDataController controller = new ChartDataController(bikeRepository);
+        final HighchartDefinition highchartDefinition = controller.getCurrentData();	
+	
+	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
+	assertThat(hlp.get(0).getName(), is(equalTo("Sum")));
+	assertThat(hlp.get(0).getData(), is(equalTo(generate(() -> 0).limit(12).collect(ArrayList::new, ArrayList::add, ArrayList::addAll))));
+    }
 }
