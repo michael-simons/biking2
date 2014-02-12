@@ -15,14 +15,13 @@
  */
 package ac.simons.biking2.persistence.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
@@ -30,6 +29,20 @@ import org.junit.Test;
  * @author Michael J. Simons
  */
 public class BikeTest {
+    private final Bike defaultTestBike;
+    
+    public BikeTest() {
+	this.defaultTestBike = new Bike();
+
+	Milage m = new Milage(this.defaultTestBike, LocalDate.of(2014, 1, 1), 0);
+	this.defaultTestBike.getMilages().add(m);
+
+	m = new Milage(this.defaultTestBike, LocalDate.of(2014, 2, 1), 20);
+	this.defaultTestBike.getMilages().add(m);
+
+	m = new Milage(this.defaultTestBike, LocalDate.of(2014, 3, 1), 50);
+	this.defaultTestBike.getMilages().add(m);
+    }
 
     /**
      * Test of getPeriods method, of class Bike.
@@ -65,18 +78,15 @@ public class BikeTest {
     }
 
     @Test
-    public void testGetMilage() {
-	Bike instance = new Bike();
-
-	Milage m = new Milage(instance, LocalDate.of(2014, 1, 1), 0);
-	instance.getMilages().add(m);
-
-	m = new Milage(instance, LocalDate.of(2014, 2, 1), 20);
-	instance.getMilages().add(m);
-
-	m = new Milage(instance, LocalDate.of(2014, 3, 1), 50);
-	instance.getMilages().add(m);
-
-	assertEquals(new Integer(50), instance.getMilage());
+    public void testGetMilage() {	
+	assertEquals(new Integer(50), defaultTestBike.getMilage());
+    }
+    
+    @Test
+    public void testGetMilagesInYear() {
+	assertThat(
+		new Integer[]{20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+		is(equalTo(defaultTestBike.getMilagesInYear(2014)))
+	);	
     }
 }

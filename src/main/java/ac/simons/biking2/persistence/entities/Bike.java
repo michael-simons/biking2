@@ -18,6 +18,7 @@ package ac.simons.biking2.persistence.entities;
 import java.io.Serializable;
 import static java.time.Instant.now;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +31,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.reducing;
 import java.util.stream.IntStream;
+import static java.util.stream.IntStream.rangeClosed;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -197,6 +199,10 @@ public class Bike implements Serializable {
      */
     public Integer getMilageInPeriod(final LocalDate period) {
 	return Optional.ofNullable(this.getPeriods().get(period)).orElse(0);
+    }
+    
+    public Integer[] getMilagesInYear(int year) {		
+	return rangeClosed(1, 12).boxed().map(i -> getMilageInPeriod(LocalDate.of(year, i, 1))).toArray(size -> new Integer[size]);
     }
 
     @Override
