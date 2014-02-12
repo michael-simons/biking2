@@ -46,8 +46,11 @@ public class Track implements Serializable {
 
     private static final long serialVersionUID = 7630613853916630933L;
 
-    public static enum Type {biking, running}
-    
+    public static enum Type {
+
+	biking, running
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,10 +81,10 @@ public class Track implements Serializable {
     @Column(name = "maxlon", precision = 18, scale = 15)
     private BigDecimal maxlon;
 
-    @Column(name="tyüe")
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private Type type = Type.biking;
-    
+
     public Integer getId() {
 	return this.id;
     }
@@ -143,17 +146,17 @@ public class Track implements Serializable {
     }
 
     public Type getType() {
-        return type;
+	return type;
     }
 
     public void setType(Type type) {
-        this.type = type;
+	this.type = type;
     }
-    
+
     public String getPrettyId() {
-        return Integer.toString(this.id, 36);
+	return Integer.toString(this.id, 36);
     }
-    
+
     @Override
     public int hashCode() {
 	int hash = 5;
@@ -170,9 +173,6 @@ public class Track implements Serializable {
 	    return false;
 	}
 	final Track other = (Track) obj;
-	if (!Objects.equals(this.id, other.id)) {
-	    return false;
-	}
-	return true;
+	return Objects.equals(this.id, other.id);
     }
 }
