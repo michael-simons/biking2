@@ -20,16 +20,10 @@ import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.function.BinaryOperator;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 
 /**
  * @author Michael J. Simons, 2014-02-09
