@@ -40,16 +40,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 @EnableJpaRepositories(basePackages = "ac.simons.biking2.persistence.repositories")
 public class PersistenceConfig {
+
     @Bean
     public JpaVendorAdapter jpaVendorAdapter(final Environment environment) {
 	final HibernateJpaVendorAdapter rv = new HibernateJpaVendorAdapter();
 
-	boolean isDev = environment.acceptsProfiles("!prod");
-
 	rv.setDatabase(Database.H2);
 	rv.setDatabasePlatform(H2Dialect.class.getName());
-	rv.setGenerateDdl(isDev);
-	rv.setShowSql(isDev);
+	rv.setGenerateDdl(environment.acceptsProfiles("dev"));
+	rv.setShowSql(environment.acceptsProfiles("dev", "test"));
 
 	return rv;
     }
