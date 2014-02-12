@@ -32,6 +32,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
@@ -47,11 +49,22 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity
 @Table(name = "bikes")
+@NamedQueries({
+    @NamedQuery(
+	    name = "Bike.findActive",
+	    query
+	    = "Select b from Bike b "
+	    + " where b.decommissionedOn is null "
+	    + "    or b.decommissionedOn >= :cutoffDate "
+	    + " order by b.name asc "
+    )
+})
 public class Bike implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
-    
+
     public static class BikingPeriod {
+
 	public final LocalDate start;
 	public final Integer milage;
 
@@ -59,7 +72,7 @@ public class Bike implements Serializable {
 	    this.start = start;
 	    this.milage = milage;
 	}
-	
+
 	public BikingPeriod(Date start, Integer milage) {
 	    this(start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), milage);
 	}
@@ -104,22 +117,24 @@ public class Bike implements Serializable {
     @Column(name = "color", length = 6, nullable = false)
     @NotBlank
     @Size(max = 6)
-    private String color = "CCCCCC";    
-    
+    private String color = "CCCCCC";
+
     @Column(name = "decommissioned_on")
-    @Temporal(TemporalType.DATE)    
+    @Temporal(TemporalType.DATE)
     private Date decommissionedOn;
-    
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
-    private List<Milage> milages = new ArrayList<>();   
-    
+    private List<Milage> milages = new ArrayList<>();
+
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Date createdAt;
-    
-    /** Contains all monthly periods that bike has been used */
+
+    /**
+     * Contains all monthly periods that bike has been used
+     */
     private transient List<BikingPeriod> periods;
 
     @PrePersist
@@ -132,7 +147,7 @@ public class Bike implements Serializable {
     public Integer getId() {
 	return this.id;
     }
-    
+
     public String getName() {
 	return this.name;
     }
@@ -172,18 +187,18 @@ public class Bike implements Serializable {
     public void setCreatedAt(Date createdAt) {
 	this.createdAt = createdAt;
     }
-    
+
     public List<BikingPeriod> getPeriods() {
-	if(this.periods == null) {	    
+	if (this.periods == null) {
 	    this.periods = (this.milages == null || milages.size() == 1) ? new ArrayList<>() : range(1, milages.size())
-		.mapToObj(i -> {
-		    final Milage left = milages.get(i-1);			
-		    return new BikingPeriod(left.getRecordedAt(), milages.get(i).getAmount().subtract(left.getAmount()).intValue());
-		}).collect(toList());
+		    .mapToObj(i -> {
+			final Milage left = milages.get(i - 1);
+			return new BikingPeriod(left.getRecordedAt(), milages.get(i).getAmount().subtract(left.getAmount()).intValue());
+		    }).collect(toList());
 	}
 	return this.periods;
     }
-    
+
     public Integer getMilage() {
 	return this.getPeriods().parallelStream().mapToInt(period -> period.milage).sum();
     }
@@ -204,9 +219,6 @@ public class Bike implements Serializable {
 	    return false;
 	}
 	final Bike other = (Bike) obj;
-	if (!Objects.equals(this.id, other.id)) {
-	    return false;
-	}
-	return true;
-    }   
+	return Objects.equals(this.id, other.id);
+    }
 }
