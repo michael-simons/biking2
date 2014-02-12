@@ -87,14 +87,14 @@ public class Milage implements Serializable, Comparable<Milage> {
 	return id;
     }
 
-    public Date getRecordedAt() {
+    public Date getRecordedOn() {
 	return recordedOn;
     }
 
-    public void setRecordedAt(Date recordedAt) {
-	this.recordedOn = recordedAt;
+    public void setRecordedOn(Date recordedOn) {
+	this.recordedOn = recordedOn;
     }
-
+    
     public BigDecimal getAmount() {
 	return amount;
     }

@@ -186,7 +186,7 @@ public class Bike implements Serializable {
 	    this.periods = (this.milages == null || milages.size() == 1) ? new ArrayList<>() : range(1, milages.size())
 		    .mapToObj(i -> {
 			final Milage left = milages.get(i - 1);
-			return new BikingPeriod(left.getRecordedAt(), milages.get(i).getAmount().subtract(left.getAmount()).intValue());
+			return new BikingPeriod(left.getRecordedOn(), milages.get(i).getAmount().subtract(left.getAmount()).intValue());
 		    }).collect(toList());
 	}
 	return this.periods;
