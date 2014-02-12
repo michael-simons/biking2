@@ -63,7 +63,7 @@ public class HighchartDefinition {
 	 * @return 
 	 */
 	public Number computeCurrentMaxYValue() {	    
-	    return series.stream().flatMap(series -> series.getData().stream()).max((a,b) -> Double.compare(a.doubleValue(), b.doubleValue())).get();
+	    return series.stream().flatMap(series -> series.getData().stream()).max((a,b) -> Double.compare(a.doubleValue(), b.doubleValue())).orElse(0);
 	}
 	
 	public Chart.Builder<Builder> chart() {
