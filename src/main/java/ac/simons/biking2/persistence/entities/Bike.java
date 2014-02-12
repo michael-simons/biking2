@@ -79,9 +79,8 @@ public class Bike implements Serializable {
 
 	@Override
 	public int hashCode() {
-	    int hash = 7;
-	    hash = 79 * hash + Objects.hashCode(this.start);
-	    hash = 79 * hash + Objects.hashCode(this.milage);
+	    int hash = 5;
+	    hash = 97 * hash + Objects.hashCode(this.start);
 	    return hash;
 	}
 
@@ -94,14 +93,8 @@ public class Bike implements Serializable {
 		return false;
 	    }
 	    final BikingPeriod other = (BikingPeriod) obj;
-	    if (!Objects.equals(this.start, other.start)) {
-		return false;
-	    }
-	    if (!Objects.equals(this.milage, other.milage)) {
-		return false;
-	    }
-	    return true;
-	}
+	    return Objects.equals(this.start, other.start);
+	}	
     }
 
     @Id
