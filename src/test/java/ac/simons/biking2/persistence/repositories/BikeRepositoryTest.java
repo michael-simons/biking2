@@ -33,6 +33,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
+ * This is an integration test of the generated JpaRepositry implementation
  * @author msimons, 2014-02-12
  */
 @RunWith(SpringJUnit4ClassRunner.class)
