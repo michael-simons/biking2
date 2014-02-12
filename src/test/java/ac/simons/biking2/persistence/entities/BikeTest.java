@@ -41,7 +41,7 @@ public class BikeTest {
 	this.defaultTestBike.getMilages().add(m);
 
 	m = new Milage(this.defaultTestBike, LocalDate.of(2014, 3, 1), 50);
-	this.defaultTestBike.getMilages().add(m);
+	this.defaultTestBike.getMilages().add(m);	
     }
 
     /**
@@ -83,10 +83,10 @@ public class BikeTest {
     }
     
     @Test
-    public void testGetMilagesInYear() {
+    public void testGetMilagesInYear() {	
 	assertThat(
-		new Integer[]{20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-		is(equalTo(defaultTestBike.getMilagesInYear(2014)))
+		defaultTestBike.getMilagesInYear(2014), 
+		is(equalTo(new Integer[]{20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}))
 	);	
     }
 }

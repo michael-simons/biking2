@@ -201,8 +201,9 @@ public class Bike implements Serializable {
 	return Optional.ofNullable(this.getPeriods().get(period)).orElse(0);
     }
     
-    public Integer[] getMilagesInYear(int year) {		
-	return rangeClosed(1, 12).boxed().map(i -> getMilageInPeriod(LocalDate.of(year, i, 1))).toArray(size -> new Integer[size]);
+    public Integer[] getMilagesInYear(int year) {	
+	final LocalDate january1st = LocalDate.of(year, Month.JANUARY, 1);
+	return rangeClosed(0, 12).boxed().map(i -> getMilageInPeriod(january1st.plusMonths(i))).limit(12).toArray(size -> new Integer[size]);
     }
 
     @Override
