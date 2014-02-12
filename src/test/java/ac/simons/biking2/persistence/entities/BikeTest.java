@@ -16,6 +16,7 @@
 package ac.simons.biking2.persistence.entities;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.Map;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -32,16 +33,10 @@ public class BikeTest {
     private final Bike defaultTestBike;
     
     public BikeTest() {
-	this.defaultTestBike = new Bike();
-
-	Milage m = new Milage(this.defaultTestBike, LocalDate.of(2014, 1, 1), 0);
-	this.defaultTestBike.getMilages().add(m);
-
-	m = new Milage(this.defaultTestBike, LocalDate.of(2014, 2, 1), 20);
-	this.defaultTestBike.getMilages().add(m);
-
-	m = new Milage(this.defaultTestBike, LocalDate.of(2014, 3, 1), 50);
-	this.defaultTestBike.getMilages().add(m);	
+	this.defaultTestBike = new Bike()
+		.addMilage(LocalDate.of(2014, 1, 1), 0)
+		.addMilage(LocalDate.of(2014, 2, 1), 20)
+		.addMilage(LocalDate.of(2014, 3, 1), 50);	
     }
 
     /**
@@ -55,20 +50,12 @@ public class BikeTest {
 	Map<LocalDate, Integer> result = instance.getPeriods();
 	assertEquals(expResult, result);
 
-	instance.getMilages().add(new Milage(instance, LocalDate.now(), 0));
+	instance.addMilage(LocalDate.now(), 0);
 	result = instance.getPeriods();
 	assertEquals(expResult, result);
 
-	instance = new Bike();
-	Milage m = new Milage(instance, LocalDate.of(2014, 1, 1), 0);
-	instance.getMilages().add(m);
-
-	m = new Milage(instance, LocalDate.of(2014, 2, 1), 20);
-	instance.getMilages().add(m);
-
-	m = new Milage(instance, LocalDate.of(2014, 3, 1), 50);
-	instance.getMilages().add(m);
-
+	instance = this.defaultTestBike;
+	
 	expResult = new HashMap<>();
 	expResult.put(LocalDate.of(2014, 1, 1), 20);
 	expResult.put(LocalDate.of(2014, 2, 1), 30);
@@ -88,5 +75,15 @@ public class BikeTest {
 		defaultTestBike.getMilagesInYear(2014), 
 		is(equalTo(new Integer[]{20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}))
 	);	
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddMilageInvalidDate() {
+	this.defaultTestBike.addMilage(LocalDate.of(2015, Month.JANUARY, 1), 23);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)    
+    public void testAddMilageInvalidAmount() {
+	this.defaultTestBike.addMilage(LocalDate.of(2014, Month.APRIL, 1), 23);
     }
 }

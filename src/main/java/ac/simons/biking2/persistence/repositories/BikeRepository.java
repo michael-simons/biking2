@@ -27,4 +27,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface BikeRepository extends JpaRepository<Bike, Integer> {
     public List<Bike> findActive(final @Param("cutoffDate") Date cutoffDate);
+    
+    public Bike findByName(final String name);
 }

@@ -59,7 +59,7 @@ public class ChartDataControllerTest {
 	    for (int i = 0; i < amounts.length; ++i) {
 		if(amounts[i] == null)
 		    continue;
-		bike.getMilages().add(new Milage(bike, january1st.plusMonths(i), amounts[i]));
+		bike.addMilage(january1st.plusMonths(i), amounts[i]);
 	    }	    
 	    return bike;
 	}).collect(toList());

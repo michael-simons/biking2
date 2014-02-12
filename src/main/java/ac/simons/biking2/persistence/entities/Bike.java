@@ -145,12 +145,8 @@ public class Bike implements Serializable {
 	this.decommissionedOn = decommissionedOn;
     }
 
-    public List<Milage> getMilages() {
+    private List<Milage> getMilages() {
 	return this.milages;
-    }
-
-    public void setMilages(List<Milage> milages) {
-	this.milages = milages;
     }
 
     public Date getCreatedAt() {
@@ -159,6 +155,22 @@ public class Bike implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
 	this.createdAt = createdAt;
+    }
+    
+    public synchronized  Bike addMilage(final LocalDate recordedOn, final double amount) {
+	if(this.milages.size() > 0) {
+	    final Milage lastMilage = this.milages.get(this.milages.size() - 1);
+	    LocalDate nextValidDate = lastMilage.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusMonths(1);
+	    if(!recordedOn.equals(nextValidDate))
+		throw new IllegalArgumentException("Next valid date for milage is " + nextValidDate);
+	    if(lastMilage.getAmount().doubleValue() > amount)
+		throw new IllegalArgumentException("New amount must be greater than or equal " + lastMilage.getAmount().toPlainString());
+	}
+	
+	this.milages.add(new Milage(this, recordedOn.withDayOfMonth(1), amount));
+	
+	this.periods = null;	
+	return this;
     }
 
     /**

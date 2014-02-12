@@ -81,7 +81,7 @@ public class Milage implements Serializable, Comparable<Milage> {
     protected Milage() {
     }
 
-    public Milage(final Bike bike, final LocalDate recordedOn, final double amount) {
+    protected Milage(final Bike bike, final LocalDate recordedOn, final double amount) {
 	this.bike = bike;
 	this.recordedOn = Date.from(recordedOn.atStartOfDay(ZoneId.systemDefault()).toInstant());
 	this.amount = BigDecimal.valueOf(amount);
