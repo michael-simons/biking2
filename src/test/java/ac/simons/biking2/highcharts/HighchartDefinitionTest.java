@@ -15,7 +15,9 @@
  */
 package ac.simons.biking2.highcharts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;
@@ -67,6 +69,12 @@ public class HighchartDefinitionTest {
 			.disableAnimation()
 			.build()
 		    .build()
+		.series()
+		    .withData(1, 2)
+		    .build()
+		.series()
+		    .withData(3, 4)
+		    .build()
 		.build();
 		
 	assertThat(definition.getChart().getBorderWidth(), is(equalTo(1)));
@@ -86,5 +94,9 @@ public class HighchartDefinitionTest {
 	assertThat(definition.getPlotOptions().getColumn().getPointPadding(), is(equalTo(0.2)));
 	assertThat(definition.getPlotOptions().getColumn().getBorderWidth(), is(equalTo(0)));
 	assertThat(definition.getPlotOptions().getSeries().isAnimation(), is(false));
+	assertThat(definition.getSeries().size(), is(equalTo(2)));
+	final List<Series> hlp = new ArrayList<>(definition.getSeries());
+	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(1, 2))));
+	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3, 4))));
     }
 }

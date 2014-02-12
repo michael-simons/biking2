@@ -17,12 +17,19 @@ package ac.simons.biking2.highcharts;
 
 import ac.simons.biking2.misc.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- *
  * @author Michael J. Simons, 2014-02-11
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder(alphabetic = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HighchartDefinition {
     public static class Builder<PB> {
 
@@ -34,6 +41,8 @@ public class HighchartDefinition {
 
 	private PlotOptions plotOptions;
 
+	private Collection<Series> series = new ArrayList<>();
+	
 	private Title title;
 
 	private Tooltip tooltip;
@@ -63,6 +72,13 @@ public class HighchartDefinition {
 	public PlotOptions.Builder<Builder<PB>> plotOptions() {
 	    return new PlotOptions.Builder<>(plotOptions -> {
 		Builder.this.plotOptions = plotOptions;
+		return Builder.this;
+	    });
+	}
+	
+	public Series.Builder<Builder<PB>> series() {
+	    return new Series.Builder<>(series -> {
+		Builder.this.series.add(series);
 		return Builder.this;
 	    });
 	}
@@ -97,7 +113,7 @@ public class HighchartDefinition {
 
 	public PB build() {
 	    return this.sink.setObject(
-		    new HighchartDefinition(chart, credits, plotOptions, title, tooltip, xAxis, yAxis)
+		    new HighchartDefinition(chart, credits, plotOptions, series, title, tooltip, xAxis, yAxis)
 	    );
 	}
     }
@@ -111,6 +127,8 @@ public class HighchartDefinition {
     private final Credits credits;
 
     private final PlotOptions plotOptions;
+    
+    private final Collection<Series> series;
 
     private final Title title;
 
@@ -125,6 +143,7 @@ public class HighchartDefinition {
 	    @JsonProperty("chart") Chart chart,
 	    @JsonProperty("credits") Credits credits,
 	    @JsonProperty("plotOptions") PlotOptions plotOptions,
+	    @JsonProperty("series") Collection<Series> series,
 	    @JsonProperty("title") Title title,
 	    @JsonProperty("tooltip") Tooltip tooltip,
 	    @JsonProperty("xAxis") Axis xAxis,
@@ -133,6 +152,7 @@ public class HighchartDefinition {
 	this.chart = chart;
 	this.credits = credits;
 	this.plotOptions = plotOptions;
+	this.series = series;
 	this.title = title;
 	this.tooltip = tooltip;
 	this.xAxis = xAxis;
@@ -151,6 +171,10 @@ public class HighchartDefinition {
 	return plotOptions;
     }
 
+    public Collection<Series> getSeries() {
+	return series;
+    }
+    
     public Title getTitle() {
 	return title;
     }
