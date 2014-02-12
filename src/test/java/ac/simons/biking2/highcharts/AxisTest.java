@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.highcharts;
 
+import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;
@@ -29,6 +30,7 @@ public class AxisTest {
     @Test
     public void testBuilder() {
 	Axis axis = new Axis.Builder<>(object -> object)
+		.withCategories("a", "b")
 		.withMin(0)
 		.withMax(2109)
 		.withTickInterval(100)
@@ -37,6 +39,7 @@ public class AxisTest {
 		    .withText("test")
 		.build()
 	.build();
+	assertThat(axis.getCategories(), is(equalTo(Arrays.asList("a", "b"))));
 	assertThat(axis.getMin(), is(equalTo(0)));
 	assertThat(axis.getMax(), is(equalTo(2109)));
 	assertThat(axis.getTickInterval(), is(equalTo(100)));
