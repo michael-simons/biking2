@@ -49,7 +49,7 @@ public class ChartDataControllerTest {
 	
 	final Map<String, Integer[]> testData = new TreeMap<>();
 	testData.put("bike1", new Integer[]{  10,  20,    30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 150});
-	testData.put("bike2", new Integer[]{   0,   0,    30, 40, 50, 60, 70, 80, 90, 100, 100,  100});
+	testData.put("bike2", new Integer[]{   0,   0,    30, 40, 50, 60, 70, 80, 90, 135, 135,  135});
 	testData.put("bike3", new Integer[]{null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null});
 	
 	final List<Bike> bikes = testData.entrySet().stream().map(entry -> {
@@ -74,13 +74,15 @@ public class ChartDataControllerTest {
 	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 30))));	
 	
 	assertThat(hlp.get(1).getName(), is(equalTo("bike2")));
-	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList( 0, 30, 10, 10, 10, 10, 10, 10, 10,  0,  0,  0))));	
+	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList( 0, 30, 10, 10, 10, 10, 10, 10, 45,  0,  0,  0))));	
 	
 	assertThat(hlp.get(2).getName(), is(equalTo("bike3")));
 	assertThat(hlp.get(2).getData(), is(equalTo(Arrays.asList( 0,  0,  0, 10, 10, 10, 10, 10, 10,  0,  0,  0))));
 	
 	assertThat(hlp.get(3).getName(), is(equalTo("Sum")));
-	assertThat(hlp.get(3).getData(), is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 30, 10, 10, 30))));
+	assertThat(hlp.get(3).getData(), is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 30))));
+	
+	assertThat(highchartDefinition.getyAxis().getMax(), is(equalTo(45)));
     }    
     
     @Test
