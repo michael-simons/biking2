@@ -97,4 +97,19 @@ public class ChartDataControllerTest {
 	assertThat(hlp.get(0).getName(), is(equalTo("Sum")));
 	assertThat(hlp.get(0).getData(), is(equalTo(generate(() -> 0).limit(12).collect(ArrayList::new, ArrayList::add, ArrayList::addAll))));
     }
+    
+    @Test
+    public void testGetCurrentDataNoMilages() {
+	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
+	
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	stub(bikeRepository.findActive(Date.from(january1st.atStartOfDay(ZoneId.systemDefault()).toInstant()))).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
+		
+        final ChartDataController controller = new ChartDataController(bikeRepository);
+        final HighchartDefinition highchartDefinition = controller.getCurrentData();	
+	
+	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
+	assertThat(hlp.get(2).getName(), is(equalTo("Sum")));
+	assertThat(hlp.get(2).getData(), is(equalTo(generate(() -> 0).limit(12).collect(ArrayList::new, ArrayList::add, ArrayList::addAll))));
+    }
 }
