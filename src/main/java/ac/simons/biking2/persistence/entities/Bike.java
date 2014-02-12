@@ -21,10 +21,15 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.IntStream.range;
+import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.reducing;
+import java.util.stream.IntStream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,40 +68,6 @@ public class Bike implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
 
-    public static class BikingPeriod {
-
-	public final LocalDate start;
-	public final Integer milage;
-
-	public BikingPeriod(LocalDate start, Integer milage) {
-	    this.start = start;
-	    this.milage = milage;
-	}
-
-	public BikingPeriod(Date start, Integer milage) {
-	    this(start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), milage);
-	}
-
-	@Override
-	public int hashCode() {
-	    int hash = 5;
-	    hash = 97 * hash + Objects.hashCode(this.start);
-	    return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-	    if (obj == null) {
-		return false;
-	    }
-	    if (getClass() != obj.getClass()) {
-		return false;
-	    }
-	    final BikingPeriod other = (BikingPeriod) obj;
-	    return Objects.equals(this.start, other.start);
-	}	
-    }
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -128,7 +99,7 @@ public class Bike implements Serializable {
     /**
      * Contains all monthly periods that bike has been used
      */
-    private transient List<BikingPeriod> periods;
+    private transient Map<LocalDate, Integer> periods;
 
     protected Bike() {
     }
@@ -188,19 +159,44 @@ public class Bike implements Serializable {
 	this.createdAt = createdAt;
     }
 
-    public List<BikingPeriod> getPeriods() {
+    /**
+     * An IntStream is used to create indizes, which are collected in a HashMap
+     * supplied by the supplier HashMap::new, a method reference capture for the
+     * constructor.
+     *
+     * @return
+     */
+    public synchronized Map<LocalDate, Integer> getPeriods() {
 	if (this.periods == null) {
-	    this.periods = (this.milages == null || milages.size() == 1) ? new ArrayList<>() : range(1, milages.size())
-		    .mapToObj(i -> {
-			final Milage left = milages.get(i - 1);
-			return new BikingPeriod(left.getRecordedOn(), milages.get(i).getAmount().subtract(left.getAmount()).intValue());
-		    }).collect(toList());
+	    this.periods = IntStream.range(1, this.milages.size()).collect(HashMap::new, (map, i) -> {
+		final Milage left = milages.get(i - 1);
+		map.put(
+			left.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+			milages.get(i).getAmount().subtract(left.getAmount()).intValue()
+		);
+	    }, HashMap::putAll);
 	}
+
 	return this.periods;
     }
 
+    /**
+     * Example of reducing a stream to a skalar value
+     *
+     * @return
+     */
     public Integer getMilage() {
-	return this.getPeriods().parallelStream().mapToInt(period -> period.milage).sum();
+	return this.getPeriods().values().parallelStream().collect(reducing(Integer::sum)).get();
+    }
+
+    /**
+     * An example of a nullable Optional
+     *
+     * @param period
+     * @return
+     */
+    public Integer getMilageInPeriod(final LocalDate period) {
+	return Optional.ofNullable(this.getPeriods().get(period)).orElse(0);
     }
 
     @Override

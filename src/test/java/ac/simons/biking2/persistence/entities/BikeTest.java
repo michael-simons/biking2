@@ -18,10 +18,10 @@ package ac.simons.biking2.persistence.entities;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -31,9 +31,6 @@ import org.junit.Test;
  */
 public class BikeTest {
 
-    public BikeTest() {
-    }
-
     /**
      * Test of getPeriods method, of class Bike.
      */
@@ -41,53 +38,43 @@ public class BikeTest {
     public void testGetPeriods() {
 
 	Bike instance = new Bike();
-	List<Bike.BikingPeriod> expResult = new ArrayList<>();
-	List<Bike.BikingPeriod> result = instance.getPeriods();
+	Map<LocalDate, Integer> expResult = new HashMap<>();
+	Map<LocalDate, Integer> result = instance.getPeriods();
 	assertEquals(expResult, result);
 
-	instance.getMilages().add(new Milage(instance));
+	instance.getMilages().add(new Milage(instance, LocalDate.now(), 0));
 	result = instance.getPeriods();
 	assertEquals(expResult, result);
 
 	instance = new Bike();
-	Milage m = new Milage(instance);
-	m.setRecordedAt(Date.from(LocalDate.of(2014, 1, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-	m.setAmount(BigDecimal.valueOf(0));
+	Milage m = new Milage(instance, LocalDate.of(2014, 1, 1), 0);
 	instance.getMilages().add(m);
 
-	m = new Milage(instance);
-	m.setRecordedAt(Date.from(LocalDate.of(2014, 2, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-	m.setAmount(BigDecimal.valueOf(20));
+	m = new Milage(instance, LocalDate.of(2014, 2, 1), 20);
 	instance.getMilages().add(m);
 
-	m = new Milage(instance);
-	m.setRecordedAt(Date.from(LocalDate.of(2014, 3, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-	m.setAmount(BigDecimal.valueOf(50));
+	m = new Milage(instance, LocalDate.of(2014, 3, 1), 50);
 	instance.getMilages().add(m);
 
-	expResult = Arrays.asList(
-		new Bike.BikingPeriod(LocalDate.of(2014, 1, 1), 20),
-		new Bike.BikingPeriod(LocalDate.of(2014, 2, 1), 30)
-	);
+	expResult = new HashMap<>();
+	expResult.put(LocalDate.of(2014, 1, 1), 20);
+	expResult.put(LocalDate.of(2014, 2, 1), 30);
+
 	result = instance.getPeriods();
 	assertEquals(expResult, result);
     }
 
+    @Test
     public void testGetMilage() {
 	Bike instance = new Bike();
-	Milage m = new Milage(instance);
-	m.setRecordedAt(Date.from(LocalDate.of(2014, 1, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-	m.setAmount(BigDecimal.valueOf(0));
+
+	Milage m = new Milage(instance, LocalDate.of(2014, 1, 1), 0);
 	instance.getMilages().add(m);
 
-	m = new Milage(instance);
-	m.setRecordedAt(Date.from(LocalDate.of(2014, 2, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-	m.setAmount(BigDecimal.valueOf(20));
+	m = new Milage(instance, LocalDate.of(2014, 2, 1), 20);
 	instance.getMilages().add(m);
 
-	m = new Milage(instance);
-	m.setRecordedAt(Date.from(LocalDate.of(2014, 3, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-	m.setAmount(BigDecimal.valueOf(50));
+	m = new Milage(instance, LocalDate.of(2014, 3, 1), 50);
 	instance.getMilages().add(m);
 
 	assertEquals(new Integer(50), instance.getMilage());
