@@ -30,6 +30,15 @@ public class SeriesTest {
     @Test
     public void testBuilder() {
 	Series series = new Series.Builder<>(object -> object)
+		.withData(1.0, 2, 3)
+		.withName("testName")
+		.withType("testType")
+		.build();
+	assertThat(series.getData(), is(equalTo(Arrays.asList(1.0, 2, 3))));
+	assertThat(series.getName(), is(equalTo("testName")));
+	assertThat(series.getType(), is(equalTo("testType")));
+		
+	series = new Series.Builder<>(object -> object)
 		.withData(1, 2, 3)
 		.withName("testName")
 		.withType("testType")

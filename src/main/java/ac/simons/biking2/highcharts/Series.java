@@ -19,8 +19,11 @@ import ac.simons.biking2.misc.Sink;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author msimons, 2014-02-12
@@ -42,6 +45,11 @@ public class Series {
 
 	public Builder<PB> withData(final Number... data) {
 	    this.data = Arrays.asList(data);
+	    return this;
+	}
+	
+	public Builder<PB> withData(final int... data) {	    
+	    this.data = Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);	    
 	    return this;
 	}
 
