@@ -13,37 +13,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.highcharts.HighchartDefinition;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.BinaryOperator;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
 /**
- * @author msimons, 2014-02-09
+ * @author Michael J. Simons, 2014-02-09
  */
 public class ChartDataController {
-   private final BikeRepository bikeRepository;
-   
-   @Autowired
-   public ChartDataController(final BikeRepository bikeRepository) {
-       this.bikeRepository = bikeRepository;
-   }
-   
-   public void getCurrentData() {
-       // final List<Bike> bikes = this.bikeRepository.findAll();
-       final LocalDate january = LocalDate.now().withMonth(1).withDayOfMonth(1);
-       
-       final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM");
-       
-       IntStream
-               .rangeClosed(1, 12).mapToObj(i -> january.withMonth(i).format(dateTimeFormat))
-               .forEach(System.out::println);
-   }
+
+    private final BikeRepository bikeRepository;
+
+    @Autowired
+    public ChartDataController(final BikeRepository bikeRepository) {
+	this.bikeRepository = bikeRepository;
+    }
+
+    public HighchartDefinition getCurrentData() {
+	// Start of current year
+	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
+
+	// All active bikes
+	final List<Bike> bikes = this.bikeRepository.findActive(Date.from(january1st.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+	final HighchartDefinition.Builder builder = HighchartDefinition.define();
+	
+	final Integer[] sums = bikes.stream().sequential().map(bike -> {
+	    final Integer[] milagesInYear = bike.getMilagesInYear(january1st.getYear());
+	    builder.series()
+		    .withName(bike.getName())
+		    .withType("column")
+		    .withData(milagesInYear)
+		    .build();
+	    return milagesInYear;
+	}).reduce((a, b) -> {
+	    Integer[] result = Arrays.copyOf(a, a.length);
+	    for (int i = 0; i < result.length; ++i) {
+		result[i] += b[i];
+	    }
+	    return result;
+	}).get();
+	
+	builder.series()
+		.withName("Sum")
+		.withType("spline")
+		.withData(sums)
+		.build();
+	
+	return builder.build();
+    }
 }
