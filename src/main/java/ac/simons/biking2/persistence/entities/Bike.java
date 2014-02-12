@@ -130,6 +130,13 @@ public class Bike implements Serializable {
      */
     private transient List<BikingPeriod> periods;
 
+    protected Bike() {
+    }
+
+    public Bike(String name) {
+	this.name = name;
+    }
+
     @PrePersist
     public void prePersist() {
 	if (this.createdAt == null) {

@@ -18,6 +18,8 @@ package ac.simons.biking2.persistence.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import static java.time.Instant.now;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -79,8 +81,10 @@ public class Milage implements Serializable, Comparable<Milage> {
     protected Milage() {
     }
 
-    public Milage(final Bike bike) {
+    public Milage(final Bike bike, final LocalDate recordedOn, final double amount) {
 	this.bike = bike;
+	this.recordedOn = Date.from(recordedOn.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	this.amount = BigDecimal.valueOf(amount);
     }
 
     public Integer getId() {
