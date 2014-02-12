@@ -38,7 +38,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  * @author Michael J. Simons, 2014-02-08
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "ac.simons.biking2.persistence.entities")
+@EnableJpaRepositories(basePackages = "ac.simons.biking2.persistence.repositories")
 public class PersistenceConfig {
     @Bean
     public JpaVendorAdapter jpaVendorAdapter(final Environment environment) {
