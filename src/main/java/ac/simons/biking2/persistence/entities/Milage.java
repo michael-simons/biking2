@@ -42,7 +42,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "milages", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"bike_id", "recorded_on"})
 })
-public class Milage implements Serializable {
+public class Milage implements Serializable, Comparable<Milage> {
 
     private static final long serialVersionUID = 3561438569324691479L;
 
@@ -135,5 +135,10 @@ public class Milage implements Serializable {
 	    return false;
 	}
 	return true;
+    }
+
+    @Override
+    public int compareTo(Milage o) {
+	return this.recordedOn.compareTo(o.recordedOn);
     }
 }
