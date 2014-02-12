@@ -61,11 +61,9 @@ public class PersistenceConfig {
 
     @Bean
     public FactoryBean<EntityManagerFactory> entityManagerFactory(final Environment environment, final DataSource dataSource, final JpaVendorAdapter jpaVendorAdapter) {
-	final boolean isDev = environment.acceptsProfiles("!prod");
-
 	final Map<String, String> properties = new HashMap<>();
 	properties.put("hibernate.generate_statistics", "false");
-	if (isDev) {
+	if (environment.acceptsProfiles("dev")) {
 	    properties.put("hibernate.hbm2ddl.auto", "update");
 	}
 
