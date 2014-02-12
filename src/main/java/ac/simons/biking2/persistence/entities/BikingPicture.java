@@ -16,8 +16,6 @@
 package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
