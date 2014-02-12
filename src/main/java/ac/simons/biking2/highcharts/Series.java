@@ -30,7 +30,7 @@ import java.util.Collection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Series {
 
-    static class Builder<PB> {
+    public static class Builder<PB> {
 
 	private final Sink<PB, Series> sink;
 

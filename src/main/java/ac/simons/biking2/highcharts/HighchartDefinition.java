@@ -31,9 +31,9 @@ import java.util.Collection;
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HighchartDefinition {
-    public static class Builder<PB> {
+    public static class Builder {
 
-	private final Sink<PB, HighchartDefinition> sink;
+	private final Sink<HighchartDefinition, HighchartDefinition> sink;
 
 	private Chart chart;
 
@@ -51,75 +51,75 @@ public class HighchartDefinition {
 
 	private Axis yAxis;
 
-	Builder(Sink<PB, HighchartDefinition> sink) {
+	Builder(Sink<HighchartDefinition, HighchartDefinition> sink) {
 	    this.sink = sink;
 	}
 	
-	public Chart.Builder<Builder<PB>> chart() {
+	public Chart.Builder<Builder> chart() {
 	    return new Chart.Builder<>(chart -> {
 		Builder.this.chart = chart;
 		return Builder.this;
 	    });
 	}
 	
-	public Credits.Builder<Builder<PB>> credits() {
+	public Credits.Builder<Builder> credits() {
 	    return new Credits.Builder<>(credits -> {
 		Builder.this.credits = credits;
 		return Builder.this;
 	    });
 	}
 	
-	public PlotOptions.Builder<Builder<PB>> plotOptions() {
+	public PlotOptions.Builder<Builder> plotOptions() {
 	    return new PlotOptions.Builder<>(plotOptions -> {
 		Builder.this.plotOptions = plotOptions;
 		return Builder.this;
 	    });
 	}
 	
-	public Series.Builder<Builder<PB>> series() {
+	public Series.Builder<Builder> series() {
 	    return new Series.Builder<>(series -> {
 		Builder.this.series.add(series);
 		return Builder.this;
 	    });
 	}
 	
-	public Title.Builder<Builder<PB>> title() {
+	public Title.Builder<Builder> title() {
 	    return new Title.Builder<>(title -> {
 		Builder.this.title = title;
 		return Builder.this;
 	    });
 	}
 	
-	public Tooltip.Builder<Builder<PB>> tooltip() {
+	public Tooltip.Builder<Builder> tooltip() {
 	    return new Tooltip.Builder<>(tooltip -> {
 		Builder.this.tooltip = tooltip;
 		return Builder.this;
 	    });
 	}
 	
-	public Axis.Builder<Builder<PB>> xAxis() {
+	public Axis.Builder<Builder> xAxis() {
 	    return new Axis.Builder<>(xAxis -> {
 		Builder.this.xAxis = xAxis;
 		return Builder.this;
 	    });
 	}
 	
-	public Axis.Builder<Builder<PB>> yAxis() {
+	public Axis.Builder<Builder> yAxis() {
 	    return new Axis.Builder<>(yAxis -> {
 		Builder.this.yAxis = yAxis;
 		return Builder.this;
 	    });
 	}
 
-	public PB build() {
+	public HighchartDefinition build() {
 	    return this.sink.setObject(
 		    new HighchartDefinition(chart, credits, plotOptions, series, title, tooltip, xAxis, yAxis)
 	    );
 	}
     }
     
-    public static Builder<HighchartDefinition> define() {
-	return new Builder<>(object -> object);
+    public static Builder define() {
+	return new Builder(object -> object);
     }
 
     private final Chart chart;
