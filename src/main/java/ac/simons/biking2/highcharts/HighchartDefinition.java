@@ -56,6 +56,12 @@ public class HighchartDefinition {
 	    this.sink = sink;
 	}
 	
+	/**
+	 * This is a nice example of how to create one joined stream from things
+	 * that have lists of other things, a reduction of several one-to-many
+	 * association into one stream.
+	 * @return 
+	 */
 	public Number computeCurrentMaxYValue() {	    
 	    return series.stream().flatMap(series -> series.getData().stream()).max((a,b) -> Double.compare(a.doubleValue(), b.doubleValue())).get();
 	}
