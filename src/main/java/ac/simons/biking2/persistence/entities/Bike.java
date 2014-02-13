@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 import static java.util.stream.Collectors.reducing;
 import java.util.stream.IntStream;
 import static java.util.stream.IntStream.rangeClosed;
@@ -180,13 +181,13 @@ public class Bike implements Serializable {
      */
     public synchronized Map<LocalDate, Integer> getPeriods() {
 	if (this.periods == null) {
-	    this.periods = IntStream.range(1, this.milages.size()).collect(HashMap::new, (map, i) -> {
+	    this.periods = IntStream.range(1, this.milages.size()).collect(TreeMap::new, (map, i) -> {
 		final Milage left = milages.get(i - 1);
 		map.put(
 			left.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
 			milages.get(i).getAmount().subtract(left.getAmount()).intValue()
 		);
-	    }, HashMap::putAll);
+	    }, TreeMap::putAll);
 	}
 
 	return this.periods;
