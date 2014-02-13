@@ -21,9 +21,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * @author Michael J. Simons, 2014-02-11
@@ -31,10 +28,11 @@ import java.util.Collection;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HighchartDefinition {
-    public static class Builder {
+public class Options {
+    
+    public static class Builder<PB> {
 
-	private final Sink<HighchartDefinition, HighchartDefinition> sink;
+	private final Sink<PB, Options> sink;
 
 	private Chart chart;
 
@@ -42,8 +40,6 @@ public class HighchartDefinition {
 
 	private PlotOptions plotOptions;
 
-	private Collection<Series> series = new ArrayList<>();
-	
 	private Title title;
 
 	private Tooltip tooltip;
@@ -52,95 +48,72 @@ public class HighchartDefinition {
 
 	private Axis yAxis;
 
-	Builder(Sink<HighchartDefinition, HighchartDefinition> sink) {
+	Builder(Sink<PB, Options> sink) {
 	    this.sink = sink;
 	}
 	
-	/**
-	 * This is a nice example of how to create one joined stream from things
-	 * that have lists of other things, a reduction of several one-to-many
-	 * association into one stream.
-	 * @return 
-	 */
-	public Number computeCurrentMaxYValue() {	    
-	    return series.stream().flatMap(series -> series.getData().stream()).max((a,b) -> Double.compare(a.doubleValue(), b.doubleValue())).orElse(0);
-	}
-	
-	public Chart.Builder<Builder> chart() {
+	public Chart.Builder<Builder<PB>> chart() {
 	    return new Chart.Builder<>(chart -> {
 		Builder.this.chart = chart;
 		return Builder.this;
 	    });
 	}
 	
-	public Credits.Builder<Builder> credits() {
+	public Credits.Builder<Builder<PB>> credits() {
 	    return new Credits.Builder<>(credits -> {
 		Builder.this.credits = credits;
 		return Builder.this;
 	    });
 	}
 	
-	public PlotOptions.Builder<Builder> plotOptions() {
+	public PlotOptions.Builder<Builder<PB>> plotOptions() {
 	    return new PlotOptions.Builder<>(plotOptions -> {
 		Builder.this.plotOptions = plotOptions;
 		return Builder.this;
 	    });
 	}
 	
-	public Series.Builder<Builder> series() {
-	    return new Series.Builder<>(series -> {
-		Builder.this.series.add(series);
-		return Builder.this;
-	    });
-	}
-	
-	public Title.Builder<Builder> title() {
+	public Title.Builder<Builder<PB>> title() {
 	    return new Title.Builder<>(title -> {
 		Builder.this.title = title;
 		return Builder.this;
 	    });
 	}
 	
-	public Tooltip.Builder<Builder> tooltip() {
+	public Tooltip.Builder<Builder<PB>> tooltip() {
 	    return new Tooltip.Builder<>(tooltip -> {
 		Builder.this.tooltip = tooltip;
 		return Builder.this;
 	    });
 	}
 	
-	public Axis.Builder<Builder> xAxis() {
+	public Axis.Builder<Builder<PB>> xAxis() {
 	    return new Axis.Builder<>(xAxis -> {
 		Builder.this.xAxis = xAxis;
 		return Builder.this;
 	    });
 	}
 	
-	public Axis.Builder<Builder> yAxis() {
+	public Axis.Builder<Builder<PB>> yAxis() {
 	    return new Axis.Builder<>(yAxis -> {
 		Builder.this.yAxis = yAxis;
 		return Builder.this;
 	    });
 	}
 
-	public HighchartDefinition build() {
+	public PB build() {
 	    return this.sink.setObject(
-		    new HighchartDefinition(chart, credits, plotOptions, series, title, tooltip, xAxis, yAxis)
+		    new Options(chart, credits, plotOptions, title, tooltip, xAxis, yAxis)
 	    );
 	}
     }
-    
-    public static Builder define() {
-	return new Builder(object -> object);
-    }
-
+ 
     private final Chart chart;
 
     private final Credits credits;
 
     private final PlotOptions plotOptions;
-    
-    private final Collection<Series> series;
-
+   
     private final Title title;
 
     private final Tooltip tooltip;
@@ -150,11 +123,10 @@ public class HighchartDefinition {
     private final Axis yAxis;
 
     @JsonCreator
-    HighchartDefinition(
+    Options(
 	    @JsonProperty("chart") Chart chart,
 	    @JsonProperty("credits") Credits credits,
 	    @JsonProperty("plotOptions") PlotOptions plotOptions,
-	    @JsonProperty("series") Collection<Series> series,
 	    @JsonProperty("title") Title title,
 	    @JsonProperty("tooltip") Tooltip tooltip,
 	    @JsonProperty("xAxis") Axis xAxis,
@@ -163,7 +135,6 @@ public class HighchartDefinition {
 	this.chart = chart;
 	this.credits = credits;
 	this.plotOptions = plotOptions;
-	this.series = series;
 	this.title = title;
 	this.tooltip = tooltip;
 	this.xAxis = xAxis;
@@ -180,10 +151,6 @@ public class HighchartDefinition {
 
     public PlotOptions getPlotOptions() {
 	return plotOptions;
-    }
-
-    public Collection<Series> getSeries() {
-	return series;
     }
     
     public Title getTitle() {

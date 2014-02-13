@@ -16,7 +16,8 @@
 
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.highcharts.HighchartDefinition;
+import ac.simons.biking2.highcharts.HighchartsNgConfig;
+import ac.simons.biking2.highcharts.Options;
 import ac.simons.biking2.highcharts.Series;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
@@ -67,7 +68,7 @@ public class ChartDataControllerTest {
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(bikes);
 		
         final ChartDataController controller = new ChartDataController(bikeRepository);
-        final HighchartDefinition highchartDefinition = controller.getCurrentData();
+        final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
 	
 	assertThat(highchartDefinition.getSeries().size(), is(equalTo(4)));
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -83,7 +84,7 @@ public class ChartDataControllerTest {
 	assertThat(hlp.get(3).getName(), is(equalTo("Sum")));
 	assertThat(hlp.get(3).getData(), is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 30))));
 	
-	assertThat(highchartDefinition.getyAxis().getMax(), is(equalTo(45)));
+	assertThat(highchartDefinition.getOptions().getyAxis().getMax(), is(equalTo(65)));
     }    
     
     @Test
@@ -94,7 +95,7 @@ public class ChartDataControllerTest {
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(new ArrayList<>());
 		
         final ChartDataController controller = new ChartDataController(bikeRepository);
-        final HighchartDefinition highchartDefinition = controller.getCurrentData();	
+        final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();	
 	
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
 	assertThat(hlp.get(0).getName(), is(equalTo("Sum")));
@@ -109,7 +110,7 @@ public class ChartDataControllerTest {
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
 		
         final ChartDataController controller = new ChartDataController(bikeRepository);
-        final HighchartDefinition highchartDefinition = controller.getCurrentData();	
+        final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();	
 	
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
 	assertThat(hlp.get(2).getName(), is(equalTo("Sum")));
