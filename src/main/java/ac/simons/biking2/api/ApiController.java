@@ -24,7 +24,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import static java.util.stream.IntStream.generate;
@@ -38,12 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-public class ChartDataController {
+public class ApiController {
 
     private final BikeRepository bikeRepository;
 
     @Autowired
-    public ChartDataController(final BikeRepository bikeRepository) {
+    public ApiController(final BikeRepository bikeRepository) {
 	this.bikeRepository = bikeRepository;
     }
     
@@ -57,7 +56,7 @@ public class ChartDataController {
 	return summary;
     }
 
-    @RequestMapping("/currentYear")
+    @RequestMapping("/charts/currentYear")
     public HighchartsNgConfig getCurrentYear() {
 	// Start of current year
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
