@@ -16,19 +16,16 @@
 package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
-import static java.time.Instant.now;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import static java.util.stream.Collectors.reducing;
 import java.util.stream.IntStream;
 import static java.util.stream.IntStream.rangeClosed;
@@ -87,7 +84,7 @@ public class Bike implements Serializable {
 
     @Column(name = "decommissioned_on")
     @Temporal(TemporalType.DATE)
-    private Date decommissionedOn;
+    private Calendar decommissionedOn;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
@@ -96,7 +93,7 @@ public class Bike implements Serializable {
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
-    private Date createdAt;
+    private Calendar createdAt;
 
     /**
      * Contains all monthly periods that bike has been used
@@ -113,7 +110,7 @@ public class Bike implements Serializable {
     @PrePersist
     public void prePersist() {
 	if (this.createdAt == null) {
-	    this.createdAt = Date.from(now());
+	    this.createdAt = Calendar.getInstance();
 	}
     }
 
@@ -137,11 +134,11 @@ public class Bike implements Serializable {
 	this.color = color;
     }
 
-    public Date getDecommissionedOn() {
+    public Calendar getDecommissionedOn() {
 	return this.decommissionedOn;
     }
 
-    public void setDecommissionedOn(Date decommissionedOn) {
+    public void setDecommissionedOn(Calendar decommissionedOn) {
 	this.decommissionedOn = decommissionedOn;
     }
 
@@ -149,14 +146,10 @@ public class Bike implements Serializable {
 	return this.milages;
     }
 
-    public Date getCreatedAt() {
+    public Calendar getCreatedAt() {
 	return this.createdAt;
     }
-
-    public void setCreatedAt(Date createdAt) {
-	this.createdAt = createdAt;
-    }
-    
+  
     public synchronized  Bike addMilage(final LocalDate recordedOn, final double amount) {
 	if(this.milages.size() > 0) {
 	    final Milage lastMilage = this.milages.get(this.milages.size() - 1);

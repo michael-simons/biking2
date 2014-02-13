@@ -17,7 +17,7 @@ package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,7 +46,7 @@ public class AssortedTrip implements Serializable {
     @Column(name = "covered_on", nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull
-    private Date coveredOn;
+    private Calendar coveredOn;
 
     @Column(name = "distance", nullable = false, precision = 8, scale = 2)
     @NotNull
@@ -56,11 +56,11 @@ public class AssortedTrip implements Serializable {
 	return id;
     }
 
-    public Date getCoveredOn() {
+    public Calendar getCoveredOn() {
 	return coveredOn;
     }
 
-    public void setCoveredOn(Date coveredOn) {
+    public void setCoveredOn(Calendar coveredOn) {
 	this.coveredOn = coveredOn;
     }
 

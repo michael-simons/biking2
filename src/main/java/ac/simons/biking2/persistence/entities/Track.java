@@ -17,7 +17,7 @@ package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,7 +64,7 @@ public class Track implements Serializable {
     @Column(name = "covered_on", nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull
-    private Date coveredOn;
+    private Calendar coveredOn;
 
     @Column(name = "description", length = 2048)
     private String description;
@@ -97,11 +97,11 @@ public class Track implements Serializable {
 	this.name = name;
     }
 
-    public Date getCoveredOn() {
+    public Calendar getCoveredOn() {
 	return this.coveredOn;
     }
 
-    public void setCoveredOn(Date coveredOn) {
+    public void setCoveredOn(Calendar coveredOn) {
 	this.coveredOn = coveredOn;
     }
 

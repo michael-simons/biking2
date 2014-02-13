@@ -17,10 +17,10 @@ package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import static java.time.Instant.now;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,7 +56,7 @@ public class Milage implements Serializable, Comparable<Milage> {
     @Column(name = "recorded_on", nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull
-    private Date recordedOn;
+    private Calendar recordedOn;
 
     @Column(name = "amount", nullable = false, precision = 8, scale = 2)
     @NotNull
@@ -69,12 +69,12 @@ public class Milage implements Serializable, Comparable<Milage> {
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
-    private Date createdAt;
+    private Calendar createdAt;
 
     @PrePersist
     public void prePersist() {
 	if (this.createdAt == null) {
-	    this.createdAt = Date.from(now());
+	    this.createdAt = Calendar.getInstance();
 	}
     }
 
@@ -83,7 +83,7 @@ public class Milage implements Serializable, Comparable<Milage> {
 
     protected Milage(final Bike bike, final LocalDate recordedOn, final double amount) {
 	this.bike = bike;
-	this.recordedOn = Date.from(recordedOn.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));	
 	this.amount = BigDecimal.valueOf(amount);
     }
 
@@ -91,29 +91,17 @@ public class Milage implements Serializable, Comparable<Milage> {
 	return id;
     }
 
-    public Date getRecordedOn() {
+    public Calendar getRecordedOn() {
 	return recordedOn;
     }
-
-    public void setRecordedOn(Date recordedOn) {
-	this.recordedOn = recordedOn;
-    }
-    
+  
     public BigDecimal getAmount() {
 	return amount;
-    }
+    }    
 
-    public void setAmount(BigDecimal amount) {
-	this.amount = amount;
-    }
-
-    public Date getCreatedAt() {
+    public Calendar getCreatedAt() {
 	return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-	this.createdAt = createdAt;
-    }
+    }  
 
     public Bike getBike() {
 	return bike;
@@ -135,10 +123,7 @@ public class Milage implements Serializable, Comparable<Milage> {
 	    return false;
 	}
 	final Milage other = (Milage) obj;
-	if (!Objects.equals(this.id, other.id)) {
-	    return false;
-	}
-	return true;
+	return Objects.equals(this.id, other.id);
     }
 
     @Override

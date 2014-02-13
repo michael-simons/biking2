@@ -46,7 +46,7 @@ public class ChartDataController {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 
 	// All active bikes
-	final List<Bike> bikes = this.bikeRepository.findActive(Date.from(january1st.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+	final List<Bike> bikes = this.bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())));
 
 	final HighchartDefinition.Builder builder = HighchartDefinition.define();
 	

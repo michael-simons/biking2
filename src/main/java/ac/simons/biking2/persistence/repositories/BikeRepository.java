@@ -17,6 +17,7 @@
 package ac.simons.biking2.persistence.repositories;
 
 import ac.simons.biking2.persistence.entities.Bike;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,7 +27,7 @@ import org.springframework.data.repository.query.Param;
  * @author Michael J. Simons, 2014-02-08
  */
 public interface BikeRepository extends JpaRepository<Bike, Integer> {
-    public List<Bike> findActive(final @Param("cutoffDate") Date cutoffDate);
+    public List<Bike> findActive(final @Param("cutoffDate") Calendar cutoffDate);
     
     public Bike findByName(final String name);
 }

@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +65,7 @@ public class BikeRepositoryTest {
     @Test
     public void testFindActive() {
 	final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);
-	final List<Bike> activeBikes = this.bikeRepository.findActive(Date.from(cutOffDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+	final List<Bike> activeBikes = this.bikeRepository.findActive(GregorianCalendar.from(cutOffDate.atStartOfDay(ZoneId.systemDefault())));
 
 	assertThat(activeBikes.size(), is(equalTo(3)));
 	assertThat(activeBikes.get(0).getName(), is(equalTo("bike1")));

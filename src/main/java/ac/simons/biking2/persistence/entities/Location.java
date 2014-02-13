@@ -17,8 +17,7 @@ package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import static java.time.Instant.now;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,12 +58,12 @@ public class Location implements Serializable {
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
-    private Date createdAt;
+    private Calendar createdAt;
 
     @PrePersist
     public void prePersist() {
 	if (this.createdAt == null) {
-	    this.createdAt = Date.from(now());
+	    this.createdAt = Calendar.getInstance();
 	}
     }
 
@@ -72,13 +71,9 @@ public class Location implements Serializable {
 	return this.id;
     }
 
-    public Date getCreatedAt() {
+    public Calendar getCreatedAt() {
 	return this.createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-	this.createdAt = createdAt;
-    }
+    }  
 
     public BigDecimal getLatitude() {
 	return this.latitude;
@@ -120,9 +115,6 @@ public class Location implements Serializable {
 	    return false;
 	}
 	final Location other = (Location) obj;
-	if (!Objects.equals(this.id, other.id)) {
-	    return false;
-	}
-	return true;
+	return Objects.equals(this.id, other.id);
     }
 }

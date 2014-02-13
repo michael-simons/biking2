@@ -25,6 +25,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -63,7 +64,7 @@ public class ChartDataControllerTest {
 	    return bike;
 	}).collect(toList());
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findActive(Date.from(january1st.atStartOfDay(ZoneId.systemDefault()).toInstant()))).toReturn(bikes);
+	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(bikes);
 		
         final ChartDataController controller = new ChartDataController(bikeRepository);
         final HighchartDefinition highchartDefinition = controller.getCurrentData();
@@ -90,7 +91,7 @@ public class ChartDataControllerTest {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findActive(Date.from(january1st.atStartOfDay(ZoneId.systemDefault()).toInstant()))).toReturn(new ArrayList<>());
+	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(new ArrayList<>());
 		
         final ChartDataController controller = new ChartDataController(bikeRepository);
         final HighchartDefinition highchartDefinition = controller.getCurrentData();	
@@ -105,7 +106,7 @@ public class ChartDataControllerTest {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findActive(Date.from(january1st.atStartOfDay(ZoneId.systemDefault()).toInstant()))).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
+	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
 		
         final ChartDataController controller = new ChartDataController(bikeRepository);
         final HighchartDefinition highchartDefinition = controller.getCurrentData();	
