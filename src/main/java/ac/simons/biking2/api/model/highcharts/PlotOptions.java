@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.api.model.highcharts;
 
 import ac.simons.biking2.misc.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,59 +28,59 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Column {
+public class PlotOptions {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Column> sink;
+	private final Sink<PB, PlotOptions> sink;
 
-	private Number borderWidth;
+	private Column column;
 
-	private Number pointPadding;
+	private SeriesOptions series;
 
-	Builder(Sink<PB, Column> sink) {
+	Builder(Sink<PB, PlotOptions> sink) {
 	    this.sink = sink;
 	}
 
-	public Builder<PB> withBorderWidth(final Number borderWidth) {
-	    this.borderWidth = borderWidth;
-	    return this;
+	public Column.Builder<Builder<PB>> column() {
+	    return new Column.Builder<>(column -> {
+		Builder.this.column = column;
+		return Builder.this;
+	    });
 	}
 
-	public Builder<PB> withPointPadding(final Number pointPadding) {
-	    this.pointPadding = pointPadding;
-	    return this;
+	public SeriesOptions.Builder<Builder<PB>> series() {
+	    return new SeriesOptions.Builder<>(series -> {
+		Builder.this.series = series;
+		return Builder.this;
+	    });
 	}
 
 	public PB build() {
-	    return this.sink.setObject(new Column(borderWidth, pointPadding));
+	    return this.sink.setObject(
+		    new PlotOptions(column, series)
+	    );
 	}
     }
 
-    /**
-     * The width of the border surronding each column or bar. Defaults to 1.
-     */
-    private final Number borderWidth;
+    private final Column column;
 
-    /**
-     * Padding between each column or bar, in x axis units. Defaults to 0.1.
-     */
-    private final Number pointPadding;
+    private final SeriesOptions series;
 
     @JsonCreator
-    Column(
-	    @JsonProperty("borderWidth") Number borderWidth,
-	    @JsonProperty("pointPadding") Number pointPadding
+    PlotOptions(
+	    @JsonProperty("categories") Column column,
+	    @JsonProperty("categories") SeriesOptions series
     ) {
-	this.borderWidth = borderWidth;
-	this.pointPadding = pointPadding;
+	this.column = column;
+	this.series = series;
     }
 
-    public Number getBorderWidth() {
-	return borderWidth;
+    public Column getColumn() {
+	return column;
     }
 
-    public Number getPointPadding() {
-	return pointPadding;
+    public SeriesOptions getSeries() {
+	return series;
     }
 }

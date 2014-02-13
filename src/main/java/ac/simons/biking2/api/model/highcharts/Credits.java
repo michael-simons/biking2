@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.api.model.highcharts;
 
 import ac.simons.biking2.misc.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Michael J. Simons, 2014-02-11
@@ -28,59 +29,42 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlotOptions {
+public class Credits {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, PlotOptions> sink;
+	private final Sink<PB, Credits> sink;
 
-	private Column column;
+	private Boolean enabled = Boolean.TRUE;
 
-	private SeriesOptions series;
-
-	Builder(Sink<PB, PlotOptions> sink) {
+	Builder(Sink<PB, Credits> sink) {
 	    this.sink = sink;
 	}
 
-	public Column.Builder<Builder<PB>> column() {
-	    return new Column.Builder<>(column -> {
-		Builder.this.column = column;
-		return Builder.this;
-	    });
+	public Builder<PB> enable() {
+	    this.enabled = true;
+	    return this;
 	}
-
-	public SeriesOptions.Builder<Builder<PB>> series() {
-	    return new SeriesOptions.Builder<>(series -> {
-		Builder.this.series = series;
-		return Builder.this;
-	    });
+	
+	public Builder<PB> disable() {
+	    this.enabled = false;
+	    return this;
 	}
 
 	public PB build() {
-	    return this.sink.setObject(
-		    new PlotOptions(column, series)
-	    );
+	    return this.sink.setObject(new Credits(enabled));
 	}
     }
-
-    private final Column column;
-
-    private final SeriesOptions series;
+    
+    /** Whether to show the credits text. Defaults to true. */
+    private final Boolean enabled;
 
     @JsonCreator
-    PlotOptions(
-	    @JsonProperty("categories") Column column,
-	    @JsonProperty("categories") SeriesOptions series
-    ) {
-	this.column = column;
-	this.series = series;
+    Credits(@JsonProperty("enabled") Boolean enabled) {
+	this.enabled = enabled;
     }
 
-    public Column getColumn() {
-	return column;
-    }
-
-    public SeriesOptions getSeries() {
-	return series;
+    public Boolean isEnabled() {
+	return enabled;
     }
 }

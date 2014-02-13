@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.api.model.highcharts;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
+ *
  * @author Michael J. Simons, 2014-02-11
  */
-public class TitleTest {
+public class CreditsTest {
 
     @Test
     public void testBuilder() {
-	Title title = new Title.Builder<>(object -> object).build();
-	assertThat(title.getText(), is(nullValue()));
+	Credits credits = new Credits.Builder<>(object -> object).build();
+	assertThat(credits.isEnabled(), is(true));
 
-	title = new Title.Builder<>(object -> object)
-	    .withText("test 123")
-	.build();
-	assertThat(title.getText(), is(equalTo("test 123")));
+	credits = new Credits.Builder<>(object -> object).disable().build();
+	assertThat(credits.isEnabled(), is(false));
+
+	credits = new Credits.Builder<>(object -> object).enable().build();
+	assertThat(credits.isEnabled(), is(true));
     }
 }

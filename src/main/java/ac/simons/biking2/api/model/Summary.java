@@ -13,25 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.api.model;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.util.Calendar;
 
 /**
- * @author Michael J. Simons, 2014-02-11
+ * @author Michael J. Simons, 2014-02-13
  */
-public class ColumnTest {
+public class Summary {
 
-    @Test
-    public void testBuilder() {
-	Column column = new Column.Builder<>(object -> object)
-		.withPointPadding(0.2)
-		.withBorderWidth(0)
-	.build();
-	assertThat(column.getPointPadding(), is(equalTo(0.2)));
-	assertThat(column.getBorderWidth(), is(equalTo(0)));
+    private Calendar dateOfFirstRecord;
+
+    private Double total;
+
+    public Calendar getDateOfFirstRecord() {
+	return dateOfFirstRecord;
+    }
+
+    public void setDateOfFirstRecord(Calendar dateOfFirstRecord) {
+	this.dateOfFirstRecord = dateOfFirstRecord;
+    }
+
+    public Double getTotal() {
+	return total;
+    }
+
+    public void setTotal(Double total) {
+	this.total = total;
     }
 }

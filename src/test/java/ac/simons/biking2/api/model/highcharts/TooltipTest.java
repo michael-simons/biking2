@@ -13,27 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.api.model.highcharts;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
- *
  * @author Michael J. Simons, 2014-02-11
  */
-public class CreditsTest {
+public class TooltipTest {
 
     @Test
     public void testBuilder() {
-	Credits credits = new Credits.Builder<>(object -> object).build();
-	assertThat(credits.isEnabled(), is(true));
-
-	credits = new Credits.Builder<>(object -> object).disable().build();
-	assertThat(credits.isEnabled(), is(false));
-
-	credits = new Credits.Builder<>(object -> object).enable().build();
-	assertThat(credits.isEnabled(), is(true));
+	Tooltip tooltip = new Tooltip.Builder<>(object -> object)
+		.withHeaderFormat("testHeader")
+		.withPointFormat("testPoint")
+		.withFooterFormat("testFoot")
+		.share()
+		.useHTML()
+	.build();
+	assertThat(tooltip.getHeaderFormat(), is(equalTo("testHeader")));
+	assertThat(tooltip.getPointFormat(), is(equalTo("testPoint")));
+	assertThat(tooltip.getFooterFormat(), is(equalTo("testFoot")));
+	assertThat(tooltip.isShared(), is(true));
+	assertThat(tooltip.isUseHTML(), is(true));		
     }
 }

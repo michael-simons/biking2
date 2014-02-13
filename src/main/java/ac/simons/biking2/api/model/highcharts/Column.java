@@ -13,57 +13,74 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.api.model.highcharts;
 
 import ac.simons.biking2.misc.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * @author Michael J. Simons, 2014-02-11
  */
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Title {
+public class Column {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Title> sink;
+	private final Sink<PB, Column> sink;
 
-	private String text;
+	private Number borderWidth;
 
-	Builder(Sink<PB, Title> sink) {
+	private Number pointPadding;
+
+	Builder(Sink<PB, Column> sink) {
 	    this.sink = sink;
 	}
 
-	public Builder<PB> withText(final String text) {
-	    this.text = text;
+	public Builder<PB> withBorderWidth(final Number borderWidth) {
+	    this.borderWidth = borderWidth;
+	    return this;
+	}
+
+	public Builder<PB> withPointPadding(final Number pointPadding) {
+	    this.pointPadding = pointPadding;
 	    return this;
 	}
 
 	public PB build() {
-	    return this.sink.setObject(new Title(text));
+	    return this.sink.setObject(new Column(borderWidth, pointPadding));
 	}
     }
 
     /**
-     * The title of the chart. To disable the title, set the text to null.
-     * Defaults to Chart title.
+     * The width of the border surronding each column or bar. Defaults to 1.
      */
-    private final String text;
+    private final Number borderWidth;
+
+    /**
+     * Padding between each column or bar, in x axis units. Defaults to 0.1.
+     */
+    private final Number pointPadding;
 
     @JsonCreator
-    Title(@JsonProperty("text") String text) {
-	this.text = text;
+    Column(
+	    @JsonProperty("borderWidth") Number borderWidth,
+	    @JsonProperty("pointPadding") Number pointPadding
+    ) {
+	this.borderWidth = borderWidth;
+	this.pointPadding = pointPadding;
     }
 
-    public String getText() {
-	return text;
+    public Number getBorderWidth() {
+	return borderWidth;
     }
 
+    public Number getPointPadding() {
+	return pointPadding;
+    }
 }

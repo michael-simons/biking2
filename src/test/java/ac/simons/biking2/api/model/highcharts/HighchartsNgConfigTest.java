@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.api.model.highcharts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  * @author Michael J. Simons, 2014-02-11

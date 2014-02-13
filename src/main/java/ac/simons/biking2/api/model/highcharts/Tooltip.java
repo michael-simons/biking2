@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.api.model.highcharts;
 
 import ac.simons.biking2.misc.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
