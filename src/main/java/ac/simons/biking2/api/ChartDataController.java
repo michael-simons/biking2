@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import static java.util.stream.IntStream.generate;
@@ -43,6 +44,16 @@ public class ChartDataController {
     @Autowired
     public ChartDataController(final BikeRepository bikeRepository) {
 	this.bikeRepository = bikeRepository;
+    }
+    
+    @RequestMapping("/summary")
+    public Summary getSummary() {
+	final List<Bike> allBikes = this.bikeRepository.findAll();
+	
+	final Summary summary = new Summary();
+	summary.setDateOfFirstRecord(this.bikeRepository.getDateOfFirstRecord());
+	summary.setTotal((double)allBikes.stream().mapToInt(Bike::getMilage).sum());
+	return summary;
     }
 
     @RequestMapping("/currentYear")
