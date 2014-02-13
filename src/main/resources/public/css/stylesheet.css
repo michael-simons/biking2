@@ -1,0 +1,77 @@
+body {
+    padding-top: 40px; 
+}
+
+.biking_picture img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+.anchor:before {
+    display: block;
+    content: "";
+    height: 40px;
+    margin: -40px 0 0; 
+}
+
+.left {
+    text-align: left; 
+}
+
+.right {
+    text-align: right;
+    padding-right: 5px; 
+}
+
+#chart-current-year {
+    max-width: 640px;
+    height: 300px;
+    display: block;
+}
+
+.row0, .row0 td {
+    background-color: #ded7c9; 
+}
+
+tbody th.sum {
+    border-left: 1px solid black; 
+}
+
+tfoot th.sum {
+    border-top: 1px solid black;
+}
+
+table.trip_table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #cccccc;
+}
+
+table.track_table {
+    width: 100%;
+}
+
+th.period, td.period {
+    width: 85px; 
+}
+
+table.trip_table td, table.track_table td {
+    vertical-align: top;
+}
+
+h2 small {
+    font-size: 50% !important;
+}
+
+#google {
+    font-size: 10px !important;
+    line-height: normal !important;
+}
+#google a {
+    background: none !important;
+}
+
+table.track_table a {
+    background: none !important;
+}
