@@ -20,10 +20,12 @@
 
 var biking2Controllers = angular.module('biking2Controllers', ["highcharts-ng"]);
 
-biking2Controllers.controller('main', function($scope) {
+biking2Controllers.controller('main', function($scope, $http) {
     $scope.now = new Date();    
+    $http.get('/api/summary').success(function(data) {
+	$scope.summary = data;
+    });
 });
-
 
 biking2Controllers.controller('charts', function($scope, $http) {
     $http.get('/api/currentYear').success(function(data) {
