@@ -40,22 +40,11 @@
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-compiler-plugin</artifactId>
-		<version>2.5.1</version>
 		<configuration>
 		    <target>${java.version}</target>
 		    <source>${java.version}</source>
 		    <encoding>${project.build.sourceEncoding}</encoding>
-		    <annotationProcessors>
-			<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
-		    </annotationProcessors>
-		</configuration>				
-		<dependencies>
-		    <dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
-			<version>${hibernate.version}</version>
-		    </dependency>
-		</dependencies>
+		</configuration>
 	    </plugin>
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
@@ -65,7 +54,7 @@
 		    <encoding>${project.build.sourceEncoding}</encoding>
 		    <overwrite>false</overwrite>
 		</configuration>
-	    </plugin>	    
+	    </plugin>
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-enforcer-plugin</artifactId>
@@ -85,24 +74,6 @@
 		    </execution>
 		</executions>
 	    </plugin>		
-	    <plugin>
-		<groupId>org.codehaus.mojo</groupId>
-		<artifactId>build-helper-maven-plugin</artifactId>		
-		<executions>
-		    <execution>
-			<id>add-source</id>
-			<phase>generate-sources</phase>
-			<goals>
-			    <goal>add-source</goal>
-			</goals>
-			<configuration>
-			    <sources>
-				<source>${project.build.directory}/generated-sources/annotations/</source>
-			    </sources>
-			</configuration>
-		    </execution>
-		</executions>
-	    </plugin>
 	    <plugin>
 		<groupId>org.zeroturnaround</groupId>
 		<artifactId>jrebel-maven-plugin</artifactId>
