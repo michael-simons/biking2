@@ -16,8 +16,10 @@
 package ac.simons.biking2.highcharts;
 
 import ac.simons.biking2.misc.Sink;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -80,7 +82,11 @@ public class HighchartsNgConfig {
 
     private final Collection<Series> series;
 
-    public HighchartsNgConfig(Options options, Collection<Series> series) {
+    @JsonCreator
+    public HighchartsNgConfig(
+	    @JsonProperty("options") Options options, 
+	    @JsonProperty("series") Collection<Series> series)
+    {
 	this.options = options;
 	this.series = series;
     }
