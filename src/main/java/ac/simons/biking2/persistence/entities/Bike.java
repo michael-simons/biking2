@@ -61,6 +61,11 @@ import org.hibernate.validator.constraints.NotBlank;
 	    + " where b.decommissionedOn is null "
 	    + "    or b.decommissionedOn >= :cutoffDate "
 	    + " order by b.name asc "
+    ),
+    @NamedQuery(
+	    name = "Bike.getDateOfFirstRecord",
+	    query
+	    = "Select coalesce(min(m.recordedOn), current_date()) from Milage m"
     )
 })
 public class Bike implements Serializable {

@@ -30,4 +30,6 @@ public interface BikeRepository extends JpaRepository<Bike, Integer> {
     public List<Bike> findActive(final @Param("cutoffDate") Calendar cutoffDate);
     
     public Bike findByName(final String name);
+    
+    public Calendar getDateOfFirstRecord();
 }

@@ -21,7 +21,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -100,5 +102,11 @@ public class BikeRepositoryTest {
 	    resultSet.next();
 	    assertThat(resultSet.getInt(1), is(equalTo(2)));
 	}
+    }
+    
+    @Test
+    public void testGetDateOfFirstRecord() {
+	final Calendar dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();		
+	assertThat(LocalDate.from(dateOfFirstRecord.toInstant().atZone(ZoneId.systemDefault())), is(equalTo(LocalDate.of(2012, Month.JANUARY, 1))));
     }
 }
