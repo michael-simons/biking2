@@ -27,7 +27,13 @@ biking2Controllers.controller('main', function($scope, $http) {
     });
 });
 
-biking2Controllers.controller('charts', function($scope, $http) {
+biking2Controllers.controller('charts', function($scope, $http) {    
+    $scope.historyConfig = $scope.currentYearConfig = {
+	options: {credits: {enabled: false}},
+	title: {text: ''},
+	loading: true
+    };
+    
     $http.get('/api/charts/currentYear').success(function(data) {
 	$scope.currentYearConfig = data;
     });
