@@ -31,4 +31,8 @@ biking2Controllers.controller('charts', function($scope, $http) {
     $http.get('/api/charts/currentYear').success(function(data) {
 	$scope.currentYearConfig = data;
     });
+    
+    $http.get('/api/charts/history').success(function(data) {
+	$scope.historyConfig = data;
+    });    
 });

@@ -30,6 +30,12 @@ body {
     display: block;
 }
 
+#chart-history {
+    max-width: 640px;
+    height: 380px;
+    display: block;
+}
+
 .row0, .row0 td {
     background-color: #ded7c9; 
 }
