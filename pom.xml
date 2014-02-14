@@ -28,7 +28,7 @@
 	
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	
-	<start-class>ac.simons.biking2.Biking2</start-class>
+	<start-class>ac.simons.biking2.Application</start-class>
     </properties>
     
     <build>
