@@ -162,19 +162,22 @@
 	    <groupId>org.webjars</groupId>
 	    <artifactId>highcharts</artifactId>
 	    <version>${highcharts.version}</version>
-	</dependency>
-	
+	</dependency>	
 	<dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>            
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>            
-        </dependency>
-			
-	
+	    <groupId>org.apache.tomcat.embed</groupId>
+	    <artifactId>tomcat-embed-jasper</artifactId>	
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.taglibs</groupId>
+	    <artifactId>taglibs-standard-spec</artifactId>
+	    <version>1.2.1</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.taglibs</groupId>
+	    <artifactId>taglibs-standard-impl</artifactId>
+	    <version>1.2.1</version>
+	</dependency>		
+				
 	<dependency>
 	    <groupId>org.hamcrest</groupId>
 	    <artifactId>hamcrest-core</artifactId>
