@@ -20,8 +20,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author Michael J. Simons, 2014-02-08
@@ -29,15 +32,28 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-public class Biking2 extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer {
 
-    public static void main(String... args) {
-	System.setProperty("spring.profiles.default", System.getProperty("spring.profiles.default", "dev"));
-	final ApplicationContext applicationContext = SpringApplication.run(Biking2.class, args);
+    @Controller
+    static class Routes {
+
+	@RequestMapping({
+	    "/tracks",
+	    "/tracks/{id:\\w+}",
+	    "about"
+	})
+	public String index() {
+	    return "/index.html";
+	}
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-	return application.sources(Biking2.class);
+	return application.sources(Application.class);
+    }
+
+    public static void main(String... args) {
+	System.setProperty("spring.profiles.default", System.getProperty("spring.profiles.default", "dev"));
+	final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
     }
 }
