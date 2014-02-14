@@ -29,6 +29,6 @@ public class OEmbedController {
     @RequestMapping(value = "/tracks/{id:\\w+}/embed")
     public String embedTrack(final @PathVariable String id, final Model model) {
 	System.out.println("Embedding track " + id);
-	return "/oEmbed/embeddedTrack";
+	return "/WEB-INF/views/oEmbed/embeddedTrack.jspx";
     }
 }
