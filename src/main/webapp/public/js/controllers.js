@@ -18,27 +18,34 @@
 
 /* Controllers */
 
-var biking2Controllers = angular.module('biking2Controllers', ["highcharts-ng"]);
+var biking2Controllers = angular
+	.module('biking2Controllers', ['highcharts-ng'])
+	.constant('emptyChart', {
+	    options: {credits: {enabled: false}},
+	    title: {text: ''},
+	    loading: true
+	});
 
-biking2Controllers.controller('main', function($scope, $http) {
-    $scope.now = new Date();    
+
+biking2Controllers.controller('IndexCtrl', function($scope, $http) {
+    $scope.now = new Date();
     $http.get('/api/summary').success(function(data) {
 	$scope.summary = data;
     });
 });
 
-biking2Controllers.controller('charts', function($scope, $http) {    
-    $scope.historyConfig = $scope.currentYearConfig = {
-	options: {credits: {enabled: false}},
-	title: {text: ''},
-	loading: true
-    };
-    
+biking2Controllers.controller('CurrentYearCtrl', function($scope, $http, emptyChart) {
+    $scope.currentYearConfig = emptyChart;
+
     $http.get('/api/charts/currentYear').success(function(data) {
 	$scope.currentYearConfig = data;
     });
-    
+});
+
+biking2Controllers.controller('HistoryCtrl', function($scope, $http, emptyChart) {
+    $scope.historyConfig = emptyChart;
+
     $http.get('/api/charts/history').success(function(data) {
 	$scope.historyConfig = data;
-    });    
+    });
 });

@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<html ng-app="biking2" ng-controller="main">
+<html ng-app="biking2" >
     <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title>biking.michael-simons.eu</title>
@@ -27,6 +27,7 @@ limitations under the License.
 
 	<script type="text/javascript" src="/webjars/jquery/${jquery.version}/jquery.min.js"></script>
 	<script type="text/javascript" src="/webjars/angularjs/${angularjs.version}/angular.min.js"></script>
+	<script type="text/javascript" src="/webjars/angularjs/${angularjs.version}/angular-route.min.js"></script>
 	<script type="text/javascript" src="/webjars/highcharts/${highcharts.version}/highcharts.js"></script>
 
 	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
@@ -35,85 +36,42 @@ limitations under the License.
 	<script src="/js/controllers.js"></script>	
 	<script src="/js/directives.js"></script>
     </head>
-    <body data-spy='scroll' data-target='.navbar'>
-	<div class='warning' id='err'></div>
-	<div class='navbar navbar-inverse navbar-fixed-top'>
-	    <div class='navbar-inner'>
-		<div class='container'>
-		    <button class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
-			<span class='icon-bar'></span>
-			<span class='icon-bar'></span>
-			<span class='icon-bar'></span>
+    <body data-spy="scroll" data-target=".navbar">	
+	<div class="navbar navbar-inverse navbar-fixed-top">
+	    <div class="navbar-inner">
+		<div class="container">
+		    <button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
 		    </button>
-		    <a class='brand' href='/'>Michis milage</a>
-		    <div class='nav-collapse collapse'>
-			<ul class='nav'>
+		    <a class="brand" href="/">Michis milage</a>
+		    <div class="nav-collapse collapse">
+			<ul class="nav">
 			    <li>
-				<a href='#current'>Current year</a>
-			    </li>
-			    <li>
-				<a href='#history'>History</a>
+				<a href="/current-year">Current year</a>
 			    </li>
 			    <li>
-				<a href='#details'>Details</a>
+				<a href="/history">History</a>
+			    </li>			    
+			    <li>
+				<a href="/tracks">Tracks</a>
 			    </li>
-			    <li class=''>
-				<a href='/tracks'>Tracks</a>
-			    </li>
-			    <li class=''>
-				<a href='/about'>About</a>
+			    <li>
+				<a href="/about">About</a>
 			    </li>
 			</ul>
 		    </div>
 		</div>
 	    </div>
 	</div>
-	<div class='container'>
-	    <div class='page-header'>
-		<h1>
-		    Michis milage
-		    <img alt='Biker Smilie' id='header_smilie' src='/img/biker.gif' />
-		</h1>
-		<div class='row'>
-		    <div class='span3 biking_picture hidden-phone'>
-			<a href='http://dailyfratze.de/michael/2008/4/3' id='a_biking_picture_link'>
-			    <img alt='Michis biking pictures…' id='a_biking_picture' src='http://dailyfratze.de/fratzen/s/5178.jpg' style='height:120px; border:1px solid #003366;' />
-			</a>
-		    </div>
-		    <div class='span9'>
-			<p>This is a little page about my biking activities. I like to track my milage and to take pictures of the places where i go. The biking pictures on the left are a subset from my pictures on <a href="http://dailyfratze.de/michael">dailyfratze.de</a>, all of which are tagged with "Radtour" (Bicycle Tour). The picture will refresh itself every few seconds.</p>
-			<p>See more biking pictures at my facebook album <a href="http://www.facebook.com/album.php?aid=155553&amp;id=535518282&amp;l=6094f409e1">Biking 2010</a> or have a look at my collection of <a href="/tracks">tracks</a>.</p>
-			<p>
-			    Since {{ summary.dateOfFirstRecord | date:'mediumDate' }}, i pedalled
-			    <strong>{{ summary.total | number:2 }}km</strong>
-			    on different bikes.
-			</p>
-		    </div>
-		</div>
-	    </div>
-	    <div class='row'>
-		<div class='span12'>
-		    <div class='anchor' id='current'>
-			<h2>Current year</h2>
-			<p>This chart shows my current biking activities.</p>			
-			<div ng-highchart ng-controller="charts" id="chart-current-year" config="currentYearConfig" ></div>			
-		    </div>
-		</div>
-	    </div>
-	    <div class="row">
-		<div class="span12">
-		    <div class="anchor" id='history'>
-			<h2>History</h2>
-			<p>Those are the overall statistics since 2009. You see a massive decline in 2011, when i exessivly programmed on <a href="http://dailyfratze.de">Daily Fratze 2</a>. I hope the trend in the last 2 months of 2012 continues… Biking tends to keep me sane ;)</p>
-			<div ng-highchart ng-controller="charts" id="chart-history"  config="historyConfig" ></div>			
-		    </div>
-		</div>
-	    </div>
+	<div class="container">
+	    <div ng-view></div>
 	    <hr />
 	    <footer>
 		<p>
-		    &#160; &copy; 2009-{{ now | date:'yyyy' }}
-		    <a href='http://michael-simons.eu'>Michael Simons</a>
+		    &#160; &copy; 2009-{{ currentYear }}
+		    <a href="http://michael-simons.eu">Michael Simons</a>
 		</p>
 	    </footer>
 	</div>
