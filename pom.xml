@@ -28,7 +28,7 @@
 	
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	
-	<start-class>ac.simons.biking2.Application</start-class>
+	<start-class>ac.simons.biking2.Biking2</start-class>
     </properties>
     
     <build>
@@ -94,12 +94,17 @@
 	</plugins>	
 	<resources>
 	    <resource> 
-		<directory>src/main/resources</directory>         
-		<filtering>true</filtering>
+		<directory>src/main/resources</directory>
+	    </resource>        	
+	    <resource> 
+		<directory>src/main/webapp</directory>		
 	    </resource>        	
 	    <resource> 
 		<directory>src/main/webapp</directory>         
-		<filtering>false</filtering>
+		<filtering>true</filtering>		
+		<includes>
+		    <include>**/*.html</include>
+		</includes>
 	    </resource>        	
 	</resources>		
     </build>

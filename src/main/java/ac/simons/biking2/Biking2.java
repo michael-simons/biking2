@@ -29,15 +29,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-public class Application extends SpringBootServletInitializer {
+public class Biking2 extends SpringBootServletInitializer {
 
     public static void main(String... args) {
 	System.setProperty("spring.profiles.default", System.getProperty("spring.profiles.default", "dev"));
-	final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
+	final ApplicationContext applicationContext = SpringApplication.run(Biking2.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-	return application.sources(Application.class);
+	return application.sources(Biking2.class);
     }
 }
