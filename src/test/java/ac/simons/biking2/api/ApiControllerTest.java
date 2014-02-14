@@ -62,7 +62,7 @@ public class ApiControllerTest {
 		bike.addMilage(january1st.plusMonths(i), amounts[i]);
 	    }
 	    return bike;
-	}).collect(toList());
+	}).collect(toList());	
     }
     
     @Test
@@ -82,7 +82,7 @@ public class ApiControllerTest {
     }
     
     @Test
-    public void testGetCurrentDataDataAvailable() {
+    public void testGetCurrentYearDataAvailable() {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(defaultTestData);
 
@@ -107,7 +107,7 @@ public class ApiControllerTest {
     }
 
     @Test
-    public void testGetCurrentDataNoData() {
+    public void testGetCurrentYearNoData() {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
@@ -122,7 +122,7 @@ public class ApiControllerTest {
     }
 
     @Test
-    public void testGetCurrentDataNoMilages() {
+    public void testGetCurrentYearNoMilages() {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
@@ -134,5 +134,108 @@ public class ApiControllerTest {
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
 	assertThat(hlp.get(2).getName(), is(equalTo("Sum")));
 	assertThat(hlp.get(2).getData(), is(equalTo(generate(() -> 0).limit(12).collect(ArrayList::new, ArrayList::add, ArrayList::addAll))));
+    }
+    
+    @Test
+    public void testGetHistoryDataAvailable() {
+	final BikeRepository bikeRepository = mock(BikeRepository.class);	
+	// Default Testdata has no historical data
+	stub(bikeRepository.findAll()).toReturn(defaultTestData);
+	
+	final ApiController controller = new ApiController(bikeRepository);
+	final HighchartsNgConfig highchartDefinition = controller.getHistory();
+
+	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
+	assertThat(hlp.size(), is(equalTo(0)));
+    }
+    
+    @Test
+    public void testCompleteData() {
+	// Arange
+	final LocalDate startDate = january1st.minusYears(2);	
+	final Calendar _startDate = GregorianCalendar.from(startDate.atStartOfDay(ZoneId.systemDefault()));
+	
+	final Map<String, Integer[]> testData = new TreeMap<>();
+	testData.put("bike1", new Integer[]{
+	     10,  20,  30,  40,  50,  60,  70,  80,  90, 100, 110, 120, 
+	    150, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
+	    310, 310, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400
+	 // 
+	});
+	testData.put("bike2", new Integer[]{
+	    0,   0,  30,  40,  50,  60,  70,  80,  90,  135,  135,  135,
+	  140, 140, 200, 300, 400, 500, 600, 700, 800,  900, 1000, 1000         
+	});
+	testData.put("bike3", new Integer[]{
+	    null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null
+	});
+
+	final List<Bike> bikes = testData.entrySet().stream().map(entry -> {
+	    final Bike bike = new Bike(entry.getKey());
+	    final Integer[] amounts = entry.getValue();
+	    for (int i = 0; i < amounts.length; ++i) {
+		if (amounts[i] == null) {
+		    continue;
+		}
+		bike.addMilage(startDate.plusMonths(i), amounts[i]);
+	    }
+	    return bike;
+	}).collect(toList());		
+	final BikeRepository bikeRepository = mock(BikeRepository.class);	
+	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(bikes.get(0)));
+	stub(bikeRepository.findAll()).toReturn(bikes);	
+	stub(bikeRepository.getDateOfFirstRecord()).toReturn(_startDate);
+		
+	// Act
+	final ApiController controller = new ApiController(bikeRepository);
+	final HighchartsNgConfig currentYear = controller.getCurrentYear();
+	final HighchartsNgConfig history = controller.getHistory();
+
+	// Assert	 	
+	assertThat(currentYear.getSeries().size(), is(equalTo(2)));
+	List<Series> hlp = new ArrayList<>(currentYear.getSeries());
+	assertThat(hlp.get(0).getName(), is(equalTo("bike1")));
+	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0))));
+	assertThat(hlp.get(1).getName(), is(equalTo("Sum")));
+	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0))));		
+	hlp = new ArrayList<>(history.getSeries());
+	assertThat(hlp.size(), is(equalTo(2)));
+	Series series = hlp.get(0);	
+	assertThat(series.getName(), is(equalTo(Integer.toString(startDate.getYear()))));
+	assertThat(series.getData(), is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 35))));
+	series = hlp.get(1);	
+	assertThat(series.getName(), is(equalTo(Integer.toString(startDate.getYear()+1))));
+	assertThat(series.getData(), is(equalTo(Arrays.asList(50, 70, 110, 110, 110, 110, 110, 110, 110, 110, 10, 10))));
+		
+	final Summary summary = controller.getSummary();
+	
+	assertThat(summary.getDateOfFirstRecord(), is(equalTo(_startDate)));
+	assertThat(summary.getTotal(), is(equalTo(1450.0)));	
+    }
+    
+    @Test
+    public void testGetHistoryNoData() {	
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	stub(bikeRepository.findAll()).toReturn(new ArrayList<>());
+
+	final ApiController controller = new ApiController(bikeRepository);
+	final HighchartsNgConfig highchartDefinition = controller.getHistory();
+
+	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
+	assertThat(hlp.size(), is(equalTo(0)));	
+    }
+    
+    @Test
+    public void testGetHistoryNoMilages() {
+	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
+
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
+
+	final ApiController controller = new ApiController(bikeRepository);
+	final HighchartsNgConfig highchartDefinition = controller.getHistory();
+
+	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
+	assertThat(hlp.size(), is(equalTo(0)));
     }
 }
