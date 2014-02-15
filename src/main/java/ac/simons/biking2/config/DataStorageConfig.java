@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.config;
 
 import java.io.File;
@@ -28,22 +27,25 @@ import org.springframework.core.env.Environment;
 @Configuration
 @Profile({"dev", "prod"})
 public class DataStorageConfig {
+
     @Bean
     public File datastoreBaseDirectory(final Environment environment) {
 	final String customDatastoreBaseDirectory = environment.getProperty("biking2.datastore-base-directory");
 	File rv;
-	if(customDatastoreBaseDirectory == null || customDatastoreBaseDirectory.isEmpty())
+	if (customDatastoreBaseDirectory == null || customDatastoreBaseDirectory.isEmpty()) {
 	    rv = new File(System.getProperty("user.dir"), String.format("var/%s", environment.acceptsProfiles("dev") ? "dev" : "prod"));
-	else
+	} else {
 	    rv = new File(customDatastoreBaseDirectory);
-	
-	if(!(rv.isDirectory() || rv.mkdir()))
+	}
+
+	if (!(rv.isDirectory() || rv.mkdir())) {
 	    throw new RuntimeException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
-	
+	}
+
 	new File(rv, "data/bikingPictures").mkdirs();
 	new File(rv, "data/galleryPictures").mkdirs();
 	new File(rv, "data/tracks").mkdirs();
-		
+
 	return rv;
-    } 
+    }
 }
