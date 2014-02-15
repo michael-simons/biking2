@@ -13,33 +13,99 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Michael J. Simons, 2014-02-15
  */
+@Controller
 @RestController
-@RequestMapping("/api")
 public class TracksController {
-    
+
     private final TrackRepository trackRepository;
+    private final File datastoreBaseDirectory;
+    private final Map<String, String> acceptableFormats;
 
     @Autowired
-    public TracksController(TrackRepository trackRepository) {
+    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory) {
 	this.trackRepository = trackRepository;
+	this.datastoreBaseDirectory = datastoreBaseDirectory;
+	final Map<String, String> hlp = new HashMap<>();
+	hlp.put("gpx", "application/gpx+xml");
+	hlp.put("tcx", "application/xml");
+	this.acceptableFormats = Collections.unmodifiableMap(hlp);
     }
-    
-    @RequestMapping("/tracks")
-    public List<Track> getTracks() {	
+
+    @RequestMapping("/api/tracks")
+    public @ResponseBody
+    List<Track> getTracks() {
 	return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
+    }
+
+    private Integer getId(final String fromPrettyId) {
+	Integer rv = null;
+	try {
+	    rv = Integer.parseInt(fromPrettyId, 36);
+	} catch (NullPointerException | NumberFormatException e) {
+	}
+	return rv;
+    }
+
+    @RequestMapping({"/tracks/{id:\\w+}.{format}"})
+    public void getTrack(
+	    final @PathVariable String id,
+	    final @PathVariable String format,
+	    final HttpServletRequest request,
+	    final HttpServletResponse response
+    ) throws IOException {
+	final Integer _id = getId(id);
+	final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
+	Track track = null;
+	if (_id == null || !acceptableFormats.containsKey(_format)) {
+	    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+	} else if ((track = this.trackRepository.findOne(_id)) == null) {
+	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	} else {
+	    final File trackFile = new File(datastoreBaseDirectory, String.format("data/tracks/%d.%s", track.getId(), _format));
+	    response.setHeader("Content-Type", acceptableFormats.get(_format));
+	    response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, _format));
+
+	    // Attribute maybe null
+	    if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
+		Files.copy(trackFile.toPath(), response.getOutputStream());
+		response.getOutputStream().flush();
+	    } else {
+		long l = trackFile.length();
+		request.setAttribute("org.apache.tomcat.sendfile.filename", trackFile.getAbsolutePath());
+		request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
+		request.setAttribute("org.apache.tomcat.sendfile.end", l);
+		response.setHeader("Content-Length", Long.toString(l));		
+	    }
+	}
+
+	response.flushBuffer();
     }
 }
