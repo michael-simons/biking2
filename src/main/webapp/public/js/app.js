@@ -46,19 +46,23 @@ var biking2 = angular
 
 		    $routeProvider.
 			    when('/', {
-				templateUrl: 'partials/_index.html',
+				templateUrl: '/partials/_index.html',
 				controller: 'IndexCtrl'
 			    }).
 			    when('/milages', {
-				templateUrl: 'partials/_milages.html',
+				templateUrl: '/partials/_milages.html',
 				controller: 'MilagesCtrl',
 			    }).
 			    when('/tracks', {
-				templateUrl: 'partials/_tracks.html',
+				templateUrl: '/partials/_tracks.html',
 				controller: 'TracksCtrl',
 			    }).
+			    when('/tracks/:id', {
+				templateUrl: '/partials/_track.html',
+				controller: 'TrackCtrl',
+			    }).
 			    when('/about', {
-				templateUrl: 'partials/_about.html',
+				templateUrl: '/partials/_about.html',
 			    }).
 			    otherwise({
 				redirectTo: '/'

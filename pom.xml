@@ -26,6 +26,7 @@
 	<jquery.version>1.11.0</jquery.version>
 	<angularjs.version>1.2.12</angularjs.version>
 	<highcharts.version>3.0.9</highcharts.version>
+	<openlayers.version>2.13.1</openlayers.version>
 	
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	
@@ -179,7 +180,12 @@
 	    <groupId>org.webjars</groupId>
 	    <artifactId>highcharts</artifactId>
 	    <version>${highcharts.version}</version>
-	</dependency>	
+	</dependency>
+	<dependency>
+	    <groupId>org.webjars</groupId>
+	    <artifactId>openlayers</artifactId>
+	    <version>${openlayers.version}</version>
+	</dependency>
 	<dependency>
 	    <groupId>org.apache.tomcat.embed</groupId>
 	    <artifactId>tomcat-embed-jasper</artifactId>	
