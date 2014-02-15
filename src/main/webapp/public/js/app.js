@@ -63,9 +63,4 @@ var biking2 = angular
 	)
 	.run(function($rootScope) {
 	    $rootScope.currentYear = new Date().getFullYear();
-	})
-	.run(function($rootScope, $location, $anchorScroll, $routeParams) {
-	    $rootScope.$on('$routeChangeSuccess', function() {      
-		$anchorScroll();  
-	    });
 	});    
