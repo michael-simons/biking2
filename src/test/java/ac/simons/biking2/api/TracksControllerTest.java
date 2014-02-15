@@ -16,36 +16,33 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.persistence.entities.Track;
-import ac.simons.biking2.persistence.repositories.BikeRepository;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.Document;
+import org.hamcrest.CoreMatchers;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 /**
  * @author Michael J. Simons, 2014-02-15
@@ -79,7 +76,7 @@ public class TracksControllerTest {
     }
     
     @Test
-    public void testGetTrack() throws IOException {
+    public void testDownloadTrack() throws IOException {
 	final int validId = 23;
 	
 	final Track t = mock(Track.class);
@@ -113,33 +110,33 @@ public class TracksControllerTest {
 	// Invalid formats...
 	response = new MockHttpServletResponse();
 	final String validPrettyId = Integer.toString(validId, 36);
-	tracksController.getTrack(validPrettyId, "html", new MockHttpServletRequest(), response);
+	tracksController.downloadTrack(validPrettyId, "html", new MockHttpServletRequest(), response);
 	assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
 	response = new MockHttpServletResponse();
-	tracksController.getTrack(Integer.toString(validId, 36), "", new MockHttpServletRequest(), response);
+	tracksController.downloadTrack(Integer.toString(validId, 36), "", new MockHttpServletRequest(), response);
 	assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
 	response = new MockHttpServletResponse();
-	tracksController.getTrack(Integer.toString(validId, 36), null, new MockHttpServletRequest(), response);
+	tracksController.downloadTrack(Integer.toString(validId, 36), null, new MockHttpServletRequest(), response);
 	assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
 	
 	// invalid ids
 	response = new MockHttpServletResponse();
-	tracksController.getTrack("öäü", "gpx", new MockHttpServletRequest(), response);
+	tracksController.downloadTrack("öäü", "gpx", new MockHttpServletRequest(), response);
 	assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));	
 	response = new MockHttpServletResponse();
-	tracksController.getTrack("", "gpx", new MockHttpServletRequest(), response);
+	tracksController.downloadTrack("", "gpx", new MockHttpServletRequest(), response);
 	assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
 	response = new MockHttpServletResponse();
-	tracksController.getTrack(null, "gpx", new MockHttpServletRequest(), response);
+	tracksController.downloadTrack(null, "gpx", new MockHttpServletRequest(), response);
 	assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
 	response = new MockHttpServletResponse();
-	tracksController.getTrack("1", "gpx", new MockHttpServletRequest(), response);
+	tracksController.downloadTrack("1", "gpx", new MockHttpServletRequest(), response);
 	assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_FOUND)));
 	
 	request = new MockHttpServletRequest();
 	request.setAttribute("org.apache.tomcat.sendfile.support", true);			
 	response = new MockHttpServletResponse();
-	tracksController.getTrack(Integer.toString(validId, 36), "gpx", request, response);	
+	tracksController.downloadTrack(Integer.toString(validId, 36), "gpx", request, response);	
 	assertThat(response.getContentType(), is(equalTo("application/gpx+xml")));
 	assertThat(response.getHeader("Content-Disposition"), is(equalTo(String.format("attachment; filename=\"%s.gpx\"", validPrettyId))));
 	assertThat(request.getAttribute("org.apache.tomcat.sendfile.filename"), is(equalTo(trackGpx.getAbsolutePath())));
@@ -149,16 +146,48 @@ public class TracksControllerTest {
 	request = new MockHttpServletRequest();
 	request.setAttribute("org.apache.tomcat.sendfile.support", false);			
 	response = new MockHttpServletResponse();
-	tracksController.getTrack(Integer.toString(validId, 36), "gpx", request, response);	
+	tracksController.downloadTrack(Integer.toString(validId, 36), "gpx", request, response);	
 	assertThat(response.getContentType(), is(equalTo("application/gpx+xml")));
 	assertThat(response.getHeader("Content-Disposition"), is(equalTo(String.format("attachment; filename=\"%s.gpx\"", validPrettyId))));
 	assertThat(response.getContentAsString(), is(equalTo(contentGpx.stream().collect(Collectors.joining("\n", "", "\n")))));
 	
 	request = new MockHttpServletRequest();	
 	response = new MockHttpServletResponse();
-	tracksController.getTrack(Integer.toString(validId, 36), "tcx", request, response);	
+	tracksController.downloadTrack(Integer.toString(validId, 36), "tcx", request, response);	
 	assertThat(response.getContentType(), is(equalTo("application/xml")));
 	assertThat(response.getHeader("Content-Disposition"), is(equalTo(String.format("attachment; filename=\"%s.tcx\"", validPrettyId))));	
 	assertThat(response.getContentAsString(), is(equalTo(contentTcx.stream().collect(Collectors.joining("\n", "", "\n")))));
+    }
+    
+    public void testGetTrack() {
+	final int validId = 23;
+	
+	final Track t = mock(Track.class);
+	stub(t.getId()).toReturn(validId);	
+	final TrackRepository trackRepository = mock(TrackRepository.class);
+	stub(trackRepository.findOne(validId)).toReturn(t);
+	
+	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")));
+	
+	ResponseEntity<Track> response;
+	response = tracksController.getTrack(Integer.toString(validId, 36));
+	assertThat(response.getBody(), is(notNullValue()));
+	assertThat(response.getBody().getId(), is(equalTo(validId)));
+	
+	response = tracksController.getTrack(null);
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
+	
+	response = tracksController.getTrack("");
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
+	
+	response = tracksController.getTrack("öäü");
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
+	
+	response = tracksController.getTrack("1");
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_FOUND)));
     }
 }

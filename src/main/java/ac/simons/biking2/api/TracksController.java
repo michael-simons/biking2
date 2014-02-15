@@ -20,8 +20,6 @@ import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +28,9 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,8 +73,25 @@ public class TracksController {
 	return rv;
     }
 
+    @RequestMapping("/api/tracks/{id:\\w+}")
+    public ResponseEntity<Track> getTrack(final @PathVariable String id) {
+	final Integer _id = getId(id);
+
+	Track track;
+	ResponseEntity<Track> rv;
+	if (_id == null) {
+	    rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+	} else if ((track = this.trackRepository.findOne(_id)) == null) {
+	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	} else {
+	    rv = new ResponseEntity<>(track, HttpStatus.OK);
+	}
+
+	return rv;
+    }
+
     @RequestMapping({"/tracks/{id:\\w+}.{format}"})
-    public void getTrack(
+    public void downloadTrack(
 	    final @PathVariable String id,
 	    final @PathVariable String format,
 	    final HttpServletRequest request,
@@ -102,7 +118,7 @@ public class TracksController {
 		request.setAttribute("org.apache.tomcat.sendfile.filename", trackFile.getAbsolutePath());
 		request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
 		request.setAttribute("org.apache.tomcat.sendfile.end", l);
-		response.setHeader("Content-Length", Long.toString(l));		
+		response.setHeader("Content-Length", Long.toString(l));
 	    }
 	}
 
