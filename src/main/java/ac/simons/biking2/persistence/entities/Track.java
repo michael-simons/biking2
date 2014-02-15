@@ -15,6 +15,12 @@
  */
 package ac.simons.biking2.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -42,6 +48,9 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "tracks", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"covered_on", "name"})
 })
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder(alphabetic = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Track implements Serializable {
 
     private static final long serialVersionUID = 7630613853916630933L;
@@ -54,6 +63,7 @@ public class Track implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "name", length = 512, nullable = false)
@@ -153,6 +163,7 @@ public class Track implements Serializable {
 	this.type = type;
     }
 
+    @JsonProperty("id")
     public String getPrettyId() {
 	return Integer.toString(this.id, 36);
     }

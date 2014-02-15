@@ -32,7 +32,7 @@ biking2Controllers.controller('IndexCtrl', function($scope, $http) {
     });
 });
 
-biking2Controllers.controller('MilagesCtrl', function($scope, $http, emptyChart, $anchorScroll) {
+biking2Controllers.controller('MilagesCtrl', function($scope, $http, emptyChart) {
     $scope.currentYearConfig = $scope.historyConfig = emptyChart;
 
     $http.get('/api/charts/currentYear').success(function(data) {
@@ -42,6 +42,10 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, emptyChart,
     $http.get('/api/charts/history').success(function(data) {
 	$scope.historyConfig = data;
     });
-    
-   $anchorScroll(); 
+});
+
+biking2Controllers.controller('TracksCtrl', function($scope, $http) {
+    $http.get('/api/tracks').success(function(data) {
+	$scope.tracks = data;
+    });    
 });

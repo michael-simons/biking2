@@ -20,8 +20,11 @@ body {
 }
 
 .right {
-    text-align: right;
-    padding-right: 5px; 
+    text-align: right;    
+}
+
+.center {
+    text-align: center;
 }
 
 #chart-current-year {
