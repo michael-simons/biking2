@@ -3,6 +3,11 @@ body {
   padding-bottom: 30px;
 }
 
+.anchor:before {
+  display: block;
+  content: "";
+  height: 40px;
+  margin: -40px 0 0; }
 
 .biking_picture img {
     display: block;

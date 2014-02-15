@@ -26,26 +26,22 @@ var biking2Controllers = angular
 	    loading: true
 	});
 
-
-biking2Controllers.controller('IndexCtrl', function($scope, $http) {
-    $scope.now = new Date();
+biking2Controllers.controller('IndexCtrl', function($scope, $http) {    
     $http.get('/api/summary').success(function(data) {
 	$scope.summary = data;
     });
 });
 
-biking2Controllers.controller('CurrentYearCtrl', function($scope, $http, emptyChart) {
-    $scope.currentYearConfig = emptyChart;
+biking2Controllers.controller('MilagesCtrl', function($scope, $http, emptyChart, $anchorScroll) {
+    $scope.currentYearConfig = $scope.historyConfig = emptyChart;
 
     $http.get('/api/charts/currentYear').success(function(data) {
 	$scope.currentYearConfig = data;
     });
-});
-
-biking2Controllers.controller('HistoryCtrl', function($scope, $http, emptyChart) {
-    $scope.historyConfig = emptyChart;
 
     $http.get('/api/charts/history').success(function(data) {
 	$scope.historyConfig = data;
     });
+    
+   $anchorScroll(); 
 });

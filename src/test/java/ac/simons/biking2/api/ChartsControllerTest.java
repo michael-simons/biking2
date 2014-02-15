@@ -42,11 +42,11 @@ import static org.mockito.Mockito.stub;
  *
  * @author msimons
  */
-public class ApiControllerTest {
+public class ChartsControllerTest {
     private final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
     private final List<Bike> defaultTestData;
     
-    public ApiControllerTest() {
+    public ChartsControllerTest() {
 	final Map<String, Integer[]> testData = new TreeMap<>();
 	testData.put("bike1", new Integer[]{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 150});
 	testData.put("bike2", new Integer[]{0, 0, 30, 40, 50, 60, 70, 80, 90, 135, 135, 135});
@@ -73,7 +73,7 @@ public class ApiControllerTest {
 	stub(bikeRepository.findAll()).toReturn(defaultTestData);
 	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
 	
-	final ApiController controller = new ApiController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository);
 	
 	final Summary summary = controller.getSummary();
 	
@@ -86,7 +86,7 @@ public class ApiControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(defaultTestData);
 
-	final ApiController controller = new ApiController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
 
 	assertThat(highchartDefinition.getSeries().size(), is(equalTo(4)));
@@ -113,7 +113,7 @@ public class ApiControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(new ArrayList<>());
 
-	final ApiController controller = new ApiController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -128,7 +128,7 @@ public class ApiControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
 
-	final ApiController controller = new ApiController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -142,7 +142,7 @@ public class ApiControllerTest {
 	// Default Testdata has no historical data
 	stub(bikeRepository.findAll()).toReturn(defaultTestData);
 	
-	final ApiController controller = new ApiController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getHistory();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -187,7 +187,7 @@ public class ApiControllerTest {
 	stub(bikeRepository.getDateOfFirstRecord()).toReturn(_startDate);
 		
 	// Act
-	final ApiController controller = new ApiController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig currentYear = controller.getCurrentYear();
 	final HighchartsNgConfig history = controller.getHistory();
 
@@ -218,7 +218,7 @@ public class ApiControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findAll()).toReturn(new ArrayList<>());
 
-	final ApiController controller = new ApiController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getHistory();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -232,7 +232,7 @@ public class ApiControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
 
-	final ApiController controller = new ApiController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getHistory();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());

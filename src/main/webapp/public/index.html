@@ -37,9 +37,7 @@ limitations under the License.
     </head>
 
     <body role="document">
-
-	<!-- Fixed navbar -->
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	    <div class="container">
 		<div class="navbar-header">
 		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">			  
@@ -51,23 +49,15 @@ limitations under the License.
 		    <a class="navbar-brand" href="/">Michis milage</a>
 		</div>
 		<div class="navbar-collapse collapse">		      
-		    <ul class="nav navbar-nav">
-			<li>
-			    <a href="/current-year">Current year</a>
-			</li>
-			<li>
-			    <a href="/history">History</a>
-			</li>			    
-			<li>
-			    <a href="/tracks">Tracks</a>
-			</li>
-			<li>
-			    <a href="/about">About</a>
-			</li>
+		    <ul class="nav navbar-nav">			
+			<li><a data-ng-active-tab href="/bikes">Bikes</a></li>
+			<li><a data-ng-active-tab href="/milages">Milages</a></li>			    
+			<li><a data-ng-active-tab href="/tracks">Tracks</a></li>			
+			<li><a data-ng-active-tab href="/about">About</a></li>
 		    </ul>		      
-		</div><!--/.nav-collapse -->
+		</div>
 	    </div>
-	</div>
+	</nav>
 	<div class="container">
 	    <div data-ng-view></div>
 	    <hr />

@@ -20,31 +20,52 @@
 
 var biking2 = angular
 	.module('biking2', ['ngRoute', 'biking2Controllers'])
-	.config(
-	    function($routeProvider, $locationProvider) {
-		$locationProvider.html5Mode(true);
+	.directive('ngActiveTab', function($location) {
+	    return {
+		link: function postLink(scope, element, attrs) {
+		    scope.$on("$routeChangeSuccess", function(event, current, previous) {
+			// this var grabs the tab-level off the attribute, or defaults to 1
+			var pathLevel = attrs.activeTab || 1,
+				// this var finds what the path is at the level specified
+				pathToCheck = $location.path().split('/')[pathLevel],
+				// this var finds grabs the same level of the href attribute
+				tabLink = attrs.href.split('/')[pathLevel];
 
-		$routeProvider.
-			when('/', {
-			    templateUrl: 'partials/_index.html',
-			    controller: 'IndexCtrl'
-			}).
-			when('/current-year', {
-			    templateUrl: 'partials/_current-year.html',
-			    controller: 'CurrentYearCtrl'
-			}).
-			when('/history', {
-			    templateUrl: 'partials/_history.html',
-			    controller: 'HistoryCtrl'
-			}).
-			when('/about', {
-			    templateUrl: 'partials/_about.html'
-			}).
-			otherwise({
-			    redirectTo: '/'
-			});
-	    }
+			if (pathToCheck === tabLink) {
+			    element.parent().addClass("active");
+			} else {
+			    element.parent().removeClass("active");
+			}
+		    });
+		}
+	    };
+	})
+	.config(
+		function($routeProvider, $locationProvider) {
+		    $locationProvider.html5Mode(true);
+
+		    $routeProvider.
+			    when('/', {
+				templateUrl: 'partials/_index.html',
+				controller: 'IndexCtrl'
+			    }).
+			    when('/milages', {
+				templateUrl: 'partials/_milages.html',
+				controller: 'MilagesCtrl',
+			    }).
+			    when('/about', {
+				templateUrl: 'partials/_about.html',
+			    }).
+			    otherwise({
+				redirectTo: '/'
+			    });
+		}
 	)
 	.run(function($rootScope) {
 	    $rootScope.currentYear = new Date().getFullYear();
-	});
+	})
+	.run(function($rootScope, $location, $anchorScroll, $routeParams) {
+	    $rootScope.$on('$routeChangeSuccess', function() {      
+		$anchorScroll();  
+	    });
+	});    

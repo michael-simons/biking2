@@ -39,12 +39,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-public class ApiController {
+public class ChartsController {
 
     private final BikeRepository bikeRepository;
 
     @Autowired
-    public ApiController(final BikeRepository bikeRepository) {
+    public ChartsController(final BikeRepository bikeRepository) {
 	this.bikeRepository = bikeRepository;
     }
     
@@ -77,7 +77,7 @@ public class ApiController {
 		    .withData(milagesInYear)
 		    .build();	
 	    return milagesInYear;
-	}).reduce(ApiController::addArrays).orElse(generate(() -> 0).limit(12).toArray());
+	}).reduce(ChartsController::addArrays).orElse(generate(() -> 0).limit(12).toArray());
 	
 	// Add sum as spline and compute maximum y value
 	final int currentMaxYValue  = 
@@ -161,7 +161,7 @@ public class ApiController {
 		    // Merge the array (necessary if the stream runs in parallel)
 		    (map1, map2) -> {			    
 			map2.forEach((k, v) -> {
-			    map1.merge(k, v, ApiController::addArrays);
+			    map1.merge(k, v, ChartsController::addArrays);
 			});
 		    }
 	    );

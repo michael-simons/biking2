@@ -38,8 +38,8 @@ public class Application extends SpringBootServletInitializer {
     static class Routes {
 
 	@RequestMapping({
-	    "/current-year",
-	    "/history",
+	    "/bikes",
+	    "/milages",
 	    "/tracks",
 	    "/tracks/{id:\\w+}",
 	    "about"
