@@ -19,7 +19,9 @@ import ac.simons.biking2.api.model.Summary;
 import ac.simons.biking2.api.model.highcharts.HighchartsNgConfig;
 import ac.simons.biking2.api.model.highcharts.Series;
 import ac.simons.biking2.persistence.entities.Bike;
+import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ import static org.mockito.Mockito.stub;
 public class ChartsControllerTest {
     private final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
     private final List<Bike> defaultTestData;
+    private final AssortedTripRepository assortedTripRepository;
     
     public ChartsControllerTest() {
 	final Map<String, Integer[]> testData = new TreeMap<>();
@@ -63,6 +66,10 @@ public class ChartsControllerTest {
 	    }
 	    return bike;
 	}).collect(toList());	
+	
+	// not really interested in trips
+	this.assortedTripRepository = mock(AssortedTripRepository.class);
+	stub(this.assortedTripRepository.getTotalDistance()).toReturn(BigDecimal.TEN);
     }
     
     @Test
@@ -73,12 +80,12 @@ public class ChartsControllerTest {
 	stub(bikeRepository.findAll()).toReturn(defaultTestData);
 	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
 	
-	final ChartsController controller = new ChartsController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository, assortedTripRepository);
 	
 	final Summary summary = controller.getSummary();
 	
 	assertThat(summary.getDateOfFirstRecord(), is(equalTo(now)));
-	assertThat(summary.getTotal(), is(equalTo(335.0)));
+	assertThat(summary.getTotal(), is(equalTo(345.0)));
     }
     
     @Test
@@ -86,7 +93,7 @@ public class ChartsControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(defaultTestData);
 
-	final ChartsController controller = new ChartsController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository, assortedTripRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
 
 	assertThat(highchartDefinition.getSeries().size(), is(equalTo(4)));
@@ -113,7 +120,7 @@ public class ChartsControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(new ArrayList<>());
 
-	final ChartsController controller = new ChartsController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository, assortedTripRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -128,7 +135,7 @@ public class ChartsControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
 
-	final ChartsController controller = new ChartsController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository, assortedTripRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -142,7 +149,7 @@ public class ChartsControllerTest {
 	// Default Testdata has no historical data
 	stub(bikeRepository.findAll()).toReturn(defaultTestData);
 	
-	final ChartsController controller = new ChartsController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository, assortedTripRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getHistory();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -187,7 +194,7 @@ public class ChartsControllerTest {
 	stub(bikeRepository.getDateOfFirstRecord()).toReturn(_startDate);
 		
 	// Act
-	final ChartsController controller = new ChartsController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository, assortedTripRepository);
 	final HighchartsNgConfig currentYear = controller.getCurrentYear();
 	final HighchartsNgConfig history = controller.getHistory();
 
@@ -210,7 +217,7 @@ public class ChartsControllerTest {
 	final Summary summary = controller.getSummary();
 	
 	assertThat(summary.getDateOfFirstRecord(), is(equalTo(_startDate)));
-	assertThat(summary.getTotal(), is(equalTo(1450.0)));	
+	assertThat(summary.getTotal(), is(equalTo(1460.0)));	
     }
     
     @Test
@@ -218,7 +225,7 @@ public class ChartsControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findAll()).toReturn(new ArrayList<>());
 
-	final ChartsController controller = new ChartsController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository, assortedTripRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getHistory();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
@@ -232,7 +239,7 @@ public class ChartsControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
 
-	final ChartsController controller = new ChartsController(bikeRepository);
+	final ChartsController controller = new ChartsController(bikeRepository, assortedTripRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getHistory();
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
