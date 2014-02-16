@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core" 
+	  xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
+    <jsp:directive.page contentType="text/html; charset=utf-8"  pageEncoding="UTF-8" />	
+    <jsp:directive.page session="false" />	
+    <jsp:output omit-xml-declaration="true" />
+    <jsp:output doctype-root-element="html" doctype-system="about:legacy-compat" />
+    <html>
+	<body>
+	    Hallo.
+	    
+	    ${1+1+1+1}
+	    
+	</body>
+    </html>
+</jsp:root>

@@ -15,9 +15,15 @@
  */
 package ac.simons.biking2.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,6 +48,9 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "tracks", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"covered_on", "name"})
 })
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder(alphabetic = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Track implements Serializable {
 
     private static final long serialVersionUID = 7630613853916630933L;
@@ -54,6 +63,7 @@ public class Track implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "name", length = 512, nullable = false)
@@ -64,7 +74,7 @@ public class Track implements Serializable {
     @Column(name = "covered_on", nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull
-    private Date coveredOn;
+    private Calendar coveredOn;
 
     @Column(name = "description", length = 2048)
     private String description;
@@ -97,11 +107,11 @@ public class Track implements Serializable {
 	this.name = name;
     }
 
-    public Date getCoveredOn() {
+    public Calendar getCoveredOn() {
 	return this.coveredOn;
     }
 
-    public void setCoveredOn(Date coveredOn) {
+    public void setCoveredOn(Calendar coveredOn) {
 	this.coveredOn = coveredOn;
     }
 
@@ -153,6 +163,7 @@ public class Track implements Serializable {
 	this.type = type;
     }
 
+    @JsonProperty("id")
     public String getPrettyId() {
 	return Integer.toString(this.id, 36);
     }

@@ -16,19 +16,17 @@
 package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
-import static java.time.Instant.now;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 import static java.util.stream.Collectors.reducing;
 import java.util.stream.IntStream;
 import static java.util.stream.IntStream.rangeClosed;
@@ -64,6 +62,11 @@ import org.hibernate.validator.constraints.NotBlank;
 	    + " where b.decommissionedOn is null "
 	    + "    or b.decommissionedOn >= :cutoffDate "
 	    + " order by b.name asc "
+    ),
+    @NamedQuery(
+	    name = "Bike.getDateOfFirstRecord",
+	    query
+	    = "Select coalesce(min(m.recordedOn), current_date()) from Milage m"
     )
 })
 public class Bike implements Serializable {
@@ -87,7 +90,7 @@ public class Bike implements Serializable {
 
     @Column(name = "decommissioned_on")
     @Temporal(TemporalType.DATE)
-    private Date decommissionedOn;
+    private Calendar decommissionedOn;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
@@ -96,7 +99,7 @@ public class Bike implements Serializable {
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
-    private Date createdAt;
+    private Calendar createdAt;
 
     /**
      * Contains all monthly periods that bike has been used
@@ -113,7 +116,7 @@ public class Bike implements Serializable {
     @PrePersist
     public void prePersist() {
 	if (this.createdAt == null) {
-	    this.createdAt = Date.from(now());
+	    this.createdAt = Calendar.getInstance();
 	}
     }
 
@@ -137,11 +140,11 @@ public class Bike implements Serializable {
 	this.color = color;
     }
 
-    public Date getDecommissionedOn() {
+    public Calendar getDecommissionedOn() {
 	return this.decommissionedOn;
     }
 
-    public void setDecommissionedOn(Date decommissionedOn) {
+    public void setDecommissionedOn(Calendar decommissionedOn) {
 	this.decommissionedOn = decommissionedOn;
     }
 
@@ -149,14 +152,10 @@ public class Bike implements Serializable {
 	return this.milages;
     }
 
-    public Date getCreatedAt() {
+    public Calendar getCreatedAt() {
 	return this.createdAt;
     }
-
-    public void setCreatedAt(Date createdAt) {
-	this.createdAt = createdAt;
-    }
-    
+  
     public synchronized  Bike addMilage(final LocalDate recordedOn, final double amount) {
 	if(this.milages.size() > 0) {
 	    final Milage lastMilage = this.milages.get(this.milages.size() - 1);
@@ -182,13 +181,13 @@ public class Bike implements Serializable {
      */
     public synchronized Map<LocalDate, Integer> getPeriods() {
 	if (this.periods == null) {
-	    this.periods = IntStream.range(1, this.milages.size()).collect(HashMap::new, (map, i) -> {
+	    this.periods = IntStream.range(1, this.milages.size()).collect(TreeMap::new, (map, i) -> {
 		final Milage left = milages.get(i - 1);
 		map.put(
 			left.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
 			milages.get(i).getAmount().subtract(left.getAmount()).intValue()
 		);
-	    }, HashMap::putAll);
+	    }, TreeMap::putAll);
 	}
 
 	return this.periods;

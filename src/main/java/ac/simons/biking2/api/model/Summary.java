@@ -13,22 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ac.simons.biking2.api.model;
 
-package ac.simons.biking2.persistence.repositories;
-
-import ac.simons.biking2.persistence.entities.Bike;
 import java.util.Calendar;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 
 /**
- * @author Michael J. Simons, 2014-02-08
+ * @author Michael J. Simons, 2014-02-13
  */
-public interface BikeRepository extends JpaRepository<Bike, Integer> {
-    public List<Bike> findActive(final @Param("cutoffDate") Calendar cutoffDate);
-    
-    public Bike findByName(final String name);
-    
-    public Calendar getDateOfFirstRecord();
+public class Summary {
+
+    private Calendar dateOfFirstRecord;
+
+    private Double total;
+
+    public Calendar getDateOfFirstRecord() {
+	return dateOfFirstRecord;
+    }
+
+    public void setDateOfFirstRecord(Calendar dateOfFirstRecord) {
+	this.dateOfFirstRecord = dateOfFirstRecord;
+    }
+
+    public Double getTotal() {
+	return total;
+    }
+
+    public void setTotal(Double total) {
+	this.total = total;
+    }
 }

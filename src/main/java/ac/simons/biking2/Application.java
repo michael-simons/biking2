@@ -17,20 +17,45 @@ package ac.simons.biking2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
 @Configuration
-@EnableAutoConfiguration()
+@EnableAutoConfiguration
 @ComponentScan
-public class Application {
+public class Application extends SpringBootServletInitializer {
+
+    @Controller
+    static class Routes {
+
+	@RequestMapping({
+	    "/bikes",
+	    "/milages",
+	    "/tracks",
+	    "/tracks/{id:\\w+}",
+	    "about"
+	})
+	public String index() {
+	    return "/index.html";
+	}
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+	return application.sources(Application.class);
+    }
 
     public static void main(String... args) {
 	System.setProperty("spring.profiles.default", System.getProperty("spring.profiles.default", "dev"));
-	final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);	
+	final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
     }
 }

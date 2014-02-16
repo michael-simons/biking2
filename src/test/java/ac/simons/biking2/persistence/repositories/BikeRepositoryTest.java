@@ -21,8 +21,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +67,7 @@ public class BikeRepositoryTest {
     @Test
     public void testFindActive() {
 	final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);
-	final List<Bike> activeBikes = this.bikeRepository.findActive(Date.from(cutOffDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+	final List<Bike> activeBikes = this.bikeRepository.findActive(GregorianCalendar.from(cutOffDate.atStartOfDay(ZoneId.systemDefault())));
 
 	assertThat(activeBikes.size(), is(equalTo(3)));
 	assertThat(activeBikes.get(0).getName(), is(equalTo("bike1")));
@@ -99,5 +102,11 @@ public class BikeRepositoryTest {
 	    resultSet.next();
 	    assertThat(resultSet.getInt(1), is(equalTo(2)));
 	}
+    }
+    
+    @Test
+    public void testGetDateOfFirstRecord() {
+	final Calendar dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();		
+	assertThat(LocalDate.from(dateOfFirstRecord.toInstant().atZone(ZoneId.systemDefault())), is(equalTo(LocalDate.of(2012, Month.JANUARY, 1))));
     }
 }

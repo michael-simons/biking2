@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ac.simons.biking2.api.model.highcharts;
 
-package ac.simons.biking2.persistence.repositories;
-
-import ac.simons.biking2.persistence.entities.Bike;
-import java.util.Calendar;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 /**
- * @author Michael J. Simons, 2014-02-08
+ * @author Michael J. Simons, 2014-02-11
  */
-public interface BikeRepository extends JpaRepository<Bike, Integer> {
-    public List<Bike> findActive(final @Param("cutoffDate") Calendar cutoffDate);
-    
-    public Bike findByName(final String name);
-    
-    public Calendar getDateOfFirstRecord();
+public class ColumnTest {
+
+    @Test
+    public void testBuilder() {
+	Column column = new Column.Builder<>(object -> object)
+		.withPointPadding(0.2)
+		.withBorderWidth(0)
+	.build();
+	assertThat(column.getPointPadding(), is(equalTo(0.2)));
+	assertThat(column.getBorderWidth(), is(equalTo(0)));
+    }
 }

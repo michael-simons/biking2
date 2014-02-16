@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ac.simons.biking2.api;
 
-package ac.simons.biking2.persistence.repositories;
-
-import ac.simons.biking2.persistence.entities.Bike;
-import java.util.Calendar;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * @author Michael J. Simons, 2014-02-08
+ * @author Michael J. Simons, 2014-02-14
  */
-public interface BikeRepository extends JpaRepository<Bike, Integer> {
-    public List<Bike> findActive(final @Param("cutoffDate") Calendar cutoffDate);
-    
-    public Bike findByName(final String name);
-    
-    public Calendar getDateOfFirstRecord();
+@Controller
+public class OEmbedController {
+
+    @RequestMapping(value = "/tracks/{id:\\w+}/embed")
+    public String embedTrack(final @PathVariable String id, final Model model) {
+	System.out.println("Embedding track " + id);
+	return "/WEB-INF/views/oEmbed/embeddedTrack.jspx";
+    }
 }
