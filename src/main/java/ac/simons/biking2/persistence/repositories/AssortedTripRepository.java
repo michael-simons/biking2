@@ -17,10 +17,12 @@
 package ac.simons.biking2.persistence.repositories;
 
 import ac.simons.biking2.persistence.entities.AssortedTrip;
+import java.math.BigDecimal;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
 public interface AssortedTripRepository extends JpaRepository<AssortedTrip, Integer> {    
+    public BigDecimal getTotalDistance();
 }

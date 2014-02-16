@@ -9,3 +9,7 @@ insert into milages(recorded_on, amount, created_at, bike_id) select '2013-02-01
 insert into milages(recorded_on, amount, created_at, bike_id) select '2013-03-01', 50, current_timestamp(), id from bikes where name = 'bike1';
 
 insert into milages(recorded_on, amount, created_at, bike_id) select '2012-01-01', 10, current_timestamp(), id from bikes where name = 'bike2';
+
+insert into assorted_trips(covered_on, distance) values ('2009-12-04', 14.2);
+insert into assorted_trips(covered_on, distance) values ('2013-06-05', 21.9);
+insert into assorted_trips(covered_on, distance) values ('1938-09-15', 7.7);
