@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author Michael J. Simons
+ * @author Michael J. Simons, 2014-02-16
  */
 @Configuration
 @ComponentScan("ac.simons.biking2.config")
