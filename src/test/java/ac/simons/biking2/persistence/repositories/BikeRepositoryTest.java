@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.persistence.repositories;
 
+import ac.simons.biking2.config.TestConfig;
 import ac.simons.biking2.persistence.entities.Bike;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,11 +25,8 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sql.DataSource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -37,8 +35,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -50,13 +46,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@ContextConfiguration
+@ContextConfiguration(classes = TestConfig.class)
 public class BikeRepositoryTest {
-
-    @Configuration
-    @ComponentScan("ac.simons.biking2.config")
-    static class TestConfiguration {
-    }
 
     @Autowired
     private BikeRepository bikeRepository;
@@ -103,10 +94,10 @@ public class BikeRepositoryTest {
 	    assertThat(resultSet.getInt(1), is(equalTo(2)));
 	}
     }
-    
+
     @Test
     public void testGetDateOfFirstRecord() {
-	final Calendar dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();		
+	final Calendar dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();
 	assertThat(LocalDate.from(dateOfFirstRecord.toInstant().atZone(ZoneId.systemDefault())), is(equalTo(LocalDate.of(2012, Month.JANUARY, 1))));
     }
 }
