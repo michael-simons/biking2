@@ -40,7 +40,7 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(
 	    name = "AssortedTrip.getTotalDistance",
 	    query
-	    = "Select sum(t.distance) from AssortedTrip t"
+	    = "Select coalesce(sum(t.distance), 0) from AssortedTrip t"
     )
 })
 public class AssortedTrip implements Serializable {
