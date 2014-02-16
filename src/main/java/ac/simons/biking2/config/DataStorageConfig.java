@@ -38,7 +38,7 @@ public class DataStorageConfig {
 	    rv = new File(customDatastoreBaseDirectory);
 	}
 
-	if (!(rv.isDirectory() || rv.mkdir())) {
+	if (!(rv.isDirectory() || rv.mkdirs())) {
 	    throw new RuntimeException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
 	}
 
