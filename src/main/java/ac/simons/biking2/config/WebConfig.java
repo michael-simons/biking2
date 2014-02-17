@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.config;
 
+import ac.simons.biking2.api.OEmbedController;
 import ac.simons.biking2.api.TracksController;
 import ac.simons.biking2.api.model.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,13 +36,13 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
-     * Enable favor of format parameter over requested content type, needed
-     * for OEmbedController#getEmbeddableTrack
-     * @param configurer 
+     * Enable favor of format parameter over requested content type, needed for {@link OEmbedController#getEmbeddableTrack(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, javax.servlet.http.HttpServletRequest)}
+     *
+     * @param configurer
      */
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-	super.configureContentNegotiation(configurer); 
+	super.configureContentNegotiation(configurer);
 	configurer.favorParameter(true);
     }
 
@@ -70,17 +71,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    }
 	};
     }
- 
+
     /**
-     * {@link OEmbedResponse} uses XmlElement annotations to be configured
-     * for JAXB as well as JSON so we need the {@link JaxbAnnotationModule} 
-     * as well
-     * @return 
+     * {@link OEmbedResponse} uses XmlElement annotations to be configured for
+     * JAXB as well as JSON so we need the {@link JaxbAnnotationModule} as well
+     *
+     * @return
      */
     @Bean
     public ObjectMapper jacksonObjectMapper() {
 	return new ObjectMapper().registerModules(
-		new JaxbAnnotationModule().setPriority(Priority.SECONDARY)		
+		new JaxbAnnotationModule().setPriority(Priority.SECONDARY)
 	);
     }
 }
