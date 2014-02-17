@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Configuration
 @EnableAutoConfiguration
+@EnableScheduling
 @ComponentScan
 public class Application extends SpringBootServletInitializer {
 
