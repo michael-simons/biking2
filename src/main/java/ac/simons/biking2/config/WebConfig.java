@@ -32,7 +32,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
      * Enable favor of format parameter over requested content type, needed
-     * for #OEmbedController#getEmbeddableTrack
+     * for OEmbedController#getEmbeddableTrack
      * @param configurer 
      */
     @Override
