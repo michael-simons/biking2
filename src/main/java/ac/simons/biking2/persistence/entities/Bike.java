@@ -206,7 +206,7 @@ public class Bike implements Serializable {
      * @return
      */
     public int getMilage() {
-	return this.getPeriods().values().parallelStream().collect(reducing(Integer::sum)).get();
+	return this.getPeriods().values().parallelStream().collect(reducing(Integer::sum)).orElse(0);
     }
 
     /**
