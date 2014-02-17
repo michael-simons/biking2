@@ -15,10 +15,8 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.api.model.Summary;
 import ac.simons.biking2.api.model.highcharts.HighchartsNgConfig;
 import ac.simons.biking2.persistence.entities.Bike;
-import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -43,25 +41,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChartsController {
 
     private final BikeRepository bikeRepository;
-    private final AssortedTripRepository assortedTripRepository;
-
-    @Autowired
-    public ChartsController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository) {
-	this.bikeRepository = bikeRepository;
-	this.assortedTripRepository = assortedTripRepository;
-    }
     
-    @RequestMapping("/summary")
-    public Summary getSummary() {
-	final List<Bike> allBikes = this.bikeRepository.findAll();
-	
-	final Summary summary = new Summary();
-	summary.setDateOfFirstRecord(this.bikeRepository.getDateOfFirstRecord());
-	summary.setTotal(
-		allBikes.stream().mapToInt(Bike::getMilage).sum() + 
-		this.assortedTripRepository.getTotalDistance().doubleValue()
-	);
-	return summary;
+    @Autowired
+    public ChartsController(final BikeRepository bikeRepository) {
+	this.bikeRepository = bikeRepository;	
     }
 
     @RequestMapping("/charts/currentYear")

@@ -51,7 +51,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 public class TracksControllerTest {
 
     private final List<Track> defaultTestData;
-    private final Coordinate home = new Coordinate("13.408056", "52.518611");
     
     public TracksControllerTest() {
 	final int[] ids = new int[]{1, 2, 3};
@@ -70,7 +69,7 @@ public class TracksControllerTest {
     public void testGetTracks() {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"))).toReturn(defaultTestData);
-	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")), home);
+	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")));
 
 	final List<Track> tracks = tracksController.getTracks();
 
@@ -104,7 +103,7 @@ public class TracksControllerTest {
 	trackTcx.createNewFile();
 	trackTcx.deleteOnExit();
 	
-	final TracksController tracksController = new TracksController(trackRepository, tmpDir, home);
+	final TracksController tracksController = new TracksController(trackRepository, tmpDir);
 	
 	MockHttpServletRequest request;
 	MockHttpServletResponse response;
@@ -169,7 +168,7 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findOne(validId)).toReturn(t);
 	
-	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")), home);
+	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")));
 	
 	ResponseEntity<Track> response;
 	response = tracksController.getTrack(Integer.toString(validId, 36));

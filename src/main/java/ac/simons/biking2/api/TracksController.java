@@ -56,13 +56,11 @@ public class TracksController {
 
     private final TrackRepository trackRepository;
     private final File datastoreBaseDirectory;
-    private final Coordinate home;
 
     @Autowired
-    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final Coordinate home) {
+    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory) {
 	this.trackRepository = trackRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
-	this.home = home;
     }
 
     @RequestMapping("/api/tracks")
@@ -86,12 +84,7 @@ public class TracksController {
 	}
 
 	return rv;
-    }
-    
-    @RequestMapping("/api/home")
-    public @ResponseBody Coordinate getHome() {
-	return this.home;
-    }
+    }    
 
     @RequestMapping({"/tracks/{id:\\w+}.{format}"})
     public void downloadTrack(
