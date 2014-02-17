@@ -13,3 +13,5 @@ insert into milages(recorded_on, amount, created_at, bike_id) select '2012-01-01
 insert into assorted_trips(covered_on, distance) values ('2009-12-04', 14.2);
 insert into assorted_trips(covered_on, distance) values ('2013-06-05', 21.9);
 insert into assorted_trips(covered_on, distance) values ('1938-09-15', 7.7);
+
+insert into tracks(id, covered_on, description, name, type) values(23, '2011-03-04', 'blah', 'RR bis Simmerath', 'biking');

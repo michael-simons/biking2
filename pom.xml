@@ -35,6 +35,14 @@
     
     <build>
 	<plugins>
+	    <!-- Inconsistend database state by forks... -->
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-surefire-plugin</artifactId>
+		<configuration>
+		    <forkCount>0</forkCount>
+		</configuration>
+	    </plugin>
 	    <plugin>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-maven-plugin</artifactId>
@@ -125,6 +133,18 @@
 	    <artifactId>spring-data-jpa</artifactId>
 	</dependency>
 		
+	<dependency>
+	    <groupId>com.fasterxml.jackson.module</groupId>
+	    <artifactId>jackson-module-jaxb-annotations</artifactId>
+	    <version>${jackson.version}</version>
+	    <exclusions>
+		<exclusion>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		</exclusion>
+	    </exclusions>  			
+	</dependency>		
+				
 	<dependency>
 	    <groupId>org.jboss.logging</groupId>
 	    <artifactId>jboss-logging</artifactId>
