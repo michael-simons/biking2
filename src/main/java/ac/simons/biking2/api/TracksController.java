@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.api.model.Coordinate;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
@@ -55,11 +56,13 @@ public class TracksController {
 
     private final TrackRepository trackRepository;
     private final File datastoreBaseDirectory;
+    private final Coordinate home;
 
     @Autowired
-    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory) {
+    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final Coordinate home) {
 	this.trackRepository = trackRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
+	this.home = home;
     }
 
     @RequestMapping("/api/tracks")
@@ -83,6 +86,11 @@ public class TracksController {
 	}
 
 	return rv;
+    }
+    
+    @RequestMapping("/api/home")
+    public @ResponseBody Coordinate getHome() {
+	return this.home;
     }
 
     @RequestMapping({"/tracks/{id:\\w+}.{format}"})

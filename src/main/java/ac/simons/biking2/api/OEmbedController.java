@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.api.model.Coordinate;
 import ac.simons.biking2.api.model.OEmbedResponse;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,10 +53,12 @@ public class OEmbedController {
     }
     
     private final TrackRepository trackRepository;
+    private final Coordinate home;
     
     @Autowired
-    public OEmbedController(TrackRepository TrackRepository) {
+    public OEmbedController(TrackRepository TrackRepository, final Coordinate home) {
 	this.trackRepository = TrackRepository;
+	this.home = home;
     }
     
     @RequestMapping(value = "/oembed", produces = {"application/json", "application/xml"})
@@ -110,8 +114,26 @@ public class OEmbedController {
     }
 
     @RequestMapping(value = "/tracks/{id:\\w+}/embed")
-    public String embedTrack(final @PathVariable String id, final Model model) {
-	System.out.println("Embedding track " + id);
+    public String embedTrack(
+	    final @PathVariable String id,
+	    final @RequestParam(required = false, defaultValue = "1024") Integer width,
+	    final @RequestParam(required = false, defaultValue = "576") Integer height,
+	    final Model model,
+	    final HttpServletResponse response
+    ) {	
+	final Integer _id = Track.getId(id);	
+	Track track;
+	if (_id == null) {
+	    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+	} else if ((track = this.trackRepository.findOne(_id)) == null) {
+	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	} else {
+	    model
+		    .addAttribute("track", track)
+		    .addAttribute("home", home)
+		    .addAttribute("width", width)
+		    .addAttribute("height", height);
+	}
 	return "/WEB-INF/views/oEmbed/embeddedTrack.jspx";
     }
 }

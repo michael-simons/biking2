@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.api.model.Coordinate;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
@@ -50,7 +51,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 public class TracksControllerTest {
 
     private final List<Track> defaultTestData;
-
+    private final Coordinate home = new Coordinate("13.408056", "52.518611");
+    
     public TracksControllerTest() {
 	final int[] ids = new int[]{1, 2, 3};
 	final LocalDate now = LocalDate.now();
@@ -68,7 +70,7 @@ public class TracksControllerTest {
     public void testGetTracks() {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"))).toReturn(defaultTestData);
-	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")));
+	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")), home);
 
 	final List<Track> tracks = tracksController.getTracks();
 
@@ -102,7 +104,7 @@ public class TracksControllerTest {
 	trackTcx.createNewFile();
 	trackTcx.deleteOnExit();
 	
-	final TracksController tracksController = new TracksController(trackRepository, tmpDir);
+	final TracksController tracksController = new TracksController(trackRepository, tmpDir, home);
 	
 	MockHttpServletRequest request;
 	MockHttpServletResponse response;
@@ -167,7 +169,7 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findOne(validId)).toReturn(t);
 	
-	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")));
+	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")), home);
 	
 	ResponseEntity<Track> response;
 	response = tracksController.getTrack(Integer.toString(validId, 36));

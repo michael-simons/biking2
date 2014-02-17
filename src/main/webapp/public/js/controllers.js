@@ -50,7 +50,7 @@ biking2Controllers.controller('TracksCtrl', function($scope, $http) {
     });
 });
 
-biking2Controllers.controller('TrackCtrl', function($scope, $http, $routeParams) {
+biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routeParams) {
     var map = new OpenLayers.Map("track-map", {
 	controls: [
 	    new OpenLayers.Control.Navigation(),
@@ -68,12 +68,16 @@ biking2Controllers.controller('TrackCtrl', function($scope, $http, $routeParams)
 
     var layerMarkers = new OpenLayers.Layer.Markers("Markers");
     map.addLayer(layerMarkers);
-    layerMarkers.addMarker(new OpenLayers.Marker(
-	    new OpenLayers.LonLat(6.179489185520004, 50.75144902272457).transform(map.displayProjection, map.getProjectionObject()), 
-	    new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16)))
-    );
 
-    $http.get('/api/tracks/' + $routeParams.id).success(function(track) {
+    $q.all([$http.get('/api/tracks/' + $routeParams.id), $http.get('/api/home')]).then(function(values) {
+	var track = values[0].data;
+	var home = values[1].data;
+
+	layerMarkers.addMarker(new OpenLayers.Marker(
+		new OpenLayers.LonLat(home.longitude, home.latitude).transform(map.displayProjection, map.getProjectionObject()),
+		new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16)))
+	);
+
 	$scope.track = track;
 	var gpx = new OpenLayers.Layer.GML(track.name, "/tracks/" + track.id + ".gpx", {
 	    format: OpenLayers.Format.GPX,

@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2;
 
+import ac.simons.biking2.api.model.Coordinate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -47,6 +48,11 @@ public class Application extends SpringBootServletInitializer {
 	public String index() {
 	    return "/index.html";
 	}
+    }
+    
+    @Bean
+    public Coordinate home() {
+	return new Coordinate("6.179489185520004", "50.75144902272457");
     }
 
     @Override
