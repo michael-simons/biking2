@@ -7,9 +7,10 @@ CREATE TABLE assorted_trips (
 CREATE TABLE bikes (
     id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT, 
     name VARCHAR(255) NOT NULL, 
+    bought_on DATE NOT NULL,
     color VARCHAR(6) NOT NULL DEFAULT 'CCCCCC', 
-    created_at DATETIME NOT NULL, 
     decommissioned_on DATE,
+    created_at DATETIME NOT NULL,         
     CONSTRAINT bikes_unique_name UNIQUE(name),
 );
 

@@ -57,7 +57,7 @@ public class ChartsControllerTest {
 	testData.put("bike3", new Integer[]{null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null});
 	
 	return testData.entrySet().stream().map(entry -> {
-	    final Bike bike = new Bike(entry.getKey());
+	    final Bike bike = new Bike(entry.getKey(), LocalDate.now());
 	    final Integer[] amounts = entry.getValue();
 	    for (int i = 0; i < amounts.length; ++i) {
 		if (amounts[i] == null) {
@@ -118,7 +118,7 @@ public class ChartsControllerTest {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
+	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(new Bike("bike1", LocalDate.now()), new Bike("bike2", LocalDate.now())));
 
 	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
@@ -163,7 +163,7 @@ public class ChartsControllerTest {
 	});
 
 	final List<Bike> bikes = testData.entrySet().stream().map(entry -> {
-	    final Bike bike = new Bike(entry.getKey());
+	    final Bike bike = new Bike(entry.getKey(), LocalDate.now());
 	    final Integer[] amounts = entry.getValue();
 	    for (int i = 0; i < amounts.length; ++i) {
 		if (amounts[i] == null) {
@@ -217,7 +217,7 @@ public class ChartsControllerTest {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1"), new Bike("bike2")));
+	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1", LocalDate.now()), new Bike("bike2", LocalDate.now())));
 
 	final ChartsController controller = new ChartsController(bikeRepository);
 	final HighchartsNgConfig highchartDefinition = controller.getHistory();

@@ -21,6 +21,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,11 @@ public class Bike implements Serializable {
     @Size(max = 6)
     private String color = "CCCCCC";
 
+    @Column(name = "bought_on", nullable = false)
+    @Temporal(TemporalType.DATE)
+    @NotNull
+    private Calendar boughtOn;
+    
     @Column(name = "decommissioned_on")
     @Temporal(TemporalType.DATE)
     private Calendar decommissionedOn;
@@ -109,8 +115,9 @@ public class Bike implements Serializable {
     protected Bike() {
     }
 
-    public Bike(String name) {
+    public Bike(String name, final LocalDate boughtOn) {
 	this.name = name;
+	this.boughtOn = GregorianCalendar.from(boughtOn.atStartOfDay(ZoneId.systemDefault()));	
     }
 
     @PrePersist
@@ -215,6 +222,14 @@ public class Bike implements Serializable {
     public int[] getMilagesInYear(int year) {	
 	final LocalDate january1st = LocalDate.of(year, Month.JANUARY, 1);
 	return rangeClosed(0, 12).map(i -> getMilageInPeriod(january1st.plusMonths(i))).limit(12).toArray();
+    }
+
+    public Calendar getBoughtOn() {
+	return boughtOn;
+    }
+
+    public void setBoughtOn(Calendar boughtOn) {
+	this.boughtOn = boughtOn;
     }
 
     @Override
