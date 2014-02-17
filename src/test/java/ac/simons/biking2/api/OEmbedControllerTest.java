@@ -144,7 +144,7 @@ public class OEmbedControllerTest {
 		.andExpect(view().name("/WEB-INF/views/oEmbed/embeddedTrack.jspx"));
 	
 	mockMvc
-		.perform(get("http://biking.michael-simons.eu/tracks/n/embed?width=23&height=42"))
+		.perform(get("http://biking.michael-simons.eu/tracks/n/embed"))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("width", is(equalTo(1024))))
 		.andExpect(model().attribute("height", is(equalTo(576))));
