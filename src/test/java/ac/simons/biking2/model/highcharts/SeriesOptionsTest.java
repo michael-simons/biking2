@@ -13,33 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ac.simons.biking2.model.highcharts;
 
-package ac.simons.biking2.api.model.highcharts;
-
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
  * @author Michael J. Simons, 2014-02-11
  */
-public class PlotOptionsTest {
-    
+public class SeriesOptionsTest {
+
     @Test
     public void testBuilder() {
-	PlotOptions plotOptions = new PlotOptions.Builder<>(object -> object)
-		.column()		    
-		    .withPointPadding(0.2)
-		    .withBorderWidth(0)
-		.build()
-		.series()
-		    .disableAnimation()
-		.build()	
-	.build();
-	assertThat(plotOptions.getColumn().getPointPadding(), is(equalTo(0.2)));
-	assertThat(plotOptions.getColumn().getBorderWidth(), is(equalTo(0)));
-	assertThat(plotOptions.getSeries().isAnimation(), is(false));
+	SeriesOptions seriesOptions = new SeriesOptions.Builder<>(object -> object).build();
+	assertThat(seriesOptions.isAnimation(), is(nullValue()));
+
+	seriesOptions = new SeriesOptions.Builder<>(object -> object)
+		.enableAnimation()
+		.build();
+	assertThat(seriesOptions.isAnimation(), is(true));
+
+	seriesOptions = new SeriesOptions.Builder<>(object -> object)
+		.disableAnimation()
+		.build();
+	assertThat(seriesOptions.isAnimation(), is(false));
     }
-    
 }

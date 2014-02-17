@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.api.model.highcharts.HighchartsNgConfig;
+import ac.simons.biking2.model.highcharts.HighchartsNgConfig;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;

@@ -13,31 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api.model.highcharts;
+package ac.simons.biking2.model.highcharts;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
  * @author Michael J. Simons, 2014-02-11
  */
-public class ChartTest {
+public class TooltipTest {
 
     @Test
     public void testBuilder() {
-	Chart chart = new Chart.Builder<>(object -> object).build();
-	assertThat(chart.getBorderWidth(), is(nullValue()));
-	assertThat(chart.getType(), is(nullValue()));
-	
-	chart = new Chart.Builder<>(object -> object)
-	    .withBorderWidth(1)
-	    .withType("line")
+	Tooltip tooltip = new Tooltip.Builder<>(object -> object)
+		.withHeaderFormat("testHeader")
+		.withPointFormat("testPoint")
+		.withFooterFormat("testFoot")
+		.share()
+		.useHTML()
 	.build();
-	
-	assertThat(chart.getBorderWidth(), is(equalTo(1)));
-	assertThat(chart.getType(), is(equalTo("line")));
+	assertThat(tooltip.getHeaderFormat(), is(equalTo("testHeader")));
+	assertThat(tooltip.getPointFormat(), is(equalTo("testPoint")));
+	assertThat(tooltip.getFooterFormat(), is(equalTo("testFoot")));
+	assertThat(tooltip.isShared(), is(true));
+	assertThat(tooltip.isUseHTML(), is(true));		
     }
 }

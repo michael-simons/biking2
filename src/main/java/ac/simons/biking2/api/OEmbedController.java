@@ -15,8 +15,8 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.api.model.Coordinate;
-import ac.simons.biking2.api.model.OEmbedResponse;
+import ac.simons.biking2.model.Coordinate;
+import ac.simons.biking2.model.OEmbedResponse;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.util.Arrays;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api.model.highcharts;
+package ac.simons.biking2.model.highcharts;
 
 import ac.simons.biking2.misc.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,59 +28,50 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlotOptions {
+public class SeriesOptions {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, PlotOptions> sink;
+	private final Sink<PB, SeriesOptions> sink;
 
-	private Column column;
+	private Boolean animation;
 
-	private SeriesOptions series;
-
-	Builder(Sink<PB, PlotOptions> sink) {
+	Builder(Sink<PB, SeriesOptions> sink) {
 	    this.sink = sink;
 	}
 
-	public Column.Builder<Builder<PB>> column() {
-	    return new Column.Builder<>(column -> {
-		Builder.this.column = column;
-		return Builder.this;
-	    });
+	public Builder<PB> enableAnimation() {
+	    this.animation = Boolean.TRUE;
+	    return this;
 	}
-
-	public SeriesOptions.Builder<Builder<PB>> series() {
-	    return new SeriesOptions.Builder<>(series -> {
-		Builder.this.series = series;
-		return Builder.this;
-	    });
+	
+	public Builder<PB> disableAnimation() {
+	    this.animation = Boolean.FALSE;
+	    return this;
 	}
 
 	public PB build() {
-	    return this.sink.setObject(
-		    new PlotOptions(column, series)
-	    );
+	    return this.sink.setObject(new SeriesOptions(animation));
 	}
     }
 
-    private final Column column;
-
-    private final SeriesOptions series;
+    /**
+     * Enable or disable the initial animation when a series is displayed. The
+     * animation can also be set as a configuration object. Please note that
+     * this option only applies to the initial animation of the series itself.
+     * For other animations, see chart.animation and the animation parameter
+     * under the API methods.	The following properties are supported:
+     */
+    private final Boolean animation;
 
     @JsonCreator
-    PlotOptions(
-	    @JsonProperty("categories") Column column,
-	    @JsonProperty("categories") SeriesOptions series
+    SeriesOptions(
+	    @JsonProperty("animation") Boolean animation
     ) {
-	this.column = column;
-	this.series = series;
+	this.animation = animation;
     }
 
-    public Column getColumn() {
-	return column;
-    }
-
-    public SeriesOptions getSeries() {
-	return series;
+    public Boolean isAnimation() {
+	return animation;
     }
 }

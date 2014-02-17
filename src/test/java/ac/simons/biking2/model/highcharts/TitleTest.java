@@ -13,38 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api.model.highcharts;
+package ac.simons.biking2.model.highcharts;
 
-import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
- *
- * @author Michael J. Simons
+ * @author Michael J. Simons, 2014-02-11
  */
-public class AxisTest {
+public class TitleTest {
 
     @Test
     public void testBuilder() {
-	Axis axis = new Axis.Builder<>(object -> object)
-		.withCategories("a", "b")
-		.withMin(0)
-		.withMax(2109)
-		.withTickInterval(100)
-		.enableEndOnTick()
-		.title()
-		    .withText("test")
-		.build()
-	.build();
-	assertThat(axis.getCategories(), is(equalTo(Arrays.asList("a", "b"))));
-	assertThat(axis.getMin(), is(equalTo(0)));
-	assertThat(axis.getMax(), is(equalTo(2109)));
-	assertThat(axis.getTickInterval(), is(equalTo(100)));
-	assertThat(axis.isEndOnTick(), is(true));
-	assertThat(axis.getTitle().getText(), is(equalTo("test")));
-    }
+	Title title = new Title.Builder<>(object -> object).build();
+	assertThat(title.getText(), is(nullValue()));
 
+	title = new Title.Builder<>(object -> object)
+	    .withText("test 123")
+	.build();
+	assertThat(title.getText(), is(equalTo("test 123")));
+    }
 }

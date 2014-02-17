@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api.model.highcharts;
+package ac.simons.biking2.model.highcharts;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
- *
  * @author Michael J. Simons, 2014-02-11
  */
-public class CreditsTest {
+public class ColumnTest {
 
     @Test
     public void testBuilder() {
-	Credits credits = new Credits.Builder<>(object -> object).build();
-	assertThat(credits.isEnabled(), is(true));
-
-	credits = new Credits.Builder<>(object -> object).disable().build();
-	assertThat(credits.isEnabled(), is(false));
-
-	credits = new Credits.Builder<>(object -> object).enable().build();
-	assertThat(credits.isEnabled(), is(true));
+	Column column = new Column.Builder<>(object -> object)
+		.withPointPadding(0.2)
+		.withBorderWidth(0)
+	.build();
+	assertThat(column.getPointPadding(), is(equalTo(0.2)));
+	assertThat(column.getBorderWidth(), is(equalTo(0)));
     }
 }

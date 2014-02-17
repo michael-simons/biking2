@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api.model.highcharts;
 
+package ac.simons.biking2.model.highcharts;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -23,15 +28,28 @@ import org.junit.Test;
 /**
  * @author Michael J. Simons, 2014-02-11
  */
-public class ColumnTest {
-
+public class HighchartsNgConfigTest {
+    
     @Test
     public void testBuilder() {
-	Column column = new Column.Builder<>(object -> object)
-		.withPointPadding(0.2)
-		.withBorderWidth(0)
-	.build();
-	assertThat(column.getPointPadding(), is(equalTo(0.2)));
-	assertThat(column.getBorderWidth(), is(equalTo(0)));
+	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
+	
+	assertThat(builder.computeCurrentMaxYValue(), is(equalTo(0)));
+	
+	final Collection<Series> series = builder
+	    .series()
+   		.withData(1, 2)
+   		.build()
+   	    .series()
+   		.withData(3, 4)
+   		.build()
+	.build().getSeries();
+	
+	assertThat(builder.computeCurrentMaxYValue(), is(equalTo(4)));
+
+	assertThat(series.size(), is(equalTo(2)));
+	final List<Series> hlp = new ArrayList<>(series);
+	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(1, 2))));
+	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3, 4))));
     }
 }

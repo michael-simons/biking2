@@ -13,32 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api.model;
+package ac.simons.biking2.model;
 
-import java.util.Calendar;
+import java.math.BigDecimal;
 
 /**
- * @author Michael J. Simons, 2014-02-13
+ * @author Michael J. Simons, 2014-02-17
  */
-public class Summary {
+public class Coordinate {
 
-    private Calendar dateOfFirstRecord;
+    private final BigDecimal longitude;
+    private final BigDecimal latitude;
 
-    private Double total;
-
-    public Calendar getDateOfFirstRecord() {
-	return dateOfFirstRecord;
+    public Coordinate(String longitude, String latitude) {
+	this(new BigDecimal(longitude), new BigDecimal(latitude));
     }
 
-    public void setDateOfFirstRecord(Calendar dateOfFirstRecord) {
-	this.dateOfFirstRecord = dateOfFirstRecord;
+    public Coordinate(BigDecimal longitude, BigDecimal latitude) {
+	this.longitude = longitude;
+	this.latitude = latitude;
     }
 
-    public Double getTotal() {
-	return total;
+    public double getLatitude() {
+	return latitude.doubleValue();
     }
 
-    public void setTotal(Double total) {
-	this.total = total;
+    public double getLongitude() {
+	return longitude.doubleValue();
     }
 }

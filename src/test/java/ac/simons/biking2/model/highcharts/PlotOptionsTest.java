@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api.model.highcharts;
+
+package ac.simons.biking2.model.highcharts;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -23,21 +24,22 @@ import org.junit.Test;
 /**
  * @author Michael J. Simons, 2014-02-11
  */
-public class TooltipTest {
-
+public class PlotOptionsTest {
+    
     @Test
     public void testBuilder() {
-	Tooltip tooltip = new Tooltip.Builder<>(object -> object)
-		.withHeaderFormat("testHeader")
-		.withPointFormat("testPoint")
-		.withFooterFormat("testFoot")
-		.share()
-		.useHTML()
+	PlotOptions plotOptions = new PlotOptions.Builder<>(object -> object)
+		.column()		    
+		    .withPointPadding(0.2)
+		    .withBorderWidth(0)
+		.build()
+		.series()
+		    .disableAnimation()
+		.build()	
 	.build();
-	assertThat(tooltip.getHeaderFormat(), is(equalTo("testHeader")));
-	assertThat(tooltip.getPointFormat(), is(equalTo("testPoint")));
-	assertThat(tooltip.getFooterFormat(), is(equalTo("testFoot")));
-	assertThat(tooltip.isShared(), is(true));
-	assertThat(tooltip.isUseHTML(), is(true));		
+	assertThat(plotOptions.getColumn().getPointPadding(), is(equalTo(0.2)));
+	assertThat(plotOptions.getColumn().getBorderWidth(), is(equalTo(0)));
+	assertThat(plotOptions.getSeries().isAnimation(), is(false));
     }
+    
 }

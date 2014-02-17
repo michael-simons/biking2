@@ -16,7 +16,7 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.Application;
-import ac.simons.biking2.api.model.Coordinate;
+import ac.simons.biking2.model.Coordinate;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

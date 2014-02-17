@@ -13,32 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api.model;
+package ac.simons.biking2.model.highcharts;
 
-import java.math.BigDecimal;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 /**
- * @author Michael J. Simons, 2014-02-17
+ *
+ * @author Michael J. Simons, 2014-02-11
  */
-public class Coordinate {
+public class CreditsTest {
 
-    private final BigDecimal longitude;
-    private final BigDecimal latitude;
+    @Test
+    public void testBuilder() {
+	Credits credits = new Credits.Builder<>(object -> object).build();
+	assertThat(credits.isEnabled(), is(true));
 
-    public Coordinate(String longitude, String latitude) {
-	this(new BigDecimal(longitude), new BigDecimal(latitude));
-    }
+	credits = new Credits.Builder<>(object -> object).disable().build();
+	assertThat(credits.isEnabled(), is(false));
 
-    public Coordinate(BigDecimal longitude, BigDecimal latitude) {
-	this.longitude = longitude;
-	this.latitude = latitude;
-    }
-
-    public double getLatitude() {
-	return latitude.doubleValue();
-    }
-
-    public double getLongitude() {
-	return longitude.doubleValue();
+	credits = new Credits.Builder<>(object -> object).enable().build();
+	assertThat(credits.isEnabled(), is(true));
     }
 }

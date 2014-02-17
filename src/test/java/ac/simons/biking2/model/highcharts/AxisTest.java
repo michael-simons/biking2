@@ -13,43 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ac.simons.biking2.model.highcharts;
 
-package ac.simons.biking2.api.model.highcharts;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
- * @author Michael J. Simons, 2014-02-11
+ *
+ * @author Michael J. Simons
  */
-public class HighchartsNgConfigTest {
-    
+public class AxisTest {
+
     @Test
     public void testBuilder() {
-	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
-	
-	assertThat(builder.computeCurrentMaxYValue(), is(equalTo(0)));
-	
-	final Collection<Series> series = builder
-	    .series()
-   		.withData(1, 2)
-   		.build()
-   	    .series()
-   		.withData(3, 4)
-   		.build()
-	.build().getSeries();
-	
-	assertThat(builder.computeCurrentMaxYValue(), is(equalTo(4)));
-
-	assertThat(series.size(), is(equalTo(2)));
-	final List<Series> hlp = new ArrayList<>(series);
-	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(1, 2))));
-	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3, 4))));
+	Axis axis = new Axis.Builder<>(object -> object)
+		.withCategories("a", "b")
+		.withMin(0)
+		.withMax(2109)
+		.withTickInterval(100)
+		.enableEndOnTick()
+		.title()
+		    .withText("test")
+		.build()
+	.build();
+	assertThat(axis.getCategories(), is(equalTo(Arrays.asList("a", "b"))));
+	assertThat(axis.getMin(), is(equalTo(0)));
+	assertThat(axis.getMax(), is(equalTo(2109)));
+	assertThat(axis.getTickInterval(), is(equalTo(100)));
+	assertThat(axis.isEndOnTick(), is(true));
+	assertThat(axis.getTitle().getText(), is(equalTo("test")));
     }
+
 }
