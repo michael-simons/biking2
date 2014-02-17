@@ -55,6 +55,20 @@ public class Track implements Serializable {
 
     private static final long serialVersionUID = 7630613853916630933L;
 
+    /**
+     * Converts a string to the real numeric id
+     * @param fromPrettyId
+     * @return 
+     */
+    public static Integer getId(final String fromPrettyId) {
+	Integer rv = null;
+	try {
+	    rv = Integer.parseInt(fromPrettyId, 36);
+	} catch (NullPointerException | NumberFormatException e) {
+	}
+	return rv;
+    }
+
     public static enum Type {
 
 	biking, running

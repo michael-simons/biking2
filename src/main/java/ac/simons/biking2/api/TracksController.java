@@ -44,18 +44,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TracksController {
 
+    private final static Map<String, String> acceptableFormats;
+
+    static {
+	final Map<String, String> hlp = new HashMap<>();
+	hlp.put("gpx", "application/gpx+xml");
+	hlp.put("tcx", "application/xml");
+	acceptableFormats = Collections.unmodifiableMap(hlp);
+    }
+
     private final TrackRepository trackRepository;
     private final File datastoreBaseDirectory;
-    private final Map<String, String> acceptableFormats;
 
     @Autowired
     public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory) {
 	this.trackRepository = trackRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
-	final Map<String, String> hlp = new HashMap<>();
-	hlp.put("gpx", "application/gpx+xml");
-	hlp.put("tcx", "application/xml");
-	this.acceptableFormats = Collections.unmodifiableMap(hlp);
     }
 
     @RequestMapping("/api/tracks")
@@ -64,18 +68,9 @@ public class TracksController {
 	return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
     }
 
-    private Integer getId(final String fromPrettyId) {
-	Integer rv = null;
-	try {
-	    rv = Integer.parseInt(fromPrettyId, 36);
-	} catch (NullPointerException | NumberFormatException e) {
-	}
-	return rv;
-    }
-
     @RequestMapping("/api/tracks/{id:\\w+}")
     public ResponseEntity<Track> getTrack(final @PathVariable String id) {
-	final Integer _id = getId(id);
+	final Integer _id = Track.getId(id);
 
 	Track track;
 	ResponseEntity<Track> rv;
@@ -97,7 +92,7 @@ public class TracksController {
 	    final HttpServletRequest request,
 	    final HttpServletResponse response
     ) throws IOException {
-	final Integer _id = getId(id);
+	final Integer _id = Track.getId(id);
 	final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
 	Track track = null;
 	if (_id == null || !acceptableFormats.containsKey(_format)) {
