@@ -16,6 +16,10 @@
 package ac.simons.biking2.config;
 
 import ac.simons.biking2.api.TracksController;
+import ac.simons.biking2.api.model.OEmbedResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
@@ -65,5 +69,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return bean;
 	    }
 	};
+    }
+ 
+    /**
+     * {@link OEmbedResponse} uses XmlElement annotations to be configured
+     * for JAXB as well as JSON so we need the {@link JaxbAnnotationModule} 
+     * as well
+     * @return 
+     */
+    @Bean
+    public ObjectMapper jacksonObjectMapper() {
+	return new ObjectMapper().registerModules(
+		new JaxbAnnotationModule().setPriority(Priority.SECONDARY)		
+	);
     }
 }
