@@ -29,7 +29,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -73,7 +72,7 @@ public class FetchBikingPicturesJob {
 	}
     }
 
-    @Scheduled(cron = "0 0 */8 * * *")
+    @Scheduled(cron = "${biking2.fetch-biking-picture-cron:0 0 */8 * * *}")
     public void run() {
 	download(createDownloadList());
     }
