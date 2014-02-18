@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2;
 
-import ac.simons.biking2.model.Coordinate;
+import ac.simons.biking2.misc.Coordinate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
