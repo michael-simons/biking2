@@ -16,13 +16,18 @@
 package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
@@ -32,6 +37,13 @@ import org.hibernate.validator.constraints.URL;
  */
 @Entity
 @Table(name = "biking_pictures")
+@NamedQueries({
+     @NamedQuery(
+	    name = "BikingPicture.getMaxPubDate",
+	    query
+	    = "Select max(bp.pubDate) from BikingPicture bp"
+    )
+})
 public class BikingPicture implements Serializable {
 
     private static final long serialVersionUID = -7050582813676065697L;
@@ -45,6 +57,11 @@ public class BikingPicture implements Serializable {
     @Column(name = "external_id", nullable = false, unique = true)    
     @NotNull    
     private Integer externalId;
+    
+    @Column(name = "pub_date", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
+    private Calendar pubDate;
     
     /** A link to the webpage */
     @Column(name = "link", nullable = false, length = 512)
@@ -71,6 +88,14 @@ public class BikingPicture implements Serializable {
 
     public void setLink(String link) {
 	this.link = link;
+    }
+
+    public Calendar getPubDate() {
+	return pubDate;
+    }
+
+    public void setPubDate(Calendar pubDate) {
+	this.pubDate = pubDate;
     }
 
     @Override

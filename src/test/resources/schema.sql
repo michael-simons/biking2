@@ -17,6 +17,7 @@ CREATE TABLE bikes (
 CREATE TABLE biking_pictures (
     id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT, 
     external_id INTEGER NOT NULL, 
+    pub_date DATETIME NOT NULL,
     link VARCHAR(512) NOT NULL,
     CONSTRAINT biking_picture_unique_external_id UNIQUE(external_id),
 );

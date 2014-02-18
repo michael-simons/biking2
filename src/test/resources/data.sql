@@ -15,3 +15,6 @@ insert into assorted_trips(covered_on, distance) values ('2013-06-05', 21.9);
 insert into assorted_trips(covered_on, distance) values ('1938-09-15', 7.7);
 
 insert into tracks(id, covered_on, description, name, type, minlat, minlon, maxlat, maxlon) values(23, '2011-03-04', 'blah', 'RR bis Simmerath', 'biking', 1, 2, 3, 4);
+
+insert into biking_pictures(external_id, pub_date, link) values(1, '2001-09-21 14:13:00', 'http://simons.ac');
+insert into biking_pictures(external_id, pub_date, link) values(2, '2003-09-21 14:13:00', 'http://planet-punk.de');
