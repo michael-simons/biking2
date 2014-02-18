@@ -37,6 +37,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import static ac.simons.biking2.config.DataStorageConfig.TRACK_DIRECTORY;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -86,7 +87,7 @@ public class TracksControllerTest {
 	stub(trackRepository.findOne(validId)).toReturn(t);
 	
 	final File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-	final File tracksDir = new File(tmpDir, "data/tracks");
+	final File tracksDir = new File(tmpDir, TRACK_DIRECTORY);
 	tracksDir.mkdirs();	
 	
 	final String content = "<foo>bar</foo>";

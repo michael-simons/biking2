@@ -27,6 +27,9 @@ import org.springframework.core.env.Environment;
 @Configuration
 @Profile({"dev", "prod"})
 public class DataStorageConfig {
+    
+    public static final String BIKING_PICTURES_DIRECTORY = "data/bikingPictures";    
+    public static final String TRACK_DIRECTORY = "data/tracks";
 
     @Bean
     public File datastoreBaseDirectory(final Environment environment) {
@@ -42,9 +45,8 @@ public class DataStorageConfig {
 	    throw new RuntimeException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
 	}
 
-	new File(rv, "data/bikingPictures").mkdirs();
-	new File(rv, "data/galleryPictures").mkdirs();
-	new File(rv, "data/tracks").mkdirs();
+	new File(rv, BIKING_PICTURES_DIRECTORY).mkdirs();	
+	new File(rv, TRACK_DIRECTORY).mkdirs();
 
 	return rv;
     }

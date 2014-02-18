@@ -24,4 +24,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface BikingPictureRepository extends JpaRepository<BikingPicture, Integer> {
     public Calendar getMaxPubDate();
+    
+    public BikingPicture findByExternalId(final Integer externalId);
 }

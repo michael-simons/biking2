@@ -16,8 +16,12 @@
 package ac.simons.biking2.persistence.entities;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,6 +52,8 @@ public class BikingPicture implements Serializable {
 
     private static final long serialVersionUID = -7050582813676065697L;
 
+    private static final Pattern GUID_PATTERN = Pattern.compile("https?://dailyfratze.de/fratzen/m/(\\d+).jpg");
+    
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +75,18 @@ public class BikingPicture implements Serializable {
     @NotNull
     @Size(max = 512)
     private String link;
+
+    protected BikingPicture() {
+    }
+
+    public BikingPicture(final String guid, final ZonedDateTime pubDate, String link) {
+	final Matcher matcher = GUID_PATTERN.matcher(guid);
+	if(!matcher.matches())
+	    throw new RuntimeException("Invalid GUID");	
+	this.externalId = Integer.parseInt(matcher.group(1));
+	this.pubDate = GregorianCalendar.from(pubDate);
+	this.link = link;
+    }
 
     public Integer getId() {
 	return this.id;

@@ -42,6 +42,14 @@ public class Channel {
     @XmlElement(name = "item")
     private List<Item> items;
     
+    public String getPrevious() {
+	return links.stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
+    }
+    
+    public String getNext() {
+	return links.stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();	
+    }
+    
     public String getTitle() {
 	return title;
     }
