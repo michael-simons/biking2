@@ -73,7 +73,6 @@ public class FetchBikingPicturesJob {
 	}
     }
 
-    @PostConstruct
     @Scheduled(cron = "0 0 */8 * * *")
     public void run() {
 	download(createDownloadList());
