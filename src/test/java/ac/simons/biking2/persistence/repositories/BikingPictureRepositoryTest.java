@@ -32,8 +32,6 @@ import static java.time.ZonedDateTime.of;
 import static java.time.ZonedDateTime.ofInstant;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Michael J. Simons, 2014-02-18
@@ -52,10 +50,12 @@ public class BikingPictureRepositoryTest {
     public void getMaxPubDate_shouldWork() {
 	ZonedDateTime value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
 	ZonedDateTime expected = of(2003, 9, 21, 14, 13, 00, 00, value.getZone());
-
 	Assert.assertThat(value, is(equalTo(expected)));
 
 	bikingPictureRepository.deleteAll();
-	assertThat(bikingPictureRepository.getMaxPubDate(), is(nullValue()));
+
+	value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
+	expected = of(2005, 8, 7, 18, 30, 42, 00, value.getZone());
+	Assert.assertThat(value, is(equalTo(expected)));
     }
 }

@@ -41,7 +41,7 @@ import org.hibernate.validator.constraints.URL;
      @NamedQuery(
 	    name = "BikingPicture.getMaxPubDate",
 	    query
-	    = "Select max(bp.pubDate) from BikingPicture bp"
+	    = "Select coalesce(max(bp.pubDate), '2005-08-07 18:30:42') from BikingPicture bp"
     )
 })
 public class BikingPicture implements Serializable {
