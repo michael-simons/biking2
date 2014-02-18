@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.misc.Coordinate;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;

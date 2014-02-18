@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.misc.Coordinate;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
@@ -28,22 +27,23 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletResponse;
 import org.hamcrest.CoreMatchers;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
 
 /**
  * @author Michael J. Simons, 2014-02-15

@@ -22,15 +22,12 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
-import static java.util.stream.Collectors.reducing;
 import java.util.stream.IntStream;
-import static java.util.stream.IntStream.rangeClosed;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,6 +46,9 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+
+import static java.util.stream.Collectors.reducing;
+import static java.util.stream.IntStream.rangeClosed;
 
 /**
  * @author Michael J. Simons, 2014-02-08

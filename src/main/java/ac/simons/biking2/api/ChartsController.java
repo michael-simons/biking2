@@ -27,11 +27,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-import static java.util.stream.IntStream.generate;
-import static java.util.stream.IntStream.rangeClosed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static java.util.stream.IntStream.generate;
+import static java.util.stream.IntStream.rangeClosed;
 
 /**
  * @author Michael J. Simons, 2014-02-09

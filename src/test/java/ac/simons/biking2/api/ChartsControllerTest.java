@@ -15,13 +15,10 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.highcharts.HighchartsNgConfig;
 import ac.simons.biking2.highcharts.Series;
 import ac.simons.biking2.persistence.entities.Bike;
-import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -31,12 +28,13 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.junit.Test;
+
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.generate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
