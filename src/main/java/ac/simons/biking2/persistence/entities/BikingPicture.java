@@ -42,11 +42,9 @@ public class BikingPicture implements Serializable {
     private Integer id;
 
     /** The url of the image itself */
-    @Column(name = "url", nullable = false, length = 512, unique = true)
-    @URL
-    @NotNull
-    @Size(max = 512)
-    private String url;
+    @Column(name = "external_id", nullable = false, unique = true)    
+    @NotNull    
+    private Integer externalId;
     
     /** A link to the webpage */
     @Column(name = "link", nullable = false, length = 512)
@@ -59,12 +57,12 @@ public class BikingPicture implements Serializable {
 	return this.id;
     }
 
-    public String getUrl() {
-	return this.url;
+    public Integer getExternalId() {
+	return externalId;
     }
 
-    public void setUrl(String url) {
-	this.url = url;
+    public void setExternalId(Integer externalId) {
+	this.externalId = externalId;
     }
 
     public String getLink() {
