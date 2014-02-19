@@ -35,9 +35,9 @@ public class BikeTest {
     
     public BikeTest() {
 	this.defaultTestBike = new Bike()
-		.addMilage(LocalDate.of(2014, 1, 1), 0)
-		.addMilage(LocalDate.of(2014, 2, 1), 20)
-		.addMilage(LocalDate.of(2014, 3, 1), 50);	
+		.addMilage(LocalDate.of(2014, 1, 1), 0).getBike()
+		.addMilage(LocalDate.of(2014, 2, 1), 20).getBike()
+		.addMilage(LocalDate.of(2014, 3, 1), 50).getBike();	
     }
 
     /**

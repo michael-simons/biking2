@@ -170,7 +170,7 @@ public class Bike implements Serializable {
 	return this.createdAt;
     }
   
-    public synchronized  Bike addMilage(final LocalDate recordedOn, final double amount) {
+    public synchronized Milage addMilage(final LocalDate recordedOn, final double amount) {
 	if(this.milages.size() > 0) {
 	    final Milage lastMilage = this.milages.get(this.milages.size() - 1);
 	    LocalDate nextValidDate = lastMilage.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusMonths(1);
@@ -179,11 +179,10 @@ public class Bike implements Serializable {
 	    if(lastMilage.getAmount().doubleValue() > amount)
 		throw new IllegalArgumentException("New amount must be greater than or equal " + lastMilage.getAmount().toPlainString());
 	}
-	
-	this.milages.add(new Milage(this, recordedOn.withDayOfMonth(1), amount));
-	
+	final Milage milage = new Milage(this, recordedOn.withDayOfMonth(1), amount);
+	this.milages.add(milage);	
 	this.periods = null;	
-	return this;
+	return milage;
     }
 
     /**

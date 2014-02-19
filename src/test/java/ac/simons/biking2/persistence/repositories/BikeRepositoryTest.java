@@ -83,7 +83,7 @@ public class BikeRepositoryTest {
     public void testAddMilage() throws SQLException {
 	final Bike bike = this.bikeRepository.findByName("testAddMilageBike");
 
-	bike.addMilage(LocalDate.now(), 23)
+	bike.addMilage(LocalDate.now(), 23).getBike()
 		.addMilage(LocalDate.now().plusMonths(1).withDayOfMonth(1), 42);
 	this.bikeRepository.save(bike);
 
