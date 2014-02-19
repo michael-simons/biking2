@@ -18,6 +18,17 @@
 
 /* App Module */
 
+Array.prototype.randomize = function() {
+    var i = this.length, j, temp;
+    while (--i) {
+	j = Math.floor(Math.random() * (i - 1));
+	temp = this[i];
+	this[i] = this[j];
+	this[j] = temp;
+    }
+    return this;
+};
+
 var biking2 = angular
 	.module('biking2', ['ngRoute', 'biking2Controllers'])
 	.directive('ngActiveTab', function($location) {

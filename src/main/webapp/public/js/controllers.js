@@ -26,9 +26,23 @@ var biking2Controllers = angular
 	    loading: true
 	});
 
-biking2Controllers.controller('IndexCtrl', function($scope, $http) {
+biking2Controllers.controller('IndexCtrl', function($scope, $http, $interval) {
     $http.get('/api/summary').success(function(data) {
 	$scope.summary = data;
+    });
+    $scope.currentBikingPicture = '/img/default-biking-picture.jpg';
+
+    $http.get('/api/bikingPictures').success(function(data) {
+	var bikingPictures = data.randomize();
+	
+	var timer = $interval(function(count) {
+	    var thePicture = bikingPictures[count % bikingPictures.length];	    
+	    $scope.currentBikingPicture = '/api/bikingPictures/' + thePicture.id + '.jpg';
+	    $scope.currentLinkToBikingPicture = thePicture.link;	    
+	}, 5000);
+	$scope.$on("$destroy", function() {	    
+	    $interval.cancel(timer);
+	});
     });
 });
 

@@ -36,13 +36,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Michael J. Simons, 2014-02-15
  */
 @Controller
-@RestController
 public class TracksController {
 
     private final static Map<String, String> acceptableFormats;
