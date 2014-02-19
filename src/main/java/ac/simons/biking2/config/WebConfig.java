@@ -25,6 +25,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -36,7 +38,26 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
-     * Enable favor of format parameter over requested content type, needed for {@link OEmbedController#getEmbeddableTrack(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, javax.servlet.http.HttpServletRequest)}
+     * Maps all AngularJS routes to index so that they work with direct linking.
+     */
+    @Controller
+    static class Routes {
+
+	@RequestMapping({
+	    "/bikes",
+	    "/milages",
+	    "/tracks",
+	    "/tracks/{id:\\w+}",
+	    "about"
+	})
+	public String index() {
+	    return "/index.html";
+	}
+    }
+
+    /**
+     * Enable favor of format parameter over requested content type, needed for
+     * {@link OEmbedController#getEmbeddableTrack(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, javax.servlet.http.HttpServletRequest)}
      *
      * @param configurer
      */

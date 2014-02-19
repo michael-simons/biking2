@@ -16,6 +16,7 @@
 package ac.simons.biking2;
 
 import ac.simons.biking2.misc.Coordinate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -25,8 +26,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author Michael J. Simons, 2014-02-08
@@ -37,24 +36,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @ComponentScan
 public class Application extends SpringBootServletInitializer {
 
-    @Controller
-    static class Routes {
-
-	@RequestMapping({
-	    "/bikes",
-	    "/milages",
-	    "/tracks",
-	    "/tracks/{id:\\w+}",
-	    "about"
-	})
-	public String index() {
-	    return "/index.html";
-	}
-    }
-    
     @Bean
-    public Coordinate home() {
-	return new Coordinate("6.179489185520004", "50.75144902272457");
+    public Coordinate home(
+	    final @Value("${biking2.home.longitude}") String longitude,
+	    final @Value("${biking2.home.latitude}") String latitude
+    ) {
+	return new Coordinate(longitude, latitude);
     }
 
     @Override

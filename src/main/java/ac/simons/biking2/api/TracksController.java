@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.config.PersistenceConfig;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
@@ -94,13 +95,13 @@ public class TracksController {
     ) throws IOException {
 	final Integer _id = Track.getId(id);
 	final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
-	Track track = null;
+	Track track;
 	if (_id == null || !acceptableFormats.containsKey(_format)) {
 	    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
 	} else if ((track = this.trackRepository.findOne(_id)) == null) {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {
-	    final File trackFile = new File(datastoreBaseDirectory, String.format("data/tracks/%d.%s", track.getId(), _format));
+	    final File trackFile = new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), _format));
 	    response.setHeader("Content-Type", acceptableFormats.get(_format));
 	    response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, _format));
 

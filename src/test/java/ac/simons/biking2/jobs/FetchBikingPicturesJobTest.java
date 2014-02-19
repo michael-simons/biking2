@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.jobs;
 
+import ac.simons.biking2.config.PersistenceConfig;
 import ac.simons.biking2.persistence.entities.BikingPicture;
 import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
 import ac.simons.biking2.rss.RSSDateTimeAdapter;
@@ -27,7 +28,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import org.junit.Test;
 
-import static ac.simons.biking2.config.DataStorageConfig.BIKING_PICTURES_DIRECTORY;
 import static java.time.ZonedDateTime.of;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -135,10 +135,10 @@ public class FetchBikingPicturesJobTest {
 	final List<BikingPicture> downloaded = job.download(downloadList);
 
 	assertThat(downloaded.size(), is(equalTo(1)));
-	assertThat(new File(this.tmpDir, BIKING_PICTURES_DIRECTORY + "/45644.jpg").isFile(), is(true));
-	assertThat(new File(this.tmpDir, BIKING_PICTURES_DIRECTORY + "/45325.jpg").isFile(), is(false));
-	assertThat(new File(this.tmpDir, BIKING_PICTURES_DIRECTORY + "/44142.jpg").isFile(), is(false));
-	assertThat(new File(this.tmpDir, BIKING_PICTURES_DIRECTORY + "/43461.jpg").isFile(), is(false));
+	assertThat(new File(this.tmpDir, PersistenceConfig.BIKING_PICTURES_DIRECTORY + "/45644.jpg").isFile(), is(true));
+	assertThat(new File(this.tmpDir, PersistenceConfig.BIKING_PICTURES_DIRECTORY + "/45325.jpg").isFile(), is(false));
+	assertThat(new File(this.tmpDir, PersistenceConfig.BIKING_PICTURES_DIRECTORY + "/44142.jpg").isFile(), is(false));
+	assertThat(new File(this.tmpDir, PersistenceConfig.BIKING_PICTURES_DIRECTORY + "/43461.jpg").isFile(), is(false));
 	// Verify number of calls with arbitrary ints
 	verify(dailyFratzeProvider, times(3)).getImageConnection(anyInt());
     }
