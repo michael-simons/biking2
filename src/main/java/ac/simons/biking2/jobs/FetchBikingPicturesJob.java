@@ -117,13 +117,10 @@ public class FetchBikingPicturesJob {
 		synchronized (this) {
 		    final URLConnection connection = this.dailyFratzeProvider.getImageConnection(incoming.getExternalId());
 		    if (connection != null) {
-			System.out.println("Trying stuff");
 			try (final InputStream inputStream = connection.getInputStream()) {
 			    Files.copy(inputStream, new File(bikingPicturesStorage, String.format("%d.jpg", incoming.getExternalId())).toPath());
-			    rv.add(this.bikingPictureRepository.save(incoming));
-			    System.out.println("Stored to " + new File(bikingPicturesStorage, String.format("%d.jpg", incoming.getExternalId())).getAbsolutePath());
+			    rv.add(this.bikingPictureRepository.save(incoming));			
 			} catch (IOException ex) {
-			    System.out.println("exception for " + incoming.getLink());
 			    Logger.getLogger(FetchBikingPicturesJob.class.getName()).log(Level.SEVERE, "Could not download image data, skipping!", ex);
 			}
 		    }
