@@ -63,6 +63,7 @@ public class ChartsController {
 	    final int[] milagesInYear = bike.getMilagesInYear(january1st.getYear());
 	    builder.series()
 		    .withName(bike.getName())
+		    .withColor("#" + bike.getColor())
 		    .withType("column")
 		    .withData(milagesInYear)
 		    .build();	
@@ -73,8 +74,9 @@ public class ChartsController {
 	final int currentMaxYValue  = 
 		builder.series()
 		    .withName("Sum")
+		    .withColor("#0A67A3")
 		    .withType("spline")
-		    .withData(sums)
+		    .withData(sums)		    
 		    .build()
 		.computeCurrentMaxYValue().intValue();
 	
