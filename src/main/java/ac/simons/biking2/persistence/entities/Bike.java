@@ -15,6 +15,9 @@
  */
 package ac.simons.biking2.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -70,6 +73,7 @@ import static java.util.stream.IntStream.rangeClosed;
 	    = "Select coalesce(min(m.recordedOn), current_date()) from Milage m"
     )
 })
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class Bike implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
@@ -100,16 +104,19 @@ public class Bike implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
+    @JsonIgnore
     private List<Milage> milages = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
+    @JsonIgnore
     private Calendar createdAt;
 
     /**
      * Contains all monthly periods that bike has been used
      */
+    @JsonIgnore
     private transient Map<LocalDate, Integer> periods;
 
     protected Bike() {
