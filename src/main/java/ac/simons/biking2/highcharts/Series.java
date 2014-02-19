@@ -41,13 +41,15 @@ public class Series {
 
 	private String type;
 
+	private String color;
+
 	public Builder<PB> withData(final Number... data) {
 	    this.data = Arrays.asList(data);
 	    return this;
 	}
-	
-	public Builder<PB> withData(final int... data) {	    
-	    this.data = Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);	    
+
+	public Builder<PB> withData(final int... data) {
+	    this.data = Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	    return this;
 	}
 
@@ -61,14 +63,21 @@ public class Series {
 	    return this;
 	}
 
+	public Builder<PB> withColor(final String color) {
+	    this.color = color;
+	    return this;
+	}
+
 	Builder(Sink<PB, Series> sink) {
 	    this.sink = sink;
 	}
 
 	public PB build() {
-	    return this.sink.setObject(new Series(data, name, type));
+	    return this.sink.setObject(new Series(color, data, name, type));
 	}
     }
+
+    private final String color;
 
     private final Collection<Number> data;
 
@@ -76,7 +85,8 @@ public class Series {
 
     private final String type;
 
-    public Series(Collection<Number> data, String name, String type) {
+    public Series(final String color, Collection<Number> data, String name, String type) {
+	this.color = color;
 	this.data = data;
 	this.name = name;
 	this.type = type;
@@ -92,5 +102,9 @@ public class Series {
 
     public String getType() {
 	return type;
+    }
+
+    public String getColor() {
+	return color;
     }
 }
