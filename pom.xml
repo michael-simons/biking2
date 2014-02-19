@@ -101,6 +101,18 @@
 		    </execution>
 		</executions>
 	    </plugin>
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-source-plugin</artifactId>
+		<version>2.1.2</version>
+		<executions>
+		    <execution>
+			<goals>
+			    <goal>jar</goal>
+			</goals>
+		    </execution>
+		</executions>
+	    </plugin>
 	</plugins>	
 	<resources>
 	    <resource> 
@@ -175,7 +187,7 @@
 	    <artifactId>h2</artifactId>
 	</dependency>
 	<dependency>
-	   <groupId>org.apache.tomcat</groupId>
+	    <groupId>org.apache.tomcat</groupId>
 	    <artifactId>tomcat-jdbc</artifactId>	    
 	</dependency>
 	
