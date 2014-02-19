@@ -29,10 +29,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +46,7 @@ import static java.util.stream.Collectors.toList;
  * @author Michael J. Simons, 2014-02-17
  */
 @Component
+@Profile({"dev", "prod"})
 public class FetchBikingPicturesJob {
 
     private final DailyFratzeProvider dailyFratzeProvider;
@@ -72,6 +75,7 @@ public class FetchBikingPicturesJob {
 	}
     }
 
+    @PostConstruct
     @Scheduled(cron = "${biking2.fetch-biking-picture-cron:0 0 */8 * * *}")
     public void run() {
 	download(createDownloadList());
