@@ -30,7 +30,7 @@ Array.prototype.randomize = function() {
 };
 
 var biking2 = angular
-	.module('biking2', ['ngRoute', 'biking2Controllers'])
+	.module('biking2', ['ngRoute', 'ui.bootstrap', 'biking2Controllers'])
 	.directive('ngActiveTab', function($location) {
 	    return {
 		link: function postLink(scope, element, attrs) {

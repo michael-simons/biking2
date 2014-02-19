@@ -194,6 +194,25 @@
 	<dependency>
 	    <groupId>org.springframework.security</groupId>
 	    <artifactId>spring-security-web</artifactId>
+	</dependency>	
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-aspects</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.webjars</groupId>
+	    <artifactId>angular-ui-bootstrap</artifactId>
+	    <version>0.10.0</version>
+	    <exclusions>
+		<exclusion>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>angularjs</artifactId>
+		</exclusion>
+		<exclusion>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>bootstrap</artifactId>
+		</exclusion>
+	    </exclusions>
 	</dependency>
 	<dependency>
 	    <groupId>org.webjars</groupId>

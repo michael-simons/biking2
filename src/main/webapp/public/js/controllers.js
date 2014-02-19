@@ -34,19 +34,19 @@ biking2Controllers.controller('IndexCtrl', function($scope, $http, $interval) {
 
     $http.get('/api/bikingPictures').success(function(data) {
 	var bikingPictures = data.randomize();
-	
+
 	var timer = $interval(function(count) {
-	    var thePicture = bikingPictures[count % bikingPictures.length];	    
+	    var thePicture = bikingPictures[count % bikingPictures.length];
 	    $scope.currentBikingPicture = '/api/bikingPictures/' + thePicture.id + '.jpg';
-	    $scope.currentLinkToBikingPicture = thePicture.link;	    
+	    $scope.currentLinkToBikingPicture = thePicture.link;
 	}, 5000);
-	$scope.$on("$destroy", function() {	    
+	$scope.$on("$destroy", function() {
 	    $interval.cancel(timer);
 	});
     });
 });
 
-biking2Controllers.controller('MilagesCtrl', function($scope, $http, emptyChart) {
+biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emptyChart) {
     $scope.currentYearConfig = $scope.historyConfig = emptyChart;
 
     $http.get('/api/charts/currentYear').success(function(data) {
@@ -56,6 +56,28 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, emptyChart)
     $http.get('/api/charts/history').success(function(data) {
 	$scope.historyConfig = data;
     });
+
+    $http.get('/api/bikes').success(function(data) {
+	$scope.bikes = data;
+    });
+
+    $scope.open = function() {
+	var modalInstance = $modal.open({
+	    templateUrl: '/partials/_new_milage.html',
+	    controller: 'AddNewMilageCtrl',
+	    scope: $scope
+	});
+
+	modalInstance.result.then(
+		function() {
+		    $http.get('/api/charts/currentYear').success(function(data) {
+			$scope.currentYearConfig.series = data.series;
+		    });
+		},
+		function() {
+		}
+	);
+    };
 });
 
 biking2Controllers.controller('TracksCtrl', function($scope, $http) {
@@ -90,7 +112,7 @@ biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routePar
 	layerMarkers.addMarker(new OpenLayers.Marker(
 		new OpenLayers.LonLat(home.longitude, home.latitude).transform(map.displayProjection, map.getProjectionObject()),
 		new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16)))
-	);
+		);
 
 	$scope.track = track;
 	var gpx = new OpenLayers.Layer.GML(track.name, "/tracks/" + track.id + ".gpx", {
@@ -106,4 +128,45 @@ biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routePar
 
 	map.zoomToExtent(bounds.transform(map.displayProjection, map.getProjectionObject()));
     });
+});
+
+biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstance, $http) {
+
+    $scope.milage = {
+	bikeId: $scope.bikes[0].id,
+	recordedOn: null,
+	amount: null
+    };
+
+    $scope.milage.recordedOn = new Date();
+    
+    $scope.recordedOnOptions = {
+	'year-format': "'yyyy'",
+	'starting-day': 1,
+	open: false,
+	minimum: $scope.milage.recordedOn
+    };
+
+    $scope.openRecordedOn = function($event) {
+	$event.preventDefault();
+	$event.stopPropagation();
+	$scope.recordedOnOptions.open = true;
+    };
+
+    $scope.cancel = function() {
+	$modalInstance.dismiss('cancel');
+    };
+
+    $scope.submit = function() {
+	$http({
+	    method: 'POST',
+	    url: '/api/bikes/' + $scope.milage.bikeId + '/milages',
+	    data: $scope.milage
+	}).success(function(data) {
+	    $modalInstance.close(data);
+	}).error(function(data, status) {
+	    if (status == 400)
+		$scope.badRequest = data;
+	});
+    };
 });

@@ -16,12 +16,26 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.persistence.entities.Bike;
+import ac.simons.biking2.persistence.entities.Milage;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Michael J. Simons, 2014-02-19
@@ -36,8 +50,23 @@ public class BikesController {
 	this.bikeRepository = bikeRepository;
     }
 
-    @RequestMapping("/api/bikes")
+    @RequestMapping("/api/bikes")    
     public List<Bike> getBikes() {	
 	return bikeRepository.findByDecommissionedOnIsNull(new Sort(Sort.Direction.ASC, "name"));
+    }
+    
+    @RequestMapping(value = "/api/bikes/{id:\\d+}/milages", method = POST)
+    @PreAuthorize("isAuthenticated()")
+    public Milage createMilage(final @PathVariable Integer id, final @RequestBody NewMilageCmd cmd, final BindingResult bindingResult) {	
+	final Bike bike = bikeRepository.findOne(id);	
+	final Milage rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
+	this.bikeRepository.save(bike);
+	
+	return rv;
+    }
+    
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) throws Exception {
+	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

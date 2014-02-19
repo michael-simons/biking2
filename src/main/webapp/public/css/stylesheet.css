@@ -79,3 +79,8 @@ table.trip_table td, table.track_table td {
 table.track_table a {
     background: none !important;
 }
+
+.datepicker-popup table {
+    border-collapse: separate !important;
+    border-spacing: 5px !important;
+}
