@@ -41,7 +41,7 @@ public class DailyFratzeProvider {
     public URLConnection getRSSConnection(final String url) {
 	URLConnection rv = null;
 	try {
-	    rv = new URL(Optional.ofNullable(url).orElse("http://dailyfratze.de/michael/tags/Thema/Radtour?format=rss&dir=d")).openConnection();	    
+	    rv = new URL(Optional.ofNullable(url).orElse("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d")).openConnection();	    
 	} catch (IOException ex) {	    
 	    Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);
 	}
