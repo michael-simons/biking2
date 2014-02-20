@@ -18,6 +18,7 @@ package ac.simons.biking2.persistence.entities;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -211,6 +212,7 @@ public class Bike implements Serializable {
      *
      * @return
      */
+    @JsonProperty
     public int getMilage() {
 	return this.getPeriods().values().parallelStream().collect(reducing(Integer::sum)).orElse(0);
     }
