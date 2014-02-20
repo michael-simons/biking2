@@ -16,8 +16,7 @@ limitations under the License.
 <div class="row">
     <div class="col-md-12">
 	<h2>Current year</h2>
-	 <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
-	
+	<alert data-ng-repeat="alert in alerts" type="alert.type" data-ng-close="closeAlert($index);">{{alert.msg}}</alert>
 	<p>This chart shows my current biking activities.</p>			
 	<div data-ng-highchart id="chart-current-year" config="currentYearConfig" ></div>			
 	<div>
