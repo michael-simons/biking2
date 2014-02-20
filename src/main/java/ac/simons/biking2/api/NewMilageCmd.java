@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,24 +23,14 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author Michael J. Simons, 2014-02-19
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class NewMilageCmd {
-    @NotNull
-    private Integer bikeId;
     @NotNull
     private Date recordedOn;
     @NotNull
     private Double amount;
-
-    public Integer getBikeId() {
-	return bikeId;
-    }
-
-    public void setBikeId(Integer bikeId) {
-	this.bikeId = bikeId;
-    }
 
     public Date getRecordedOn() {
 	return recordedOn;
