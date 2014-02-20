@@ -46,6 +46,12 @@ biking2Controllers.controller('IndexCtrl', function($scope, $http, $interval) {
     });
 });
 
+biking2Controllers.controller('BikesCtrl', function($scope, $http) {
+    $http.get('/api/bikes?all=true').success(function(data) {
+	$scope.bikes = data;
+    });
+});
+
 biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emptyChart) {
     $scope.currentYearConfig = $scope.historyConfig = emptyChart;
     $scope.alerts = [];
