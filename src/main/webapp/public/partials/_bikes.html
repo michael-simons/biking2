@@ -21,14 +21,15 @@
 			</tr>
 		    </thead>
 		    <tbody>
-			<tr ng-repeat="bike in bikes">
+			<tr ng-repeat="bike in bikes | orderBy:['boughtOn', 'decommissionedOn', 'name']">
 			    <td>{{ bike.name }}</td>		    
 			    <td>{{ bike.boughtOn | date: 'dd.MM.yyyy' }}</td>
 			    <td>{{ bike.decommissionedOn | date: 'dd.MM.yyyy' }}</td>
 			    <td class="text-right">{{ bike.milage | number:0 }}km</td>
 			</tr>
 		    </tbody>
-		</table>
+		</table>		
+		<button type="button" class="btn btn-default" data-ng-click="openNewBikeDlg();">New bike</button>	
 	    </div>
 	</div>
     </div>

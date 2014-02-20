@@ -21,6 +21,7 @@ import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -48,7 +50,7 @@ public class BikesController {
 	this.bikeRepository = bikeRepository;
     }
 
-    @RequestMapping("/api/bikes")
+    @RequestMapping(value = "/api/bikes", method = GET)
     public List<Bike> getBikes(final @RequestParam(required = false, defaultValue = "false") boolean all) {
 	List<Bike> rv;
 	if(all)
@@ -74,6 +76,28 @@ public class BikesController {
 	    this.bikeRepository.save(bike);
 
 	    rv = new ResponseEntity<>(milage, HttpStatus.OK);
+	}
+	
+	return rv;
+    }
+    
+    @RequestMapping(value = "/api/bikes", method = POST) 
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Bike> createBike(final @RequestBody @Valid NewBikeCmd newBikeCmd, final BindingResult bindingResult) {
+	if(bindingResult.hasErrors())
+	    throw new IllegalArgumentException("Invalid arguments.");
+	
+	ResponseEntity<Bike> rv;
+	
+	final Bike bike = new Bike(newBikeCmd.getName(), newBikeCmd.boughtOnAsLocalDate());
+	bike.setColor(newBikeCmd.getColor());
+	bike.addMilage(newBikeCmd.boughtOnAsLocalDate().withDayOfMonth(1), 0);
+	
+	try {
+	    this.bikeRepository.save(bike);
+	    rv = new ResponseEntity<>(bike, HttpStatus.OK);
+	} catch(DataIntegrityViolationException e) {	    
+	    rv = new ResponseEntity<>(HttpStatus.CONFLICT);
 	}
 	
 	return rv;

@@ -1,9 +1,9 @@
-<form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
-    <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	<h4 class="modal-title">New milage</h4>
-    </div>
-    <div class="modal-body">    	
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">New milage</h4>
+</div>
+<div class="modal-body">    	
+    <form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
 	<div class="form-group" data-ng-show="badRequest">
 	    <div class="col-sm-offset-2 col-sm-10">      
 		<label class="text-danger">
@@ -25,7 +25,7 @@
 		<div class="input-group datepicker-popup">
 		    <input id="inputDate" name="inputDate" type="text" class="form-control" datepicker-popup="yyyy-MM-dd" data-ng-model="milage.recordedOn" data-is-open="recordedOnOptions.open" data-show-weeks="false" data-show-button-bar="false" data-min="recordedOnOptions.minimum" data-ng-required="true" />
 		    <span class="input-group-btn">
-			<button class="btn btn-default" ng-click="openRecordedOn($event);"><i class="glyphicon glyphicon-calendar"></i></button>
+			<button class="btn btn-default" ng-click="openRecordedOn($event);"><span class="glyphicon glyphicon-calendar"></span>&#xFEFF;</button>
 		    </span>
 		</div>
 	    </div>
@@ -36,9 +36,9 @@
 		<input id="inputMilage" name="inputMilage" type="number" class="form-control" data-ng-model="milage.amount" data-ng-required="true"/>
 	    </div>
 	</div>
-    </div>
-    <div class="modal-footer">
-	<button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
-	<button type="submit" class="btn btn-primary">Save milage</button>
-    </div>
-</form>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
+    <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid" data-ng-click="submit();">Save milage</button>
+</div>

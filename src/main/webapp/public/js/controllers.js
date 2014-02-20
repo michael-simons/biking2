@@ -46,10 +46,65 @@ biking2Controllers.controller('IndexCtrl', function($scope, $http, $interval) {
     });
 });
 
-biking2Controllers.controller('BikesCtrl', function($scope, $http) {
+biking2Controllers.controller('BikesCtrl', function($scope, $http, $modal) {
     $http.get('/api/bikes?all=true').success(function(data) {
 	$scope.bikes = data;
     });
+
+    $scope.openNewBikeDlg = function() {
+	var modalInstance = $modal.open({
+	    templateUrl: '/partials/_new_bike.html',
+	    controller: 'AddNewBikeCtrl',
+	    scope: $scope
+	});
+
+	modalInstance.result.then(
+		function(newBike) {
+		    $scope.bikes.push(newBike);
+		},
+		function() {
+		}
+	);
+    }
+});
+
+biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance, $http) {
+    $scope.bike = {
+	name: null,
+	boughtOn: new Date(),
+	color: null
+    };
+
+    $scope.boughtOnOptions = {
+	'year-format': "'yyyy'",
+	'starting-day': 1,
+	open: false
+    };
+
+    $scope.openBoughtOn = function($event) {
+	$event.preventDefault();
+	$event.stopPropagation();
+	$scope.boughtOnOptions.open = true;
+    };
+
+    $scope.cancel = function() {
+	$modalInstance.dismiss('cancel');
+    };
+    
+    $scope.submit = function() {
+	$http({
+	    method: 'POST',
+	    url: '/api/bikes',
+	    data: $scope.bike
+	}).success(function(data) {
+	    $modalInstance.close(data);
+	}).error(function(data, status) {
+	    if (status === 400)
+		$scope.badRequest = data;
+	    else if (status === 409)
+		$scope.badRequest = 'The name is already used.';	
+	});
+    };
 });
 
 biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emptyChart) {
@@ -72,7 +127,7 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
 	$scope.alerts.splice(index, 1);
     };
 
-    $scope.open = function() {
+    $scope.openNewMilageDlg = function() {
 	if ($scope.bikes.length === 0)
 	    $scope.alerts.push({type: 'danger', msg: 'Please define at least one bike'});
 	else {
@@ -92,6 +147,49 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
 		    }
 	    );
 	}
+    };
+});
+
+biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstance, $http) {
+
+    $scope.milage = {
+	bikeId: $scope.bikes[0].id,
+	recordedOn: null,
+	amount: null
+    };
+
+    $scope.milage.recordedOn = new Date();
+    
+    $scope.recordedOnOptions = {
+	'year-format': "'yyyy'",
+	'starting-day': 1,
+	open: false,
+	minimum: $scope.milage.recordedOn
+    };
+
+    $scope.openRecordedOn = function($event) {
+	$event.preventDefault();
+	$event.stopPropagation();
+	$scope.recordedOnOptions.open = true;
+    };
+
+    $scope.cancel = function() {
+	$modalInstance.dismiss('cancel');
+    };
+
+    $scope.submit = function() {
+	$http({
+	    method: 'POST',
+	    url: '/api/bikes/' + $scope.milage.bikeId + '/milages',
+	    data: $scope.milage
+	}).success(function(data) {
+	    $modalInstance.close(data);
+	}).error(function(data, status) {
+	    if (status === 400)
+		$scope.badRequest = data;
+	    else if(status === 404)
+		$scope.badRequest = 'Please do not temper with this form.';
+	});
     };
 });
 
@@ -143,47 +241,4 @@ biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routePar
 
 	map.zoomToExtent(bounds.transform(map.displayProjection, map.getProjectionObject()));
     });
-});
-
-biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstance, $http) {
-
-    $scope.milage = {
-	bikeId: $scope.bikes[0].id,
-	recordedOn: null,
-	amount: null
-    };
-
-    $scope.milage.recordedOn = new Date();
-    
-    $scope.recordedOnOptions = {
-	'year-format': "'yyyy'",
-	'starting-day': 1,
-	open: false,
-	minimum: $scope.milage.recordedOn
-    };
-
-    $scope.openRecordedOn = function($event) {
-	$event.preventDefault();
-	$event.stopPropagation();
-	$scope.recordedOnOptions.open = true;
-    };
-
-    $scope.cancel = function() {
-	$modalInstance.dismiss('cancel');
-    };
-
-    $scope.submit = function() {
-	$http({
-	    method: 'POST',
-	    url: '/api/bikes/' + $scope.milage.bikeId + '/milages',
-	    data: $scope.milage
-	}).success(function(data) {
-	    $modalInstance.close(data);
-	}).error(function(data, status) {
-	    if (status === 400)
-		$scope.badRequest = data;
-	    else if(status === 404)
-		$scope.badRequest = 'Please do not temper with this form.';
-	});
-    };
 });
