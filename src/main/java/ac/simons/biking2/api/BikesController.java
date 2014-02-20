@@ -18,6 +18,7 @@ package ac.simons.biking2.api;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.entities.Milage;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -57,16 +58,27 @@ public class BikesController {
     
     @RequestMapping(value = "/api/bikes/{id:\\d+}/milages", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public Milage createMilage(final @PathVariable Integer id, final @RequestBody NewMilageCmd cmd, final BindingResult bindingResult) {	
-	final Bike bike = bikeRepository.findOne(id);	
-	final Milage rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
-	this.bikeRepository.save(bike);
+    public ResponseEntity<Milage> createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {	
+	if(bindingResult.hasErrors())
+	    throw new IllegalArgumentException("Invalid arguments.");
+	
+	final Bike bike = bikeRepository.findOne(id);
+	
+	ResponseEntity<Milage> rv;	
+	if(bike == null)
+	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	else {
+	    final Milage milage = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
+	    this.bikeRepository.save(bike);
+
+	    rv = new ResponseEntity<>(milage, HttpStatus.OK);
+	}
 	
 	return rv;
     }
     
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) throws Exception {
+    @ExceptionHandler(IllegalArgumentException.class)    
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) throws Exception {	
 	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

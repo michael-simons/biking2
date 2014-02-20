@@ -48,6 +48,7 @@ biking2Controllers.controller('IndexCtrl', function($scope, $http, $interval) {
 
 biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emptyChart) {
     $scope.currentYearConfig = $scope.historyConfig = emptyChart;
+    $scope.alerts = [];
 
     $http.get('/api/charts/currentYear').success(function(data) {
 	$scope.currentYearConfig = data;
@@ -60,23 +61,31 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
     $http.get('/api/bikes').success(function(data) {
 	$scope.bikes = data;
     });
+    
+    $scope.closeAlert = function(index) {
+	$scope.alerts.splice(index, 1);
+    };
 
     $scope.open = function() {
-	var modalInstance = $modal.open({
-	    templateUrl: '/partials/_new_milage.html',
-	    controller: 'AddNewMilageCtrl',
-	    scope: $scope
-	});
+	if ($scope.bikes.length === 0)
+	    $scope.alerts.push({type: 'danger', msg: 'Please define at least one bike'});
+	else {
+	    var modalInstance = $modal.open({
+		templateUrl: '/partials/_new_milage.html',
+		controller: 'AddNewMilageCtrl',
+		scope: $scope
+	    });
 
-	modalInstance.result.then(
-		function() {
-		    $http.get('/api/charts/currentYear').success(function(data) {
-			$scope.currentYearConfig.series = data.series;
-		    });
-		},
-		function() {
-		}
-	);
+	    modalInstance.result.then(
+		    function() {
+			$http.get('/api/charts/currentYear').success(function(data) {
+			    $scope.currentYearConfig.series = data.series;
+			});
+		    },
+		    function() {
+		    }
+	    );
+	}
     };
 });
 
@@ -165,8 +174,10 @@ biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstanc
 	}).success(function(data) {
 	    $modalInstance.close(data);
 	}).error(function(data, status) {
-	    if (status == 400)
+	    if (status === 400)
 		$scope.badRequest = data;
+	    else if(status === 404)
+		$scope.badRequest = 'Please do not temper with this form.';
 	});
     };
 });

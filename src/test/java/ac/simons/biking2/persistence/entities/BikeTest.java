@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.internal.runners.statements.ExpectException;
 import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
