@@ -142,7 +142,7 @@ public class OEmbedControllerTest {
 		.andExpect(model().attribute("home", is(equalTo(home))))
 		.andExpect(model().attribute("width", is(equalTo(23))))
 		.andExpect(model().attribute("height", is(equalTo(42))))
-		.andExpect(view().name("/WEB-INF/views/oEmbed/embeddedTrack.jspx"));
+		.andExpect(view().name("/oEmbed/embeddedTrack"));
 	
 	mockMvc
 		.perform(get("http://biking.michael-simons.eu/tracks/n/embed"))

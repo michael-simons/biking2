@@ -123,6 +123,7 @@ public class OEmbedController {
     ) {	
 	final Integer _id = Track.getId(id);	
 	Track track;
+	String rv = null;
 	if (_id == null) {
 	    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
 	} else if ((track = this.trackRepository.findOne(_id)) == null) {
@@ -133,7 +134,8 @@ public class OEmbedController {
 		    .addAttribute("home", home)
 		    .addAttribute("width", width)
 		    .addAttribute("height", height);
-	}
-	return "/oEmbed/embeddedTrack";
+	    rv = "/oEmbed/embeddedTrack";
+	}	
+	return rv;
     }
 }
