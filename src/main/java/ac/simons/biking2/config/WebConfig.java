@@ -134,8 +134,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     @Conditional(NeedsCustomizedConnectorCondition.class)
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
-	    final @Value("{biking2.connector.proxyName}") String proxyName,
-	    final @Value("{biking2.connector.proxyPort:80}") int proxyPort
+	    final @Value("${biking2.connector.proxyName}") String proxyName,
+	    final @Value("${biking2.connector.proxyPort:80}") int proxyPort
     ) {
 	 return (ConfigurableEmbeddedServletContainerFactory factory) -> {	     
 	     if(factory instanceof TomcatEmbeddedServletContainerFactory){
