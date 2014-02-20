@@ -19,18 +19,25 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.internal.runners.statements.ExpectException;
+import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.rules.ExpectedException.none;
 
 /**
  *
  * @author Michael J. Simons
  */
 public class BikeTest {
+    @Rule
+    public final ExpectedException expectedException = none();
+    
     private final Bike defaultTestBike;
     
     public BikeTest() {
@@ -79,13 +86,17 @@ public class BikeTest {
 	);	
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddMilageInvalidDate() {
+	this.expectedException.expect(IllegalArgumentException.class);	
+	this.expectedException.expectMessage("Next valid date for milage is " + LocalDate.of(2014, 4, 1));
 	this.defaultTestBike.addMilage(LocalDate.of(2015, Month.JANUARY, 1), 23);
-    }
+    }    
     
-    @Test(expected = IllegalArgumentException.class)    
+    @Test
     public void testAddMilageInvalidAmount() {
+	this.expectedException.expect(IllegalArgumentException.class);
+	this.expectedException.expectMessage("New amount must be greater than or equal 50");
 	this.defaultTestBike.addMilage(LocalDate.of(2014, Month.APRIL, 1), 23);
     }
 }
