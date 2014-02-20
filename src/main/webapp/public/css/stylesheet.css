@@ -84,3 +84,9 @@ table.track_table a {
     border-collapse: separate !important;
     border-spacing: 5px !important;
 }
+
+.highcharts-tooltip table {
+    font-size: 12px;
+    min-width: 150px;
+    margin-bottom: 0px;
+}
