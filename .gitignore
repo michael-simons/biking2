@@ -1,4 +1,4 @@
 target/
 .DS_Store
 var/
-application.properties
+/application.properties
