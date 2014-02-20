@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -51,9 +52,14 @@ public class BikesController {
 	this.bikeRepository = bikeRepository;
     }
 
-    @RequestMapping("/api/bikes")    
-    public List<Bike> getBikes() {	
-	return bikeRepository.findByDecommissionedOnIsNull(new Sort(Sort.Direction.ASC, "name"));
+    @RequestMapping("/api/bikes")
+    public List<Bike> getBikes(final @RequestParam(required = false, defaultValue = "false") boolean all) {
+	List<Bike> rv;
+	if(all)
+	    rv = bikeRepository.findAll(new Sort(Sort.Direction.ASC, "boughtOn", "decommissionedOn", "name"));
+	else
+	    rv = bikeRepository.findByDecommissionedOnIsNull(new Sort(Sort.Direction.ASC, "name"));
+	return rv;
     }
     
     @RequestMapping(value = "/api/bikes/{id:\\d+}/milages", method = POST)
