@@ -134,6 +134,6 @@ public class OEmbedController {
 		    .addAttribute("width", width)
 		    .addAttribute("height", height);
 	}
-	return "/WEB-INF/views/oEmbed/embeddedTrack.jspx";
+	return "/oEmbed/embeddedTrack";
     }
 }

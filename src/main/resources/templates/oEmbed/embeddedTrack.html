@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="Michael J. Simons" name="Author" />
+	<title>biking.michael-simons.eu</title>
+
+	<script type="text/javascript" src="/webjars/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript" src="/webjars/openlayers/2.13.1/OpenLayers.js"></script>
+	<script type="text/javascript" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>	 
+
+	<script src="/js/OpenLayersDeprecated.js"></script>
+	<script src="/js/embeddedTrack.js"></script>
+    </head>
+    <body style="overflow: hidden; margin: 0px; padding: 0px;">	    
+	<div id="map" 
+	     data-th-attr="data-home-longitude=${home.longitude},
+	     data-home-latitude=${home.latitude},
+	     data-track-url='/tracks/'+${track.prettyId}+'.gpx',
+	     data-track-name=${track.name},
+	     data-track-minlat=${track.minlat},
+	     data-track-minlon=${track.minlon},
+	     data-track-maxlat=${track.maxlat},
+	     data-track-maxlon=${track.maxlon},
+	     data-width=${width-2},
+	     data-height=${height-2}"
+	     style="border:1px solid black;"
+	     >	    
+	</div>	    
+    </body>
+</html>
