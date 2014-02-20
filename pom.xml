@@ -27,6 +27,7 @@
 	<angularjs.version>1.2.12</angularjs.version>
 	<highcharts.version>3.0.9</highcharts.version>
 	<openlayers.version>2.13.1</openlayers.version>
+	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
 	
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	
@@ -198,22 +199,7 @@
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-aspects</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>org.webjars</groupId>
-	    <artifactId>angular-ui-bootstrap</artifactId>
-	    <version>0.10.0</version>
-	    <exclusions>
-		<exclusion>
-		    <groupId>org.webjars</groupId>
-		    <artifactId>angularjs</artifactId>
-		</exclusion>
-		<exclusion>
-		    <groupId>org.webjars</groupId>
-		    <artifactId>bootstrap</artifactId>
-		</exclusion>
-	    </exclusions>
-	</dependency>
+	</dependency>	
 	<dependency>
 	    <groupId>org.webjars</groupId>
 	    <artifactId>bootstrap</artifactId>
@@ -234,6 +220,21 @@
 	    <groupId>org.webjars</groupId>
 	    <artifactId>angularjs</artifactId>
 	    <version>${angularjs.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.webjars</groupId>
+	    <artifactId>angular-ui-bootstrap</artifactId>
+	    <version>${angular-ui-bootstrap.version}</version>
+	    <exclusions>
+		<exclusion>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>angularjs</artifactId>
+		</exclusion>
+		<exclusion>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>bootstrap</artifactId>
+		</exclusion>
+	    </exclusions>
 	</dependency>
 	<dependency>
 	    <groupId>org.webjars</groupId>
