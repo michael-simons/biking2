@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,10 +43,12 @@ import static java.util.stream.IntStream.rangeClosed;
 public class ChartsController {
 
     private final BikeRepository bikeRepository;
+    private final String colorOfCumulativeGraph;
     
     @Autowired
-    public ChartsController(final BikeRepository bikeRepository) {
+    public ChartsController(final BikeRepository bikeRepository, final @Value("${biking2.color-of-cumulative-graph:000000}") String colorOfCumulativeGraph) {
 	this.bikeRepository = bikeRepository;	
+	this.colorOfCumulativeGraph = colorOfCumulativeGraph;
     }
 
     @RequestMapping("/charts/currentYear")
@@ -74,7 +77,7 @@ public class ChartsController {
 	final int currentMaxYValue  = 
 		builder.series()
 		    .withName("Sum")
-		    .withColor("#0A67A3")
+		    .withColor("#" + colorOfCumulativeGraph)
 		    .withType("spline")
 		    .withData(sums)		    
 		    .build()
