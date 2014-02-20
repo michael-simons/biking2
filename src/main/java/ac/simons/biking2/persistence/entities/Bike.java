@@ -216,7 +216,12 @@ public class Bike implements Serializable {
     public int getMilage() {
 	return this.getPeriods().values().parallelStream().collect(reducing(Integer::sum)).orElse(0);
     }
-
+    
+    @JsonProperty
+    public int getLastMilage() {	
+	return this.milages == null || this.milages.isEmpty() ? 0 : this.milages.get(this.milages.size()-1).getAmount().intValue();
+    }
+    
     /**
      * An example of a nullable Optional
      *

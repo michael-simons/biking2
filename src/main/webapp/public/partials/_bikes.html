@@ -17,7 +17,7 @@
 			    <th>Name</th>
 			    <th>Bought on</th>
 			    <th>Decommissioned on</th>
-			    <th class="text-right">Current milage</th>
+			    <th class="text-right">Last milage</th>
 			</tr>
 		    </thead>
 		    <tbody>
@@ -25,7 +25,7 @@
 			    <td>{{ bike.name }}</td>		    
 			    <td>{{ bike.boughtOn | date: 'dd.MM.yyyy' }}</td>
 			    <td>{{ bike.decommissionedOn | date: 'dd.MM.yyyy' }}</td>
-			    <td class="text-right">{{ bike.milage | number:0 }}km</td>
+			    <td class="text-right">{{ bike.lastMilage | number:0 }}km</td>
 			</tr>
 		    </tbody>
 		</table>		
