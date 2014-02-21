@@ -21,13 +21,19 @@ import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.entities.Track.Type;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +45,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -52,6 +59,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -95,36 +103,48 @@ public class TracksController {
     
     @RequestMapping(value = "/api/tracks", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Track> createTrack(
+    public ResponseEntity<Track> createTrack(	    
 	    @RequestParam(value = "name", required = true)
-	    final String name,
+	    final String name,	    
 	    @RequestParam(value = "coveredOn", required = true)
-	    @DateTimeFormat(pattern="yyyy-MM-dd") 
-	    final Date coveredOn,
-	    @RequestParam(value = "coveredOn", required = false)
+	    @DateTimeFormat(iso = DATE_TIME) 
+	    final ZonedDateTime coveredOn,
+	    @RequestParam(value = "description", required = false)
 	    final String description,
-	    @RequestParam(value = "type", required = true)
+	    @RequestParam(value = "type", required = true, defaultValue = "biking")
 	    final Type type,
 	    @RequestParam("trackData")
 	    final MultipartFile trackFile
     ) throws IOException {
-	System.out.println();
-	Track track = new Track() {
-
-	    @Override
-	    public Integer getId() {
-		return 23;
+	ResponseEntity<Track> rv;
+	if(trackFile == null || trackFile.isEmpty())
+	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	else {
+	    try {
+		Track track = new Track();
+		track.setCoveredOn(GregorianCalendar.from(coveredOn));
+		track.setDescription(description);
+		track.setName(name);
+		track.setType(type);
+		
+		track = this.trackRepository.save(track);	   
+		
+		try {
+		    this.storeFile(track, trackFile.getInputStream());		    
+		    
+		    track = this.trackRepository.save(track);
+		    rv = new ResponseEntity<>(track, HttpStatus.OK);		    
+		} catch(Exception e) {
+		    this.trackRepository.delete(track);
+		    
+		    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}		
+	    } catch(DataIntegrityViolationException e) {	    
+		rv = new ResponseEntity<>(HttpStatus.CONFLICT);
 	    }
+	}
 
-	    @Override
-	    public String getPrettyId() {
-		return "xx";
-	    }
-
-	};
-	this.storeFile(track, trackFile.getInputStream());
-
-	return new ResponseEntity<>(track, HttpStatus.OK);
+	return rv;
     }
     
     Track storeFile(final Track track, final InputStream tcxData) {
@@ -141,7 +161,10 @@ public class TracksController {
 	try {
 	    final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
 	    process.waitFor();
-
+	    int exitValue = process.exitValue();
+	    
+	    if(exitValue != 0)
+		throw new RuntimeException("GPSBabel could not convert the input file!");
 	    final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
 	    GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
 	    track.setMinlon(gpx.getBounds().getMinlon());
