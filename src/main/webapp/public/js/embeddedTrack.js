@@ -15,11 +15,11 @@
  */
 var map;
 $(document).ready(function() {
-    var _map = $('#map');
-    if ($('#map').height() === 0)
-	_map.css('height', _map.width() * 2 / 3);
+    var _map = $('#map');    
+    _map.css('width', _map.data('width'));
+    _map.css('height', _map.data('height'));
 
-    var home = {"longitude": $('#map').data('homeLongitude'), "latitude": $('#map').data('homeLatitude'), "description": "Home"};
+    var home = {"longitude": _map.data('homeLongitude'), "latitude": _map.data('homeLatitude'), "description": "Home"};
 
     map = new OpenLayers.Map("map", {
 	controls: [
@@ -35,7 +35,7 @@ $(document).ready(function() {
 
     map.addLayer(new OpenLayers.Layer.OSM.Mapnik("Mapnik"));
     map.addLayer(new OpenLayers.Layer.OSM.CycleMap("CycleMap"));
-    var gpx = new OpenLayers.Layer.GML($('#map').data('trackName'), $('#map').data('trackUrl'), {
+    var gpx = new OpenLayers.Layer.GML(_map.data('trackName'), _map.data('trackUrl'), {
 	format: OpenLayers.Format.GPX,
 	style: {strokeColor: "red", strokeWidth: 5, strokeOpacity: 1.0},
 	projection: new OpenLayers.Projection("EPSG:4326")

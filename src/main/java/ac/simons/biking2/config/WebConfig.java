@@ -21,15 +21,34 @@ import ac.simons.biking2.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
+import java.util.EnumSet;
+import java.util.Set;
+import javax.servlet.DispatcherType;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContainerInitializer;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 /**
  * @author Michael J. Simons, 2014-02-15
@@ -53,6 +72,23 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public String index() {
 	    return "/index.html";
 	}
+    }
+    
+    @Bean
+    public ServletContextInitializer servletContextInitializer() {
+	return (ServletContext servletContext) -> {
+	    final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+	    characterEncodingFilter.setEncoding("UTF-8");
+	    characterEncodingFilter.setForceEncoding(false);
+	    
+	    servletContext.addFilter("characterEncodingFilter", characterEncodingFilter).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+	    System.out.println("Filter added");
+	};
+    }
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+	return new MultipartConfigElement("", 5 * 1024 * 1024, 5 * 1024 * 1024, 1024 * 1024);	
     }
 
     /**
@@ -83,6 +119,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		if (bean instanceof RequestMappingHandlerMapping && "requestMappingHandlerMapping".equals(beanName)) {
 		    ((RequestMappingHandlerMapping) bean).setUseRegisteredSuffixPatternMatch(true);
 		}
+		if (bean instanceof ThymeleafViewResolver && "thymeleafViewResolver".equals(beanName)) {
+		    ((ThymeleafViewResolver) bean).setExcludedViewNames(new String[]{"/index.html"});
+		}
 		return bean;
 	    }
 
@@ -104,5 +143,36 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	return new ObjectMapper().registerModules(
 		new JaxbAnnotationModule().setPriority(Priority.SECONDARY)
 	);
+    }
+
+    // TODO Blog
+    /**
+     * This is a condition based on a property. If the property is set and not
+     * empty, the EmbeddedServletContainer needs a customized connector
+     */
+    static class NeedsCustomizedConnectorCondition implements Condition {
+
+	@Override
+	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+	    final Environment environment = context.getEnvironment();
+	    return environment.containsProperty("biking2.connector.proxyName") && !environment.getProperty("biking2.connector.proxyName", String.class).isEmpty();
+	}
+    }
+
+    @Bean
+    @Conditional(NeedsCustomizedConnectorCondition.class)
+    public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
+	    final @Value("${biking2.connector.proxyName}") String proxyName,
+	    final @Value("${biking2.connector.proxyPort:80}") int proxyPort
+    ) {
+	return (ConfigurableEmbeddedServletContainerFactory factory) -> {
+	    if (factory instanceof TomcatEmbeddedServletContainerFactory) {
+		final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) factory;
+		containerFactory.addConnectorCustomizers(connector -> {
+		    connector.setProxyName(proxyName);
+		    connector.setProxyPort(proxyPort);
+		});
+	    }
+	};
     }
 }

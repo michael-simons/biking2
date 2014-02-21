@@ -16,26 +16,51 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.gpx.GPX;
 import ac.simons.biking2.persistence.entities.Track;
+import ac.simons.biking2.persistence.entities.Track.Type;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.channels.Channels;
 import java.nio.file.Files;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Michael J. Simons, 2014-02-15
@@ -54,11 +79,20 @@ public class TracksController {
 
     private final TrackRepository trackRepository;
     private final File datastoreBaseDirectory;
+    private final String gpsBabel;
+    private final JAXBContext gpxContext;
 
     @Autowired
-    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory) {
+    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") String gpsBabel) {
 	this.trackRepository = trackRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
+	this.gpsBabel = gpsBabel;
+	
+	try {
+	    this.gpxContext = JAXBContext.newInstance(GPX.class);
+	} catch (JAXBException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     @RequestMapping("/api/tracks")
@@ -66,7 +100,84 @@ public class TracksController {
     List<Track> getTracks() {
 	return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
     }
+    
+    @RequestMapping(value = "/api/tracks", method = POST)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Track> createTrack(	    
+	    @RequestParam(value = "name", required = true)
+	    final String name,	    
+	    @RequestParam(value = "coveredOn", required = true)
+	    @DateTimeFormat(iso = DATE_TIME) 
+	    final ZonedDateTime coveredOn,
+	    @RequestParam(value = "description", required = false)
+	    final String description,
+	    @RequestParam(value = "type", required = true, defaultValue = "biking")
+	    final Type type,
+	    @RequestParam("trackData")
+	    final MultipartFile trackFile
+    ) throws IOException {
+	ResponseEntity<Track> rv;
+	if(trackFile == null || trackFile.isEmpty())
+	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	else {
+	    try {
+		Track track = new Track();
+		track.setCoveredOn(GregorianCalendar.from(coveredOn));
+		track.setDescription(description);
+		track.setName(name);
+		track.setType(type);
+		
+		track = this.trackRepository.save(track);	   
+		
+		try {
+		    this.storeFile(track, trackFile.getInputStream());		    
+		    
+		    track = this.trackRepository.save(track);
+		    rv = new ResponseEntity<>(track, HttpStatus.OK);		    
+		} catch(Exception e) {
+		    this.trackRepository.delete(track);
+		    
+		    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}		
+	    } catch(DataIntegrityViolationException e) {	    
+		rv = new ResponseEntity<>(HttpStatus.CONFLICT);
+	    }
+	}
 
+	return rv;
+    }
+    
+    Track storeFile(final Track track, final InputStream tcxData) {
+	final File tcxFile = new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "tcx"));
+	final File gpxFile = new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "gpx"));
+
+	try (FileOutputStream out = new FileOutputStream(tcxFile);) {
+	    out.getChannel().transferFrom(Channels.newChannel(tcxData), 0, Integer.MAX_VALUE);
+	    out.flush();
+	} catch (IOException ex) {
+	    throw new RuntimeException(ex);
+	}
+
+	try {
+	    final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
+	    process.waitFor();
+	    int exitValue = process.exitValue();
+	    
+	    if(exitValue != 0)
+		throw new RuntimeException("GPSBabel could not convert the input file!");
+	    final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
+	    GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
+	    track.setMinlon(gpx.getBounds().getMinlon());
+	    track.setMinlat(gpx.getBounds().getMinlat());
+	    track.setMaxlon(gpx.getBounds().getMaxlon());
+	    track.setMaxlat(gpx.getBounds().getMaxlat());
+	} catch (IOException | JAXBException | InterruptedException ex) {
+	    throw new RuntimeException(ex);
+	}
+
+	return track;
+    }
+    
     @RequestMapping("/api/tracks/{id:\\w+}")
     public ResponseEntity<Track> getTrack(final @PathVariable String id) {
 	final Integer _id = Track.getId(id);

@@ -193,10 +193,83 @@ biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstanc
     };
 });
 
-biking2Controllers.controller('TracksCtrl', function($scope, $http) {
+biking2Controllers.controller('TracksCtrl', function($scope, $http, $modal) {
     $http.get('/api/tracks').success(function(data) {
 	$scope.tracks = data;
     });
+    
+    $scope.openNewTrackDlg = function() {
+	var modalInstance = $modal.open({
+	    templateUrl: '/partials/_new_track.html',
+	    controller: 'AddNewTrackCtrl',
+	    scope: $scope
+	});
+
+	modalInstance.result.then(
+		function(newTrack) {
+		    $scope.tracks.push(newTrack);
+		},
+		function() {
+		}
+	);
+    }
+});
+
+biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance, $http, $upload) {
+    $scope.track = {
+	name: null,
+	coveredOn: new Date(),
+	description: null,
+	type: 'biking'
+    };
+    $scope.trackData = null;
+
+    $scope.types = ['biking', 'running'];
+
+    $scope.onFileSelect = function($files) {
+	$scope.trackData = $files[0];	
+    };
+
+    $scope.coveredOnOptions = {
+	'year-format': "'yyyy'",
+	'starting-day': 1,
+	open: false
+    };
+
+    $scope.openCoveredOn = function($event) {
+	$event.preventDefault();
+	$event.stopPropagation();
+	$scope.coveredOnOptions.open = true;
+    };
+
+    $scope.cancel = function() {
+	$modalInstance.dismiss('cancel');
+    };
+    
+    $scope.submit = function() {
+	$upload.upload({
+	    method: 'POST',
+	    url: '/api/tracks',        
+	    data: $scope.track,
+	    file: $scope.trackData,
+	    fileFormDataName: 'trackData',
+	    withCredentials: true,
+	    formDataAppender: function(formData, key, val){
+		// Without that, val.toJSON() is used which adds "...
+		if(key !== null && key === 'coveredOn')
+		    formData.append(key, val.toISOString());
+		else
+		    formData.append(key, val);
+	    }
+	}).success(function(data) {
+	    $modalInstance.close(data);
+	}).error(function(data, status) {	
+	    if (status === 409)
+		$scope.badRequest = 'A track with the given name on that date already exists.';	
+	    else
+		$scope.badRequest = 'There\'s something wrong with your input, please check!';
+	});	
+    };
 });
 
 biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routeParams) {

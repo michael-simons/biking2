@@ -70,7 +70,7 @@ public class TracksControllerTest {
     public void testGetTracks() {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"))).toReturn(defaultTestData);
-	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")));
+	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")), "");
 
 	final List<Track> tracks = tracksController.getTracks();
 
@@ -104,7 +104,7 @@ public class TracksControllerTest {
 	trackTcx.createNewFile();
 	trackTcx.deleteOnExit();
 	
-	final TracksController tracksController = new TracksController(trackRepository, tmpDir);
+	final TracksController tracksController = new TracksController(trackRepository, tmpDir, "");
 	
 	MockHttpServletRequest request;
 	MockHttpServletResponse response;
@@ -169,7 +169,7 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findOne(validId)).toReturn(t);
 	
-	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")));
+	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")), "");
 	
 	ResponseEntity<Track> response;
 	response = tracksController.getTrack(Integer.toString(validId, 36));

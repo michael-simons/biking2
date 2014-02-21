@@ -42,6 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.sessionCreationPolicy(STATELESS)
 	    .and()
 	    .csrf()
-		.disable();
+		.disable()
+	    .headers()
+		.frameOptions() // OEmbedController#embedTrack uses an iframe
+		    .disable();
     }
 }
