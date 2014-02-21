@@ -65,8 +65,8 @@ public class OEmbedController {
     public ResponseEntity<OEmbedResponse> getEmbeddableTrack(
 	    final @RequestParam(required = true) @URL String url, 
 	    final @RequestParam(required = false, defaultValue = "json") String format,
-	    final @RequestParam(required = false, defaultValue = "1024") Integer width,
-	    final @RequestParam(required = false, defaultValue = "576") Integer height,
+	    final @RequestParam(required = false, defaultValue = "1024") Integer maxwidth,
+	    final @RequestParam(required = false, defaultValue = "576") Integer maxheight,
 	    final HttpServletRequest request
     ) {
 	ResponseEntity<OEmbedResponse> rv = null;
@@ -91,16 +91,16 @@ public class OEmbedController {
 	    response.setCacheAge((long)(24 * 60 * 60));
 	    response.setHtml(new StringBuilder()
 		    .append("<iframe ")
-			.append("width='").append(width).append("' ")
-			.append("height='").append(height).append("' ")
+			.append("width='").append(maxwidth).append("' ")
+			.append("height='").append(maxheight).append("' ")
 			.append("src='")
 			    .append(request.getScheme()).append("://")
 			    .append(request.getServerName())
 			    .append(Arrays.asList(80, 443).contains(request.getServerPort()) ? "" : (":" + request.getServerPort()))
 			    .append(request.getContextPath())
 			    .append("/tracks/").append(m.group(1)).append("/embed?")
-				.append("width=").append(width).append("&")
-				.append("height=").append(height)		    
+				.append("width=").append(maxwidth).append("&")
+				.append("height=").append(maxheight)		    
 			.append("' ")
 			.append("class='bikingTrack'>")
 		    .append("</iframe>")		    
