@@ -17,45 +17,36 @@ package ac.simons.biking2.api;
 
 import ac.simons.biking2.config.PersistenceConfig;
 import ac.simons.biking2.gpx.GPX;
-import ac.simons.biking2.jobs.FetchBikingPicturesJob;
 import ac.simons.biking2.persistence.entities.Track;
+import ac.simons.biking2.persistence.entities.Track.Type;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
-import ac.simons.biking2.rss.RSS;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -84,7 +75,7 @@ public class TracksController {
     private final JAXBContext gpxContext;
 
     @Autowired
-    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel") String gpsBabel) {
+    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") String gpsBabel) {
 	this.trackRepository = trackRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
 	this.gpsBabel = gpsBabel;
@@ -104,9 +95,36 @@ public class TracksController {
     
     @RequestMapping(value = "/api/tracks", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Track> createTrack(@RequestParam("trackFile") MultipartFile trackFile, final @RequestBody @Valid NewTrackCmd cmd, final BindingResult bindingResult) {
-	
-	return null;
+    public ResponseEntity<Track> createTrack(
+	    @RequestParam(value = "name", required = true)
+	    final String name,
+	    @RequestParam(value = "coveredOn", required = true)
+	    @DateTimeFormat(pattern="yyyy-MM-dd") 
+	    final Date coveredOn,
+	    @RequestParam(value = "coveredOn", required = false)
+	    final String description,
+	    @RequestParam(value = "type", required = true)
+	    final Type type,
+	    @RequestParam("trackData")
+	    final MultipartFile trackFile
+    ) throws IOException {
+	System.out.println();
+	Track track = new Track() {
+
+	    @Override
+	    public Integer getId() {
+		return 23;
+	    }
+
+	    @Override
+	    public String getPrettyId() {
+		return "xx";
+	    }
+
+	};
+	this.storeFile(track, trackFile.getInputStream());
+
+	return new ResponseEntity<>(track, HttpStatus.OK);
     }
     
     Track storeFile(final Track track, final InputStream tcxData) {
