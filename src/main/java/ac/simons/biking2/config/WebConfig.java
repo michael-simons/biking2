@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 /**
  * @author Michael J. Simons, 2014-02-15
@@ -93,6 +94,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		if (bean instanceof RequestMappingHandlerMapping && "requestMappingHandlerMapping".equals(beanName)) {
 		    ((RequestMappingHandlerMapping) bean).setUseRegisteredSuffixPatternMatch(true);
+		}
+		if (bean instanceof ThymeleafViewResolver && "thymeleafViewResolver".equals(beanName)) {
+		    ((ThymeleafViewResolver) bean).setExcludedViewNames(new String[]{"/index.html"});
 		}
 		return bean;
 	    }
