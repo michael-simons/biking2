@@ -1,0 +1,56 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">New track</h4>
+</div>
+<div class="modal-body">    	
+    <form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
+	<div class="form-group" data-ng-show="badRequest">
+	    <div class="col-sm-offset-2 col-sm-10">      
+		<label class="text-danger">
+		    {{badRequest}}
+		</label>      
+	    </div>
+	</div>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputName.$invalid,'has-success': theForm.inputName.$valid}">
+	    <label for="inputName" class="col-sm-2 control-label">Name</label>
+	    <div class="col-sm-10">
+		<input id="inputName" name="inputName" type="text" class="form-control" data-ng-model="track.name" data-ng-required="true"/>
+	    </div>
+	</div>	
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputCoveredOn.$invalid,'has-success': theForm.inputCoveredOn.$valid}">
+	    <label for="inputCoveredOn" class="col-sm-2 control-label">Date</label>
+	    <div class="col-sm-10">
+		<div class="input-group datepicker-popup">
+		    <input id="inputCoveredOn" name="inputCoveredOn" type="text" class="form-control" datepicker-popup="yyyy-MM-dd" data-ng-model="track.coveredOn" data-is-open="coveredOnOptions.open" data-show-weeks="false" data-show-button-bar="false" data-min="coveredOnOptions.minimum" data-ng-required="true" />
+		    <span class="input-group-btn">
+			<button class="btn btn-default" data-ng-click="openCoveredOn($event);" type="button"><span class="glyphicon glyphicon-calendar"></span>&#xFEFF;</button>
+		    </span>
+		</div>
+	    </div>
+	</div>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputType.$invalid,'has-success': theForm.inputType.$valid}">
+	    <label for="inputType" class="col-sm-2 control-label">Type</label>
+	    <div class="col-sm-10">
+		<select id="inputType" name="inputType" class="form-control" data-ng-model="track.type" data-ng-required="true">
+		    <option data-ng-repeat="type in types" value="{{ type }}">{{ type }}</option>		    
+		</select>		
+	    </div>
+	</div>	
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputDescription.$invalid,'has-success': theForm.inputDescription.$valid}">
+	    <label for="inputDescription" class="col-sm-2 control-label">Description</label>
+	    <div class="col-sm-10">
+		<textarea id="inputDescription" name="inputDescription" class="form-control" rows="3" data-ng-model="track.description"></textarea>
+	    </div>
+	</div>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputTrackData.$invalid,'has-success': theForm.inputTrackData.$valid}">
+	    <label for="inputTrackData" class="col-sm-2 control-label">Track data (tcx)</label>
+	    <div class="col-sm-10">
+		<input type="file" id="inputTrackData" name="inputTrackData" data-ng-file-select="onFileSelect($files);" />
+	    </div>
+	</div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
+    <button type="submit" class="btn btn-primary" data-ng-disabled="1==2 && (theForm.$invalid || trackData === null)" data-ng-click="submit();">Save track</button>
+</div>

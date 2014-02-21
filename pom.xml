@@ -35,7 +35,8 @@
 	<highcharts.version>3.0.9</highcharts.version>
 	<openlayers.version>2.13.1</openlayers.version>
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
-
+	<angular-file-upload.version>1.2.5</angular-file-upload.version>
+	
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 	<start-class>ac.simons.biking2.Application</start-class>
@@ -242,6 +243,11 @@
 		    <artifactId>bootstrap</artifactId>
 		</exclusion>
 	    </exclusions>
+	</dependency>
+	<dependency>	    
+	    <groupId>org.webjars</groupId>
+	    <artifactId>angular-file-upload</artifactId>
+	    <version>${angular-file-upload.version}</version>
 	</dependency>
 	<dependency>
 	    <groupId>org.webjars</groupId>
