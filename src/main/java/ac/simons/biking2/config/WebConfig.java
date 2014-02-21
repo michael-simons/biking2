@@ -67,8 +67,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    MultipartConfigElement multipartConfigElement() {
-	return new MultipartConfigElement("");
+    public MultipartConfigElement multipartConfigElement() {
+	return new MultipartConfigElement("", 5 * 1024 * 1024, 5 * 1024 * 1024, 1024 * 1024);	
     }
 
     /**
