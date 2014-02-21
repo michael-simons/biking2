@@ -134,7 +134,7 @@ public class OEmbedController {
 		    .addAttribute("home", home)
 		    .addAttribute("width", width)
 		    .addAttribute("height", height);
-	    rv = "/oEmbed/embeddedTrack";
+	    rv = "oEmbed/embeddedTrack";
 	}	
 	return rv;
     }
