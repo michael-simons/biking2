@@ -21,13 +21,12 @@ import ac.simons.biking2.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
-import org.apache.catalina.connector.Connector;
+import javax.servlet.MultipartConfigElement;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Condition;
@@ -65,6 +64,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public String index() {
 	    return "/index.html";
 	}
+    }
+
+    @Bean
+    MultipartConfigElement multipartConfigElement() {
+	return new MultipartConfigElement("");
     }
 
     /**
@@ -120,35 +124,35 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		new JaxbAnnotationModule().setPriority(Priority.SECONDARY)
 	);
     }
-    
+
     // TODO Blog
     /**
-     * This is a condition based on a property. If the property 
-     * is set and not empty, the EmbeddedServletContainer needs a customized
-     * connector
+     * This is a condition based on a property. If the property is set and not
+     * empty, the EmbeddedServletContainer needs a customized connector
      */
     static class NeedsCustomizedConnectorCondition implements Condition {
+
 	@Override
 	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
 	    final Environment environment = context.getEnvironment();
 	    return environment.containsProperty("biking2.connector.proxyName") && !environment.getProperty("biking2.connector.proxyName", String.class).isEmpty();
-	}	
+	}
     }
-    
+
     @Bean
     @Conditional(NeedsCustomizedConnectorCondition.class)
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
 	    final @Value("${biking2.connector.proxyName}") String proxyName,
 	    final @Value("${biking2.connector.proxyPort:80}") int proxyPort
     ) {
-	 return (ConfigurableEmbeddedServletContainerFactory factory) -> {	     
-	     if(factory instanceof TomcatEmbeddedServletContainerFactory){
-                final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) factory;
-                containerFactory.addConnectorCustomizers(connector -> {
+	return (ConfigurableEmbeddedServletContainerFactory factory) -> {
+	    if (factory instanceof TomcatEmbeddedServletContainerFactory) {
+		final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) factory;
+		containerFactory.addConnectorCustomizers(connector -> {
 		    connector.setProxyName(proxyName);
 		    connector.setProxyPort(proxyPort);
 		});
-            }
-	 };
+	    }
+	};
     }
 }
