@@ -51,9 +51,9 @@ public class GalleryPicture implements Serializable {
     @NotNull
     private Calendar takenOn;
 
-    @Column(name = "filename", length = 32, unique = true, updatable = false)
+    @Column(name = "filename", length = 36, unique = true, updatable = false)
     @NotNull
-    @Size(max = 32)
+    @Size(max = 36)
     private String filename;
 
     @Column(name = "description", length = 2048, nullable = false)

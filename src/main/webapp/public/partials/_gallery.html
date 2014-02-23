@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-8">
+	<h2>Gallery</h2>
+	<p>Have a look at some impressions of my tours. The images are randomized, you can reshuffle them with this <a data-ng-click="reshuffle();" href="#">link</a>.</p>
+	
+	<div >	    
+	    <carousel interval="imageInterval">
+		<slide data-ng-repeat="slide in slides" active="slide.active">
+		    <img ng-src="{{slide.image}}" style="margin:auto;" />
+		    <div class="carousel-caption">        
+			<h4>{{ slide.takenOn | date: 'dd.MM.yyyy' }}</h4>
+			<p>{{slide.text}}</p>
+		    </div>
+		</slide>
+	    </carousel>
+	</div>
+		
+	<div>
+	    <br />	
+	    <button type="button" class="btn btn-default" data-ng-click="openNewPictureDlg();">Add picture</button>
+	</div>
+    </div>    
+</div>

@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel();">&times;</button>
+    <h4 class="modal-title">New track</h4>
+</div>
+<div class="modal-body">    	
+    <form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
+	<div class="form-group" data-ng-show="badRequest">
+	    <div class="col-sm-offset-2 col-sm-10">      
+		<label class="text-danger">
+		    {{badRequest}}
+		</label>      
+	    </div>
+	</div>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputTakenOn.$invalid,'has-success': theForm.inputTakenOn.$valid}">
+	    <label for="inputTakenOn" class="col-sm-2 control-label">Date</label>
+	    <div class="col-sm-10">
+		<div class="input-group datepicker-popup">
+		    <input id="inputTakenOn" name="inputTakenOn" type="text" class="form-control" datepicker-popup="yyyy-MM-dd" data-ng-model="picture.takenOn" data-is-open="takenOnOptions.open" data-show-weeks="false" data-show-button-bar="false" data-min="takenOnOptions.minimum" data-ng-required="true" />
+		    <span class="input-group-btn">
+			<button class="btn btn-default" data-ng-click="openTakenOn($event);" type="button"><span class="glyphicon glyphicon-calendar"></span>&#xFEFF;</button>
+		    </span>
+		</div>
+	    </div>
+	</div>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputDescription.$invalid,'has-success': theForm.inputDescription.$valid}">
+	    <label for="inputDescription" class="col-sm-2 control-label">Description</label>
+	    <div class="col-sm-10">
+		<textarea id="inputDescription" name="inputDescription" class="form-control" rows="3" data-ng-model="picture.description" data-ng-required="true"></textarea>
+	    </div>
+	</div>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputTrackData.$invalid,'has-success': theForm.inputTrackData.$valid}">
+	    <label for="inputTrackData" class="col-sm-2 control-label">Track data (tcx)</label>
+	    <div class="col-sm-10">
+		<input type="file" id="inputTrackData" name="inputTrackData" data-ng-file-select="onFileSelect($files);" />
+	    </div>
+	</div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
+    <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid || imageData === null || submitting" data-ng-click="submit();">Upload picture</button>
+</div>

@@ -65,6 +65,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@RequestMapping({
 	    "/bikes",
 	    "/milages",
+	    "/gallery",
 	    "/tracks",
 	    "/tracks/{id:\\w+}",
 	    "about"
