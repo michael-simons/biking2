@@ -21,18 +21,13 @@ import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.entities.Track.Type;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +47,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -114,10 +108,10 @@ public class TracksController {
 	    @RequestParam(value = "type", required = true, defaultValue = "biking")
 	    final Type type,
 	    @RequestParam("trackData")
-	    final MultipartFile trackFile
+	    final MultipartFile trackData
     ) throws IOException {
 	ResponseEntity<Track> rv;
-	if(trackFile == null || trackFile.isEmpty())
+	if(trackData == null || trackData.isEmpty())
 	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	else {
 	    try {
@@ -130,7 +124,7 @@ public class TracksController {
 		track = this.trackRepository.save(track);	   
 		
 		try {
-		    this.storeFile(track, trackFile.getInputStream());		    
+		    this.storeFile(track, trackData.getInputStream());		    
 		    
 		    track = this.trackRepository.save(track);
 		    rv = new ResponseEntity<>(track, HttpStatus.OK);		    

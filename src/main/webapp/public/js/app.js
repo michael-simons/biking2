@@ -20,6 +20,8 @@
 
 Array.prototype.randomize = function() {
     var i = this.length, j, temp;
+    if(i===0)
+	return this;
     while (--i) {
 	j = Math.floor(Math.random() * (i - 1));
 	temp = this[i];
@@ -67,6 +69,10 @@ var biking2 = angular
 			    when('/milages', {
 				templateUrl: '/partials/_milages.html',
 				controller: 'MilagesCtrl',
+			    }).
+			    when('/gallery', {
+				templateUrl: '/partials/_gallery.html',
+				controller: 'GalleryCtrl',
 			    }).
 			    when('/tracks', {
 				templateUrl: '/partials/_tracks.html',

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.persistence.repositories;
 
-import ac.simons.biking2.persistence.entities.Location;
+import ac.simons.biking2.persistence.entities.GalleryPicture;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * @author Michael J. Simons, 2014-02-08
+ * @author Michael J. Simons, 2014-02-22
  */
-public interface LocationRepository extends JpaRepository<Location, Integer> {
+public interface GalleryPictureRepository extends JpaRepository<GalleryPicture, Integer> {
 }

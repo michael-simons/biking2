@@ -92,13 +92,16 @@ biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance,
     };
     
     $scope.submit = function() {
+	$scope.submitting = true;
 	$http({
 	    method: 'POST',
 	    url: '/api/bikes',
 	    data: $scope.bike
 	}).success(function(data) {
+	    $scope.submitting = false;
 	    $modalInstance.close(data);
 	}).error(function(data, status) {
+	    $scope.submitting = false;
 	    if (status === 400)
 		$scope.badRequest = data;
 	    else if (status === 409)
@@ -178,18 +181,119 @@ biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstanc
     };
 
     $scope.submit = function() {
+	$scope.submitting = true;
 	$http({
 	    method: 'POST',
 	    url: '/api/bikes/' + $scope.milage.bikeId + '/milages',
 	    data: $scope.milage
 	}).success(function(data) {
+	    $scope.submitting = false;
 	    $modalInstance.close(data);
 	}).error(function(data, status) {
+	    $scope.submitting = false;
 	    if (status === 400)
 		$scope.badRequest = data;
 	    else if(status === 404)
 		$scope.badRequest = 'Please do not temper with this form.';
 	});
+    };
+});
+
+biking2Controllers.controller('GalleryCtrl', function($scope, $http, $modal) {
+    $scope.imageInterval = 5000;
+    $scope.allPictures = [];
+    $scope.slides = [];
+    
+    $scope.reshuffle = function() {
+	$scope.allPictures = $scope.allPictures.randomize();
+	$scope.slides.length = 0;
+	var max = Math.min(15, $scope.allPictures.length);	    
+	for(var i=0;i<max;++i) {
+	    $scope.slides.push({
+		image: '/api/galleryPictures/' + $scope.allPictures[i].id + '.jpg',
+		takenOn: $scope.allPictures[i].takenOn,
+		text: $scope.allPictures[i].description
+	    });		
+	}
+    };
+    
+    $http.get('/api/galleryPictures').success(function(data) {
+	$scope.allPictures = data;
+	$scope.reshuffle();
+    });
+    
+    $scope.openNewPictureDlg = function() {
+	var modalInstance = $modal.open({
+	    templateUrl: '/partials/_new_picture.html',
+	    controller: 'AddNewPictureCtrl',
+	    scope: $scope
+	});
+
+	modalInstance.result.then(
+		function(newPicture) {
+		    if ($scope.slides.length < 15) {
+			$scope.slides.push({
+			    image: '/api/galleryPictures/' + newPicture.id + '.jpg',
+			    takenOn: newPicture.takenOn,
+			    text: newPicture.description
+			});
+		    }
+		},
+		function() {
+		}
+	);
+    };
+});
+
+biking2Controllers.controller('AddNewPictureCtrl', function($scope, $modalInstance, $http, $upload) {
+    $scope.picture = {
+	takenOn: null,
+	description: null
+    };
+    $scope.imageData = null;
+
+    $scope.onFileSelect = function($files) {
+	$scope.imageData = $files[0];	
+    };
+
+    $scope.takenOnOptions = {
+	'year-format': "'yyyy'",
+	'starting-day': 1,
+	open: false
+    };
+
+    $scope.openTakenOn = function($event) {
+	$event.preventDefault();
+	$event.stopPropagation();
+	$scope.takenOnOptions.open = true;
+    };
+
+    $scope.cancel = function() {
+	$modalInstance.dismiss('cancel');
+    };
+    
+    $scope.submit = function() {
+	$scope.submitting = true;
+	$upload.upload({
+	    method: 'POST',
+	    url: '/api/galleryPictures',        
+	    data: $scope.picture,
+	    file: $scope.imageData,
+	    fileFormDataName: 'imageData',
+	    withCredentials: true,
+	    formDataAppender: function(formData, key, val){		
+		if(key !== null && key === 'takenOn')
+		    formData.append(key, val.toISOString());
+		else
+		    formData.append(key, val);
+	    }
+	}).success(function(data) {
+	    $scope.submitting = false;
+	    $modalInstance.close(data);
+	}).error(function() {		    
+	    $scope.submitting = false;
+	    $scope.badRequest = 'There\'s something wrong with your input, please check!';
+	});	
     };
 });
 
@@ -212,7 +316,7 @@ biking2Controllers.controller('TracksCtrl', function($scope, $http, $modal) {
 		function() {
 		}
 	);
-    }
+    };
 });
 
 biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance, $http, $upload) {
@@ -247,6 +351,7 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
     };
     
     $scope.submit = function() {
+	$scope.submitting = true;
 	$upload.upload({
 	    method: 'POST',
 	    url: '/api/tracks',        
@@ -262,8 +367,10 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
 		    formData.append(key, val);
 	    }
 	}).success(function(data) {
+	    $scope.submitting = false;
 	    $modalInstance.close(data);
-	}).error(function(data, status) {	
+	}).error(function(data, status) {
+	    $scope.submitting = false;
 	    if (status === 409)
 		$scope.badRequest = 'A track with the given name on that date already exists.';	
 	    else

@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel();">&times;</button>
     <h4 class="modal-title">New track</h4>
 </div>
 <div class="modal-body">    	
@@ -52,5 +52,5 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
-    <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid || trackData === null" data-ng-click="submit();">Save track</button>
+    <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid || trackData === null || submitting" data-ng-click="submit();">Save track</button>
 </div>
