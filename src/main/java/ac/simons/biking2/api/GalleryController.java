@@ -24,12 +24,10 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +46,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static java.lang.String.format;
 import static java.security.MessageDigest.getInstance;
-import static org.apache.catalina.util.MD5Encoder.encode;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
