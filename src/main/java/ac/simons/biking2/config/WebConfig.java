@@ -82,8 +82,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    characterEncodingFilter.setEncoding("UTF-8");
 	    characterEncodingFilter.setForceEncoding(false);
 	    
-	    servletContext.addFilter("characterEncodingFilter", characterEncodingFilter).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
-	    System.out.println("Filter added");
+	    // TODO Blog
+	    servletContext.addFilter("characterEncodingFilter", characterEncodingFilter).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
 	};
     }
 
