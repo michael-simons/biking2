@@ -28,10 +28,10 @@
 		<textarea id="inputDescription" name="inputDescription" class="form-control" rows="3" data-ng-model="picture.description" data-ng-required="true"></textarea>
 	    </div>
 	</div>
-	<div class="form-group" data-ng-class="{'has-error': theForm.inputTrackData.$invalid,'has-success': theForm.inputTrackData.$valid}">
-	    <label for="inputTrackData" class="col-sm-2 control-label">Track data (tcx)</label>
+	<div class="form-group" data-ng-class="{'has-error': theForm.inputImageData.$invalid,'has-success': theForm.inputImageData.$valid}">
+	    <label for="inputImageData" class="col-sm-2 control-label">Image file</label>
 	    <div class="col-sm-10">
-		<input type="file" id="inputTrackData" name="inputTrackData" data-ng-file-select="onFileSelect($files);" />
+		<input type="file" id="inputImageData" name="inputImageData" data-ng-file-select="onFileSelect($files);" />
 	    </div>
 	</div>
     </form>
