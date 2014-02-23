@@ -92,13 +92,16 @@ biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance,
     };
     
     $scope.submit = function() {
+	$scope.submitting = true;
 	$http({
 	    method: 'POST',
 	    url: '/api/bikes',
 	    data: $scope.bike
 	}).success(function(data) {
+	    $scope.submitting = false;
 	    $modalInstance.close(data);
 	}).error(function(data, status) {
+	    $scope.submitting = false;
 	    if (status === 400)
 		$scope.badRequest = data;
 	    else if (status === 409)
@@ -178,13 +181,16 @@ biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstanc
     };
 
     $scope.submit = function() {
+	$scope.submitting = true;
 	$http({
 	    method: 'POST',
 	    url: '/api/bikes/' + $scope.milage.bikeId + '/milages',
 	    data: $scope.milage
 	}).success(function(data) {
+	    $scope.submitting = false;
 	    $modalInstance.close(data);
 	}).error(function(data, status) {
+	    $scope.submitting = false;
 	    if (status === 400)
 		$scope.badRequest = data;
 	    else if(status === 404)
@@ -345,6 +351,7 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
     };
     
     $scope.submit = function() {
+	$scope.submitting = true;
 	$upload.upload({
 	    method: 'POST',
 	    url: '/api/tracks',        
@@ -360,8 +367,10 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
 		    formData.append(key, val);
 	    }
 	}).success(function(data) {
+	    $scope.submitting = false;
 	    $modalInstance.close(data);
-	}).error(function(data, status) {	
+	}).error(function(data, status) {
+	    $scope.submitting = false;
 	    if (status === 409)
 		$scope.badRequest = 'A track with the given name on that date already exists.';	
 	    else

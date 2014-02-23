@@ -40,5 +40,5 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
-    <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid" data-ng-click="submit();">Save milage</button>
+    <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid || submitting" data-ng-click="submit();">Save milage</button>
 </div>
