@@ -39,6 +39,7 @@
     </form>
 </div>
 <div class="modal-footer">
+    <img src="/img/waiting.gif" alt="waiting" data-ng-show="submitting" />&#160;&#160;
     <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancel();">Cancel</button>
     <button type="submit" class="btn btn-primary" data-ng-disabled="theForm.$invalid || submitting" data-ng-click="submit();">Save milage</button>
 </div>
