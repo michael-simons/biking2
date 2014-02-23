@@ -48,6 +48,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class PersistenceConfig {
 
     public static final String BIKING_PICTURES_DIRECTORY = "data/bikingPictures";
+    public static final String GALLERY_PICTURES_DIRECTORY = "data/galleryPictures";
     public static final String TRACK_DIRECTORY = "data/tracks";
 
     /**
@@ -65,6 +66,7 @@ public class PersistenceConfig {
 	}
 
 	new File(rv, BIKING_PICTURES_DIRECTORY).mkdirs();
+	new File(rv, GALLERY_PICTURES_DIRECTORY).mkdirs();
 	new File(rv, TRACK_DIRECTORY).mkdirs();
 	return rv;
     }

@@ -30,6 +30,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * @author Michael J. Simons, 2014-02-22
@@ -55,7 +56,9 @@ public class GalleryPicture implements Serializable {
     @Size(max = 32)
     private String filename;
 
-    @Column(name = "description", length = 2048)
+    @Column(name = "description", length = 2048, nullable = false)
+    @NotBlank
+    @Size(max = 2048)
     private String description;
     
     @Column(name = "created_at", nullable = false, updatable = false)

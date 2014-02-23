@@ -20,5 +20,5 @@ insert into biking_pictures(external_id, pub_date, link) values(1, '2001-09-21 1
 insert into biking_pictures(external_id, pub_date, link) values(2, '2003-09-21 14:13:00', 'http://planet-punk.de');
 
 insert into gallery_pictures(description, filename, taken_on, created_at) values('test beschreibung', 'abcdefg', '2014-02-22', current_timestamp());
-insert into gallery_pictures(description, filename, taken_on, created_at) values('', 'foobar', '2014-02-21', current_timestamp());
+insert into gallery_pictures(description, filename, taken_on, created_at) values('x', 'foobar', '2014-02-21', current_timestamp());
 insert into gallery_pictures(description, filename, taken_on, created_at) values('test', 'xxxxx', '2014-02-20', current_timestamp());

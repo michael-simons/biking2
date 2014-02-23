@@ -58,6 +58,6 @@ CREATE TABLE gallery_pictures (
     id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT, 
     taken_on DATE NOT NULL, 
     filename VARCHAR(32) NOT NULL,
-    description VARCHAR(2048),
+    description VARCHAR(2048) NOT NULL,
     CONSTRAINT filename_unique UNIQUE(taken_on)
 );

@@ -108,10 +108,10 @@ public class TracksController {
 	    @RequestParam(value = "type", required = true, defaultValue = "biking")
 	    final Type type,
 	    @RequestParam("trackData")
-	    final MultipartFile trackFile
+	    final MultipartFile trackData
     ) throws IOException {
 	ResponseEntity<Track> rv;
-	if(trackFile == null || trackFile.isEmpty())
+	if(trackData == null || trackData.isEmpty())
 	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	else {
 	    try {
@@ -124,7 +124,7 @@ public class TracksController {
 		track = this.trackRepository.save(track);	   
 		
 		try {
-		    this.storeFile(track, trackFile.getInputStream());		    
+		    this.storeFile(track, trackData.getInputStream());		    
 		    
 		    track = this.trackRepository.save(track);
 		    rv = new ResponseEntity<>(track, HttpStatus.OK);		    
