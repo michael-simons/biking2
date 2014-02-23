@@ -25,9 +25,14 @@ import java.math.BigInteger;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
+import java.time.Year;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalField;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +51,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static java.lang.String.format;
 import static java.security.MessageDigest.getInstance;
+import static java.time.ZoneId.of;
+import static java.time.ZonedDateTime.now;
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -123,7 +131,7 @@ public class GalleryController {
 	}
 	return rv;
     }
-
+    
     @RequestMapping({"/api/galleryPictures/{id:\\d+}.jpg"})
     public void getGalleryPicture(
 	    final @PathVariable Integer id,
@@ -136,9 +144,13 @@ public class GalleryController {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {
 	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", PersistenceConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
+	    
+	    final int cacheForDays = 365;
 	    response.setHeader("Content-Type", "image/jpeg");
 	    response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
-
+	    response.addHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME.withLocale(Locale.US)));
+	    response.addHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
+	    
 	    // Attribute maybe null
 	    if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
 		Files.copy(imageFile.toPath(), response.getOutputStream());
