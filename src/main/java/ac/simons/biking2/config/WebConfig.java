@@ -82,7 +82,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    characterEncodingFilter.setEncoding("UTF-8");
 	    characterEncodingFilter.setForceEncoding(false);
 	    
-	    // TODO Blog
 	    servletContext.addFilter("characterEncodingFilter", characterEncodingFilter).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
 	};
     }
@@ -146,7 +145,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	);
     }
 
-    // TODO Blog
     /**
      * This is a condition based on a property. If the property is set and not
      * empty, the EmbeddedServletContainer needs a customized connector
