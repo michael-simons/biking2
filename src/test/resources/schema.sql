@@ -60,5 +60,5 @@ CREATE TABLE gallery_pictures (
     filename VARCHAR(36) NOT NULL,
     description VARCHAR(2048) NOT NULL,
     created_at DATETIME NOT NULL,
-    CONSTRAINT filename_unique UNIQUE(taken_on)
+    CONSTRAINT filename_unique UNIQUE(filename)
 );

@@ -25,12 +25,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.Channels;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Description;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static ac.simons.biking2.api.BikingPicturesControllerTest.RegexMatcher.matches;
 import static ac.simons.biking2.config.PersistenceConfig.BIKING_PICTURES_DIRECTORY;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
@@ -79,7 +88,8 @@ public class BikingPicturesControllerTest {
 	stub(repository.findOne(1)).toReturn(new BikingPicture("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12"));
 
 	final BikingPicturesController controller = new BikingPicturesController(repository, tmpDir);
-
+	final ZonedDateTime expiresIn = ZonedDateTime.now(ZoneId.of("UTC")).plusYears(1);	
+	
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
 	mockMvc
@@ -91,8 +101,10 @@ public class BikingPicturesControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(header().string("Content-Type", "image/jpeg"))
 		.andExpect(header().string("Content-Disposition", "inline; filename=\"1.jpg\""))
+		.andExpect(header().string("Cache-Control", String.format("max-age=%d, %s", 365 * 24 * 60 * 60, "public")))
+		.andExpect(header().string("Expires", matches(expiresIn.format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:'\\d{2}' 'GMT'").withLocale(Locale.US)))))
 		.andExpect(content().bytes(testData));
-
+	
 	mockMvc
 		.perform(get("http://biking.michael-simons.eu/api/bikingPictures/1.jpg").requestAttr("org.apache.tomcat.sendfile.support", true))
 		.andExpect(status().isOk())
@@ -101,5 +113,29 @@ public class BikingPicturesControllerTest {
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.filename", new File(bikingPictures, "45644.jpg").getAbsolutePath()))
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.start", 0l))
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.end", (long) this.testData.length));
+    }
+    
+    public static class RegexMatcher extends BaseMatcher {
+
+	private final String regex;
+
+	public RegexMatcher(String regex) {
+	    this.regex = regex;
+	}
+
+	@Override
+	public boolean matches(Object o) {
+	    return ((String) o).matches(regex);
+
+	}
+
+	@Override
+	public void describeTo(Description description) {
+	    description.appendText("matches regex=" + this.regex);
+	}
+
+	public static RegexMatcher matches(String regex) {
+	    return new RegexMatcher(regex);
+	}
     }
 }
