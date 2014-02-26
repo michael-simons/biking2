@@ -13,19 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.misc;
+package ac.simons.biking2.api;
 
 import java.math.BigDecimal;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Michael J. Simons, 2014-02-17
  */
+@Component("home")
 public class Coordinate {
 
     private final BigDecimal longitude;
     private final BigDecimal latitude;
 
-    public Coordinate(String longitude, String latitude) {
+    @Autowired
+    public Coordinate(
+	    final @Value("${biking2.home.longitude}") String longitude,
+	    final @Value("${biking2.home.latitude}") String latitude
+    ) {
 	this(new BigDecimal(longitude), new BigDecimal(latitude));
     }
 
