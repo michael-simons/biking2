@@ -138,6 +138,16 @@
 	    <artifactId>spring-boot-starter-web</artifactId>
 	</dependency>
 	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-thymeleaf</artifactId>
+	    <exclusions>
+		<exclusion>
+		    <groupId>org.javassist</groupId>
+		    <artifactId>javassist</artifactId>
+		</exclusion>
+	    </exclusions>
+	</dependency>
+	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-orm</artifactId>
 	</dependency>
@@ -258,21 +268,7 @@
 	    <groupId>org.webjars</groupId>
 	    <artifactId>openlayers</artifactId>
 	    <version>${openlayers.version}</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.thymeleaf</groupId>
-	    <artifactId>thymeleaf</artifactId>
-	    <exclusions>
-		<exclusion>
-		    <groupId>org.javassist</groupId>
-		    <artifactId>javassist</artifactId>
-		</exclusion>
-	    </exclusions>
-	</dependency>
-	<dependency>
-	    <groupId>org.thymeleaf</groupId>
-	    <artifactId>thymeleaf-spring4</artifactId>
-	</dependency>
+	</dependency>	
 
 	<dependency>
 	    <groupId>org.hamcrest</groupId>
