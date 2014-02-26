@@ -24,17 +24,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Michael J. Simons, 2014-02-18
  */
 @Component
+@ConditionalOnExpression(value = "environment['biking2.dailyfratze-access-token'] != null && !environment['biking2.dailyfratze-access-token'].isEmpty()")
 public class DailyFratzeProvider {    
     private final String accessToken;    
     
     @Autowired
-    public DailyFratzeProvider(final @Value("${biking2.dailyfratze-access-token:na}") String accessToken) {
+    public DailyFratzeProvider(final @Value("${biking2.dailyfratze-access-token}") String accessToken) {
 	this.accessToken = accessToken;
     }
     

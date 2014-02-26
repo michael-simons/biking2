@@ -22,26 +22,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
 import java.util.EnumSet;
-import java.util.Set;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Condition;
-import org.springframework.context.annotation.ConditionContext;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -82,7 +75,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    characterEncodingFilter.setEncoding("UTF-8");
 	    characterEncodingFilter.setForceEncoding(false);
 	    
-	    // TODO Blog
 	    servletContext.addFilter("characterEncodingFilter", characterEncodingFilter).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
 	};
     }
@@ -146,22 +138,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	);
     }
 
-    // TODO Blog
-    /**
-     * This is a condition based on a property. If the property is set and not
-     * empty, the EmbeddedServletContainer needs a customized connector
-     */
-    static class NeedsCustomizedConnectorCondition implements Condition {
-
-	@Override
-	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-	    final Environment environment = context.getEnvironment();
-	    return environment.containsProperty("biking2.connector.proxyName") && !environment.getProperty("biking2.connector.proxyName", String.class).isEmpty();
-	}
-    }
-
     @Bean
-    @Conditional(NeedsCustomizedConnectorCondition.class)
+    @ConditionalOnExpression(value = "environment['biking2.connector.proxyName'] != null && !environment['biking2.connector.proxyName'].isEmpty()")
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
 	    final @Value("${biking2.connector.proxyName}") String proxyName,
 	    final @Value("${biking2.connector.proxyPort:80}") int proxyPort
