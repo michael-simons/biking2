@@ -36,6 +36,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -48,8 +50,9 @@ import static java.util.stream.Collectors.toList;
  */
 @Component
 @Profile({"dev", "prod"})
+@ConditionalOnBean(DailyFratzeProvider.class)
 public class FetchBikingPicturesJob {
-
+    
     private final DailyFratzeProvider dailyFratzeProvider;
     private final BikingPictureRepository bikingPictureRepository;
     private final File bikingPicturesStorage;
