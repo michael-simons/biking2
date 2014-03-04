@@ -29,7 +29,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
@@ -144,9 +144,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    final @Value("${biking2.connector.proxyName}") String proxyName,
 	    final @Value("${biking2.connector.proxyPort:80}") int proxyPort
     ) {
-	return (ConfigurableEmbeddedServletContainerFactory factory) -> {
-	    if (factory instanceof TomcatEmbeddedServletContainerFactory) {
-		final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) factory;
+	return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
+	    if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
+		final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
 		containerFactory.addConnectorCustomizers(connector -> {
 		    connector.setProxyName(proxyName);
 		    connector.setProxyPort(proxyPort);
