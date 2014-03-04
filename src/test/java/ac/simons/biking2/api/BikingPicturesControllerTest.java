@@ -102,7 +102,7 @@ public class BikingPicturesControllerTest {
 		.andExpect(header().string("Content-Type", "image/jpeg"))
 		.andExpect(header().string("Content-Disposition", "inline; filename=\"1.jpg\""))
 		.andExpect(header().string("Cache-Control", String.format("max-age=%d, %s", 365 * 24 * 60 * 60, "public")))
-		.andExpect(header().string("Expires", matches(expiresIn.format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:'\\d{2}' 'GMT'").withLocale(Locale.US)))))
+		.andExpect(header().string("Expires", matches(expiresIn.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:'\\d{2}' 'GMT'").withLocale(Locale.US)))))
 		.andExpect(content().bytes(testData));
 	
 	mockMvc
