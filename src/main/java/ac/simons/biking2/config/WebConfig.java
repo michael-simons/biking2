@@ -138,19 +138,21 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	);
     }
 
-    @Bean
-    @ConditionalOnExpression(value = "environment['biking2.connector.proxyName'] != null && !environment['biking2.connector.proxyName'].isEmpty()")
+    @Bean    
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
-	    final @Value("${biking2.connector.proxyName}") String proxyName,
+	    final @Value("${biking2.connector.proxyName:}") String proxyName,
 	    final @Value("${biking2.connector.proxyPort:80}") int proxyPort
     ) {
 	return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
 	    if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
 		final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
-		containerFactory.addConnectorCustomizers(connector -> {
-		    connector.setProxyName(proxyName);
-		    connector.setProxyPort(proxyPort);
-		});
+		containerFactory.setTldSkip("*.jar");
+		if(!proxyName.isEmpty()) {
+		    containerFactory.addConnectorCustomizers(connector -> {
+			connector.setProxyName(proxyName);
+			connector.setProxyPort(proxyPort);
+		    });
+		}
 	    }
 	};
     }
