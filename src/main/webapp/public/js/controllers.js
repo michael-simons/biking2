@@ -427,7 +427,7 @@ biking2Controllers.controller('AboutCtrl', function($scope, $http) {
     $scope.refresh = function() {    
 	$http.get('/api/about').success(function(data) {
 	    $scope.about = data;
-	    $scope.humanizedUptime = nezasa.iso8601.Period.parseToString(data.vm.uptime, true);
+	    $scope.humanizedUptime = nezasa.iso8601.Period.parseToString(data.vm.uptime, null, null, true);
 	});
     };
     
