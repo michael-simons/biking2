@@ -5,7 +5,7 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>0.2.8-SNAPSHOT</version>
+    <version>0.2.8</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
@@ -24,10 +24,14 @@
     </licenses>
 
     <properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	
+	<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+	<build-date>${maven.build.timestamp}</build-date>
+		
 	<java.version>1.8</java.version>
 	<junit.version>4.11</junit.version>
-	<spring.version>4.0.1.RELEASE</spring.version>
-	<hibernate.version>4.3.1.Final</hibernate.version>
+	<hibernate.version>4.3.4.Final</hibernate.version>
 	<hibernate-entitymanager.version>${hibernate.version}</hibernate-entitymanager.version>
 	<bootstrap.version>3.1.1</bootstrap.version>
 	<jquery.version>1.11.0</jquery.version>
@@ -37,9 +41,7 @@
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
 	<angular-file-upload.version>1.2.5</angular-file-upload.version>
 	
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-	<start-class>ac.simons.biking2.Application</start-class>
+	<start-class>ac.simons.biking2.Application</start-class>	
     </properties>
 
     <build>
@@ -118,6 +120,13 @@
 	<resources>
 	    <resource>
 		<directory>src/main/resources</directory>
+	    </resource>
+	    <resource>
+		<directory>src/main/resources</directory>
+		<filtering>true</filtering>
+		<includes>
+		    <include>build.properties</include>
+		</includes>
 	    </resource>
 	    <resource>
 		<directory>src/main/webapp</directory>

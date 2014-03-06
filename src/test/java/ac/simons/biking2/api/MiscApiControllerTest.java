@@ -48,7 +48,7 @@ public class MiscApiControllerTest {
 	stub(bikeRepository.findAll()).toReturn(ChartsControllerTest.generateTestData());
 	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
 
-	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home);
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
 
 	final Summary summary = controller.getSummary();
 
