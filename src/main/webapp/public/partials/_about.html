@@ -37,10 +37,11 @@
 	    for <strong>{{ humanizedUptime || 'n/a'}}</strong>
 	    on Java <strong>{{ about.vm.version || 'n/a'}}</strong>, 
 	    using <strong>{{ about.vm.usedMemory | bytes }}</strong> of <strong>{{ about.vm.totalMemory | bytes }}</strong>. 
-	    Maximal available memory is <strong>{{ about.vm.maxMemory | bytes }}</strong>.
-	    <br/> <small><a data-ng-click="refresh();" href="#">Refresh</a></small>
+	    Maximal available memory is <strong>{{ about.vm.maxMemory | bytes }}</strong>.	    
 	</p>
 
+	<div data-ng-highchart id="chart-memory"  config="memoryConfig" ></div>				
+	
 	<p>
 	    <img alt="Some Rights Reserved" id="somerights20" src="/img/somerights20.gif" style="vertical-align:text-top;">
 	</p>	
