@@ -75,9 +75,11 @@ public class MiscApiController {
 	final About about = new About();
 	final VMProperties vMProperties = new VMProperties();
 
-	final Runtime runtime = getRuntime();
+	final Runtime runtime = getRuntime();	
+	final long freeMemory = runtime.freeMemory();
 	vMProperties.setAvailableMemory(runtime.totalMemory());
-	vMProperties.setUsedMemory(runtime.totalMemory() - runtime.freeMemory());
+	vMProperties.setUsedMemory(runtime.totalMemory() - freeMemory);
+	vMProperties.setFreeMemory(freeMemory);
 	vMProperties.setMaxMemory(runtime.maxMemory());
 	vMProperties.setUptime(Duration.ofSeconds(ManagementFactory.getRuntimeMXBean().getUptime() / 1000));
 

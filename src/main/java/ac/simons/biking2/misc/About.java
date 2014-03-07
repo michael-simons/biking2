@@ -38,6 +38,8 @@ public class About {
 	private Duration uptime;
 
 	private Long usedMemory;
+	
+	private Long freeMemory;
 
 	private Long totalMemory;
 
@@ -63,6 +65,14 @@ public class About {
 	    this.usedMemory = usedMemory;
 	}
 
+	public Long getFreeMemory() {
+	    return freeMemory;
+	}
+
+	public void setFreeMemory(Long freeMemory) {
+	    this.freeMemory = freeMemory;
+	}
+	
 	public Long getAvailableMemory() {
 	    return totalMemory;
 	}
