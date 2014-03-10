@@ -70,7 +70,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     
     @Bean
     public ServletContextInitializer servletContextInitializer() {
-	return (ServletContext servletContext) -> {
+	return servletContext -> {
 	    final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
 	    characterEncodingFilter.setEncoding("UTF-8");
 	    characterEncodingFilter.setForceEncoding(false);
