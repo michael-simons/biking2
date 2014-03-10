@@ -9,6 +9,38 @@
 	<p>Until early 2014 this application was <a href="http://www.ruby-lang.org">Ruby</a> and <a href="http://www.sinatrarb.com/">Sinatra</a> based and consisted mainly of one big *.rb file. The blog post about the old application is still online here: <a href="http://info.michael-simons.eu/2009/07/29/creating-a-self-containing-mvc-application-with-sinatra/">Creating a self containing mvc application with Sinatra</a>, together with the old <a target="_self" href="/misc/biking.rb">source code</a>.</p>
 
 	<p>If you like this application or have any questions, just drop me a line at <a href="mailto:misi@planet-punk.de">misi@planet-punk.de</a>.</p>
+
+	<div class="row">
+	    <div class="col-md-3">
+		<h3>Build</h3>
+		
+		<table class="table table-condensed table-bordered table-striped">
+		    <thead>
+			<tr>
+			    <th>Component</th>
+			    <th>Version</th>		    
+			</tr>
+		    </thead>
+		    <tbody>
+			<tr ng-repeat="(key, value) in about.build.versions" ng-show="key !== 'app'">
+			    <td>{{ key }}</td>
+			    <td>{{ value }}</td>			
+			</tr>
+		    </tbody>
+		</table>	
+	    </div>
+	</div>
+
+	<h3>Runtime</h3>
+	<p>
+	    Running build <strong>{{about.build.versions.app || 'n/a'}}</strong> from <strong>{{about.build.buildDate || 'unknown'}}</strong> 
+	    for <strong>{{ humanizedUptime || 'n/a'}}</strong>
+	    on Java <strong>{{ about.vm.version || 'n/a'}}</strong>, 
+	    using <strong>{{ about.vm.usedMemory | bytes }}</strong> of <strong>{{ about.vm.totalMemory | bytes }}</strong>. 
+	    Maximal available memory is <strong>{{ about.vm.maxMemory | bytes }}</strong>.
+	    <br/> <small><a data-ng-click="refresh();" href="#">Refresh</a></small>
+	</p>
+
 	<p>
 	    <img alt="Some Rights Reserved" id="somerights20" src="/img/somerights20.gif" style="vertical-align:text-top;">
 	</p>	

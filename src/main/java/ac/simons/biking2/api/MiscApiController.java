@@ -15,31 +15,41 @@
  */
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.misc.About;
+import ac.simons.biking2.misc.About.VMProperties;
 import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
+import java.lang.management.ManagementFactory;
+import java.time.Duration;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static java.lang.Runtime.getRuntime;
 
 /**
  * @author Michael J. Simons, 2014-02-17
  */
 @RestController
 @RequestMapping("/api")
+@EnableConfigurationProperties(BuildProperties.class)
 public class MiscApiController {
 
     private final BikeRepository bikeRepository;
     private final AssortedTripRepository assortedTripRepository;
     private final Coordinate home;
+    private final BuildProperties builtProperties;
 
     @Autowired
-    public MiscApiController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository, final Coordinate home) {
+    public MiscApiController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository, final Coordinate home, final BuildProperties builtProperties) {
 	this.bikeRepository = bikeRepository;
 	this.assortedTripRepository = assortedTripRepository;
 	this.home = home;
+	this.builtProperties = builtProperties;
     }
 
     @RequestMapping("/summary")
@@ -54,9 +64,26 @@ public class MiscApiController {
 	);
 	return summary;
     }
-    
+
     @RequestMapping("/home")
     public Coordinate getHome() {
 	return this.home;
+    }
+
+    @RequestMapping("/about")
+    public About about() {
+	final About about = new About();
+	final VMProperties vMProperties = new VMProperties();
+
+	final Runtime runtime = getRuntime();
+	vMProperties.setAvailableMemory(runtime.totalMemory());
+	vMProperties.setUsedMemory(runtime.totalMemory() - runtime.freeMemory());
+	vMProperties.setMaxMemory(runtime.maxMemory());
+	vMProperties.setUptime(Duration.ofSeconds(ManagementFactory.getRuntimeMXBean().getUptime() / 1000));
+
+	about.setVm(vMProperties);
+	about.setBuild(builtProperties);
+
+	return about;
     }
 }
