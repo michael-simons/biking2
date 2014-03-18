@@ -303,7 +303,7 @@ angular
 					new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16))
 				    )
 			    );
-			});			
+			}, true);			
 			
 			scope.$watch(attrs.track, function (value) {
 			    if(value === undefined)
@@ -327,7 +327,7 @@ angular
 			    bounds.extend(new OpenLayers.LonLat(track.maxlon, track.maxlat));
 
 			    map.zoomToExtent(bounds.transform(map.displayProjection, map.getProjectionObject()));			   			    
-			});			
+			}, true);			
 		    }
 		};
 	}]);
