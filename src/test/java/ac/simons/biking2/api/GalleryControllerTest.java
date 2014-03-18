@@ -18,7 +18,9 @@ package ac.simons.biking2.api;
 import ac.simons.biking2.config.PersistenceConfig;
 import ac.simons.biking2.persistence.entities.GalleryPicture;
 import ac.simons.biking2.persistence.repositories.GalleryPictureRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
+import java.util.GregorianCalendar;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
@@ -26,9 +28,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static java.util.TimeZone.getTimeZone;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -36,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class GalleryControllerTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final File tmpDir;
     private final File galleryPictures;
 
@@ -49,7 +54,9 @@ public class GalleryControllerTest {
     @Test
     public void createGalleryPicture() throws Exception {
 	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
-	final GalleryPicture galleryPicture = new GalleryPicture() {
+	final GregorianCalendar takenOn = new GregorianCalendar(getTimeZone("UTC"));
+	takenOn.set(2014, 2, 24, 23, 0, 0);
+	final GalleryPicture galleryPicture = new GalleryPicture(takenOn, "description") {
 	    private static final long serialVersionUID = -3391535625175956488L;
 
 	    @Override
@@ -71,6 +78,7 @@ public class GalleryControllerTest {
 			.param("description", "description")
 		)
 		.andDo(MockMvcResultHandlers.print())
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andExpect(content().string(objectMapper.writeValueAsString(galleryPicture)));
     }
 }
