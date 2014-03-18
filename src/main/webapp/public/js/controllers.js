@@ -379,47 +379,10 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
     };
 });
 
-biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routeParams) {
-    var map = new OpenLayers.Map("track-map", {
-	controls: [
-	    new OpenLayers.Control.Navigation(),
-	    new OpenLayers.Control.PanZoomBar(),
-	    new OpenLayers.Control.LayerSwitcher(),
-	    new OpenLayers.Control.Attribution()
-	],
-	projection: new OpenLayers.Projection("EPSG:900913"),
-	displayProjection: new OpenLayers.Projection("EPSG:4326"),
-	units: 'm'
-    });
-
-    map.addLayer(new OpenLayers.Layer.OSM.Mapnik("Mapnik"));
-    map.addLayer(new OpenLayers.Layer.OSM.CycleMap("CycleMap"));
-
-    var layerMarkers = new OpenLayers.Layer.Markers("Markers");
-    map.addLayer(layerMarkers);
-
+biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routeParams) {    
     $q.all([$http.get('/api/tracks/' + $routeParams.id), $http.get('/api/home')]).then(function(values) {
-	var track = values[0].data;
-	var home = values[1].data;
-
-	layerMarkers.addMarker(new OpenLayers.Marker(
-		new OpenLayers.LonLat(home.longitude, home.latitude).transform(map.displayProjection, map.getProjectionObject()),
-		new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16)))
-		);
-
-	$scope.track = track;
-	var gpx = new OpenLayers.Layer.GML(track.name, "/tracks/" + track.id + ".gpx", {
-	    format: OpenLayers.Format.GPX,
-	    style: {strokeColor: "red", strokeWidth: 5, strokeOpacity: 1.0},
-	    projection: new OpenLayers.Projection("EPSG:4326")
-	});
-	map.addLayer(gpx);
-	var bounds = new OpenLayers.Bounds();
-
-	bounds.extend(new OpenLayers.LonLat(track.minlon, track.minlat));
-	bounds.extend(new OpenLayers.LonLat(track.maxlon, track.maxlat));
-
-	map.zoomToExtent(bounds.transform(map.displayProjection, map.getProjectionObject()));
+	$scope.track = values[0].data;	
+	$scope.home = values[1].data;	
     });
 });
 

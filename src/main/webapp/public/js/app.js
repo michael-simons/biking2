@@ -32,7 +32,13 @@ Array.prototype.randomize = function() {
 };
 
 var biking2 = angular
-	.module('biking2', ['ngRoute', 'angularFileUpload', 'ui.bootstrap', 'biking2Controllers'])
+	.module('biking2', [
+	    'ngRoute', 
+	    'angularFileUpload', 
+	    'ui.bootstrap', 
+	    'track-map-ng',	    
+	    'biking2Controllers'
+	])
 	.directive('ngActiveTab', function($location) {
 	    return {
 		link: function postLink(scope, element, attrs) {
@@ -64,23 +70,23 @@ var biking2 = angular
 			    }).
 			    when('/bikes', {
 				templateUrl: '/partials/_bikes.html',
-				controller: 'BikesCtrl',
+				controller: 'BikesCtrl'
 			    }).
 			    when('/milages', {
 				templateUrl: '/partials/_milages.html',
-				controller: 'MilagesCtrl',
+				controller: 'MilagesCtrl'
 			    }).
 			    when('/gallery', {
 				templateUrl: '/partials/_gallery.html',
-				controller: 'GalleryCtrl',
+				controller: 'GalleryCtrl'
 			    }).
 			    when('/tracks', {
 				templateUrl: '/partials/_tracks.html',
-				controller: 'TracksCtrl',
+				controller: 'TracksCtrl'
 			    }).
 			    when('/tracks/:id', {
 				templateUrl: '/partials/_track.html',
-				controller: 'TrackCtrl',
+				controller: 'TrackCtrl'
 			    }).
 			    when('/about', {
 				templateUrl: '/partials/_about.html',
@@ -99,7 +105,7 @@ var biking2 = angular
 		var units = [' bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'],
 			number = Math.floor(Math.log(bytes) / Math.log(1024));
 		return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  '' + units[number];
-	    }
+	    };
 	})
 	.run(function($rootScope) {
 	    $rootScope.currentYear = new Date().getFullYear();

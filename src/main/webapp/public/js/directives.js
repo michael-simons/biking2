@@ -255,3 +255,70 @@ angular.module('highcharts-ng', []).directive('ngHighchart', function () {
     }
   };
 });
+
+angular
+	.module('track-map-ng', [])
+	.directive('ngTrackMap', [function () {
+		return {
+		    restrict: 'EA',
+		    priority: -10,
+		    link: function(scope, elem, attrs) {
+			var projection = new OpenLayers.Projection("EPSG:3857");		
+			var displayProjection = new OpenLayers.Projection("EPSG:4326");		
+			var map = new OpenLayers.Map(elem[0], {
+			    controls: [
+				new OpenLayers.Control.Navigation(),
+				new OpenLayers.Control.PanZoomBar(),
+				new OpenLayers.Control.LayerSwitcher(),
+				new OpenLayers.Control.Attribution()
+			    ],
+			    projection: projection,
+			    displayProjection: displayProjection,
+			    units: 'm',
+			    center: new OpenLayers.LonLat([10.447683, 51.163375]).transform(displayProjection, projection),
+			    layers: [
+				new OpenLayers.Layer.OSM.Mapnik("Mapnik"),
+				new OpenLayers.Layer.OSM.CycleMap("CycleMap"),
+				new OpenLayers.Layer.Markers("Markers")
+			    ],
+			    zoom: 6
+			});
+			
+			scope.$watch(attrs.home, function (value) {
+			    if(value === undefined)
+				return;
+			    var home = value;
+			    map.getLayersByName('Markers')[0].addMarker(
+				    new OpenLayers.Marker(
+					new OpenLayers.LonLat(home.longitude, home.latitude).transform(map.displayProjection, map.getProjectionObject()),
+					new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16))
+				    )
+			    );
+			});			
+			
+			scope.$watch(attrs.track, function (value) {
+			    if(value === undefined)
+				return;
+			    var track = value;
+			    
+			    var oldLayer = map.getLayersByName(track.name);
+			    if(oldLayer.length > 0) {
+				map.removeLayer(oldLayer[0]);
+			    }
+			    var newLayer = new OpenLayers.Layer.GML(track.name, "/tracks/" + track.id + ".gpx", {
+				format: OpenLayers.Format.GPX,
+				style: {strokeColor: "red", strokeWidth: 5, strokeOpacity: 1.0},
+				projection: new OpenLayers.Projection("EPSG:4326")
+			    });
+			    map.addLayer(newLayer);
+			    map.raiseLayer(newLayer, -1);
+			    
+			    var bounds = new OpenLayers.Bounds();
+			    bounds.extend(new OpenLayers.LonLat(track.minlon, track.minlat));
+			    bounds.extend(new OpenLayers.LonLat(track.maxlon, track.maxlat));
+
+			    map.zoomToExtent(bounds.transform(map.displayProjection, map.getProjectionObject()));			   			    
+			});			
+		    }
+		};
+	}]);
