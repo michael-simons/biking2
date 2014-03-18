@@ -265,6 +265,15 @@ angular
 		    link: function(scope, elem, attrs) {
 			var projection = new OpenLayers.Projection("EPSG:3857");		
 			var displayProjection = new OpenLayers.Projection("EPSG:4326");		
+			
+			if(attrs['width'] !== undefined) {
+			    elem.css('width', attrs['width']);
+			}
+			
+			if(attrs['height'] !== undefined) {
+			    elem.css('height', attrs['height']);
+			}
+			
 			var map = new OpenLayers.Map(elem[0], {
 			    controls: [
 				new OpenLayers.Control.Navigation(),
