@@ -69,7 +69,7 @@ table.trip_table td, table.track_table td {
     vertical-align: top;
 }
 
-#track-map div.olMap {
+div.map-wrapper div.olMap {
     width: 100%;
     height: 480px;
     border: 4px #fff solid;    
