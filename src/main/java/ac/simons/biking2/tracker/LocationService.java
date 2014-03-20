@@ -17,9 +17,14 @@ package ac.simons.biking2.tracker;
 
 import ac.simons.biking2.persistence.entities.Location;
 import ac.simons.biking2.persistence.repositories.LocationRepository;
+import java.time.ZonedDateTime;
+import java.util.GregorianCalendar;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import static java.time.ZoneId.systemDefault;
 
 /**
  * @author Michael J. Simons, 2014-03-20
@@ -40,5 +45,9 @@ public class LocationService {
 	final Location location = this.locationRepository.save(new Location(newLocation.getLatitude(), newLocation.getLongitude(), newLocation.getCreatedAt()));
 	this.messagingTemplate.convertAndSend("/topic/currentLocation", location);
 	return location;
+    }
+
+    public List<Location> getLocationsForTheLastNHours(int hours) {
+	return locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(GregorianCalendar.from(ZonedDateTime.now(systemDefault()).minusHours(hours)));
     }
 }
