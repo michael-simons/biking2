@@ -18,6 +18,7 @@ package ac.simons.biking2.api;
 import ac.simons.biking2.tracker.NewLocationCmd;
 import ac.simons.biking2.persistence.entities.Location;
 import ac.simons.biking2.tracker.LocationService;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -43,6 +45,11 @@ public class LocationController {
     @Autowired
     public LocationController(LocationService locationService) {
 	this.locationService = locationService;
+    }
+    
+    @RequestMapping(value = "/locations", method = GET)
+    public List<Location> getLocations() {
+	return this.locationService.getLocationsForTheLastNHours(1);
     }
 
     @RequestMapping(value = "/locations", method = POST)
