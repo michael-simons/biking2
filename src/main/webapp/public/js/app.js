@@ -88,6 +88,10 @@ var biking2 = angular
 				templateUrl: '/partials/_track.html',
 				controller: 'TrackCtrl'
 			    }).
+			    when('/location', {
+				templateUrl: '/partials/_location.html',
+				controller: 'LocationCtrl'
+			    }).
 			    when('/about', {
 				templateUrl: '/partials/_about.html',
 				controller: 'AboutCtrl'
