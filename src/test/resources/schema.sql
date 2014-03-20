@@ -27,7 +27,8 @@ CREATE TABLE locations (
     created_at DATETIME NOT NULL, 
     latitude DECIMAL(18,15) NOT NULL, 
     longitude DECIMAL(18,15) NOT NULL, 
-    description VARCHAR(2048)
+    description VARCHAR(2048),
+    CONSTRAINT location_unique_created_at UNIQUE(created_at),
 );
 
 CREATE TABLE milages (

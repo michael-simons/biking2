@@ -2,7 +2,7 @@
     <div class="col-md-12">
 
 	<h2>About</h2>
-	<p>This application is written in <a href="http://www.oracle.com/technetwork/java/index.html">Java</a>. The backend is created with <a href="http://projects.spring.io/spring-boot/">Spring Boot</a>, <a href="http://projects.spring.io/spring-data-jpa/">Spring Data JPA</a> and protected <a href="http://projects.spring.io/spring-security/">Spring Security</a>. The frontend is created with <a href="http://angularjs.org">AngularJS</a> except a little part for embedded maps.</p>
+	<p>This application is written in <a href="http://www.oracle.com/technetwork/java/index.html">Java</a>. The backend is created with <a href="http://projects.spring.io/spring-boot/">Spring Boot</a>, <a href="http://projects.spring.io/spring-data-jpa/">Spring Data JPA</a> and protected by <a href="http://projects.spring.io/spring-security/">Spring Security</a>. The frontend is created with <a href="http://angularjs.org">AngularJS</a> except a little part for embedded maps.</p>
 
 	<p>I've blogged about my goals rewriting the old application from scratch here <a href="http://info.michael-simons.eu/2014/02/20/developing-a-web-application-with-spring-boot-angularjs-and-java-8/">Developing a web application with Spring Boot, AngularJS and Java 8</a>, the source code is available here <a href="https://github.com/michael-simons/biking2">github.com/michael-simons/biking2</a>.</p>
 
@@ -37,10 +37,11 @@
 	    for <strong>{{ humanizedUptime || 'n/a'}}</strong>
 	    on Java <strong>{{ about.vm.version || 'n/a'}}</strong>, 
 	    using <strong>{{ about.vm.usedMemory | bytes }}</strong> of <strong>{{ about.vm.totalMemory | bytes }}</strong>. 
-	    Maximal available memory is <strong>{{ about.vm.maxMemory | bytes }}</strong>.
-	    <br/> <small><a data-ng-click="refresh();" href="#">Refresh</a></small>
+	    Maximal available memory is <strong>{{ about.vm.maxMemory | bytes }}</strong>.	    
 	</p>
 
+	<div data-ng-highchart id="chart-memory"  config="memoryConfig" ></div>				
+	
 	<p>
 	    <img alt="Some Rights Reserved" id="somerights20" src="/img/somerights20.gif" style="vertical-align:text-top;">
 	</p>	

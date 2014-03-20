@@ -90,7 +90,7 @@ biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance,
     $scope.cancel = function() {
 	$modalInstance.dismiss('cancel');
     };
-    
+
     $scope.submit = function() {
 	$scope.submitting = true;
 	$http({
@@ -105,7 +105,7 @@ biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance,
 	    if (status === 400)
 		$scope.badRequest = data;
 	    else if (status === 409)
-		$scope.badRequest = 'The name is already used.';	
+		$scope.badRequest = 'The name is already used.';
 	});
     };
 });
@@ -125,7 +125,7 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
     $http.get('/api/bikes').success(function(data) {
 	$scope.bikes = data;
     });
-    
+
     $scope.closeAlert = function(index) {
 	$scope.alerts.splice(index, 1);
     };
@@ -162,7 +162,7 @@ biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstanc
     };
 
     $scope.milage.recordedOn = new Date();
-    
+
     $scope.recordedOnOptions = {
 	'year-format': "'yyyy'",
 	'starting-day': 1,
@@ -193,7 +193,7 @@ biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstanc
 	    $scope.submitting = false;
 	    if (status === 400)
 		$scope.badRequest = data;
-	    else if(status === 404)
+	    else if (status === 404)
 		$scope.badRequest = 'Please do not temper with this form.';
 	});
     };
@@ -203,25 +203,25 @@ biking2Controllers.controller('GalleryCtrl', function($scope, $http, $modal) {
     $scope.imageInterval = 5000;
     $scope.allPictures = [];
     $scope.slides = [];
-    
+
     $scope.reshuffle = function() {
 	$scope.allPictures = $scope.allPictures.randomize();
 	$scope.slides.length = 0;
-	var max = Math.min(15, $scope.allPictures.length);	    
-	for(var i=0;i<max;++i) {
+	var max = Math.min(15, $scope.allPictures.length);
+	for (var i = 0; i < max; ++i) {
 	    $scope.slides.push({
 		image: '/api/galleryPictures/' + $scope.allPictures[i].id + '.jpg',
 		takenOn: $scope.allPictures[i].takenOn,
 		text: $scope.allPictures[i].description
-	    });		
+	    });
 	}
     };
-    
+
     $http.get('/api/galleryPictures').success(function(data) {
 	$scope.allPictures = data;
 	$scope.reshuffle();
     });
-    
+
     $scope.openNewPictureDlg = function() {
 	var modalInstance = $modal.open({
 	    templateUrl: '/partials/_new_picture.html',
@@ -253,7 +253,7 @@ biking2Controllers.controller('AddNewPictureCtrl', function($scope, $modalInstan
     $scope.imageData = null;
 
     $scope.onFileSelect = function($files) {
-	$scope.imageData = $files[0];	
+	$scope.imageData = $files[0];
     };
 
     $scope.takenOnOptions = {
@@ -271,18 +271,18 @@ biking2Controllers.controller('AddNewPictureCtrl', function($scope, $modalInstan
     $scope.cancel = function() {
 	$modalInstance.dismiss('cancel');
     };
-    
+
     $scope.submit = function() {
 	$scope.submitting = true;
 	$upload.upload({
 	    method: 'POST',
-	    url: '/api/galleryPictures',        
+	    url: '/api/galleryPictures',
 	    data: $scope.picture,
 	    file: $scope.imageData,
 	    fileFormDataName: 'imageData',
 	    withCredentials: true,
-	    formDataAppender: function(formData, key, val){		
-		if(key !== null && key === 'takenOn')
+	    formDataAppender: function(formData, key, val) {
+		if (key !== null && key === 'takenOn')
 		    formData.append(key, val.toISOString());
 		else
 		    formData.append(key, val);
@@ -290,10 +290,10 @@ biking2Controllers.controller('AddNewPictureCtrl', function($scope, $modalInstan
 	}).success(function(data) {
 	    $scope.submitting = false;
 	    $modalInstance.close(data);
-	}).error(function() {		    
+	}).error(function() {
 	    $scope.submitting = false;
 	    $scope.badRequest = 'There\'s something wrong with your input, please check!';
-	});	
+	});
     };
 });
 
@@ -301,7 +301,7 @@ biking2Controllers.controller('TracksCtrl', function($scope, $http, $modal) {
     $http.get('/api/tracks').success(function(data) {
 	$scope.tracks = data;
     });
-    
+
     $scope.openNewTrackDlg = function() {
 	var modalInstance = $modal.open({
 	    templateUrl: '/partials/_new_track.html',
@@ -319,7 +319,7 @@ biking2Controllers.controller('TracksCtrl', function($scope, $http, $modal) {
     };
 });
 
-biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance, $http, $upload) {
+biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance, $upload) {
     $scope.track = {
 	name: null,
 	coveredOn: new Date(),
@@ -331,7 +331,7 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
     $scope.types = ['biking', 'running'];
 
     $scope.onFileSelect = function($files) {
-	$scope.trackData = $files[0];	
+	$scope.trackData = $files[0];
     };
 
     $scope.coveredOnOptions = {
@@ -349,19 +349,19 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
     $scope.cancel = function() {
 	$modalInstance.dismiss('cancel');
     };
-    
+
     $scope.submit = function() {
 	$scope.submitting = true;
 	$upload.upload({
 	    method: 'POST',
-	    url: '/api/tracks',        
+	    url: '/api/tracks',
 	    data: $scope.track,
 	    file: $scope.trackData,
 	    fileFormDataName: 'trackData',
 	    withCredentials: true,
-	    formDataAppender: function(formData, key, val){
+	    formDataAppender: function(formData, key, val) {
 		// Without that, val.toJSON() is used which adds "...
-		if(key !== null && key === 'coveredOn')
+		if (key !== null && key === 'coveredOn')
 		    formData.append(key, val.toISOString());
 		else
 		    formData.append(key, val);
@@ -372,64 +372,121 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
 	}).error(function(data, status) {
 	    $scope.submitting = false;
 	    if (status === 409)
-		$scope.badRequest = 'A track with the given name on that date already exists.';	
+		$scope.badRequest = 'A track with the given name on that date already exists.';
 	    else
 		$scope.badRequest = 'There\'s something wrong with your input, please check!';
-	});	
+	});
     };
 });
 
-biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routeParams) {
-    var map = new OpenLayers.Map("track-map", {
-	controls: [
-	    new OpenLayers.Control.Navigation(),
-	    new OpenLayers.Control.PanZoomBar(),
-	    new OpenLayers.Control.LayerSwitcher(),
-	    new OpenLayers.Control.Attribution()
-	],
-	projection: new OpenLayers.Projection("EPSG:900913"),
-	displayProjection: new OpenLayers.Projection("EPSG:4326"),
-	units: 'm'
-    });
-
-    map.addLayer(new OpenLayers.Layer.OSM.Mapnik("Mapnik"));
-    map.addLayer(new OpenLayers.Layer.OSM.CycleMap("CycleMap"));
-
-    var layerMarkers = new OpenLayers.Layer.Markers("Markers");
-    map.addLayer(layerMarkers);
-
+biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routeParams) {    
     $q.all([$http.get('/api/tracks/' + $routeParams.id), $http.get('/api/home')]).then(function(values) {
-	var track = values[0].data;
-	var home = values[1].data;
-
-	layerMarkers.addMarker(new OpenLayers.Marker(
-		new OpenLayers.LonLat(home.longitude, home.latitude).transform(map.displayProjection, map.getProjectionObject()),
-		new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16)))
-		);
-
-	$scope.track = track;
-	var gpx = new OpenLayers.Layer.GML(track.name, "/tracks/" + track.id + ".gpx", {
-	    format: OpenLayers.Format.GPX,
-	    style: {strokeColor: "red", strokeWidth: 5, strokeOpacity: 1.0},
-	    projection: new OpenLayers.Projection("EPSG:4326")
-	});
-	map.addLayer(gpx);
-	var bounds = new OpenLayers.Bounds();
-
-	bounds.extend(new OpenLayers.LonLat(track.minlon, track.minlat));
-	bounds.extend(new OpenLayers.LonLat(track.maxlon, track.maxlat));
-
-	map.zoomToExtent(bounds.transform(map.displayProjection, map.getProjectionObject()));
+	$scope.track = values[0].data;	
+	$scope.home = values[1].data;	
     });
 });
 
-biking2Controllers.controller('AboutCtrl', function($scope, $http) {
-    $scope.refresh = function() {    
+biking2Controllers.controller('LocationCtrl', function($scope, $http) {
+    $scope.locations = [];
+    $http.get('/api/locations').success(function(data) {
+	$scope.locations = data;	
+	var stompClient = Stomp.over(new SockJS('/api/ws'));
+	stompClient.connect({}, function() {	
+	    stompClient.subscribe('/topic/currentLocation', function(greeting) {
+		$scope.$apply(function() {
+		    $scope.locations.push(JSON.parse(greeting.body));
+		});
+	    });
+	});
+    
+	$scope.$on("$destroy", function() {	
+	    stompClient.disconnect(function() {
+	    });
+	});
+    });
+});
+
+biking2Controllers.controller('AboutCtrl', function($scope, $http, $filter, $interval) {
+    $scope.refreshInterval = 30;
+    $scope.memoryConfig = {
+	options: {
+	    chart: {
+		type: 'area'
+	    },
+	    credits: {
+		enabled: false
+	    },
+	    title: {
+		text: 'Memory usage'
+	    },
+	    subtitle: {
+                text: 'Refreshes every ' + $scope.refreshInterval + ' seconds'
+            },
+	    tooltip: {
+		shared: true,
+		valueSuffix: 'MiB'
+	    },
+	    plotOptions: {
+		area: {
+		    stacking: 'normal',
+		    lineColor: '#666666',
+		    lineWidth: 1,
+		    marker: {
+			lineWidth: 1,
+			lineColor: '#666666'
+		    }
+		}
+	    }
+	},
+	series: [{
+		name: 'Free',
+		data: []
+	    }, {
+		name: 'Used',
+		data: []
+	    }],
+	loading: false,
+	xAxis: {
+	    categories: [],
+	    tickmarkPlacement: 'on',
+	    title: {
+		enabled: false
+	    }
+	},
+	yAxis: {
+	    title: {
+		text: 'MiB'
+	    }
+	}
+    };
+
+    $scope.refresh = function() {
+	var formatBytes = function(bytes) {
+	    return Math.round((bytes / Math.pow(1024, Math.floor(2))) * 10) / 10;
+	};
+
 	$http.get('/api/about').success(function(data) {
 	    $scope.about = data;
-	    $scope.humanizedUptime = nezasa.iso8601.Period.parseToString(data.vm.uptime, true);
+	    $scope.humanizedUptime = nezasa.iso8601.Period.parseToString(data.vm.uptime, null, null, true);
+	    var max = 10;
+	    var cur = $scope.memoryConfig.series[0].data.length;
+
+	    if (cur === max) {
+		$scope.memoryConfig.series[0].data.splice(0, 1);
+		$scope.memoryConfig.series[1].data.splice(0, 1);
+		$scope.memoryConfig.xAxis.categories.splice(0, 1);
+	    }
+	    $scope.memoryConfig.series[0].data.push(formatBytes($scope.about.vm.freeMemory));
+	    $scope.memoryConfig.series[1].data.push(formatBytes($scope.about.vm.usedMemory));
+	    $scope.memoryConfig.xAxis.categories.push($filter('date')(new Date(), "HH:mm:ss"));
 	});
     };
-    
+
+    var timer = $interval(function() {
+	$scope.refresh();
+    }, $scope.refreshInterval * 1000);
+    $scope.$on("$destroy", function() {	
+	$interval.cancel(timer);
+    });
     $scope.refresh();
 });

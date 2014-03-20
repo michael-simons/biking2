@@ -55,10 +55,19 @@ public class Location implements Serializable {
     @Column(name = "description", length = 2048)
     private String description;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, unique = true)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Calendar createdAt;
+
+    protected Location() {
+    }
+
+    public Location(BigDecimal latitude, BigDecimal longitude, Calendar createdAt) {
+	this.latitude = latitude;
+	this.longitude = longitude;
+	this.createdAt = createdAt;
+    }
 
     @PrePersist
     public void prePersist() {

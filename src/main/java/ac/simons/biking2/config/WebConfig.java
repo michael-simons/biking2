@@ -24,11 +24,9 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
@@ -61,6 +59,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    "/gallery",
 	    "/tracks",
 	    "/tracks/{id:\\w+}",
+	    "/location",
 	    "about"
 	})
 	public String index() {
@@ -70,7 +69,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     
     @Bean
     public ServletContextInitializer servletContextInitializer() {
-	return (ServletContext servletContext) -> {
+	return servletContext -> {
 	    final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
 	    characterEncodingFilter.setEncoding("UTF-8");
 	    characterEncodingFilter.setForceEncoding(false);

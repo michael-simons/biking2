@@ -15,21 +15,25 @@
  */
 package ac.simons.biking2;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
 @Configuration
 @EnableAutoConfiguration
-@EnableScheduling
+@EnableWebSocketMessageBroker
 @ComponentScan
 public class Application extends SpringBootServletInitializer {
 
@@ -42,4 +46,9 @@ public class Application extends SpringBootServletInitializer {
 	System.setProperty("spring.profiles.default", System.getProperty("spring.profiles.default", "dev"));
 	final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
     }
+    
+     @Bean(destroyMethod="shutdown")
+     public Executor taskScheduler(final @Value("${biking2.scheduled-thread-pool-size:10}") int scheduledThreadPoolSize) {
+         return Executors.newScheduledThreadPool(scheduledThreadPoolSize);
+     }
 }

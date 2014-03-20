@@ -5,7 +5,7 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>0.2.10-SNAPSHOT</version>
+    <version>0.3.6-SNAPSHOT</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
@@ -40,6 +40,7 @@
 	<openlayers.version>2.13.1</openlayers.version>
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
 	<angular-file-upload.version>1.2.5</angular-file-upload.version>
+	<activemq.version>5.9.0</activemq.version>
 	
 	<start-class>ac.simons.biking2.Application</start-class>	
     </properties>
@@ -148,13 +149,17 @@
 	</dependency>
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-thymeleaf</artifactId>
+	    <artifactId>spring-boot-starter-thymeleaf</artifactId>
 	    <exclusions>
 		<exclusion>
 		    <groupId>org.javassist</groupId>
 		    <artifactId>javassist</artifactId>
 		</exclusion>
 	    </exclusions>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-websocket</artifactId>
 	</dependency>
 	<dependency>
 	    <groupId>org.springframework</groupId>
@@ -278,7 +283,53 @@
 	    <artifactId>openlayers</artifactId>
 	    <version>${openlayers.version}</version>
 	</dependency>	
-
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-jms</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-messaging</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-websocket</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.projectreactor</groupId>
+	    <artifactId>reactor-tcp</artifactId>
+	    <version>1.0.1.RELEASE</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-broker</artifactId>
+	    <version>${activemq.version}</version>			
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-client</artifactId>
+	    <version>${activemq.version}</version>	    
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-mqtt</artifactId>
+	    <version>${activemq.version}</version>			
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-stomp</artifactId>
+	    <version>${activemq.version}</version>			
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-pool</artifactId>	    
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-spring</artifactId>
+	    <version>${activemq.version}</version>
+	</dependency>
+	
 	<dependency>
 	    <groupId>org.hamcrest</groupId>
 	    <artifactId>hamcrest-core</artifactId>
@@ -312,7 +363,6 @@
 		</exclusion>
 	    </exclusions>
 	</dependency>
-
     </dependencies>
 
     <repositories>
