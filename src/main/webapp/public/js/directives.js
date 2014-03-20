@@ -258,22 +258,22 @@ angular.module('highcharts-ng', []).directive('ngHighchart', function () {
 
 angular
 	.module('track-map-ng', [])
-	.directive('ngTrackMap', [function () {
+	.directive('ngTrackMap', [function() {
 		return {
 		    restrict: 'EA',
 		    priority: -10,
 		    link: function(scope, elem, attrs) {
-			var projection = new OpenLayers.Projection("EPSG:3857");		
-			var displayProjection = new OpenLayers.Projection("EPSG:4326");		
-			
-			if(attrs['width'] !== undefined) {
+			var projection = new OpenLayers.Projection("EPSG:3857");
+			var displayProjection = new OpenLayers.Projection("EPSG:4326");
+
+			if (attrs['width'] !== undefined) {
 			    elem.css('width', attrs['width']);
 			}
-			
-			if(attrs['height'] !== undefined) {
+
+			if (attrs['height'] !== undefined) {
 			    elem.css('height', attrs['height']);
 			}
-			
+
 			var map = new OpenLayers.Map(elem[0], {
 			    controls: [
 				new OpenLayers.Control.Navigation(),
@@ -292,26 +292,27 @@ angular
 			    ],
 			    zoom: 6
 			});
-			
-			scope.$watch(attrs.home, function (value) {
-			    if(value === undefined)
+
+			scope.$watch(attrs.home, function(value) {
+			    if (value === undefined)
 				return;
 			    var home = value;
 			    map.getLayersByName('Markers')[0].addMarker(
 				    new OpenLayers.Marker(
-					new OpenLayers.LonLat(home.longitude, home.latitude).transform(map.displayProjection, map.getProjectionObject()),
-					new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16))
-				    )
-			    );
-			}, true);			
-			
-			scope.$watch(attrs.track, function (value) {
-			    if(value === undefined)
+					    new OpenLayers.LonLat(home.longitude, home.latitude).transform(map.displayProjection, map.getProjectionObject()),
+					    new OpenLayers.Icon('http://simons.ac/images/favicon.png', new OpenLayers.Size(16, 16), new OpenLayers.Pixel(-(16 / 2), -16))
+					    )
+				    );
+			}, true);
+
+			scope.$watch(attrs.track, function(value) {
+			    if (value === undefined) {
 				return;
+			    }
 			    var track = value;
-			    
+
 			    var oldLayer = map.getLayersByName(track.name);
-			    if(oldLayer.length > 0) {
+			    if (oldLayer.length > 0) {
 				map.removeLayer(oldLayer[0]);
 			    }
 			    var newLayer = new OpenLayers.Layer.GML(track.name, "/tracks/" + track.id + ".gpx", {
@@ -321,13 +322,80 @@ angular
 			    });
 			    map.addLayer(newLayer);
 			    map.raiseLayer(newLayer, -1);
-			    
+
 			    var bounds = new OpenLayers.Bounds();
 			    bounds.extend(new OpenLayers.LonLat(track.minlon, track.minlat));
 			    bounds.extend(new OpenLayers.LonLat(track.maxlon, track.maxlat));
 
-			    map.zoomToExtent(bounds.transform(map.displayProjection, map.getProjectionObject()));			   			    
-			}, true);			
+			    map.zoomToExtent(bounds.transform(map.displayProjection, map.getProjectionObject()));
+			}, true);
+
+			var locationIndex = 0;
+			var bikingMarker = null;
+			var trackLayer = null;
+			var track = null;
+			var trackFeature = null;
+
+			var initTrackLayer = function() {
+			    if (trackLayer !== null) {
+				return;
+			    }
+
+			    trackLayer = new OpenLayers.Layer.Vector("Current track...");
+			    map.addLayer(trackLayer);
+			    map.raiseLayer(trackLayer, -1);
+			    var style = {
+				strokeColor: '#f00',
+				strokeOpacity: 1,
+				strokeWidth: 5
+			    };
+			    track = new OpenLayers.Geometry.LineString([]);
+			    trackLayer.addFeatures([trackFeature = new OpenLayers.Feature.Vector(track, null, style)]);
+			};
+
+			var placeBiker = function(location) {
+			    var rv = new OpenLayers.LonLat(location.longitude, location.latitude).transform(map.displayProjection, map.getProjectionObject());
+			    var markerLayer = map.getLayersByName('Markers')[0];
+			    if (bikingMarker !== null) {
+				markerLayer.removeMarker(bikingMarker);
+			    }
+			    bikingMarker = new OpenLayers.Marker(rv, new OpenLayers.Icon('/img/biker.gif', new OpenLayers.Size(27, 32), new OpenLayers.Pixel(-(16 / 2), -16)))
+			    markerLayer.addMarker(bikingMarker);
+			    return rv;
+			};
+
+			scope.$watch(attrs.locations, function(value) {
+			    if (value === undefined || value.length === 0) {
+				return;
+			    }
+
+			    initTrackLayer();
+
+			    for (var i = 0; i < value.length; ++i) {
+				track.addPoint(new OpenLayers.Geometry.Point(value[i].longitude, value[i].latitude).transform(map.displayProjection, map.getProjectionObject()));
+			    }
+
+			    trackLayer.drawFeature(trackFeature);
+			    locationIndex = value.length - 1;
+
+			    var markerLocation = placeBiker(value[locationIndex]);
+			    map.setCenter(markerLocation);
+			});
+
+			scope.$watchCollection(attrs.locations, function(value) {
+			    if (value === undefined || value.length === 0) {
+				return;
+			    }
+
+			    initTrackLayer();
+
+			    var markerLocation = placeBiker(value[locationIndex++]);
+
+			    track.addPoint(new OpenLayers.Geometry.Point(markerLocation.lon, markerLocation.lat));
+			    trackLayer.drawFeature(trackFeature);
+
+			    map.setCenter(markerLocation);
+			});
 		    }
 		};
-	}]);
+	    }]);
