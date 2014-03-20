@@ -76,6 +76,8 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
 	private int outboundPoolSize = 2;
 
+	private boolean useJMX = true;
+	
 	public String getHost() {
 	    return host;
 	}
@@ -131,6 +133,14 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	public void setOutboundPoolSize(int outboundPoolSize) {
 	    this.outboundPoolSize = outboundPoolSize;
 	}
+
+	public boolean isUseJMX() {
+	    return useJMX;
+	}
+
+	public void setUseJMX(boolean useJMX) {
+	    this.useJMX = useJMX;
+	}
     }
 
     @Autowired
@@ -143,10 +153,11 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 			+ "vm://localhost,"
 			+ "stomp://localhost:%d,"
 			+ "mqtt+nio://%s:%d"
-			+ ")?persistent=false&useJmx=true&useShutdownHook=true",
+			+ ")?persistent=false&useJmx=%s&useShutdownHook=true",
 			properties.getStompPort(),
 			properties.getHost(),
-			properties.getMqttPort()
+			properties.getMqttPort(),
+			properties.isUseJMX()
 		)
 	);
 
