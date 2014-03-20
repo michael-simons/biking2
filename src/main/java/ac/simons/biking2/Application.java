@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 
 /**
  * @author Michael J. Simons, 2014-02-08
@@ -30,6 +31,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @EnableAutoConfiguration
 @EnableScheduling
+@EnableWebSocketMessageBroker
 @ComponentScan
 public class Application extends SpringBootServletInitializer {
 
