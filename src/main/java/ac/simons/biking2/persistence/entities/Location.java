@@ -15,10 +15,6 @@
  */
 package ac.simons.biking2.persistence.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -39,9 +35,6 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "locations")
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder(alphabetic = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Location implements Serializable {
 
     private static final long serialVersionUID = -9075950345524958606L;
@@ -51,12 +44,10 @@ public class Location implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonProperty(value = "lat")
     @Column(name = "latitude", precision = 18, scale = 15, nullable = false)
     @NotNull
     private BigDecimal latitude;
 
-    @JsonProperty(value = "lon")
     @Column(name = "longitude", precision = 18, scale = 15, nullable = false)
     @NotNull
     private BigDecimal longitude;
@@ -64,11 +55,19 @@ public class Location implements Serializable {
     @Column(name = "description", length = 2048)
     private String description;
 
-    @JsonProperty(value = "tst")
     @Column(name = "created_at", nullable = false, unique = true)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Calendar createdAt;
+
+    protected Location() {
+    }
+
+    public Location(BigDecimal latitude, BigDecimal longitude, Calendar createdAt) {
+	this.latitude = latitude;
+	this.longitude = longitude;
+	this.createdAt = createdAt;
+    }
 
     @PrePersist
     public void prePersist() {
