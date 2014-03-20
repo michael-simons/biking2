@@ -16,10 +16,14 @@
 package ac.simons.biking2.persistence.repositories;
 
 import ac.simons.biking2.persistence.entities.Location;
+import java.util.Calendar;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Michael J. Simons, 2014-03-19
  */
 public interface LocationRepository extends JpaRepository<Location, Integer> {
+
+    public List<Location> findByCreatedAtGreaterThanOrderByCreatedAtAsc(Calendar value);
 }
