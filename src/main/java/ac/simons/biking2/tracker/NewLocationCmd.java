@@ -40,7 +40,10 @@ public class NewLocationCmd {
     private BigDecimal longitude;
 
     @JsonProperty(value = "tst")
-    private Calendar createdAt;
+    private Long timestampSeconds;
+
+    @JsonProperty(value = "tstMillis")
+    private Long timestampMillis;
 
     public BigDecimal getLatitude() {
 	return latitude;
@@ -51,6 +54,14 @@ public class NewLocationCmd {
     }
 
     public Calendar getCreatedAt() {
-	return createdAt;
+	Calendar rv = null;
+	if (this.timestampSeconds != null) {
+	    rv = Calendar.getInstance();
+	    rv.setTimeInMillis(this.timestampSeconds * 1000);
+	} else if (this.timestampMillis != null) {
+	    rv = Calendar.getInstance();
+	    rv.setTimeInMillis(this.timestampMillis);
+	}
+	return rv;
     }
 }
