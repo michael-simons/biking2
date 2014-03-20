@@ -59,6 +59,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    "/gallery",
 	    "/tracks",
 	    "/tracks/{id:\\w+}",
+	    "/location",
 	    "about"
 	})
 	public String index() {
