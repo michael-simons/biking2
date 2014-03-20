@@ -319,7 +319,7 @@ biking2Controllers.controller('TracksCtrl', function($scope, $http, $modal) {
     };
 });
 
-biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance, $http, $upload) {
+biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance, $upload) {
     $scope.track = {
 	name: null,
 	coveredOn: new Date(),
@@ -383,6 +383,26 @@ biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routePar
     $q.all([$http.get('/api/tracks/' + $routeParams.id), $http.get('/api/home')]).then(function(values) {
 	$scope.track = values[0].data;	
 	$scope.home = values[1].data;	
+    });
+});
+
+biking2Controllers.controller('LocationCtrl', function($scope, $http) {
+    $scope.locations = [];
+    $http.get('/api/locations').success(function(data) {
+	$scope.locations = data;	
+	var stompClient = Stomp.over(new SockJS('/api/ws'));
+	stompClient.connect({}, function() {	
+	    stompClient.subscribe('/topic/currentLocation', function(greeting) {
+		$scope.$apply(function() {
+		    $scope.locations.push(JSON.parse(greeting.body));
+		});
+	    });
+	});
+    
+	$scope.$on("$destroy", function() {	
+	    stompClient.disconnect(function() {
+	    });
+	});
     });
 });
 
