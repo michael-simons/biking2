@@ -60,7 +60,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    "/tracks",
 	    "/tracks/{id:\\w+}",
 	    "/location",
-	    "about"
+	    "/about"
 	})
 	public String index() {
 	    return "/index.html";
@@ -112,7 +112,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		    ((RequestMappingHandlerMapping) bean).setUseRegisteredSuffixPatternMatch(true);
 		}
 		if (bean instanceof ThymeleafViewResolver && "thymeleafViewResolver".equals(beanName)) {
-		    ((ThymeleafViewResolver) bean).setExcludedViewNames(new String[]{"/index.html"});
+		    ((ThymeleafViewResolver) bean).setViewNames(new String[]{"oEmbed/embeddedTrack"});
 		}
 		return bean;
 	    }
