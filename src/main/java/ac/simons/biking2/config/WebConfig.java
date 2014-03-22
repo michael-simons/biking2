@@ -63,7 +63,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    "/about"
 	})
 	public String index() {
-	    return "/index.html";
+	    return "forward:/index.html";
 	}
     }
     
@@ -110,10 +110,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		if (bean instanceof RequestMappingHandlerMapping && "requestMappingHandlerMapping".equals(beanName)) {
 		    ((RequestMappingHandlerMapping) bean).setUseRegisteredSuffixPatternMatch(true);
-		}
-		if (bean instanceof ThymeleafViewResolver && "thymeleafViewResolver".equals(beanName)) {
-		    ((ThymeleafViewResolver) bean).setViewNames(new String[]{"oEmbed/embeddedTrack"});
-		}
+		}		
 		return bean;
 	    }
 
