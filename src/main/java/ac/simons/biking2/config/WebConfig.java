@@ -112,7 +112,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		    ((RequestMappingHandlerMapping) bean).setUseRegisteredSuffixPatternMatch(true);
 		}
 		if (bean instanceof ThymeleafViewResolver && "thymeleafViewResolver".equals(beanName)) {
-		    ((ThymeleafViewResolver) bean).setExcludedViewNames(new String[]{"*.html"});
+		    ((ThymeleafViewResolver) bean).setViewNames(new String[]{"oEmbed/embeddedTrack"});
 		}
 		return bean;
 	    }
