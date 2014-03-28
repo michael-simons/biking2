@@ -16,6 +16,7 @@
 package ac.simons.biking2.config;
 
 import ac.simons.biking2.Application;
+import java.util.stream.Stream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static java.util.Arrays.asList;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
@@ -49,7 +49,7 @@ public class RoutingTest {
 		.webAppContextSetup(applicationContext)
 		.build();
 
-	asList("/", "/bikes", "/milages", "/gallery", "/tracks", "/tracks/23", "/location", "/about").forEach(path -> {
+	Stream.of("/", "/bikes", "/milages", "/gallery", "/tracks", "/tracks/23", "/location", "/about").forEach(path -> {
 	    try {
 		mockMvc
 			.perform(get(path))
