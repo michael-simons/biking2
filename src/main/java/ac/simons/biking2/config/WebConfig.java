@@ -37,9 +37,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 /**
  * @author Michael J. Simons, 2014-02-15
@@ -63,7 +63,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    "/about"
 	})
 	public String index() {
-	    return "/index.html";
+	    return "forward:/index.html";
 	}
     }
     
@@ -97,31 +97,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
      * This makes mapping of
-     * {@link TracksController#getTrack(java.lang.String, java.lang.String)} and
-     * the default mapping in separate methods possible.
-     *
-     * @return
+     * {@link TracksController#downloadTrack(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)} 
+     * and the default mapping in separate methods possible.
+     * @param configurer
      */
-    @Bean
-    public BeanPostProcessor beanPostProcessor() {
-	return new BeanPostProcessor() {
-
-	    @Override
-	    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-		if (bean instanceof RequestMappingHandlerMapping && "requestMappingHandlerMapping".equals(beanName)) {
-		    ((RequestMappingHandlerMapping) bean).setUseRegisteredSuffixPatternMatch(true);
-		}
-		if (bean instanceof ThymeleafViewResolver && "thymeleafViewResolver".equals(beanName)) {
-		    ((ThymeleafViewResolver) bean).setViewNames(new String[]{"oEmbed/embeddedTrack"});
-		}
-		return bean;
-	    }
-
-	    @Override
-	    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		return bean;
-	    }
-	};
+    @Override
+    public void configurePathMatch(final PathMatchConfigurer configurer) {
+	configurer.setUseRegisteredSuffixPatternMatch(true);
     }
 
     /**

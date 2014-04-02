@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * @author Michael J. Simons, 2014-03-06
  */
-@ConfigurationProperties(path = "classpath:build.properties")
+@ConfigurationProperties(locations = "classpath:build.properties")
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 public class BuildProperties {
