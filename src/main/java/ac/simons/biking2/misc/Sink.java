@@ -20,7 +20,10 @@ package ac.simons.biking2.misc;
  * A generic Sink that consists of a target <em>T</em> that takes
  * an object <em>O</em> and is then returned
  * @author Michael J. Simons, 2014-02-11
+ * @param <T>
+ * @param <O>
  */
+@FunctionalInterface
 public interface Sink<T, O> {
     public T setObject(final O object);
 }
