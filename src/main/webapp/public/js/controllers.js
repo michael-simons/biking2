@@ -157,17 +157,14 @@ biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstanc
 
     $scope.milage = {
 	bikeId: $scope.bikes[0].id,
-	recordedOn: null,
+	recordedOn: new Date(),
 	amount: null
     };
-
-    $scope.milage.recordedOn = new Date();
 
     $scope.recordedOnOptions = {
 	'year-format': "'yyyy'",
 	'starting-day': 1,
-	open: false,
-	minimum: $scope.milage.recordedOn
+	open: false
     };
 
     $scope.openRecordedOn = function($event) {
