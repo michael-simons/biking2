@@ -18,6 +18,7 @@ package ac.simons.biking2.api;
 import ac.simons.biking2.config.PersistenceConfig;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,13 +32,21 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletResponse;
 import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static java.util.Calendar.getInstance;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -45,13 +54,20 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author Michael J. Simons, 2014-02-15
  */
 public class TracksControllerTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final List<Track> defaultTestData;
+    private final File tmpDir;        
+    private final File tracksDir;
+    private final File gpsBabel;
     
     public TracksControllerTest() {
 	final int[] ids = new int[]{1, 2, 3};
@@ -64,13 +80,31 @@ public class TracksControllerTest {
 	    stub(t.getCoveredOn()).toReturn(GregorianCalendar.from(now.minusDays(random.nextInt(365)).atStartOfDay(ZoneId.systemDefault())));
 	    return t;
 	}).collect(toList());
+	
+	this.tmpDir = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
+	this.tmpDir.deleteOnExit();
+	this.tracksDir = new File(this.tmpDir, PersistenceConfig.TRACK_DIRECTORY);
+	this.tracksDir.mkdirs();
+	
+	// Try to find gpsbabel
+	File tmp = null;
+	for(String possibleExe : new String[]{"/usr/bin/gpsbabel", "/opt/local/bin/gpsbabel"}) {
+	    tmp = new File(possibleExe);
+	    if(tmp.canExecute()) {
+		break;
+	    }
+	}    
+	if(tmp == null) {
+	    throw new IllegalStateException("No gpsbabel found, cannot execute test!");
+	}
+	this.gpsBabel = tmp;
     }
      
     @Test
     public void testGetTracks() {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"))).toReturn(defaultTestData);
-	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")), "");
+	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
 
 	final List<Track> tracks = tracksController.getTracks();
 
@@ -86,10 +120,6 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findOne(validId)).toReturn(t);
 	
-	final File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-	final File tracksDir = new File(tmpDir, PersistenceConfig.TRACK_DIRECTORY);
-	tracksDir.mkdirs();	
-	
 	final String content = "<foo>bar</foo>";
 	final List<String> contentGpx = Arrays.asList(content, "gpx");
 	final List<String> contentTcx = Arrays.asList(content, "tcx");
@@ -98,13 +128,15 @@ public class TracksControllerTest {
 	Files.write(trackGpx.toPath(), contentGpx);
 	trackGpx.createNewFile();
 	trackGpx.deleteOnExit();
+	stub(t.getTrackFile(tmpDir, "gpx")).toReturn(trackGpx);
 	
 	final File trackTcx = new File(tracksDir, String.format("%d.tcx", validId));
 	Files.write(trackTcx.toPath(), contentTcx);
 	trackTcx.createNewFile();
-	trackTcx.deleteOnExit();
-	
-	final TracksController tracksController = new TracksController(trackRepository, tmpDir, "");
+	trackTcx.deleteOnExit();	
+	stub(t.getTrackFile(tmpDir, "tcx")).toReturn(trackTcx);
+		
+	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
 	
 	MockHttpServletRequest request;
 	MockHttpServletResponse response;
@@ -170,7 +202,7 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findOne(validId)).toReturn(t);
 	
-	final TracksController tracksController = new TracksController(trackRepository, new File(System.getProperty("java.io.tmpdir")), "");
+	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
 	
 	ResponseEntity<Track> response;
 	response = tracksController.getTrack(Integer.toString(validId, 36));
@@ -192,5 +224,61 @@ public class TracksControllerTest {
 	response = tracksController.getTrack("1");
 	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
 	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_FOUND)));
+    }
+    
+    @Test
+    public void testCreateTrack() throws Exception {
+	final Track track = new Track() {	    
+	    private static final long serialVersionUID = -3391535625175956488L;
+
+	    @Override
+	    public Integer getId() {
+		return 4711;
+	    }	    
+
+	    @Override
+	    public String getPrettyId() {
+		return Integer.toString(this.getId(), 36);
+	    }
+	};
+	
+	final TrackRepository trackRepository = mock(TrackRepository.class);
+	stub(trackRepository.save(Matchers.any(Track.class))).toReturn(track);
+	
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		
+	// Test valid track
+	MockMultipartFile trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/test.tcx"));
+	mockMvc
+		.perform(
+			fileUpload("http://biking.michael-simons.eu/api/tracks")
+			    .file(trackData)
+			    .param("name", "name")
+			    .param("coveredOn", "2014-01-01T21:21:21.000Z")
+			    .param("description", "description")
+			    .param("type", "biking")
+		)
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isOk())
+		.andExpect(content().string(objectMapper.writeValueAsString(track)));
+	Assert.assertTrue(new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
+	Assert.assertTrue(new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
+	
+	trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/biking_pictures.rss"));
+	mockMvc
+		.perform(
+			fileUpload("http://biking.michael-simons.eu/api/tracks")
+			    .file(trackData)
+			    .param("name", "name")
+			    .param("coveredOn", "2014-01-01T21:21:21.000Z")
+			    .param("description", "description")
+			    .param("type", "biking")
+		)
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isBadRequest());
+	Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
+	Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
+	Mockito.verify(trackRepository, Mockito.times(1)).delete(track);
     }
 }
