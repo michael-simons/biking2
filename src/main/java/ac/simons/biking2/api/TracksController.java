@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.config.PersistenceConfig;
 import ac.simons.biking2.gpx.GPX;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.entities.Track.Type;
@@ -130,6 +129,8 @@ public class TracksController {
 		    rv = new ResponseEntity<>(track, HttpStatus.OK);		    
 		} catch(Exception e) {
 		    this.trackRepository.delete(track);
+		    track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
+		    track.getTrackFile(datastoreBaseDirectory, "gpx").delete();
 		    
 		    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}		
