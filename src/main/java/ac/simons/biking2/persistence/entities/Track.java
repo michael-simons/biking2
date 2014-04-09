@@ -15,11 +15,13 @@
  */
 package ac.simons.biking2.persistence.entities;
 
+import ac.simons.biking2.config.PersistenceConfig;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -181,6 +183,10 @@ public class Track implements Serializable {
 	return Integer.toString(this.id, 36);
     }
 
+    public File getTrackFile(final File datastoreBaseDirectory, final String format) {
+	return new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, this.getId(), format));
+    }
+    
     @Override
     public int hashCode() {
 	int hash = 5;

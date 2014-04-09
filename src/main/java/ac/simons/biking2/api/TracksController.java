@@ -142,8 +142,8 @@ public class TracksController {
     }
     
     Track storeFile(final Track track, final InputStream tcxData) {
-	final File tcxFile = new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "tcx"));
-	final File gpxFile = new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "gpx"));
+	final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
+	final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");	
 
 	try (FileOutputStream out = new FileOutputStream(tcxFile);) {
 	    out.getChannel().transferFrom(Channels.newChannel(tcxData), 0, Integer.MAX_VALUE);
@@ -204,7 +204,7 @@ public class TracksController {
 	} else if ((track = this.trackRepository.findOne(_id)) == null) {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {
-	    final File trackFile = new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), _format));
+	    final File trackFile = track.getTrackFile(datastoreBaseDirectory, _format);
 	    response.setHeader("Content-Type", acceptableFormats.get(_format));
 	    response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, _format));
 
