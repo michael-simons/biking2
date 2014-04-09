@@ -161,6 +161,7 @@ public class TracksControllerTest {
 	assertThat(response.getContentAsString(), is(equalTo(contentTcx.stream().collect(Collectors.joining("\n", "", "\n")))));
     }
     
+    @Test
     public void testGetTrack() {
 	final int validId = 23;
 	
