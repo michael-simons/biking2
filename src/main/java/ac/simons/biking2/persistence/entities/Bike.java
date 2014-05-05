@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -289,15 +290,14 @@ public class Bike implements Serializable {
      * summarizes the value
      * 
      * @param bikes A likst of bikes whose milage periods should be grouped together
-     * @param maximumDate An optional date. If not null, only periods before that date 
-     * are grouped and summarized
+     * @param entryFilter An optional filter for the entries
      * @return A map of grouped periods
      */
-    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes, final LocalDate maximumDate) {
+    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {
 	return bikes.stream()
 	    .filter(bike -> bike.hasMilages())
 	    .flatMap(bike -> bike.getPeriods().entrySet().stream())			
-	    .filter(entry -> maximumDate == null || entry.getKey().isBefore(maximumDate))
+	    .filter(Optional.ofNullable(entryFilter).orElse(entry -> true))
 	    .collect(
 	        HashMap::new,
 		(map, period) -> {				    
