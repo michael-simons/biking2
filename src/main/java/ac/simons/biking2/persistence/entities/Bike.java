@@ -25,6 +25,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -207,14 +208,14 @@ public class Bike implements Serializable {
      * @return the date and the value of the period in which this bike was used the most
      */
     public Optional<Map.Entry<LocalDate, Integer>> getMaxPeriod() {
-	return this.getPeriods().entrySet().stream().max(Map.Entry.comparingByValue(Integer::compare));
+	return this.getPeriods().entrySet().stream().max(Bike::comparePeriodsByValue);
     }
     
     /**
      * @return the date and the value of the period in which this bike was used the least
      */
     public Optional<Map.Entry<LocalDate, Integer>> getMinPeriod() {
-	return this.getPeriods().entrySet().stream().min(Map.Entry.comparingByValue(Integer::compare));
+	return this.getPeriods().entrySet().stream().min(Bike::comparePeriodsByValue);
     }
         
     /**
@@ -276,5 +277,9 @@ public class Bike implements Serializable {
 	}
 	final Bike other = (Bike) obj;
 	return Objects.equals(this.id, other.id);
+    }
+    
+    public static int comparePeriodsByValue(Map.Entry<LocalDate, Integer> period1, Map.Entry<LocalDate, Integer> period2) {
+	return Integer.compare(period1.getValue(), period2.getValue());
     }
 }
