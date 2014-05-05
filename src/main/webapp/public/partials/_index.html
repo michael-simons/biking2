@@ -16,7 +16,11 @@
 	<p>
 	    Since {{ summary.dateOfFirstRecord | date:'mediumDate' }}, i pedalled
 	    <strong>{{ summary.total | number:2 }}km</strong>
-	    on different bikes.
+	    on different bikes. 
+	    <span ng-hide="summary.minimumPeriod === null || summary.maximumPeriod === null">
+		<br />
+		Worst month was {{ summary.minimumPeriod.startOfPeriod | date:'MMMM yyyy'}} with {{ summary.minimumPeriod.value | number:2}}km, best month was {{ summary.maximumPeriod.startOfPeriod | date:'MMMM yyyy' }} with {{ summary.maximumPeriod.value | number:2}}km
+	    </span>
 	</p>		
 	<p>This little application is not only about my biking activities, but should also showcase my current skillset as Developer as well. Read more <a href="/about">here</a> or at my <a href="http://info.michael-simons.eu">blog</a>.</p>
 	
