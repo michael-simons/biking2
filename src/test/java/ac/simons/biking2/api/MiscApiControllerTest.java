@@ -90,13 +90,13 @@ public class MiscApiControllerTest {
 
 	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
 	final Summary summary = controller.getSummary();
-	assertNotNull(summary.getMinimumPeriod());	
-	assertThat(summary.getMinimumPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,2,1).atStartOfDay(ZoneId.systemDefault())))));
-	assertThat(summary.getMinimumPeriod().getValue(), is(equalTo(43)));
+	assertNotNull(summary.getWorstPeriod());	
+	assertThat(summary.getWorstPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,2,1).atStartOfDay(ZoneId.systemDefault())))));
+	assertThat(summary.getWorstPeriod().getValue(), is(equalTo(43)));
 	
-	assertNotNull(summary.getMaximumPeriod());	
-	assertThat(summary.getMaximumPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,1,1).atStartOfDay(ZoneId.systemDefault())))));
-	assertThat(summary.getMaximumPeriod().getValue(), is(equalTo(50)));
+	assertNotNull(summary.getBestPeriod());	
+	assertThat(summary.getBestPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,1,1).atStartOfDay(ZoneId.systemDefault())))));
+	assertThat(summary.getBestPeriod().getValue(), is(equalTo(50)));
     }
     
     @Test
@@ -111,7 +111,7 @@ public class MiscApiControllerTest {
 	
 	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
 	final Summary summary = controller.getSummary();
-	assertNull(summary.getMinimumPeriod());	
-	assertNull(summary.getMaximumPeriod());	
+	assertNull(summary.getWorstPeriod());	
+	assertNull(summary.getBestPeriod());	
     }
 }

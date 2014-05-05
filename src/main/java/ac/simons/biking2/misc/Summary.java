@@ -26,9 +26,9 @@ public class Summary {
 
     private Double total;
         
-    private AccumulatedPeriod minimumPeriod;
+    private AccumulatedPeriod worstPeriod;
     
-    private AccumulatedPeriod maximumPeriod;
+    private AccumulatedPeriod bestPeriod;
 
     public Calendar getDateOfFirstRecord() {
 	return dateOfFirstRecord;
@@ -46,19 +46,19 @@ public class Summary {
 	this.total = total;
     }
 
-    public AccumulatedPeriod getMinimumPeriod() {
-	return minimumPeriod;
+    public AccumulatedPeriod getWorstPeriod() {
+	return worstPeriod;
     }
 
-    public void setMinimumPeriod(AccumulatedPeriod minimumPeriod) {
-	this.minimumPeriod = minimumPeriod;
+    public void setWorstPeriod(AccumulatedPeriod worstPeriod) {
+	this.worstPeriod = worstPeriod;
     }
 
-    public AccumulatedPeriod getMaximumPeriod() {
-	return maximumPeriod;
+    public AccumulatedPeriod getBestPeriod() {
+	return bestPeriod;
     }
 
-    public void setMaximumPeriod(AccumulatedPeriod maximumPeriod) {
-	this.maximumPeriod = maximumPeriod;
+    public void setBestPeriod(AccumulatedPeriod bestPeriod) {
+	this.bestPeriod = bestPeriod;
     }    
 }

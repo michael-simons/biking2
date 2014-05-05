@@ -68,8 +68,8 @@ public class MiscApiController {
 	
 	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(allBikes, null);
 	
-	summary.setMinimumPeriod(Bike.getWorstPeriod(summarizedPeriods));	
-	summary.setMaximumPeriod(Bike.getBestPeriod(summarizedPeriods));
+	summary.setWorstPeriod(Bike.getWorstPeriod(summarizedPeriods));	
+	summary.setBestPeriod(Bike.getBestPeriod(summarizedPeriods));
 		
 	return summary;
     }
