@@ -1,20 +1,55 @@
 <div class="row">
     <div class="col-md-12">
 	<h2>Current year</h2>
-	<alert data-ng-repeat="alert in alerts" type="alert.type" data-ng-close="closeAlert($index);">{{alert.msg}}</alert>
-	<p>This chart shows my current biking activities.</p>			
-	<div data-ng-highchart id="chart-current-year" config="currentYearConfig" ></div>			
-	<div>
-	    <br />	
-	    <button type="button" class="btn btn-default" data-ng-click="openNewMilageDlg();">New milage</button>
-	</div>
+	<alert data-ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index);">{{alert.msg}}</alert>
+	<p>This chart shows my current biking activities.</p>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-8 col-lg-7">	
+	<div data-ng-highchart id="chart-current-year" config="currentYearConfig"></div>	
     </div>    
+    <div class="col-md-4 hidden-sm hidden-xs">
+	<table class="table table-condensed">
+	    <thead>
+		<tr><th></th><th>Month</th><th>Milage (km)</th></tr>
+	    </thead>
+	    <tbody>		
+		<tr><td>Worst:</td><td>{{ currentYearConfig.userData.worstPeriod.startOfPeriod | date:'MMMM'}}</td><td>{{currentYearConfig.userData.worstPeriod.value | number:0}}</td></tr>
+		<tr><td>Best:</td><td>{{ currentYearConfig.userData.bestPeriod.startOfPeriod | date:'MMMM'}}</td><td>{{currentYearConfig.userData.bestPeriod.value | number:0}}</td></tr>
+	    </tbody>
+	</table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+	<button type="button" class="btn btn-default" data-ng-click="openNewMilageDlg();">New milage</button>
+    </div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
 	<h2>History</h2>
 	<p>Those are the overall statistics since 2009. You see a massive decline in 2011, when i exessivly programmed on <a href="http://dailyfratze.de">Daily Fratze 2</a>. I hope the trend in the last 2 months of 2012 continues… Biking tends to keep me sane ;)</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 col-lg-7">
 	<div data-ng-highchart id="chart-history"  config="historyConfig" ></div>				
+    </div>
+    <div class="col-md-4 hidden-sm hidden-xs">
+	<table class="table table-condensed">
+	    <thead>
+		<tr><th></th><th>Month</th><th>Milage (km)</th></tr>
+	    </thead>
+	    <tbody>		
+		<tr><td>Worst:</td><td>{{ historyConfig.userData.worstPeriod.startOfPeriod | date:'MMMM yyyy'}}</td><td>{{historyConfig.userData.worstPeriod.value | number:0}}</td></tr>
+		<tr><td>Best:</td><td>{{ historyConfig.userData.bestPeriod.startOfPeriod | date:'MMMM yyyy'}}</td><td>{{historyConfig.userData.bestPeriod.value | number:0}}</td></tr>
+	    </tbody>
+	</table>
     </div>
 </div>

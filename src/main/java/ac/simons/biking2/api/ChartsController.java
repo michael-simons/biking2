@@ -16,6 +16,7 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.highcharts.HighchartsNgConfig;
+import ac.simons.biking2.misc.AccumulatedPeriod;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -58,8 +60,14 @@ public class ChartsController {
 
 	// All active bikes
 	final List<Bike> bikes = this.bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())));
-
+	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, entry -> !entry.getKey().isBefore(january1st));
+	
+	final Map<String, AccumulatedPeriod> worstAndBestPeriod = new HashMap<>();
+	worstAndBestPeriod.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
+	worstAndBestPeriod.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
+	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
+	builder.withUserData(worstAndBestPeriod);
 	
 	// Add the bike charts as columns
 	final int[] sums = bikes.stream().sequential().map(bike -> {
@@ -133,8 +141,16 @@ public class ChartsController {
     public HighchartsNgConfig getHistory() {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	
-	final List<Bike> bikes = this.bikeRepository.findAll();
+	final List<Bike> bikes = this.bikeRepository.findAll();	
+	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, entry -> entry.getKey().isBefore(january1st));
+	
+	final Map<String, AccumulatedPeriod> worstAndBestPeriod = new HashMap<>();
+	worstAndBestPeriod.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
+	worstAndBestPeriod.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
+	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
+	builder.withUserData(worstAndBestPeriod);
+	
 	final Map<Integer, int[]> data = bikes
 	    // Stream the bikes 
 	    .stream()
