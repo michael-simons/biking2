@@ -255,6 +255,10 @@ public class Bike implements Serializable {
 	this.boughtOn = boughtOn;
     }
 
+    public boolean hasMilages() {
+	return this.milages != null && this.milages.size() > 0;
+    }
+    
     @Override
     public int hashCode() {
 	int hash = 7;
