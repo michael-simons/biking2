@@ -207,16 +207,16 @@ public class Bike implements Serializable {
      * @return the date and the value of the period in which this bike was used the most
      */
     public Optional<Map.Entry<LocalDate, Integer>> getMaxPeriod() {
-	return this.getPeriods().entrySet().stream().max((e1, e2) -> e1.getValue().compareTo(e2.getValue()));
+	return this.getPeriods().entrySet().stream().max(Map.Entry.comparingByValue(Integer::compare));
     }
     
     /**
      * @return the date and the value of the period in which this bike was used the least
      */
     public Optional<Map.Entry<LocalDate, Integer>> getMinPeriod() {
-	return this.getPeriods().entrySet().stream().min((e1, e2) -> e1.getValue().compareTo(e2.getValue()));
+	return this.getPeriods().entrySet().stream().min(Map.Entry.comparingByValue(Integer::compare));
     }
-
+        
     /**
      * Example of reducing a stream to a skalar value
      *
