@@ -25,8 +25,8 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -281,5 +281,29 @@ public class Bike implements Serializable {
     
     public static int comparePeriodsByValue(Map.Entry<LocalDate, Integer> period1, Map.Entry<LocalDate, Integer> period2) {
 	return Integer.compare(period1.getValue(), period2.getValue());
+    }
+    
+    /**
+     * This method groups all periods of the given bikes by their period start and
+     * summarizes the value
+     * 
+     * @param bikes A likst of bikes whose milage periods should be grouped together
+     * @return A map of grouped periods
+     */
+    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes) {
+	return bikes.stream()
+	    .filter(bike -> bike.hasMilages())
+	    .flatMap(bike -> bike.getPeriods().entrySet().stream())			
+	    .collect(
+	        HashMap::new,
+		(map, period) -> {				    
+		    map.merge(period.getKey(), period.getValue(), (val1, val2) -> val1 + val2);
+		},
+		(map1, map2) -> {			    			    
+		    map2.forEach((k, v) -> {
+			map1.merge(k, v, (val1, val2) -> val1 + val2);
+		    });
+		}
+	    );
     }
 }
