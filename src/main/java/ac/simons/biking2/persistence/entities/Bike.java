@@ -106,7 +106,7 @@ public class Bike implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
     @JsonIgnore
-    private List<Milage> milages = new ArrayList<>();
+    private final List<Milage> milages = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -161,10 +161,6 @@ public class Bike implements Serializable {
 
     public void setDecommissionedOn(Calendar decommissionedOn) {
 	this.decommissionedOn = decommissionedOn;
-    }
-
-    private List<Milage> getMilages() {
-	return this.milages;
     }
 
     public Calendar getCreatedAt() {
