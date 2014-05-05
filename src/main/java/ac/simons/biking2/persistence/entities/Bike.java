@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.persistence.entities;
 
+import ac.simons.biking2.misc.AccumulatedPeriod;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -288,12 +289,15 @@ public class Bike implements Serializable {
      * summarizes the value
      * 
      * @param bikes A likst of bikes whose milage periods should be grouped together
+     * @param maximumDate An optional date. If not null, only periods before that date 
+     * are grouped and summarized
      * @return A map of grouped periods
      */
-    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes) {
+    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes, final LocalDate maximumDate) {
 	return bikes.stream()
 	    .filter(bike -> bike.hasMilages())
 	    .flatMap(bike -> bike.getPeriods().entrySet().stream())			
+	    .filter(entry -> maximumDate == null || entry.getKey().isBefore(maximumDate))
 	    .collect(
 	        HashMap::new,
 		(map, period) -> {				    
@@ -305,5 +309,35 @@ public class Bike implements Serializable {
 		    });
 		}
 	    );
+    }
+    
+    /**
+     * Returns the worst performing period in the list of summarized (grouped) periods
+     * 
+     * @param summarizedPeriods A list of grouped periods
+     * @return The worst (with the lowest value) period
+     */
+    public static AccumulatedPeriod getWorstPeriod(final Map<LocalDate, Integer> summarizedPeriods) {
+	 return summarizedPeriods
+			.entrySet()
+			.stream()
+			.min(Bike::comparePeriodsByValue)
+			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+			.orElse(null);
+    }
+    
+    /**
+     * Returns the best performing period in the list of summarized (grouped) periods
+     * 
+     * @param summarizedPeriods A list of grouped periods
+     * @return The best (with the highest value) period
+     */
+    public static AccumulatedPeriod getBestPeriod(final Map<LocalDate, Integer> summarizedPeriods) {
+	 return summarizedPeriods
+			.entrySet()
+			.stream()
+			.max(Bike::comparePeriodsByValue)
+			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+			.orElse(null);
     }
 }

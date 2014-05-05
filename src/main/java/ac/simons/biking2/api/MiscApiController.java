@@ -66,25 +66,10 @@ public class MiscApiController {
 		+ this.assortedTripRepository.getTotalDistance().doubleValue()
 	);	
 	
-	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(allBikes);
+	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(allBikes, null);
 	
-	summary.setMinimumPeriod(
-		    summarizedPeriods
-			.entrySet()
-			.stream()
-			.min(Bike::comparePeriodsByValue)
-			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
-			.orElse(null)
-	);
-	
-	summary.setMaximumPeriod(
-		    summarizedPeriods
-			.entrySet()
-			.stream()
-			.max(Bike::comparePeriodsByValue)
-			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
-			.orElse(null)
-	);
+	summary.setMinimumPeriod(Bike.getWorstPeriod(summarizedPeriods));	
+	summary.setMaximumPeriod(Bike.getBestPeriod(summarizedPeriods));
 		
 	return summary;
     }
