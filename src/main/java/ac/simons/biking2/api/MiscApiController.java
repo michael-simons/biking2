@@ -17,13 +17,16 @@ package ac.simons.biking2.api;
 
 import ac.simons.biking2.misc.About;
 import ac.simons.biking2.misc.About.VMProperties;
+import ac.simons.biking2.misc.AccumulatedPeriod;
 import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +64,28 @@ public class MiscApiController {
 	summary.setTotal(
 		allBikes.stream().mapToInt(Bike::getMilage).sum()
 		+ this.assortedTripRepository.getTotalDistance().doubleValue()
+	);	
+	
+	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(allBikes);
+	
+	summary.setMinimumPeriod(
+		    summarizedPeriods
+			.entrySet()
+			.stream()
+			.min(Bike::comparePeriodsByValue)
+			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+			.orElse(null)
 	);
+	
+	summary.setMaximumPeriod(
+		    summarizedPeriods
+			.entrySet()
+			.stream()
+			.max(Bike::comparePeriodsByValue)
+			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+			.orElse(null)
+	);
+		
 	return summary;
     }
 

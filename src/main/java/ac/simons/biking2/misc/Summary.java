@@ -15,10 +15,7 @@
  */
 package ac.simons.biking2.misc;
 
-import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * @author Michael J. Simons, 2014-02-13
@@ -28,10 +25,10 @@ public class Summary {
     private Calendar dateOfFirstRecord;
 
     private Double total;
+        
+    private AccumulatedPeriod minimumPeriod;
     
-    private Map.Entry<LocalDate, Integer> minimumPeriod;
-    
-    private Map.Entry<LocalDate, Integer> maximumPeriod;
+    private AccumulatedPeriod maximumPeriod;
 
     public Calendar getDateOfFirstRecord() {
 	return dateOfFirstRecord;
@@ -49,19 +46,19 @@ public class Summary {
 	this.total = total;
     }
 
-    public Entry<LocalDate, Integer> getMinimumPeriod() {
+    public AccumulatedPeriod getMinimumPeriod() {
 	return minimumPeriod;
     }
 
-    public void setMinimumPeriod(Entry<LocalDate, Integer> minimumPeriod) {
+    public void setMinimumPeriod(AccumulatedPeriod minimumPeriod) {
 	this.minimumPeriod = minimumPeriod;
     }
 
-    public Entry<LocalDate, Integer> getMaximumPeriod() {
+    public AccumulatedPeriod getMaximumPeriod() {
 	return maximumPeriod;
     }
 
-    public void setMaximumPeriod(Entry<LocalDate, Integer> maximumPeriod) {
+    public void setMaximumPeriod(AccumulatedPeriod maximumPeriod) {
 	this.maximumPeriod = maximumPeriod;
-    }
+    }    
 }
