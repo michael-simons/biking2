@@ -21,6 +21,7 @@
 		<tr><td>Best:</td><td>{{ currentYearConfig.userData.bestPeriod.startOfPeriod | date:'MMMM'}}</td><td>{{currentYearConfig.userData.bestPeriod.value | number:0}}</td></tr>
 	    </tbody>
 	</table>
+	<p>Monthly average: {{currentYearConfig.userData.average | number:0}}km.</p>
     </div>
 </div>
 
@@ -51,5 +52,6 @@
 		<tr><td>Best:</td><td>{{ historyConfig.userData.bestPeriod.startOfPeriod | date:'MMMM yyyy'}}</td><td>{{historyConfig.userData.bestPeriod.value | number:0}}</td></tr>
 	    </tbody>
 	</table>
+	<p>Monthly average: {{historyConfig.userData.average | number:0}}km.</p>
     </div>
 </div>

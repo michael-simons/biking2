@@ -62,12 +62,13 @@ public class ChartsController {
 	final List<Bike> bikes = this.bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())));
 	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, entry -> !entry.getKey().isBefore(january1st));
 	
-	final Map<String, AccumulatedPeriod> worstAndBestPeriod = new HashMap<>();
-	worstAndBestPeriod.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
-	worstAndBestPeriod.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
+	final Map<String, Object> userData = new HashMap<>();
+	userData.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
+	userData.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
+	userData.put("average", summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
 	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
-	builder.withUserData(worstAndBestPeriod);
+	builder.withUserData(userData);
 	
 	// Add the bike charts as columns
 	final int[] sums = bikes.stream().sequential().map(bike -> {
@@ -144,12 +145,13 @@ public class ChartsController {
 	final List<Bike> bikes = this.bikeRepository.findAll();	
 	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, entry -> entry.getKey().isBefore(january1st));
 	
-	final Map<String, AccumulatedPeriod> worstAndBestPeriod = new HashMap<>();
-	worstAndBestPeriod.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
-	worstAndBestPeriod.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
+	final Map<String, Object> userData = new HashMap<>();
+	userData.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
+	userData.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
+	userData.put("average", summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
 	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
-	builder.withUserData(worstAndBestPeriod);
+	builder.withUserData(userData);
 	
 	final Map<Integer, int[]> data = bikes
 	    // Stream the bikes 
