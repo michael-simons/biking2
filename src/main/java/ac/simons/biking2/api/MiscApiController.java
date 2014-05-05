@@ -17,7 +17,6 @@ package ac.simons.biking2.api;
 
 import ac.simons.biking2.misc.About;
 import ac.simons.biking2.misc.About.VMProperties;
-import ac.simons.biking2.misc.AccumulatedPeriod;
 import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
@@ -67,9 +66,10 @@ public class MiscApiController {
 	);	
 	
 	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(allBikes, null);
-	
+		
 	summary.setWorstPeriod(Bike.getWorstPeriod(summarizedPeriods));	
 	summary.setBestPeriod(Bike.getBestPeriod(summarizedPeriods));
+	summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
 		
 	return summary;
     }

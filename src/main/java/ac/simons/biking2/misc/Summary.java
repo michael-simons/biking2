@@ -29,6 +29,8 @@ public class Summary {
     private AccumulatedPeriod worstPeriod;
     
     private AccumulatedPeriod bestPeriod;
+    
+    private Double average;
 
     public Calendar getDateOfFirstRecord() {
 	return dateOfFirstRecord;
@@ -61,4 +63,12 @@ public class Summary {
     public void setBestPeriod(AccumulatedPeriod bestPeriod) {
 	this.bestPeriod = bestPeriod;
     }    
+
+    public Double getAverage() {
+	return average;
+    }
+
+    public void setAverage(Double average) {
+	this.average = average;
+    }
 }

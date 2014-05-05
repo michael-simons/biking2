@@ -97,6 +97,8 @@ public class MiscApiControllerTest {
 	assertNotNull(summary.getBestPeriod());	
 	assertThat(summary.getBestPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,1,1).atStartOfDay(ZoneId.systemDefault())))));
 	assertThat(summary.getBestPeriod().getValue(), is(equalTo(50)));
+	
+	assertThat(summary.getAverage(), is(equalTo(93.0/2)));
     }
     
     @Test
@@ -113,5 +115,7 @@ public class MiscApiControllerTest {
 	final Summary summary = controller.getSummary();
 	assertNull(summary.getWorstPeriod());	
 	assertNull(summary.getBestPeriod());	
+	
+	assertThat(summary.getAverage(), is(equalTo(0.0)));
     }
 }
