@@ -92,3 +92,7 @@ table.track_table a {
     min-width: 150px;
     margin-bottom: 0px;
 }
+
+#chart-current-year {
+    margin-bottom: 10px;
+}
