@@ -16,10 +16,10 @@
 	<p>
 	    Since {{ summary.dateOfFirstRecord | date:'mediumDate' }}, i pedalled
 	    <strong>{{ summary.total | number:2 }}km</strong>
-	    on different bikes. 
+	    on different bikes. That was an average of <strong>{{ summary.average | number:2 }}km</strong> per month.
 	    <span ng-hide="summary.worstPeriod === null || summary.bestPeriod === null">
 		<br />
-		Worst month was {{ summary.worstPeriod.startOfPeriod | date:'MMMM yyyy'}} with {{ summary.worstPeriod.value | number:0}}km, best month was {{ summary.bestPeriod.startOfPeriod | date:'MMMM yyyy' }} with {{ summary.bestPeriod.value | number:0}}km
+		The worst month was {{ summary.worstPeriod.startOfPeriod | date:'MMMM yyyy'}} with {{ summary.worstPeriod.value | number:0}}km, the best month was {{ summary.bestPeriod.startOfPeriod | date:'MMMM yyyy' }} with {{ summary.bestPeriod.value | number:0}}km.
 	    </span>
 	</p>		
 	<p>This little application is not only about my biking activities, but should also showcase my current skillset as Developer as well. Read more <a href="/about">here</a> or at my <a href="http://info.michael-simons.eu">blog</a>.</p>
