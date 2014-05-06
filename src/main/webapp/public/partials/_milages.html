@@ -22,6 +22,7 @@
 	    </tbody>
 	</table>
 	<p>Monthly average: {{currentYearConfig.userData.average | number:0}}km.</p>
+	<p ng-hide="currentYearConfig.userData.preferredBike === null">Preferred bike in {{currentYearConfig.userData.currentYear}} is my "{{currentYearConfig.userData.preferredBike.name}}" so far.</p>
     </div>
 </div>
 

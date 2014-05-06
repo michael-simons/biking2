@@ -65,6 +65,8 @@ public class ChartsController {
 	userData.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
 	userData.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
 	userData.put("average", summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
+	userData.put("preferredBike", bikes.stream().max(new Bike.BikeByMilageInYearComparator(january1st.getYear())).orElse(null));
+	userData.put("currentYear", january1st.getYear());
 	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
 	builder.withUserData(userData);
