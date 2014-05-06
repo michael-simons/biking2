@@ -17,7 +17,8 @@
 	    Since {{ summary.dateOfFirstRecord | date:'mediumDate' }}, i pedalled
 	    <strong>{{ summary.total | number:2 }}km</strong>
 	    on different bikes. That was an average of <strong>{{ summary.average | number:2 }}km</strong> per month.
-	    <span ng-hide="summary.worstPeriod === null || summary.bestPeriod === null">
+	    <!-- Comparing with == to check for null and undefined objects -->
+	    <span ng-hide="summary.worstPeriod == null || summary.bestPeriod == null">
 		<br />
 		The worst month was {{ summary.worstPeriod.startOfPeriod | date:'MMMM yyyy'}} with {{ summary.worstPeriod.value | number:0}}km, the best month was {{ summary.bestPeriod.startOfPeriod | date:'MMMM yyyy' }} with {{ summary.bestPeriod.value | number:0}}km.
 	    </span>
