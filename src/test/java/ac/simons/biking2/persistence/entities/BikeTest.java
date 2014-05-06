@@ -48,28 +48,6 @@ public class BikeTest {
 		.addMilage(LocalDate.of(2014, 2, 1), 20).getBike()
 		.addMilage(LocalDate.of(2014, 3, 1), 50).getBike();	
     }
-    
-    @Test
-    public void testGetMaxPeriod() {
-	Optional<Map.Entry<LocalDate, Integer>> max = this.defaultTestBike.getMaxPeriod();		
-	assertThat(max.isPresent(), is(true));
-	assertThat(max.get().getKey(), is(equalTo(LocalDate.of(2014, 2, 1))));
-	assertThat(max.get().getValue(), is(equalTo(30)));
-	
-	max = new Bike().getMaxPeriod();
-	assertThat(max.isPresent(), is(false));
-    }
-    
-    @Test
-    public void testGetMinPeriod() {
-	Optional<Map.Entry<LocalDate, Integer>> min = this.defaultTestBike.getMinPeriod();		
-	assertThat(min.isPresent(), is(true));
-	assertThat(min.get().getKey(), is(equalTo(LocalDate.of(2014, 1, 1))));
-	assertThat(min.get().getValue(), is(equalTo(20)));
-	
-	min = new Bike().getMinPeriod();
-	assertThat(min.isPresent(), is(false));
-    }
 
     /**
      * Test of getPeriods method, of class Bike.
