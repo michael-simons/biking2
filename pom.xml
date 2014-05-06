@@ -15,6 +15,20 @@
 
     <name>biking2</name>
     <url>http://maven.apache.org</url>
+    
+    <inceptionYear>2014</inceptionYear>
+    
+    <developers>
+	<developer>
+	    <name>Michael J. Simons</name>
+	    <email>michael@simons.ac</email>	    
+	</developer>
+    </developers>
+    
+    <organization>
+	<name>michael-simons.eu</name>
+	<url>http://michael-simons.eu</url>
+    </organization>
 
     <licenses>
 	<license>
