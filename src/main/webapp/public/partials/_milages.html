@@ -17,8 +17,8 @@
 		<tr><th></th><th>Month</th><th>Milage (km)</th></tr>
 	    </thead>
 	    <tbody>		
-		<tr><td>Worst:</td><td>{{ currentYearConfig.userData.worstPeriod.startOfPeriod | date:'MMMM'}}</td><td>{{currentYearConfig.userData.worstPeriod.value | number:0}}</td></tr>
-		<tr><td>Best:</td><td>{{ currentYearConfig.userData.bestPeriod.startOfPeriod | date:'MMMM'}}</td><td>{{currentYearConfig.userData.bestPeriod.value | number:0}}</td></tr>
+		<tr><th>Worst:</th><td>{{ currentYearConfig.userData.worstPeriod.startOfPeriod | date:'MMMM'}}</td><td>{{currentYearConfig.userData.worstPeriod.value | number:0}}</td></tr>
+		<tr><th>Best:</th><td>{{ currentYearConfig.userData.bestPeriod.startOfPeriod | date:'MMMM'}}</td><td>{{currentYearConfig.userData.bestPeriod.value | number:0}}</td></tr>
 	    </tbody>
 	</table>
 	<p>Monthly average: {{currentYearConfig.userData.average | number:0}}km.</p>
@@ -48,8 +48,8 @@
 		<tr><th></th><th>Month</th><th>Milage (km)</th></tr>
 	    </thead>
 	    <tbody>		
-		<tr><td>Worst:</td><td>{{ historyConfig.userData.worstPeriod.startOfPeriod | date:'MMMM yyyy'}}</td><td>{{historyConfig.userData.worstPeriod.value | number:0}}</td></tr>
-		<tr><td>Best:</td><td>{{ historyConfig.userData.bestPeriod.startOfPeriod | date:'MMMM yyyy'}}</td><td>{{historyConfig.userData.bestPeriod.value | number:0}}</td></tr>
+		<tr><th>Worst:</th><td>{{ historyConfig.userData.worstPeriod.startOfPeriod | date:'MMMM yyyy'}}</td><td>{{historyConfig.userData.worstPeriod.value | number:0}}</td></tr>
+		<tr><th>Best:</th><td>{{ historyConfig.userData.bestPeriod.startOfPeriod | date:'MMMM yyyy'}}</td><td>{{historyConfig.userData.bestPeriod.value | number:0}}</td></tr>
 	    </tbody>
 	</table>
 	<p>Monthly average: {{historyConfig.userData.average | number:0}}km.</p>
