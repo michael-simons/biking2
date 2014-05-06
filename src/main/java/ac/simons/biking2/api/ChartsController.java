@@ -22,12 +22,15 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -148,13 +151,8 @@ public class ChartsController {
 	final List<Bike> bikes = this.bikeRepository.findAll();	
 	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, entry -> entry.getKey().isBefore(january1st));
 	
-	final Map<String, Object> userData = new HashMap<>();
-	userData.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
-	userData.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
-	userData.put("average", summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
-	
+	final Map<String, Object> userData = new HashMap<>();	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
-	builder.withUserData(userData);
 	
 	final Map<Integer, int[]> data = bikes
 	    // Stream the bikes 
@@ -185,9 +183,31 @@ public class ChartsController {
 	data.forEach((k,v) -> builder.series().withName(Integer.toString(k)).withData(v).build());
 
 	final StringBuilder title = new StringBuilder();
-	if(data.isEmpty())
+	if(data.isEmpty()) {
 	    title.append("No historical data available.");
-	else {
+	} else {
+	    // Compute summed years
+	    final Map<Integer, Integer> summedYears = data.entrySet().stream()
+		    .collect(Collectors.toMap(Map.Entry::getKey, entry -> Arrays.stream(entry.getValue()).sum()));
+	    
+	    // Computed worst and best year from summed years
+	    final Optional<Map.Entry<Integer, Integer>> worstYear = summedYears.entrySet().stream().min(Map.Entry.comparingByValue());
+	    final Optional<Map.Entry<Integer, Integer>> bestYear = summedYears.entrySet().stream().max(Map.Entry.comparingByValue());
+	    // Only add them if they differ
+	    if(!worstYear.equals(bestYear)) {
+		userData.put("worstYear", worstYear.orElse(null));
+		userData.put("bestYear", bestYear.orElse(null));
+	    }
+	   
+	    // Preferred bikes...
+	    userData.put("preferredBikes",
+		data.keySet().stream().collect(
+			TreeMap::new, 
+			(map, year) -> map.put(year, bikes.stream().max(Comparator.comparingInt(bike -> bike.getMilageInYear(year))).get()), 
+			TreeMap::putAll
+		)
+	    );
+	    
 	    title.append("Milage ")
 		    .append(data.keySet().stream().min(Integer::compare).get())
 		    .append("-")
@@ -196,6 +216,7 @@ public class ChartsController {
 	
 	final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);
 	return builder
+		.withUserData(userData)
 		.options()
 		    .chart()
 			.withBorderWidth(1)

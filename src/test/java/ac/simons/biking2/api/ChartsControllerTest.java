@@ -17,6 +17,7 @@ package ac.simons.biking2.api;
 
 import ac.simons.biking2.highcharts.HighchartsNgConfig;
 import ac.simons.biking2.highcharts.Series;
+import ac.simons.biking2.misc.AccumulatedPeriod;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;
@@ -149,12 +150,12 @@ public class ChartsControllerTest {
 	testData.put("bike1", new Integer[]{
 	     10,  20,  30,  40,  50,  60,  70,  80,  90, 100, 110, 120, 
 	    150, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
-	    310, 310, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400
+	    310, 310, 310, 320, 330, 340, 350, 360, 370, 380, 395, 400
 	 // 
 	});
 	testData.put("bike2", new Integer[]{
 	    0,   0,  30,  40,  50,  60,  70,  80,  90,  135,  135,  135,
-	  140, 140, 200, 300, 400, 500, 600, 700, 800,  900, 1000, 1000         
+	  140, 140, 200, 300, 400, 500, 600, 700, 800,  900, 1500, 1500         
 	});
 	testData.put("bike3", new Integer[]{
 	    null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null
@@ -185,9 +186,14 @@ public class ChartsControllerTest {
 	assertThat(currentYear.getSeries().size(), is(equalTo(2)));
 	List<Series> hlp = new ArrayList<>(currentYear.getSeries());
 	assertThat(hlp.get(0).getName(), is(equalTo("bike1")));
-	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0))));
+	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(0, 0, 10, 10, 10, 10, 10, 10, 10, 15, 5, 0))));
 	assertThat(hlp.get(1).getName(), is(equalTo("Sum")));
-	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0))));		
+	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(0, 0, 10, 10, 10, 10, 10, 10, 10, 15, 5, 0))));		
+	AccumulatedPeriod accumulatedPeriod = (AccumulatedPeriod) ((Map<String, Object>)currentYear.getUserData()).get("worstPeriod");
+	assertThat(accumulatedPeriod.getValue(), is(equalTo(0)));
+	accumulatedPeriod = (AccumulatedPeriod) ((Map<String, Object>)currentYear.getUserData()).get("bestPeriod");
+	assertThat(accumulatedPeriod.getValue(), is(equalTo(15)));
+	
 	hlp = new ArrayList<>(history.getSeries());
 	assertThat(hlp.size(), is(equalTo(2)));
 	Series series = hlp.get(0);	
@@ -195,7 +201,12 @@ public class ChartsControllerTest {
 	assertThat(series.getData(), is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 35))));
 	series = hlp.get(1);	
 	assertThat(series.getName(), is(equalTo(Integer.toString(startDate.getYear()+1))));
-	assertThat(series.getData(), is(equalTo(Arrays.asList(50, 70, 110, 110, 110, 110, 110, 110, 110, 110, 10, 10))));
+	assertThat(series.getData(), is(equalTo(Arrays.asList(50, 70, 110, 110, 110, 110, 110, 110, 110, 610, 10, 10))));	
+	assertThat(((Map.Entry<Integer, Integer>)((Map<String, Object>)history.getUserData()).get("worstYear")).getKey(), is(equalTo(startDate.getYear())));
+	assertThat(((Map.Entry<Integer, Integer>)((Map<String, Object>)history.getUserData()).get("bestYear")).getKey(), is(equalTo(startDate.getYear() + 1)));
+	final Map<Integer, Bike> preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history.getUserData()).get("preferredBikes");
+	assertThat(preferredBikes.get(startDate.getYear()).getName(), is(equalTo("bike1")));
+	assertThat(preferredBikes.get(startDate.getYear()+1).getName(), is(equalTo("bike2")));	
     }
     
     @Test
