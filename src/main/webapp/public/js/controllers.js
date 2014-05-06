@@ -65,7 +65,7 @@ biking2Controllers.controller('BikesCtrl', function($scope, $http, $modal) {
 		function() {
 		}
 	);
-    }
+    };
 });
 
 biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance, $http) {
