@@ -27,6 +27,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -289,6 +290,19 @@ public class Bike implements Serializable {
     
     public static int comparePeriodsByValue(Map.Entry<LocalDate, Integer> period1, Map.Entry<LocalDate, Integer> period2) {
 	return Integer.compare(period1.getValue(), period2.getValue());
+    }
+    
+    public static class BikeByMilageInYearComparator implements Comparator<Bike> {
+	private final int year;
+
+	public BikeByMilageInYearComparator(int year) {
+	    this.year = year;
+	}
+	
+	@Override
+	public int compare(Bike o1, Bike o2) {
+	    return Integer.compare(o1.getMilageInYear(year), o2.getMilageInYear(year));
+	}
     }
     
     /**
