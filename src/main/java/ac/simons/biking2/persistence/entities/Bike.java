@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -313,23 +314,18 @@ public class Bike implements Serializable {
      * @param entryFilter An optional filter for the entries
      * @return A map of grouped periods
      */
-    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {
+    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {	
 	return bikes.stream()
-	    .filter(bike -> bike.hasMilages())
+	    .filter(Bike::hasMilages)
 	    .flatMap(bike -> bike.getPeriods().entrySet().stream())			
 	    .filter(Optional.ofNullable(entryFilter).orElse(entry -> true))
 	    .collect(
-	        HashMap::new,
-		(map, period) -> {				    
-		    map.merge(period.getKey(), period.getValue(), (val1, val2) -> val1 + val2);
-		},
-		(map1, map2) -> {			    			    
-		    map2.forEach((k, v) -> {
-			map1.merge(k, v, (val1, val2) -> val1 + val2);
-		    });
-		}
+		Collectors.groupingBy(
+		    Map.Entry::getKey,
+		    Collectors.reducing(0, Map.Entry::getValue, Integer::sum)
+		)
 	    );
-    }
+    }    
     
     /**
      * Returns the worst performing period in the list of summarized (grouped) periods
