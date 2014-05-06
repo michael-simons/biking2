@@ -12,7 +12,7 @@
 	<div data-ng-highchart id="chart-current-year" config="currentYearConfig"></div>	
     </div>    
     <div class="col-md-4 hidden-sm hidden-xs">
-	<table class="table table-condensed">
+	<table class="table table-condensed" ng-hide="currentYearConfig.userData.worstPeriod === null || currentYearConfig.userData.bestPeriod === null">
 	    <thead>
 		<tr><th></th><th>Month</th><th>Milage (km)</th></tr>
 	    </thead>
@@ -43,7 +43,7 @@
 	<div data-ng-highchart id="chart-history"  config="historyConfig" ></div>				
     </div>
     <div class="col-md-4 hidden-sm hidden-xs">
-	<table class="table table-condensed">
+	<table class="table table-condensed" ng-hide="historyConfig.userData.worstPeriod === null || historyConfig.userData.bestPeriod === null">
 	    <thead>
 		<tr><th></th><th>Month</th><th>Milage (km)</th></tr>
 	    </thead>
