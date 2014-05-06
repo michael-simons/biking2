@@ -17,8 +17,11 @@ package ac.simons.biking2.persistence.entities;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -44,6 +47,12 @@ public class BikeTest {
 		.addMilage(LocalDate.of(2014, 1, 1), 0).getBike()
 		.addMilage(LocalDate.of(2014, 2, 1), 20).getBike()
 		.addMilage(LocalDate.of(2014, 3, 1), 50).getBike();	
+    }
+    
+    @Test
+    public void testGetMilageInYear() {
+	Assert.assertThat(this.defaultTestBike.getMilageInYear(2013), is(equalTo(0)));
+	Assert.assertThat(this.defaultTestBike.getMilageInYear(2014), is(equalTo(50)));
     }
 
     /**
@@ -83,6 +92,14 @@ public class BikeTest {
 		defaultTestBike.getMilagesInYear(2014), 
 		is(equalTo(new Integer[]{20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}))
 	);	
+    }
+    
+    @Test
+    public void testSummarizePeriods() {
+	// Assert, that an empty list doesn't result in an error
+	Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(new ArrayList<>(), null);
+	Assert.assertNotNull(summarizedPeriods);
+	assertThat(summarizedPeriods.size(), is(0));
     }
     
     @Test

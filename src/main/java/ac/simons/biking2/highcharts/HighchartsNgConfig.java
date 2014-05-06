@@ -37,6 +37,8 @@ public class HighchartsNgConfig {
 	private final Sink<HighchartsNgConfig, HighchartsNgConfig> sink;
 
 	private Options options;
+	
+	private Object userData;
 
 	private final Collection<Series> series = new ArrayList<>();
 
@@ -68,9 +70,14 @@ public class HighchartsNgConfig {
 		return Builder.this;
 	    });
 	}
+	
+	public Builder withUserData(final Object userData) {
+	    this.userData = userData;
+	    return this;
+	}
 
 	public HighchartsNgConfig build() {
-	    return this.sink.setObject(new HighchartsNgConfig(options, series));
+	    return this.sink.setObject(new HighchartsNgConfig(options, series, userData));
 	}
     }
 
@@ -81,21 +88,32 @@ public class HighchartsNgConfig {
     private final Options options;
 
     private final Collection<Series> series;
+    
+    private final Object userData;
 
     @JsonCreator
     public HighchartsNgConfig(
 	    @JsonProperty("options") Options options, 
-	    @JsonProperty("series") Collection<Series> series)
+	    @JsonProperty("series") Collection<Series> series)	    
     {
-	this.options = options;
-	this.series = series;
+	this(options, series, null);
     }
 
+    public HighchartsNgConfig(Options options, Collection<Series> series, Object userData) {
+	this.options = options;
+	this.series = series;
+	this.userData = userData;
+    }
+    
     public Options getOptions() {
 	return options;
     }
 
     public Collection<Series> getSeries() {
 	return series;
+    }
+
+    public Object getUserData() {
+	return userData;
     }
 }

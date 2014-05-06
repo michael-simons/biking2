@@ -16,14 +16,23 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.misc.Summary;
+import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import org.junit.Test;
 
+import static java.time.LocalDate.now;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
@@ -54,5 +63,59 @@ public class MiscApiControllerTest {
 
 	assertThat(summary.getDateOfFirstRecord(), is(equalTo(now)));
 	assertThat(summary.getTotal(), is(equalTo(345.0)));
+    }
+    
+    @Test
+    public void testGetSummaryMinMaxPeriods() {
+	final Calendar now = Calendar.getInstance();	
+	final List<Bike> bikes = new ArrayList<>();	
+	// A bike with no milage should not lead to an error
+	bikes.add(new Bike("no-milage", now()));
+	bikes.add(
+		new Bike("some-milage", now())
+		    .addMilage(LocalDate.of(2009,1,1), 10).getBike()
+		    .addMilage(LocalDate.of(2009,2,1), 30).getBike()		
+		    .addMilage(LocalDate.of(2009,3,1), 33).getBike()		
+	);
+	bikes.add(
+		new Bike("more-milage", now())
+		    .addMilage(LocalDate.of(2009,1,1),  0).getBike()
+		    .addMilage(LocalDate.of(2009,2,1), 30).getBike()		
+		    .addMilage(LocalDate.of(2009,3,1), 70).getBike()						    	
+	);
+	
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	stub(bikeRepository.findAll()).toReturn(bikes);
+	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
+	final Summary summary = controller.getSummary();
+	assertNotNull(summary.getWorstPeriod());	
+	assertThat(summary.getWorstPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,2,1).atStartOfDay(ZoneId.systemDefault())))));
+	assertThat(summary.getWorstPeriod().getValue(), is(equalTo(43)));
+	
+	assertNotNull(summary.getBestPeriod());	
+	assertThat(summary.getBestPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,1,1).atStartOfDay(ZoneId.systemDefault())))));
+	assertThat(summary.getBestPeriod().getValue(), is(equalTo(50)));
+	
+	assertThat(summary.getAverage(), is(equalTo(93.0/2)));
+    }
+    
+    @Test
+    public void testGetSummaryMinMaxPeriodsWithoutPeriods() {
+	final Calendar now = Calendar.getInstance();	
+	final List<Bike> bikes = new ArrayList<>();	
+	bikes.add(new Bike("no-milage", now()));
+	
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	stub(bikeRepository.findAll()).toReturn(bikes);
+	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+	
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
+	final Summary summary = controller.getSummary();
+	assertNull(summary.getWorstPeriod());	
+	assertNull(summary.getBestPeriod());	
+	
+	assertThat(summary.getAverage(), is(equalTo(0.0)));
     }
 }

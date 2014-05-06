@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.persistence.entities;
 
+import ac.simons.biking2.misc.AccumulatedPeriod;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,13 +25,18 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -106,7 +112,7 @@ public class Bike implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
     @JsonIgnore
-    private List<Milage> milages = new ArrayList<>();
+    private final List<Milage> milages = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -163,10 +169,6 @@ public class Bike implements Serializable {
 	this.decommissionedOn = decommissionedOn;
     }
 
-    private List<Milage> getMilages() {
-	return this.milages;
-    }
-
     public Calendar getCreatedAt() {
 	return this.createdAt;
     }
@@ -206,7 +208,7 @@ public class Bike implements Serializable {
 
 	return this.periods;
     }
-
+        
     /**
      * Example of reducing a stream to a skalar value
      *
@@ -232,9 +234,28 @@ public class Bike implements Serializable {
 	return Optional.ofNullable(this.getPeriods().get(period)).orElse(0);
     }
     
+    /**
+     * Returns an array with 12 elements, containing the milages for each month
+     * of the given year
+     * 
+     * @param year The year in which the milages should be computed
+     * @return 12 values of milages for the month of the given year
+     */
     public int[] getMilagesInYear(int year) {	
 	final LocalDate january1st = LocalDate.of(year, Month.JANUARY, 1);
+	// The limit is necessary because the range contains 13 elements for 
+	// computing the correct periods, the last element is January 1st of year +1
 	return rangeClosed(0, 12).map(i -> getMilageInPeriod(january1st.plusMonths(i))).limit(12).toArray();
+    }
+    
+    /**
+     * Returns the sum of all milages in the given year
+     * 
+     * @param year The year for which the sum of milages should be computed
+     * @return  The sum of all milages in the given year
+     */
+    public int getMilageInYear(int year) {	
+	return Arrays.stream(getMilagesInYear(year)).sum();
     }
 
     public Calendar getBoughtOn() {
@@ -245,6 +266,10 @@ public class Bike implements Serializable {
 	this.boughtOn = boughtOn;
     }
 
+    public boolean hasMilages() {
+	return this.milages != null && this.milages.size() > 0;
+    }
+    
     @Override
     public int hashCode() {
 	int hash = 7;
@@ -262,5 +287,73 @@ public class Bike implements Serializable {
 	}
 	final Bike other = (Bike) obj;
 	return Objects.equals(this.id, other.id);
+    }
+    
+    public static int comparePeriodsByValue(Map.Entry<LocalDate, Integer> period1, Map.Entry<LocalDate, Integer> period2) {
+	return Integer.compare(period1.getValue(), period2.getValue());
+    }
+    
+    public static class BikeByMilageInYearComparator implements Comparator<Bike> {
+	private final int year;
+
+	public BikeByMilageInYearComparator(int year) {
+	    this.year = year;
+	}
+	
+	@Override
+	public int compare(Bike o1, Bike o2) {
+	    return Integer.compare(o1.getMilageInYear(year), o2.getMilageInYear(year));
+	}
+    }
+    
+    /**
+     * This method groups all periods of the given bikes by their period start and
+     * summarizes the value
+     * 
+     * @param bikes A likst of bikes whose milage periods should be grouped together
+     * @param entryFilter An optional filter for the entries
+     * @return A map of grouped periods
+     */
+    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {	
+	return bikes.stream()
+	    .filter(Bike::hasMilages)
+	    .flatMap(bike -> bike.getPeriods().entrySet().stream())			
+	    .filter(Optional.ofNullable(entryFilter).orElse(entry -> true))
+	    .collect(
+		Collectors.groupingBy(
+		    Map.Entry::getKey,
+		    Collectors.reducing(0, Map.Entry::getValue, Integer::sum)
+		)
+	    );
+    }    
+    
+    /**
+     * Returns the worst performing period in the list of summarized (grouped) periods
+     * 
+     * @param summarizedPeriods A list of grouped periods
+     * @return The worst (with the lowest value) period
+     */
+    public static AccumulatedPeriod getWorstPeriod(final Map<LocalDate, Integer> summarizedPeriods) {
+	 return summarizedPeriods
+			.entrySet()
+			.stream()
+			.min(Bike::comparePeriodsByValue)
+			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+			.orElse(null);
+    }
+    
+    /**
+     * Returns the best performing period in the list of summarized (grouped) periods
+     * 
+     * @param summarizedPeriods A list of grouped periods
+     * @return The best (with the highest value) period
+     */
+    public static AccumulatedPeriod getBestPeriod(final Map<LocalDate, Integer> summarizedPeriods) {
+	 return summarizedPeriods
+			.entrySet()
+			.stream()
+			.max(Bike::comparePeriodsByValue)
+			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+			.orElse(null);
     }
 }

@@ -65,7 +65,7 @@ biking2Controllers.controller('BikesCtrl', function($scope, $http, $modal) {
 		function() {
 		}
 	);
-    }
+    };
 });
 
 biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance, $http) {
@@ -144,6 +144,7 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
 		    function() {
 			$http.get('/api/charts/currentYear').success(function(data) {
 			    $scope.currentYearConfig.series = data.series;
+			    $scope.currentYearConfig.userData = data.userData;
 			});
 		    },
 		    function() {

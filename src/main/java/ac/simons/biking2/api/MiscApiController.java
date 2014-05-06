@@ -23,7 +23,9 @@ import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +63,14 @@ public class MiscApiController {
 	summary.setTotal(
 		allBikes.stream().mapToInt(Bike::getMilage).sum()
 		+ this.assortedTripRepository.getTotalDistance().doubleValue()
-	);
+	);	
+	
+	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(allBikes, null);
+		
+	summary.setWorstPeriod(Bike.getWorstPeriod(summarizedPeriods));	
+	summary.setBestPeriod(Bike.getBestPeriod(summarizedPeriods));
+	summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
+		
 	return summary;
     }
 
