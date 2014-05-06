@@ -48,6 +48,12 @@ public class BikeTest {
 		.addMilage(LocalDate.of(2014, 2, 1), 20).getBike()
 		.addMilage(LocalDate.of(2014, 3, 1), 50).getBike();	
     }
+    
+    @Test
+    public void testGetMilageInYear() {
+	Assert.assertThat(this.defaultTestBike.getMilageInYear(2013), is(equalTo(0)));
+	Assert.assertThat(this.defaultTestBike.getMilageInYear(2014), is(equalTo(50)));
+    }
 
     /**
      * Test of getPeriods method, of class Bike.

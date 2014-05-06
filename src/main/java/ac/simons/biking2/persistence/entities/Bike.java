@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -231,9 +232,28 @@ public class Bike implements Serializable {
 	return Optional.ofNullable(this.getPeriods().get(period)).orElse(0);
     }
     
+    /**
+     * Returns an array with 12 elements, containing the milages for each month
+     * of the given year
+     * 
+     * @param year The year in which the milages should be computed
+     * @return 12 values of milages for the month of the given year
+     */
     public int[] getMilagesInYear(int year) {	
 	final LocalDate january1st = LocalDate.of(year, Month.JANUARY, 1);
+	// The limit is necessary because the range contains 13 elements for 
+	// computing the correct periods, the last element is January 1st of year +1
 	return rangeClosed(0, 12).map(i -> getMilageInPeriod(january1st.plusMonths(i))).limit(12).toArray();
+    }
+    
+    /**
+     * Returns the sum of all milages in the given year
+     * 
+     * @param year The year for which the sum of milages should be computed
+     * @return  The sum of all milages in the given year
+     */
+    public int getMilageInYear(int year) {	
+	return Arrays.stream(getMilagesInYear(year)).sum();
     }
 
     public Calendar getBoughtOn() {
