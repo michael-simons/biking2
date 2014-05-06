@@ -83,6 +83,8 @@ public class ChartsController {
 	    return milagesInYear;
 	}).reduce(ChartsController::addArrays).orElse(generate(() -> 0).limit(12).toArray());
 	
+	userData.put("currentYearSum", Arrays.stream(sums).sum());
+	
 	// Add sum as spline and compute maximum y value
 	final int currentMaxYValue  = 
 		builder.series()

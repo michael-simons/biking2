@@ -21,7 +21,7 @@
 		<tr><th>Best:</th><td>{{ currentYearConfig.userData.bestPeriod.startOfPeriod | date:'MMMM'}}</td><td>{{currentYearConfig.userData.bestPeriod.value | number:0}}</td></tr>
 	    </tbody>
 	</table>
-	<p>Monthly average: {{currentYearConfig.userData.average | number:0}}km.</p>
+	<p>Current milage this year is {{currentYearConfig.userData.currentYearSum}}km, this is a monthly average of {{currentYearConfig.userData.average | number:0}}km.</p>
 	<p ng-hide="currentYearConfig.userData.preferredBike === null">Preferred bike in {{currentYearConfig.userData.currentYear}} is my "{{currentYearConfig.userData.preferredBike.name}}" so far.</p>
     </div>
 </div>
