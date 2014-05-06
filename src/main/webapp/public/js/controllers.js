@@ -144,6 +144,7 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
 		    function() {
 			$http.get('/api/charts/currentYear').success(function(data) {
 			    $scope.currentYearConfig.series = data.series;
+			    $scope.currentYearConfig.userData = data.userData;
 			});
 		    },
 		    function() {
