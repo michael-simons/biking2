@@ -166,6 +166,11 @@
 				<rule implementation="org.jacoco.maven.RuleConfiguration">
 				    <element>BUNDLE</element>
 				    <limits>
+					<limit implementation="org.jacoco.report.check.Limit">
+					    <counter>INSTRUCTION</counter>
+					    <value>COVEREDRATIO</value>
+					    <minimum>0.95</minimum>			
+					</limit>
 					<!--  implmentation is needed only for Maven 2  -->
 					<limit implementation="org.jacoco.report.check.Limit">
 					    <counter>COMPLEXITY</counter>
