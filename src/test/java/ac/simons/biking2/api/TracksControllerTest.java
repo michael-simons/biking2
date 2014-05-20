@@ -125,14 +125,12 @@ public class TracksControllerTest {
 	final List<String> contentTcx = Arrays.asList(content, "tcx");
 	
 	final File trackGpx = new File(tracksDir, String.format("%d.gpx", validId));
-	Files.write(trackGpx.toPath(), contentGpx);
-	trackGpx.createNewFile();
+	Files.write(trackGpx.toPath(), contentGpx);	
 	trackGpx.deleteOnExit();
 	stub(t.getTrackFile(tmpDir, "gpx")).toReturn(trackGpx);
 	
 	final File trackTcx = new File(tracksDir, String.format("%d.tcx", validId));
-	Files.write(trackTcx.toPath(), contentTcx);
-	trackTcx.createNewFile();
+	Files.write(trackTcx.toPath(), contentTcx);	
 	trackTcx.deleteOnExit();	
 	stub(t.getTrackFile(tmpDir, "tcx")).toReturn(trackTcx);
 		
