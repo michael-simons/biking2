@@ -24,13 +24,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -90,10 +94,59 @@ public class GalleryControllerTest {
 			.file(multipartFile)
 			.param("takenOn", "2014-03-24T23:00:00.000Z")
 			.param("description", "description")
-		)
-		.andDo(MockMvcResultHandlers.print())
+		)		
 		.andExpect(status().isOk())
 		.andExpect(content().string(objectMapper.writeValueAsString(galleryPicture)));
+    }
+    
+    @Test
+    public void shouldHandleIOExceptionsGracefully() throws Exception {
+	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
+	final GregorianCalendar takenOn = new GregorianCalendar(getTimeZone("UTC"));
+	takenOn.set(2014, 2, 24, 23, 0, 0);
+	final GalleryPicture galleryPicture = new GalleryPicture(takenOn, "description") {
+	    private static final long serialVersionUID = -3391535625175956488L;
+
+	    @Override
+	    public Integer getId() {
+		return 23;
+	    }
+	};
+	stub(repository.save(Mockito.any(GalleryPicture.class))).toReturn(galleryPicture);
+	// use non existing dir
+	final GalleryController controller = new GalleryController(repository, new File(this.tmpDir, "haha, got you"));
+
+	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	final MockMultipartFile multipartFile = new MockMultipartFile("imageData", this.getClass().getResourceAsStream("/IMG_0041.JPG"));
+
+	mockMvc
+		.perform(
+			fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
+			.file(multipartFile)
+			.param("takenOn", "2014-03-24T23:00:00.000Z")
+			.param("description", "description")
+		)		
+		.andExpect(status().isInternalServerError());
+    }
+    
+    @Test
+    public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
+	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);	
+	stub(repository.save(Mockito.any(GalleryPicture.class))).toThrow(new DataIntegrityViolationException("fud"));
+
+	final GalleryController controller = new GalleryController(repository, this.tmpDir);
+	
+	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	final MockMultipartFile multipartFile = new MockMultipartFile("imageData", this.getClass().getResourceAsStream("/IMG_0041.JPG"));
+
+	mockMvc
+		.perform(
+			fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
+			.file(multipartFile)
+			.param("takenOn", "2014-03-24T23:00:00.000Z")
+			.param("description", "description")
+		)		
+		.andExpect(status().isBadRequest());
     }
     
     @Test
@@ -204,6 +257,20 @@ public class GalleryControllerTest {
 	    .andReturn();	
 	
 	Mockito.verify(repository, times(3)).findOne(42);
+	Mockito.verifyNoMoreInteractions(repository);
+    }
+    
+    @Test
+    public void shouldGetGalleryPictures() {
+	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);	
+	Mockito.stub(repository.findAll(Mockito.any(Sort.class))).toReturn(new ArrayList<>());
+	final GalleryController controller = new GalleryController(repository, this.tmpDir);
+
+	final List<GalleryPicture> galleryPictures = controller.getGalleryPictures();
+	Assert.assertNotNull(galleryPictures);
+	Assert.assertEquals(0, galleryPictures.size());
+	
+	Mockito.verify(repository).findAll(Mockito.any(Sort.class));
 	Mockito.verifyNoMoreInteractions(repository);
     }
 }
