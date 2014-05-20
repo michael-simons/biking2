@@ -53,10 +53,11 @@ public class BikesController {
     @RequestMapping(value = "/api/bikes", method = GET)
     public List<Bike> getBikes(final @RequestParam(required = false, defaultValue = "false") boolean all) {
 	List<Bike> rv;
-	if(all)
+	if(all) {
 	    rv = bikeRepository.findAll(new Sort(Sort.Direction.ASC, "boughtOn", "decommissionedOn", "name"));
-	else
+	} else {
 	    rv = bikeRepository.findByDecommissionedOnIsNull(new Sort(Sort.Direction.ASC, "name"));
+	}
 	return rv;
     }
     
@@ -69,9 +70,9 @@ public class BikesController {
 	final Bike bike = bikeRepository.findOne(id);
 	
 	ResponseEntity<Milage> rv;	
-	if(bike == null)
+	if(bike == null) {
 	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	else {
+	} else {
 	    final Milage milage = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
 	    this.bikeRepository.save(bike);
 
