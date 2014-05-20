@@ -28,12 +28,17 @@ import java.nio.channels.Channels;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -111,6 +116,20 @@ public class BikingPicturesControllerTest {
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.filename", new File(bikingPictures, "45644.jpg").getAbsolutePath()))
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.start", 0l))
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.end", (long) this.testData.length));
+    }
+    
+    @Test
+    public void shouldGetGalleryPictures() {
+	final BikingPictureRepository repository = mock(BikingPictureRepository.class);
+	Mockito.stub(repository.findAll(Mockito.any(Sort.class))).toReturn(new ArrayList<>());
+	final BikingPicturesController controller = new BikingPicturesController(repository, this.tmpDir);
+
+	final List<BikingPicture> pictures = controller.getBikingPictures();
+	Assert.assertNotNull(pictures);
+	Assert.assertEquals(0, pictures.size());
+	
+	Mockito.verify(repository).findAll(Mockito.any(Sort.class));
+	Mockito.verifyNoMoreInteractions(repository);
     }
     
     public static class RegexMatcher extends BaseMatcher {
