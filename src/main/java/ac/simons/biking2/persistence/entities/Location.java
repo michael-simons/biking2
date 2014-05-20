@@ -111,7 +111,9 @@ public class Location implements Serializable {
     @Override
     public int hashCode() {
 	int hash = 7;
-	hash = 41 * hash + Objects.hashCode(this.id);
+	hash = 71 * hash + Objects.hashCode(this.latitude);
+	hash = 71 * hash + Objects.hashCode(this.longitude);
+	hash = 71 * hash + Objects.hashCode(this.createdAt);
 	return hash;
     }
 
@@ -124,6 +126,14 @@ public class Location implements Serializable {
 	    return false;
 	}
 	final Location other = (Location) obj;
-	return Objects.equals(this.id, other.id);
+	if (!Objects.equals(this.latitude, other.latitude)) {
+	    return false;
+	}
+	if (!Objects.equals(this.createdAt, other.createdAt)) {
+	    return false;
+	}
+	return true;
     }
+
+   
 }
