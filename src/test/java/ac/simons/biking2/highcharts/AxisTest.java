@@ -46,6 +46,12 @@ public class AxisTest {
 	assertThat(axis.getTickInterval(), is(equalTo(100)));
 	assertThat(axis.isEndOnTick(), is(true));
 	assertThat(axis.getTitle().getText(), is(equalTo("test")));
+	
+	axis = new Axis.Builder<>(object -> object)	
+		.enableEndOnTick()
+		.disableEndOnTick()	
+	.build();
+	assertThat(axis.isEndOnTick(), is(false));	
     }
 
 }
