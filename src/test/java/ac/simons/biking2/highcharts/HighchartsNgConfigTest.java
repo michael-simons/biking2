@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -51,5 +52,12 @@ public class HighchartsNgConfigTest {
 	final List<Series> hlp = new ArrayList<>(series);
 	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(1, 2))));
 	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3, 4))));
+    }
+    
+    @Test
+    public void testJsonCreator() {
+	final HighchartsNgConfig config = new HighchartsNgConfig(null, null);
+	// Make sure no user data can be injected
+	assertThat(config.getUserData(), is(nullValue()));
     }
 }
