@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -34,10 +35,12 @@ public class SeriesTest {
 		.withData(1.0, 2, 3)
 		.withName("testName")
 		.withType("testType")
+		.withColor("AABBCC")
 		.build();
 	assertThat(series.getData(), is(equalTo(Arrays.asList(1.0, 2, 3))));
 	assertThat(series.getName(), is(equalTo("testName")));
 	assertThat(series.getType(), is(equalTo("testType")));
+	assertThat(series.getColor(), is(equalTo("AABBCC")));
 		
 	series = new Series.Builder<>(object -> object)
 		.withData(1, 2, 3)
@@ -47,5 +50,6 @@ public class SeriesTest {
 	assertThat(series.getData(), is(equalTo(Arrays.asList(1, 2, 3))));
 	assertThat(series.getName(), is(equalTo("testName")));
 	assertThat(series.getType(), is(equalTo("testType")));
+	assertThat(series.getColor(), is(nullValue()));
     }
 }
