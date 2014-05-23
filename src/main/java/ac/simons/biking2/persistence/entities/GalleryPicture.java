@@ -105,11 +105,12 @@ public class GalleryPicture implements Serializable {
     public Calendar getCreatedAt() {
 	return createdAt;
     }
-    
+
     @Override
     public int hashCode() {
 	int hash = 3;
-	hash = 29 * hash + Objects.hashCode(this.id);
+	hash = 23 * hash + Objects.hashCode(this.takenOn);
+	hash = 23 * hash + Objects.hashCode(this.filename);
 	return hash;
     }
 
@@ -122,6 +123,12 @@ public class GalleryPicture implements Serializable {
 	    return false;
 	}
 	final GalleryPicture other = (GalleryPicture) obj;
-	return Objects.equals(this.id, other.id);
+	if (!Objects.equals(this.takenOn, other.takenOn)) {
+	    return false;
+	}
+	if (!Objects.equals(this.filename, other.filename)) {
+	    return false;
+	}
+	return true;
     }
 }
