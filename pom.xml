@@ -430,5 +430,11 @@
 		</exclusion>
 	    </exclusions>
 	</dependency>
+	<dependency>
+	    <groupId>org.outsideMyBox</groupId>
+	    <artifactId>testUtils</artifactId>
+	    <version>0.1.1</version>
+	    <scope>test</scope>
+	</dependency>
     </dependencies>
 </project>
