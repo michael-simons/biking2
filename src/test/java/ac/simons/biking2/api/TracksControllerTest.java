@@ -15,11 +15,14 @@
  */
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.api.BikingPicturesControllerTest.RegexMatcher;
 import ac.simons.biking2.config.PersistenceConfig;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -33,9 +36,12 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletResponse;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,12 +52,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static java.util.Calendar.getInstance;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.rules.ExpectedException.none;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
@@ -68,6 +74,9 @@ public class TracksControllerTest {
     private final File tmpDir;        
     private final File tracksDir;
     private final File gpsBabel;
+    
+    @Rule
+    public final ExpectedException expectedException = none();
     
     public TracksControllerTest() {
 	final int[] ids = new int[]{1, 2, 3};
@@ -278,5 +287,88 @@ public class TracksControllerTest {
 	Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
 	Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
 	Mockito.verify(trackRepository, Mockito.times(1)).delete(track);
+    }
+    
+    @Test
+    public void shouldNotCreateInvalidTracks() throws Exception {
+	final TrackRepository trackRepository = mock(TrackRepository.class);	
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	
+	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	
+	// Empty data
+	final MockMultipartFile multipartFile = new MockMultipartFile("trackData", new byte[0]);		
+	mockMvc
+		.perform(
+			fileUpload("http://biking.michael-simons.eu/api/tracks")
+			    .file(multipartFile)
+			    .param("name", "poef")
+			    .param("coveredOn", "2014-03-24T23:00:00.000Z")
+			    .param("description", "description")
+		)		
+		.andExpect(status().isBadRequest());
+	
+	// No data
+	mockMvc
+	    .perform(
+		    fileUpload("http://biking.michael-simons.eu/api/tracks")
+			.param("name", "poef")
+			.param("coveredOn", "2014-03-24T23:00:00.000Z")
+			.param("description", "description")
+	    )	    
+	    .andExpect(status().isBadRequest());
+	
+	Mockito.verifyZeroInteractions(trackRepository);
+    }
+    
+    @Test
+    public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
+	final TrackRepository trackRepository = mock(TrackRepository.class);
+	stub(trackRepository.save(Matchers.any(Track.class))).toThrow(new DataIntegrityViolationException("fud"));
+	
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	
+	MockMultipartFile trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/test.tcx"));
+	mockMvc
+		.perform(
+			fileUpload("http://biking.michael-simons.eu/api/tracks")
+			    .file(trackData)
+			    .param("name", "name")
+			    .param("coveredOn", "2014-01-01T21:21:21.000Z")
+			    .param("description", "description")
+			    .param("type", "biking")
+		)		
+		.andExpect(status().isConflict());	
+	
+	Mockito.verify(trackRepository).save(Mockito.any(Track.class));
+	Mockito.verifyNoMoreInteractions(trackRepository);
+    }
+    
+    @Test
+    public void shouldHandleIOExceptionsGracefully() throws Exception {
+	final Track track = new Track() {	    
+	    private static final long serialVersionUID = -3391535625175956488L;
+
+	    @Override
+	    public Integer getId() {
+		return 4223;
+	    }	    
+
+	    @Override
+	    public String getPrettyId() {
+		return Integer.toString(this.getId(), 36);
+	    }
+	};	
+	final TrackRepository trackRepository = mock(TrackRepository.class);	
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+
+	final File stopper = track.getTrackFile(this.tmpDir, "tcx");
+	// create a directory so that the controller cannot write to it
+	Assert.assertTrue(stopper.mkdir());
+	
+	this.expectedException.expect(RuntimeException.class);	
+	this.expectedException.expectMessage(new RegexMatcher(".*\\(Is a directory\\)$"));
+	controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
     }
 }
