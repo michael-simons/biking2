@@ -71,13 +71,6 @@ public class Milage implements Serializable, Comparable<Milage> {
     @NotNull
     private Calendar createdAt;
 
-    @PrePersist
-    public void prePersist() {
-	if (this.createdAt == null) {
-	    this.createdAt = Calendar.getInstance();
-	}
-    }
-
     protected Milage() {
     }
 
@@ -85,6 +78,13 @@ public class Milage implements Serializable, Comparable<Milage> {
 	this.bike = bike;
 	this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));	
 	this.amount = BigDecimal.valueOf(amount);
+    }
+    
+    @PrePersist
+    public void prePersist() {
+	if (this.createdAt == null) {
+	    this.createdAt = Calendar.getInstance();
+	}
     }
 
     public Integer getId() {
@@ -110,7 +110,8 @@ public class Milage implements Serializable, Comparable<Milage> {
     @Override
     public int hashCode() {
 	int hash = 7;
-	hash = 61 * hash + Objects.hashCode(this.id);
+	hash = 31 * hash + Objects.hashCode(this.recordedOn);
+	hash = 31 * hash + Objects.hashCode(this.bike);
 	return hash;
     }
 
@@ -123,7 +124,13 @@ public class Milage implements Serializable, Comparable<Milage> {
 	    return false;
 	}
 	final Milage other = (Milage) obj;
-	return Objects.equals(this.id, other.id);
+	if (!Objects.equals(this.recordedOn, other.recordedOn)) {
+	    return false;
+	}
+	if (!Objects.equals(this.amount, other.amount)) {
+	    return false;
+	}
+	return Objects.equals(this.bike, other.bike);
     }
 
     @Override
