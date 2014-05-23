@@ -94,32 +94,20 @@ public class BikingPicture implements Serializable {
 
     public Integer getExternalId() {
 	return externalId;
-    }
-
-    public void setExternalId(Integer externalId) {
-	this.externalId = externalId;
-    }
+    }    
 
     public String getLink() {
 	return this.link;
     }
-
-    public void setLink(String link) {
-	this.link = link;
-    }
-
+   
     public Calendar getPubDate() {
 	return pubDate;
     }
 
-    public void setPubDate(Calendar pubDate) {
-	this.pubDate = pubDate;
-    }
-
     @Override
     public int hashCode() {
-	int hash = 7;
-	hash = 47 * hash + Objects.hashCode(this.id);
+	int hash = 5;
+	hash = 67 * hash + Objects.hashCode(this.externalId);
 	return hash;
     }
 
@@ -132,9 +120,6 @@ public class BikingPicture implements Serializable {
 	    return false;
 	}
 	final BikingPicture other = (BikingPicture) obj;
-	if (!Objects.equals(this.id, other.id)) {
-	    return false;
-	}
-	return true;
+	return Objects.equals(this.externalId, other.externalId);
     }
 }
