@@ -142,6 +142,8 @@
 		    <excludes>
 			<!-- Application starter -->
 			<exclude>ac/simons/biking2/Application.class</exclude>
+			<!-- Checked JAXBException while creating contexts -->
+			<exclude>ac/simons/biking2/misc/JAXBContextFactory.class</exclude>
 			<!-- Configuration -->
 			<exclude>ac/simons/biking2/config/*</exclude>			
 		    </excludes>

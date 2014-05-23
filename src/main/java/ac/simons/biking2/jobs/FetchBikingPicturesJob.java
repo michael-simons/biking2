@@ -16,6 +16,7 @@
 package ac.simons.biking2.jobs;
 
 import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.misc.JAXBContextFactory;
 import ac.simons.biking2.persistence.entities.BikingPicture;
 import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
 import ac.simons.biking2.rss.RSS;
@@ -71,11 +72,7 @@ public class FetchBikingPicturesJob {
 	    throw new RuntimeException("Could not create bikingPicturesStorage!");
 	}
 
-	try {
-	    this.rssContext = JAXBContext.newInstance(RSS.class);
-	} catch (JAXBException e) {
-	    throw new RuntimeException(e);
-	}
+	this.rssContext = JAXBContextFactory.createContext(RSS.class);	
     }
 
     @PostConstruct

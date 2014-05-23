@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.rss;
 
+import ac.simons.biking2.misc.JAXBContextFactory;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import javax.xml.bind.JAXBContext;
@@ -28,14 +29,13 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
- *
- * @author Michael J. Simons
+ * @author Michael J. Simons, 2014-02-18
  */
 public class RSSTest {
 
     @Test
     public void testJAXBMapping() throws JAXBException {
-	JAXBContext context = JAXBContext.newInstance(RSS.class);
+	JAXBContext context = JAXBContextFactory.createContext(RSS.class);
 
 	final Unmarshaller unmarschaller = context.createUnmarshaller();
 	final RSS rss = (RSS) unmarschaller.unmarshal(this.getClass().getResourceAsStream("/biking_pictures.rss"));

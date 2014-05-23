@@ -16,6 +16,7 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.gpx.GPX;
+import ac.simons.biking2.misc.JAXBContextFactory;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.entities.Track.Type;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
@@ -81,11 +82,7 @@ public class TracksController {
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
 	this.gpsBabel = gpsBabel;
 	
-	try {
-	    this.gpxContext = JAXBContext.newInstance(GPX.class);
-	} catch (JAXBException e) {
-	    throw new RuntimeException(e);
-	}
+	this.gpxContext = JAXBContextFactory.createContext(GPX.class);	
     }
 
     @RequestMapping("/api/tracks")
