@@ -88,16 +88,8 @@ public class Location implements Serializable {
 	return this.latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
-	this.latitude = latitude;
-    }
-
     public BigDecimal getLongitude() {
 	return this.longitude;
-    }
-
-    public void setLongitude(BigDecimal longitude) {
-	this.longitude = longitude;
     }
 
     public String getDescription() {
@@ -134,6 +126,4 @@ public class Location implements Serializable {
 	}
 	return true;
     }
-
-   
 }
