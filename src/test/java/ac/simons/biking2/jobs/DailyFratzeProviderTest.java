@@ -53,4 +53,11 @@ public class DailyFratzeProviderTest {
 	URLConnection connection = dailyFratzeProvider.getRSSConnection("asd");
 	Assert.assertNull(connection);	
     }
+    
+    @Test
+    public void shouldHandleImageUrlExceptionsGracefully() {
+	final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef", "size/%s/id/%d.jpg");
+	URLConnection connection = dailyFratzeProvider.getImageConnection(23);
+	Assert.assertNull(connection);
+    }
 }

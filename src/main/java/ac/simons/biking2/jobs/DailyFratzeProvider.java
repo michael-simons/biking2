@@ -34,10 +34,16 @@ import org.springframework.stereotype.Component;
 @ConditionalOnExpression(value = "environment['biking2.dailyfratze-access-token'] != null && !environment['biking2.dailyfratze-access-token'].isEmpty()")
 public class DailyFratzeProvider {    
     private final String accessToken;    
+    private final String imageUrlFormat;
     
     @Autowired
     public DailyFratzeProvider(final @Value("${biking2.dailyfratze-access-token}") String accessToken) {
+	this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
+    }
+    
+    DailyFratzeProvider(final String accessToken, final String imageUrlFormat) {
 	this.accessToken = accessToken;
+	this.imageUrlFormat = imageUrlFormat;
     }
     
     public URLConnection getRSSConnection(final String url) {
@@ -53,7 +59,7 @@ public class DailyFratzeProvider {
     public URLConnection getImageConnection(final Integer id) {
 	URLConnection rv = null;
 	try {	    		
-	    rv = new URL(String.format("https://dailyfratze.de/api/images/%s/%d.jpg", "s", id)).openConnection();	    
+	    rv = new URL(String.format(imageUrlFormat, "s", id)).openConnection();	    
 	    rv.setRequestProperty ("Authorization", String.format("Bearer %s", accessToken));
 	} catch (IOException ex) {	    
 	    Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);

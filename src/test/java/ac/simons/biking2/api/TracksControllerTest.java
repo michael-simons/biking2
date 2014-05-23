@@ -346,7 +346,7 @@ public class TracksControllerTest {
     }
     
     @Test
-    public void shouldHandleIOExceptionsGracefully() throws Exception {
+    public void shouldHandleIOExceptionsGracefully1() throws Exception {
 	Track track = Mockito.mock(Track.class);
 	Mockito.stub(track.getId()).toReturn(4223);
 	Mockito.stub(track.getPrettyId()).toReturn(Integer.toString(4223, 36));
@@ -359,5 +359,42 @@ public class TracksControllerTest {
 	this.expectedException.expect(RuntimeException.class);	
 	this.expectedException.expectMessage(new RegexMatcher(".*\\(Is a directory\\)$"));
 	controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
+	
+	Mockito.verify(track);
+	Mockito.verifyNoMoreInteractions(track);
+    }
+    
+    @Test
+    public void shouldHandleIOExceptionsGracefully2() throws Exception {
+	Track track = Mockito.mock(Track.class);	
+	Mockito.stub(track.getTrackFile(this.tmpDir, "tcx")).toReturn(File.createTempFile("4223", ".tcx"));
+	Mockito.stub(track.getTrackFile(this.tmpDir, "gpx")).toReturn(File.createTempFile("4223", ".gpx"));
+	
+	final TrackRepository trackRepository = mock(TrackRepository.class);	
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, new File("/iam/not/gpsBabel").getAbsolutePath());
+	
+	this.expectedException.expect(RuntimeException.class);	
+	this.expectedException.expectMessage("java.io.IOException: Cannot run program \"/iam/not/gpsBabel\": error=2, No such file or directory");
+	controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
+	
+	Mockito.verify(track);
+	Mockito.verifyNoMoreInteractions(track);
+    }
+    
+    @Test
+    public void shouldHandleInvalidTcxFiles() throws Exception {
+	Track track = Mockito.mock(Track.class);
+	Mockito.stub(track.getTrackFile(this.tmpDir, "tcx")).toReturn(File.createTempFile("4223", ".tcx"));
+	Mockito.stub(track.getTrackFile(this.tmpDir, "gpx")).toReturn(File.createTempFile("4223", ".gpx"));
+	
+	final TrackRepository trackRepository = mock(TrackRepository.class);	
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	
+	this.expectedException.expect(RuntimeException.class);	
+	this.expectedException.expectMessage("GPSBabel could not convert the input file!");
+	controller.storeFile(track, this.getClass().getResourceAsStream("/test-invalid.tcx"));
+	
+	Mockito.verify(track);
+	Mockito.verifyNoMoreInteractions(track);
     }
 }
