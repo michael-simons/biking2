@@ -17,10 +17,12 @@ package ac.simons.biking2.persistence.entities;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,7 +35,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.rules.ExpectedException.none;
 
 /**
- *
  * @author Michael J. Simons
  */
 public class BikeTest {
@@ -47,6 +48,33 @@ public class BikeTest {
 		.addMilage(LocalDate.of(2014, 1, 1), 0).getBike()
 		.addMilage(LocalDate.of(2014, 2, 1), 20).getBike()
 		.addMilage(LocalDate.of(2014, 3, 1), 50).getBike();	
+    }
+    
+    @Test
+    public void beanShouldWorkAsExpected() {
+	Bike bike = new Bike("poef", LocalDate.now().withDayOfMonth(1));
+	bike.prePersist();
+	
+	Bike same = new Bike("poef", LocalDate.now().withDayOfMonth(1));
+	same.prePersist();
+	
+	Bike other = new Bike("other", LocalDate.now().withDayOfMonth(1));
+	other.prePersist();
+	final Calendar now = Calendar.getInstance();
+	other.setBoughtOn(now);
+	other.setDecommissionedOn(now);
+		
+	Assert.assertNull(bike.getId());
+	Assert.assertNotNull(bike.getCreatedAt());
+	Assert.assertEquals(bike, same);
+	Assert.assertNotEquals(bike, other);
+	Assert.assertNotEquals(bike, null);
+	Assert.assertNotEquals(bike, "somethingElse");
+	Assert.assertNull(bike.getDecommissionedOn());
+	Assert.assertEquals(GregorianCalendar.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault())), bike.getBoughtOn());
+	
+	Assert.assertEquals(now, other.getBoughtOn());
+	Assert.assertEquals(now, other.getDecommissionedOn());
     }
     
     @Test
