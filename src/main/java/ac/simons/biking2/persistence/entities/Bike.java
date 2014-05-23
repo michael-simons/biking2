@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -147,10 +146,6 @@ public class Bike implements Serializable {
 
     public String getName() {
 	return this.name;
-    }
-
-    public void setName(String name) {
-	this.name = name;
     }
 
     public String getColor() {
