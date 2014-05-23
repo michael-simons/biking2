@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.misc.About;
 import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static java.time.LocalDate.now;
@@ -117,5 +119,27 @@ public class MiscApiControllerTest {
 	assertNull(summary.getBestPeriod());	
 	
 	assertThat(summary.getAverage(), is(equalTo(0.0)));
+    }
+    
+    @Test
+    public void testGetHome() {
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
+	
+	Assert.assertEquals(this.home, controller.getHome());
+    }
+    
+    @Test
+    public void testGetAbout() {
+	final BuildProperties buildProperties = new BuildProperties();
+	
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, buildProperties);
+	
+	final About about = controller.getAbout();
+	Assert.assertNotNull(about);
+	Assert.assertNotNull(about.getVm());
+	Assert.assertNotNull(about.getBuild());
+	Assert.assertEquals(buildProperties, about.getBuild());
     }
 }
