@@ -86,7 +86,7 @@ public class MiscApiController {
 
 	final Runtime runtime = getRuntime();	
 	final long freeMemory = runtime.freeMemory();
-	vMProperties.setAvailableMemory(runtime.totalMemory());
+	vMProperties.setTotalMemory(runtime.totalMemory());
 	vMProperties.setUsedMemory(runtime.totalMemory() - freeMemory);
 	vMProperties.setFreeMemory(freeMemory);
 	vMProperties.setMaxMemory(runtime.maxMemory());

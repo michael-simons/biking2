@@ -73,14 +73,6 @@ public class About {
 	    this.freeMemory = freeMemory;
 	}
 	
-	public Long getAvailableMemory() {
-	    return totalMemory;
-	}
-
-	public void setAvailableMemory(Long availableMemory) {
-	    this.totalMemory = availableMemory;
-	}
-
 	public Long getTotalMemory() {
 	    return totalMemory;
 	}
