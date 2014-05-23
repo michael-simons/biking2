@@ -80,7 +80,7 @@ public class MiscApiController {
     }
 
     @RequestMapping("/about")
-    public About about() {
+    public About getAbout() {
 	final About about = new About();
 	final VMProperties vMProperties = new VMProperties();
 
