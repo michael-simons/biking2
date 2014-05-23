@@ -61,6 +61,14 @@ public class AssortedTrip implements Serializable {
     @NotNull
     private BigDecimal distance;
 
+    protected AssortedTrip() {	
+    }
+    
+    public AssortedTrip(Calendar coveredOn, BigDecimal distance) {
+	this.coveredOn = coveredOn;
+	this.distance = distance;
+    }
+    
     public Integer getId() {
 	return id;
     }
@@ -69,22 +77,15 @@ public class AssortedTrip implements Serializable {
 	return coveredOn;
     }
 
-    public void setCoveredOn(Calendar coveredOn) {
-	this.coveredOn = coveredOn;
-    }
-
     public BigDecimal getDistance() {
 	return distance;
     }
 
-    public void setDistance(BigDecimal distance) {
-	this.distance = distance;
-    }
-
     @Override
     public int hashCode() {
-	int hash = 3;
-	hash = 79 * hash + Objects.hashCode(this.id);
+	int hash = 5;
+	hash = 83 * hash + Objects.hashCode(this.coveredOn);
+	hash = 83 * hash + Objects.hashCode(this.distance);
 	return hash;
     }
 
@@ -97,9 +98,12 @@ public class AssortedTrip implements Serializable {
 	    return false;
 	}
 	final AssortedTrip other = (AssortedTrip) obj;
-	if (!Objects.equals(this.id, other.id)) {
+	if (!Objects.equals(this.coveredOn, other.coveredOn)) {
+	    return false;
+	}
+	if (!Objects.equals(this.distance, other.distance)) {
 	    return false;
 	}
 	return true;
-    }
+    }   
 }
