@@ -347,25 +347,14 @@ public class TracksControllerTest {
     
     @Test
     public void shouldHandleIOExceptionsGracefully() throws Exception {
-	final Track track = new Track() {	    
-	    private static final long serialVersionUID = -3391535625175956488L;
-
-	    @Override
-	    public Integer getId() {
-		return 4223;
-	    }	    
-
-	    @Override
-	    public String getPrettyId() {
-		return Integer.toString(this.getId(), 36);
-	    }
-	};	
+	Track track = Mockito.mock(Track.class);
+	Mockito.stub(track.getId()).toReturn(4223);
+	Mockito.stub(track.getPrettyId()).toReturn(Integer.toString(4223, 36));
+	// return a directory so that the controller cannot write to it
+	Mockito.stub(track.getTrackFile(this.tmpDir, "tcx")).toReturn(this.tmpDir);
+	
 	final TrackRepository trackRepository = mock(TrackRepository.class);	
 	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
-
-	final File stopper = track.getTrackFile(this.tmpDir, "tcx");
-	// create a directory so that the controller cannot write to it
-	Assert.assertTrue(stopper.mkdir());
 	
 	this.expectedException.expect(RuntimeException.class);	
 	this.expectedException.expectMessage(new RegexMatcher(".*\\(Is a directory\\)$"));

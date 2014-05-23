@@ -111,10 +111,8 @@ public class TracksController {
 	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	else {
 	    try {
-		Track track = new Track();
-		track.setCoveredOn(GregorianCalendar.from(coveredOn));
+		Track track = new Track(name, GregorianCalendar.from(coveredOn));
 		track.setDescription(description);
-		track.setName(name);
 		track.setType(type);
 		
 		track = this.trackRepository.save(track);	   
