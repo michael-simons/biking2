@@ -53,8 +53,7 @@
 	<highcharts.version>3.0.9</highcharts.version>
 	<openlayers.version>2.13.1</openlayers.version>
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
-	<angular-file-upload.version>1.2.5</angular-file-upload.version>
-	<activemq.version>5.9.0</activemq.version>
+	<angular-file-upload.version>1.2.5</angular-file-upload.version>	
 	
 	<maven.compiler.source>${java.version}</maven.compiler.source>
 	<maven.compiler.target>${java.version}</maven.compiler.target>
@@ -370,19 +369,28 @@
 	    <version>1.1.2.RELEASE</version>
 	</dependency>
 	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-broker</artifactId>
-	    <version>${activemq.version}</version>			
+	    <groupId>org.fusesource.hawtdispatch</groupId>
+	    <artifactId>hawtdispatch-transport</artifactId>
+	    <version>1.21</version>
 	</dependency>
 	<dependency>
 	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-client</artifactId>
-	    <version>${activemq.version}</version>	    
+	    <artifactId>activemq-broker</artifactId>	    		
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-client</artifactId>	    	    
 	</dependency>
 	<dependency>
 	    <groupId>org.apache.activemq</groupId>
 	    <artifactId>activemq-mqtt</artifactId>
-	    <version>${activemq.version}</version>			
+	    <version>${activemq.version}</version>	
+	    <exclusions>
+		<exclusion>
+		    <groupId>org.fusesource.hawtdispatch</groupId>
+		    <artifactId>hawtdispatch-transport</artifactId>
+		</exclusion>
+	    </exclusions>		
 	</dependency>
 	<dependency>
 	    <groupId>org.apache.activemq</groupId>
