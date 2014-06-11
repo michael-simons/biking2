@@ -110,6 +110,14 @@ public class Track implements Serializable {
     @Enumerated(EnumType.STRING)
     private Type type = Type.biking;
 
+    protected Track() {	
+    }
+    
+    public Track(String name, Calendar coveredOn) {
+	this.name = name;
+	this.coveredOn = coveredOn;
+    }
+
     public Integer getId() {
 	return this.id;
     }
@@ -118,16 +126,8 @@ public class Track implements Serializable {
 	return this.name;
     }
 
-    public void setName(String name) {
-	this.name = name;
-    }
-
     public Calendar getCoveredOn() {
 	return this.coveredOn;
-    }
-
-    public void setCoveredOn(Calendar coveredOn) {
-	this.coveredOn = coveredOn;
     }
 
     public String getDescription() {
@@ -180,17 +180,18 @@ public class Track implements Serializable {
 
     @JsonProperty("id")
     public String getPrettyId() {
-	return Integer.toString(this.id, 36);
+	return this.getId() == null ? "" : Integer.toString(this.getId(), 36);
     }
 
     public File getTrackFile(final File datastoreBaseDirectory, final String format) {
 	return new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, this.getId(), format));
     }
-    
+
     @Override
     public int hashCode() {
-	int hash = 5;
-	hash = 67 * hash + Objects.hashCode(this.id);
+	int hash = 7;
+	hash = 31 * hash + Objects.hashCode(this.name);
+	hash = 31 * hash + Objects.hashCode(this.coveredOn);
 	return hash;
     }
 
@@ -203,6 +204,12 @@ public class Track implements Serializable {
 	    return false;
 	}
 	final Track other = (Track) obj;
-	return Objects.equals(this.id, other.id);
-    }
+	if (!Objects.equals(this.name, other.name)) {
+	    return false;
+	}
+	if (!Objects.equals(this.coveredOn, other.coveredOn)) {
+	    return false;
+	}
+	return true;
+    }    
 }

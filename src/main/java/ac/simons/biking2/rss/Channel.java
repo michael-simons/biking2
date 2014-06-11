@@ -16,11 +16,14 @@
 package ac.simons.biking2.rss;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * @author Michael J. Simons, 2014-02-17
@@ -43,11 +46,11 @@ public class Channel {
     private List<Item> items;
     
     public String getPrevious() {
-	return links.stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
+	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
     }
     
     public String getNext() {
-	return links.stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();	
+	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();	
     }
     
     public String getTitle() {

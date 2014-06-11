@@ -24,7 +24,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -69,13 +68,6 @@ public class Location implements Serializable {
 	this.createdAt = createdAt;
     }
 
-    @PrePersist
-    public void prePersist() {
-	if (this.createdAt == null) {
-	    this.createdAt = Calendar.getInstance();
-	}
-    }
-
     public Integer getId() {
 	return this.id;
     }
@@ -88,16 +80,8 @@ public class Location implements Serializable {
 	return this.latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
-	this.latitude = latitude;
-    }
-
     public BigDecimal getLongitude() {
 	return this.longitude;
-    }
-
-    public void setLongitude(BigDecimal longitude) {
-	this.longitude = longitude;
     }
 
     public String getDescription() {
@@ -111,7 +95,9 @@ public class Location implements Serializable {
     @Override
     public int hashCode() {
 	int hash = 7;
-	hash = 41 * hash + Objects.hashCode(this.id);
+	hash = 79 * hash + Objects.hashCode(this.latitude);
+	hash = 79 * hash + Objects.hashCode(this.longitude);
+	hash = 79 * hash + Objects.hashCode(this.createdAt);
 	return hash;
     }
 
@@ -124,6 +110,12 @@ public class Location implements Serializable {
 	    return false;
 	}
 	final Location other = (Location) obj;
-	return Objects.equals(this.id, other.id);
+	if (!Objects.equals(this.latitude, other.latitude)) {
+	    return false;
+	}
+	if (!Objects.equals(this.longitude, other.longitude)) {
+	    return false;
+	}
+	return Objects.equals(this.createdAt, other.createdAt);
     }
 }

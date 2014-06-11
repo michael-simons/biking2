@@ -19,9 +19,14 @@ import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -44,6 +49,27 @@ public class BikesControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Test
+    public void shouldGetBikes() {
+	final BikeRepository repository = mock(BikeRepository.class);
+	stub(repository.findAll(any(Sort.class))).toReturn(new ArrayList<>());
+	stub(repository.findByDecommissionedOnIsNull(any(Sort.class))).toReturn(new ArrayList<>());
+	
+	final BikesController controller = new BikesController(repository);
+		
+	List<Bike> bikes = controller.getBikes(false);
+	Assert.assertNotNull(bikes);
+	Assert.assertEquals(0, bikes.size());
+	
+	bikes = controller.getBikes(true);
+	Assert.assertNotNull(bikes);
+	Assert.assertEquals(0, bikes.size());
+	
+	Mockito.verify(repository).findAll(Mockito.any(Sort.class));
+	Mockito.verify(repository).findByDecommissionedOnIsNull(Mockito.any(Sort.class));
+	Mockito.verifyNoMoreInteractions(repository);	
+    }
+    
     @Test
     public void testCreateMilage() throws Exception {
 	LocalDate now = now();

@@ -80,13 +80,13 @@ public class MiscApiController {
     }
 
     @RequestMapping("/about")
-    public About about() {
+    public About getAbout() {
 	final About about = new About();
 	final VMProperties vMProperties = new VMProperties();
 
 	final Runtime runtime = getRuntime();	
 	final long freeMemory = runtime.freeMemory();
-	vMProperties.setAvailableMemory(runtime.totalMemory());
+	vMProperties.setTotalMemory(runtime.totalMemory());
 	vMProperties.setUsedMemory(runtime.totalMemory() - freeMemory);
 	vMProperties.setFreeMemory(freeMemory);
 	vMProperties.setMaxMemory(runtime.maxMemory());

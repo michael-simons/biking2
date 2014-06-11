@@ -83,10 +83,6 @@ public class GalleryController {
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
     }
 
-    public void setFilenameGenerator(FilenameGenerator filenameGenerator) {
-	this.filenameGenerator = filenameGenerator;
-    }
-
     @RequestMapping("/api/galleryPictures")
     public @ResponseBody
     List<GalleryPicture> getGalleryPictures() {

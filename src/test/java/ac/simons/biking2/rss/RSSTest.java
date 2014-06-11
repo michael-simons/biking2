@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.rss;
 
+import ac.simons.biking2.misc.JAXBContextFactory;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import javax.xml.bind.JAXBContext;
@@ -24,21 +25,22 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
- *
- * @author Michael J. Simons
+ * @author Michael J. Simons, 2014-02-18
  */
 public class RSSTest {
 
     @Test
     public void testJAXBMapping() throws JAXBException {
-	JAXBContext context = JAXBContext.newInstance(RSS.class);
+	JAXBContext context = JAXBContextFactory.createContext(RSS.class);
 
 	final Unmarshaller unmarschaller = context.createUnmarshaller();
 	final RSS rss = (RSS) unmarschaller.unmarshal(this.getClass().getResourceAsStream("/biking_pictures.rss"));
 
+	assertThat(rss.getVersion(), is(equalTo("2.0")));
 	assertThat(rss.getChannel().getLink(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?page=1&dir=desc")));
 	assertThat(rss.getChannel().getDescription(), is(equalTo("DailyFratze.de: \"A daily picture - everyday.\".")));
 	assertThat(rss.getChannel().getLinks().get(0).getHref(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=1")));
@@ -57,5 +59,8 @@ public class RSSTest {
 	assertThat(item.getContent().size(), is(equalTo(2)));
 	assertThat(item.getContent().get(0).getUrl(), is(equalTo("http://dailyfratze.de/fratzen/m/45644.jpg")));
 	assertThat(item.getContent().get(1).getUrl(), is(equalTo("http://dailyfratze.de/fratzen/l/45644.jpg")));
-    }
+	
+	rss.setChannel(null);
+	assertThat(rss.getChannel(), is(nullValue()));
+    }    
 }

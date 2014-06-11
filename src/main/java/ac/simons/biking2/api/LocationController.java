@@ -62,7 +62,7 @@ public class LocationController {
 	ResponseEntity<Location> rv;
 
 	try {
-	    rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.OK);
+	    rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.CREATED);
 	} catch (DataIntegrityViolationException e) {
 	    rv = new ResponseEntity<>(HttpStatus.CONFLICT);
 	}

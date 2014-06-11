@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -149,10 +148,6 @@ public class Bike implements Serializable {
 	return this.name;
     }
 
-    public void setName(String name) {
-	this.name = name;
-    }
-
     public String getColor() {
 	return this.color;
     }
@@ -269,11 +264,11 @@ public class Bike implements Serializable {
     public boolean hasMilages() {
 	return this.milages != null && this.milages.size() > 0;
     }
-    
+
     @Override
     public int hashCode() {
 	int hash = 7;
-	hash = 17 * hash + Objects.hashCode(this.id);
+	hash = 97 * hash + Objects.hashCode(this.name);
 	return hash;
     }
 
@@ -286,7 +281,10 @@ public class Bike implements Serializable {
 	    return false;
 	}
 	final Bike other = (Bike) obj;
-	return Objects.equals(this.id, other.id);
+	if (!Objects.equals(this.name, other.name)) {
+	    return false;
+	}
+	return true;
     }
     
     public static int comparePeriodsByValue(Map.Entry<LocalDate, Integer> period1, Map.Entry<LocalDate, Integer> period2) {
