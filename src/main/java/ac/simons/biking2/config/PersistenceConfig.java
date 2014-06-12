@@ -21,14 +21,12 @@ import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import org.hibernate.dialect.H2Dialect;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
-import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -90,7 +88,7 @@ public class PersistenceConfig {
     }
 
     @Bean
-    public FactoryBean<EntityManagerFactory> entityManagerFactory(final Environment environment, final DataSource dataSource, final JpaVendorAdapter jpaVendorAdapter) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(final Environment environment, final DataSource dataSource, final JpaVendorAdapter jpaVendorAdapter) {
 	final Map<String, String> properties = new HashMap<>();
 	properties.put("hibernate.generate_statistics", "false");
 	if (environment.acceptsProfiles("dev")) {
@@ -106,10 +104,5 @@ public class PersistenceConfig {
 	rv.setLoadTimeWeaver(new InstrumentationLoadTimeWeaver());
 	rv.setJpaPropertyMap(properties);
 	return rv;
-    }
-    
-    @Bean
-    public HibernateExceptionTranslator hibernateExceptionTranslator() {
-	return new HibernateExceptionTranslator();
-    }
+    }    
 }

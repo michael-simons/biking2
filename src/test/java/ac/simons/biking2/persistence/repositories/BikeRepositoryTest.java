@@ -28,9 +28,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -39,6 +44,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.rules.ExpectedException.none;
 
 /**
  * This is an integration test of the generated JpaRepositry implementation
@@ -56,6 +62,18 @@ public class BikeRepositoryTest {
     @Autowired
     private DataSource dataSource;
 
+    @Rule
+    public final ExpectedException expectedException = none();
+    
+    @Test    
+    @Transactional
+    @Rollback
+    public void nameShouldBeUnique() {
+	// There's a bike1 in the test data
+	this.expectedException.expect(DataIntegrityViolationException.class);
+	this.bikeRepository.save(new Bike("bike1", LocalDate.now()));		
+    }
+    
     @Test
     public void testFindActive() {
 	final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);
