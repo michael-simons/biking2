@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
-import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -105,10 +104,5 @@ public class PersistenceConfig {
 	rv.setLoadTimeWeaver(new InstrumentationLoadTimeWeaver());
 	rv.setJpaPropertyMap(properties);
 	return rv;
-    }
-    
-    @Bean
-    public HibernateExceptionTranslator hibernateExceptionTranslator() {
-	return new HibernateExceptionTranslator();
-    }
+    }    
 }
