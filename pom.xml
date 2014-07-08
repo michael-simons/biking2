@@ -53,7 +53,8 @@
 	<highcharts.version>3.0.9</highcharts.version>
 	<openlayers.version>2.13.1</openlayers.version>
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
-	<angular-file-upload.version>1.2.5</angular-file-upload.version>	
+	<angular-file-upload.version>1.2.5</angular-file-upload.version>
+	<h2.version>1.4.179</h2.version>	
 	
 	<maven.compiler.source>${java.version}</maven.compiler.source>
 	<maven.compiler.target>${java.version}</maven.compiler.target>
