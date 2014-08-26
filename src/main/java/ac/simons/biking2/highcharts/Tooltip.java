@@ -45,6 +45,8 @@ public class Tooltip {
 	private Boolean useHTML;
 	
 	private Boolean crosshairs;
+	
+	private String valueSuffix;
 
 	public Builder(Sink<PB, Tooltip> sink) {
 	    this.sink = sink;
@@ -62,6 +64,11 @@ public class Tooltip {
 	
 	public Builder<PB> withPointFormat(final String pointFormat) {
 	    this.pointFormat = pointFormat;
+	    return this;
+	}
+	
+	public Builder<PB> withValueSuffix(final String valueSuffix) {
+	    this.valueSuffix = valueSuffix;
 	    return this;
 	}
 	
@@ -88,7 +95,7 @@ public class Tooltip {
 	
 	public PB build() {
 	    return this.sink.setObject(
-		    new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML, crosshairs)
+		    new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML, crosshairs, valueSuffix)
 	    );
 	}
     }
@@ -136,6 +143,8 @@ public class Tooltip {
     private final Boolean useHTML;
     
     private final Boolean crosshairs;
+    
+    private final String valueSuffix;
 
     @JsonCreator
     Tooltip(
@@ -144,7 +153,8 @@ public class Tooltip {
 	    @JsonProperty("pointFormat") String pointFormat, 
 	    @JsonProperty("shared") Boolean shared, 
 	    @JsonProperty("useHTML") Boolean useHTML,
-	    @JsonProperty("crosshairs") Boolean crosshairs
+	    @JsonProperty("crosshairs") Boolean crosshairs,
+	    @JsonProperty("valueSuffix") String valueSuffix 
     ) {
 	this.footerFormat = footerFormat;
 	this.headerFormat = headerFormat;
@@ -152,6 +162,7 @@ public class Tooltip {
 	this.shared = shared;
 	this.useHTML = useHTML;
 	this.crosshairs = crosshairs;		
+	this.valueSuffix = valueSuffix;
     }
 
     public String getFooterFormat() {
@@ -176,5 +187,9 @@ public class Tooltip {
 
     public Boolean isCrosshairs() {
 	return crosshairs;
+    }
+
+    public String getValueSuffix() {
+	return valueSuffix;
     }
 }
