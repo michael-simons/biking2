@@ -149,7 +149,6 @@ public class ChartsController {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	
 	final List<Bike> bikes = this.bikeRepository.findAll();	
-	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, entry -> entry.getKey().isBefore(january1st));
 	
 	final Map<String, Object> userData = new HashMap<>();	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
