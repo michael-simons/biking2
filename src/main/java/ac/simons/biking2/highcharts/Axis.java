@@ -21,8 +21,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Michael J. Simons, 2014-02-11
@@ -46,7 +48,9 @@ public class Axis {
 	private Boolean endOnTick;
 
 	private Title title;	
-
+	
+	private List<PlotLine> plotLines;
+	
 	Builder(final Sink<PB, Axis> sink) {
 	    this.sink = sink;
 	}
@@ -88,9 +92,20 @@ public class Axis {
 	    });
 	}
 
+	public PlotLine.Builder<Builder<PB>> withPlotLine() {
+	    return new PlotLine.Builder<>(plotLine -> {
+		if(Builder.this.plotLines == null) {
+		    Builder.this.plotLines = new ArrayList<>();
+		}
+		Builder.this.plotLines.add(plotLine);
+		return Builder.this;
+	    });
+	}
+
+	
 	public PB build() {
 	    return this.sink.setObject(
-		    new Axis(categories, endOnTick, max, min, tickInterval, title)
+		    new Axis(categories, endOnTick, max, min, tickInterval, title, plotLines)
 	    );
 	}
     }
@@ -106,6 +121,8 @@ public class Axis {
     private final Number tickInterval;
 
     private final Title title;
+    
+    private final Collection<PlotLine> plotLines;
 
     @JsonCreator
     Axis(
@@ -114,7 +131,8 @@ public class Axis {
 	    @JsonProperty("max") Number max,
 	    @JsonProperty("min") Number min,
 	    @JsonProperty("tickInterval") Number tickInterval,
-	    @JsonProperty("title") Title title
+	    @JsonProperty("title") Title title,
+	    @JsonProperty("plotLines") Collection<PlotLine> plotLines
     ) {
 	this.categories = categories;
 	this.endOnTick = endOnTick;
@@ -122,6 +140,7 @@ public class Axis {
 	this.min = min;
 	this.tickInterval = tickInterval;
 	this.title = title;
+	this.plotLines = plotLines;
     }
 
     public Collection<String> getCategories() {
@@ -146,5 +165,9 @@ public class Axis {
 
     public Title getTitle() {
 	return title;
+    }
+
+    public Collection<PlotLine> getPlotLines() {
+	return plotLines;
     }
 }
