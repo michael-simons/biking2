@@ -310,7 +310,7 @@ public class ChartsController {
 			.disable()
 			.build()
 		    .title()
-			.withText("Overall monthly average")
+			.withText("Monthly average")
 			.build()
 		    .xAxis()
 			.withCategories(

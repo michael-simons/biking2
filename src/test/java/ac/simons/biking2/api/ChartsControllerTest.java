@@ -181,6 +181,7 @@ public class ChartsControllerTest {
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
 	final HighchartsNgConfig currentYear = controller.getCurrentYear();
 	final HighchartsNgConfig history = controller.getHistory();
+	final HighchartsNgConfig monthlyAverage = controller.getMonthlyAverage();	
 
 	// Assert	 	
 	assertThat(currentYear.getSeries().size(), is(equalTo(2)));
@@ -193,7 +194,7 @@ public class ChartsControllerTest {
 	assertThat(accumulatedPeriod.getValue(), is(equalTo(0)));
 	accumulatedPeriod = (AccumulatedPeriod) ((Map<String, Object>)currentYear.getUserData()).get("bestPeriod");
 	assertThat(accumulatedPeriod.getValue(), is(equalTo(15)));
-	
+		
 	hlp = new ArrayList<>(history.getSeries());
 	assertThat(hlp.size(), is(equalTo(2)));
 	Series series = hlp.get(0);	
@@ -207,6 +208,36 @@ public class ChartsControllerTest {
 	final Map<Integer, Bike> preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history.getUserData()).get("preferredBikes");
 	assertThat(preferredBikes.get(startDate.getYear()).getName(), is(equalTo("bike1")));
 	assertThat(preferredBikes.get(startDate.getYear()+1).getName(), is(equalTo("bike2")));	
+		
+	hlp = new ArrayList<>(monthlyAverage.getSeries());
+	assertThat(hlp.size(), is(equalTo(2)));			
+	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(
+	    ( 0 + 10 +  50)/3.0,
+	    ( 0 + 40 +  70)/3.0,
+	    (10 + 20 + 110)/3.0,
+	    (10 + 30 + 110)/3.0,
+	    (10 + 30 + 110)/3.0,
+	    (10 + 30 + 110)/3.0,
+	    (10 + 30 + 110)/3.0,
+	    (10 + 30 + 110)/3.0,
+	    (10 + 65 + 110)/3.0,
+	    (15 + 10 + 610)/3.0,
+	    ( 5 + 10 +  10)/3.0,
+	    ( 0 + 35 +  10)/2.0
+	))));
+	final List<Integer[]> ranges = new ArrayList(hlp.get(1).getData());	
+	assertThat(Arrays.equals(ranges.get(0),  new Integer[]{  0,  50}), is(true));
+	assertThat(Arrays.equals(ranges.get(1),  new Integer[]{  0,  70}), is(true));
+	assertThat(Arrays.equals(ranges.get(2),  new Integer[]{ 10, 110}), is(true));
+	assertThat(Arrays.equals(ranges.get(3),  new Integer[]{ 10, 110}), is(true));
+	assertThat(Arrays.equals(ranges.get(4),  new Integer[]{ 10, 110}), is(true));
+	assertThat(Arrays.equals(ranges.get(5),  new Integer[]{ 10, 110}), is(true));
+	assertThat(Arrays.equals(ranges.get(6),  new Integer[]{ 10, 110}), is(true));
+	assertThat(Arrays.equals(ranges.get(7),  new Integer[]{ 10, 110}), is(true));
+	assertThat(Arrays.equals(ranges.get(8),  new Integer[]{ 10, 110}), is(true));
+	assertThat(Arrays.equals(ranges.get(9),  new Integer[]{ 10, 610}), is(true));
+	assertThat(Arrays.equals(ranges.get(10), new Integer[]{  5,  10}), is(true));
+	assertThat(Arrays.equals(ranges.get(11), new Integer[]{ 10,  35}), is(true));
     }
     
     @Test
@@ -250,7 +281,15 @@ public class ChartsControllerTest {
 	
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
 	
-	controller.getMonthlyAverage();	
+	final HighchartsNgConfig monthlyAverage = controller.getMonthlyAverage();	
+	final List<Series> hlp = new ArrayList<>(monthlyAverage.getSeries());
+	assertThat(hlp.size(), is(equalTo(2)));	
+	final Series average = hlp.get(0);
+	assertThat(average.getData(), is(equalTo(Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))));	
+	final Series range = hlp.get(1);
+	range.getData().forEach(item -> {    
+	    assertThat(Arrays.equals((Object[]) item, new Integer[]{0,0}), is(true));
+	});	
     }    
     
     @Test
@@ -260,6 +299,14 @@ public class ChartsControllerTest {
 
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
 	
-	controller.getMonthlyAverage();	
+	final HighchartsNgConfig monthlyAverage = controller.getMonthlyAverage();	
+	final List<Series> hlp = new ArrayList<>(monthlyAverage.getSeries());
+	assertThat(hlp.size(), is(equalTo(2)));	
+	final Series average = hlp.get(0);
+	assertThat(average.getData(), is(equalTo(Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))));	
+	final Series range = hlp.get(1);
+	range.getData().forEach(item -> {    
+	    assertThat(Arrays.equals((Object[]) item, new Integer[]{0,0}), is(true));
+	});	
     }
 }
