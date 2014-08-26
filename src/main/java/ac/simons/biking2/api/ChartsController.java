@@ -25,26 +25,21 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static java.util.function.BinaryOperator.maxBy;
-import static java.util.function.BinaryOperator.minBy;
-import static java.util.stream.Collectors.averagingInt;
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.reducing;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.IntStream.generate;
 import static java.util.stream.IntStream.rangeClosed;
 
@@ -273,32 +268,9 @@ public class ChartsController {
 	// Get all bikes
 	final List<Bike> bikes = this.bikeRepository.findAll();		
 	
-	final Map<Integer, Double> averages = bikes.stream()
+	final Map<Integer, IntSummaryStatistics> statistics = bikes.stream()
 		.flatMap(bike -> bike.getPeriods().entrySet().stream())		
-		.collect(groupingBy(e -> e.getKey().getMonthValue(), averagingInt(Entry::getValue)));
-	
-	final Map<Integer, Integer> minimums = bikes.stream()
-		.flatMap(bike -> bike.getPeriods().entrySet().stream())
-		.collect(groupingBy(e -> e.getKey().getMonthValue(), mapping(Entry::getValue, reducing(Integer.MAX_VALUE, minBy(Integer::compareTo)))));
-	
-	final Map<Integer, Integer> maximums = bikes.stream()
-		.flatMap(bike -> bike.getPeriods().entrySet().stream())
-		.collect(groupingBy(e -> e.getKey().getMonthValue(), mapping(Entry::getValue, reducing(Integer.MIN_VALUE, maxBy(Integer::compareTo)))));
-	
-	
-	
-	System.out.println(averages);
-	System.out.println(minimums);
-	System.out.println(maximums);
-	/*
-	// Average values
-	months.entrySet().stream().collect(
-		TreeMap::new,
-		(map, entry) -> {
-		    map.put(entry.getKey(), entry.getValue().stream().re
-		},
-		TreeMap::putAll
-	);*/
+		.collect(groupingBy(e -> e.getKey().getMonthValue(), summarizingInt(Entry::getValue)));	
     }
     
     private static int[] addArrays(final int[] a, final int[] b) {
