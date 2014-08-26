@@ -117,6 +117,10 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
     $http.get('/api/charts/currentYear').success(function(data) {
 	$scope.currentYearConfig = data;
     });
+    
+    $http.get('/api/charts/monthlyAverage').success(function(data) {
+	$scope.monthlyAverageConfig = data;
+    });
 
     $http.get('/api/charts/history').success(function(data) {
 	$scope.historyConfig = data;
@@ -145,6 +149,10 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
 			$http.get('/api/charts/currentYear').success(function(data) {
 			    $scope.currentYearConfig.series = data.series;
 			    $scope.currentYearConfig.userData = data.userData;
+			});
+			
+			$http.get('/api/charts/monthlyAverage').success(function(data) {
+			   $scope.monthlyAverageConfig = data;
 			});
 		    },
 		    function() {
