@@ -33,7 +33,7 @@ body {
     display: block;
 }
 
-#chart-history {
+#chart-monthly-average, #chart-history {
     max-width: 640px;
     height: 380px;
     display: block;
