@@ -55,7 +55,7 @@ public class SeriesTest {
 	assertThat(series.getMarker(), is(not(nullValue())));
 		
 	series = new Series.Builder<>(object -> object)
-		.withData(1, 2, 3)
+		.withData(1.0, 2, 3)
 		.withName("testName")
 		.withType("testType")
 		.build();

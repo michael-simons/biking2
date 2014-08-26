@@ -39,10 +39,10 @@ public class HighchartsNgConfigTest {
 	
 	final Collection<Series<?>> series = builder
 	    .series()
-   		.withData(1, 2)
+   		.withData(1.0, 2)
    		.build()
    	    .series()
-   		.withData(3, 4)
+   		.withData(3.0, 4)
    		.build()
 	.build().getSeries();
 	
