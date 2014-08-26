@@ -240,11 +240,28 @@ public class ChartsControllerTest {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);	
 	stub(bikeRepository.findAll()).toReturn(defaultTestData);	
 	
+	final ChartsController controller = new ChartsController(bikeRepository, "000000");
+		
+	controller.getMonthlyAverage();
+    }
+    
+    @Test
+    public void testGetMonthlyAverageNoData() {	
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	stub(bikeRepository.findAll()).toReturn(new ArrayList<>());
+	
+	final ChartsController controller = new ChartsController(bikeRepository, "000000");
+	
+	controller.getMonthlyAverage();	
+    }    
+    
+    @Test
+    public void testGetMonthlyAverageNoMilages() {
+	final BikeRepository bikeRepository = mock(BikeRepository.class);
+	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1", LocalDate.now()), new Bike("bike2", LocalDate.now())));
 
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
 	
-	
-	controller.getMonthlyAverage();
-
+	controller.getMonthlyAverage();	
     }
 }
