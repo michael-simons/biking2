@@ -234,4 +234,17 @@ public class ChartsControllerTest {
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
 	assertThat(hlp.size(), is(equalTo(0)));
     }
+    
+    @Test
+    public void testGetMonthlyAverage() {
+	final BikeRepository bikeRepository = mock(BikeRepository.class);	
+	stub(bikeRepository.findAll()).toReturn(defaultTestData);	
+	
+
+	final ChartsController controller = new ChartsController(bikeRepository, "000000");
+	
+	
+	controller.getMonthlyAverage();
+
+    }
 }
