@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -38,20 +39,30 @@ public class AxisTest {
 		.enableEndOnTick()
 		.title()
 		    .withText("test")
-		.build()
-	.build();
+		    .build()
+		.withPlotLine()
+		    .at(23)
+		    .build()
+		.withPlotLine()
+		    .at(42)
+		    .build()
+		.build();
 	assertThat(axis.getCategories(), is(equalTo(Arrays.asList("a", "b"))));
 	assertThat(axis.getMin(), is(equalTo(0)));
 	assertThat(axis.getMax(), is(equalTo(2109)));
 	assertThat(axis.getTickInterval(), is(equalTo(100)));
 	assertThat(axis.isEndOnTick(), is(true));
 	assertThat(axis.getTitle().getText(), is(equalTo("test")));
+	assertThat(axis.getPlotLines().size(), is(equalTo(2)));
+	assertThat(axis.getPlotLines().toArray(new PlotLine[2])[0].getValue(), is(equalTo(23)));
+	assertThat(axis.getPlotLines().toArray(new PlotLine[2])[1].getValue(), is(equalTo(42)));
 	
 	axis = new Axis.Builder<>(object -> object)	
 		.enableEndOnTick()
 		.disableEndOnTick()	
 	.build();
 	assertThat(axis.isEndOnTick(), is(false));	
+	assertThat(axis.getPlotLines(), is(nullValue()));
     }
 
 }
