@@ -50,8 +50,8 @@ public class HighchartsNgConfigTest {
 
 	assertThat(series.size(), is(equalTo(2)));
 	final List<Series> hlp = new ArrayList<>(series);
-	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(1, 2))));
-	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3, 4))));
+	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(1.0, 2))));
+	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3.0, 4))));
     }
     
     @Test
