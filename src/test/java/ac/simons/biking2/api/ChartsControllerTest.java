@@ -223,8 +223,6 @@ public class ChartsControllerTest {
     
     @Test
     public void testGetHistoryNoMilages() {
-	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
-
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1", LocalDate.now()), new Bike("bike2", LocalDate.now())));
 
