@@ -40,7 +40,7 @@ public class HighchartsNgConfig {
 	
 	private Object userData;
 
-	private final Collection<Series> series = new ArrayList<>();
+	private final Collection<Series<?>> series = new ArrayList<>();
 
 	Builder(Sink<HighchartsNgConfig, HighchartsNgConfig> sink) {
 	    this.sink = sink;
@@ -54,7 +54,11 @@ public class HighchartsNgConfig {
 	 * @return
 	 */
 	public Number computeCurrentMaxYValue() {
-	    return series.stream().flatMap(series -> series.getData().stream()).max((a, b) -> Double.compare(a.doubleValue(), b.doubleValue())).orElse(0);
+	    return series.stream()		    
+		    .flatMap(series -> series.getData().stream())
+		    .filter(val -> val instanceof Number)
+		    .map(val -> (Number)val)
+		    .max((a, b) -> Double.compare(a.doubleValue(), b.doubleValue())).orElse(0);
 	}
 
 	public Options.Builder<Builder> options() {
@@ -64,7 +68,7 @@ public class HighchartsNgConfig {
 	    });
 	}
 
-	public Series.Builder<Builder> series() {
+	public <T> Series.Builder<Builder, T> series() {
 	    return new Series.Builder<>(series -> {
 		Builder.this.series.add(series);
 		return Builder.this;
@@ -87,19 +91,19 @@ public class HighchartsNgConfig {
 
     private final Options options;
 
-    private final Collection<Series> series;
+    private final Collection<Series<?>> series;
     
     private final Object userData;
 
     @JsonCreator
     public HighchartsNgConfig(
 	    @JsonProperty("options") Options options, 
-	    @JsonProperty("series") Collection<Series> series)	    
+	    @JsonProperty("series") Collection<Series<?>> series)	    
     {
 	this(options, series, null);
     }
 
-    public HighchartsNgConfig(Options options, Collection<Series> series, Object userData) {
+    public HighchartsNgConfig(Options options, Collection<Series<?>> series, Object userData) {
 	this.options = options;
 	this.series = series;
 	this.userData = userData;
@@ -109,7 +113,7 @@ public class HighchartsNgConfig {
 	return options;
     }
 
-    public Collection<Series> getSeries() {
+    public Collection<Series<?>> getSeries() {
 	return series;
     }
 

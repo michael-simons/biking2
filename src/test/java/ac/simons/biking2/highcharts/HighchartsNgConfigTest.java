@@ -37,7 +37,7 @@ public class HighchartsNgConfigTest {
 	
 	assertThat(builder.computeCurrentMaxYValue(), is(equalTo(0)));
 	
-	final Collection<Series> series = builder
+	final Collection<Series<?>> series = builder
 	    .series()
    		.withData(1, 2)
    		.build()

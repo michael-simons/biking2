@@ -29,13 +29,13 @@ import java.util.Collection;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Series {
+public class Series<T> {
 
-    public static class Builder<PB> {
+    public static class Builder<PB, T> {
 
 	private final Sink<PB, Series> sink;
 
-	private Collection<Number> data;
+	private Collection<T> data;
 
 	private String name;
 
@@ -43,27 +43,27 @@ public class Series {
 
 	private String color;
 
-	public Builder<PB> withData(final Number... data) {
+	public Builder<PB, T> withData(final T... data) {
 	    this.data = Arrays.asList(data);
 	    return this;
 	}
-
-	public Builder<PB> withData(final int... data) {
-	    this.data = Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	
+	public Builder<PB, T> withData(final int... data) {
+	    this.data = (Collection<T>)Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	    return this;
 	}
-
-	public Builder<PB> withName(final String name) {
+	
+	public Builder<PB, T> withName(final String name) {
 	    this.name = name;
 	    return this;
 	}
 
-	public Builder<PB> withType(final String type) {
+	public Builder<PB, T> withType(final String type) {
 	    this.type = type;
 	    return this;
 	}
 
-	public Builder<PB> withColor(final String color) {
+	public Builder<PB, T> withColor(final String color) {
 	    this.color = color;
 	    return this;
 	}
@@ -79,20 +79,20 @@ public class Series {
 
     private final String color;
 
-    private final Collection<Number> data;
+    private final Collection<T> data;
 
     private final String name;
 
     private final String type;
 
-    public Series(final String color, Collection<Number> data, String name, String type) {
+    public Series(final String color, Collection<T> data, String name, String type) {
 	this.color = color;
 	this.data = data;
 	this.name = name;
 	this.type = type;
     }
 
-    public Collection<Number> getData() {
+    public Collection<T> getData() {
 	return data;
     }
 
