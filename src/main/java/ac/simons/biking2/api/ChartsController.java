@@ -16,7 +16,6 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.highcharts.HighchartsNgConfig;
-import ac.simons.biking2.highcharts.Series;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;
@@ -134,6 +133,7 @@ public class ChartsController {
 			.withHeaderFormat("{point.key}<table class=\"table table-condensed table-striped\">")
 			.withPointFormat("<tr><td style=\"color:{series.color};padding:0\">{series.name}: </td><td style=\"padding:0\"><b>{point.y:.1f} km</b></td></tr>")
 			.withFooterFormat("</table>")
+			.enableCrosshairs()
 			.share()
 			.useHTML()
 			.build()	
@@ -250,6 +250,7 @@ public class ChartsController {
 			.withHeaderFormat("{point.key}<table class=\"table table-condensed table-striped\">")
 			.withPointFormat("<tr><td style=\"color:{series.color};padding:0\">{series.name}: </td><td style=\"padding:0\"><b>{point.y:.1f} km</b></td></tr>")
 			.withFooterFormat("</table>")
+			.enableCrosshairs()
 			.share()
 			.useHTML()
 			.build()
