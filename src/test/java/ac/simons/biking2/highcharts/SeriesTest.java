@@ -59,7 +59,7 @@ public class SeriesTest {
 		.withName("testName")
 		.withType("testType")
 		.build();
-	assertThat(series.getData(), is(equalTo(Arrays.asList(1, 2, 3))));
+	assertThat(series.getData(), is(equalTo(Arrays.asList(1.0, 2, 3))));
 	assertThat(series.getName(), is(equalTo("testName")));
 	assertThat(series.getType(), is(equalTo("testType")));
 	assertThat(series.getColor(), is(nullValue()));
