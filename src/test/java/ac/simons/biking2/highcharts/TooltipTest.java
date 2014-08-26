@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -32,13 +33,24 @@ public class TooltipTest {
 		.withHeaderFormat("testHeader")
 		.withPointFormat("testPoint")
 		.withFooterFormat("testFoot")
+		.withValueSuffix("km")
+		.enableCrosshairs()
 		.share()
 		.useHTML()
 	.build();
 	assertThat(tooltip.getHeaderFormat(), is(equalTo("testHeader")));
 	assertThat(tooltip.getPointFormat(), is(equalTo("testPoint")));
 	assertThat(tooltip.getFooterFormat(), is(equalTo("testFoot")));
+	assertThat(tooltip.getValueSuffix(), is(equalTo("km")));
+	assertThat(tooltip.isCrosshairs(), is(true));
 	assertThat(tooltip.isShared(), is(true));
-	assertThat(tooltip.isUseHTML(), is(true));		
+	assertThat(tooltip.isUseHTML(), is(true));	
+	
+	tooltip = new Tooltip.Builder<>(object -> object).build();
+	
+	assertThat(tooltip.isCrosshairs(), is(nullValue()));
+	assertThat(tooltip.isShared(), is(nullValue()));
+	assertThat(tooltip.isUseHTML(), is(nullValue()));	
+	assertThat(tooltip.getValueSuffix(), is(nullValue()));	
     }
 }

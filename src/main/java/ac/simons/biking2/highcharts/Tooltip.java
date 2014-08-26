@@ -86,13 +86,7 @@ public class Tooltip {
 	    this.crosshairs = true;
 	    return this;
 	}
-	
-	public Builder<PB> disableCrosshairs() {
-	    this.crosshairs = false;
-	    return this;
-	}
-	
-	
+		
 	public PB build() {
 	    return this.sink.setObject(
 		    new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML, crosshairs, valueSuffix)
