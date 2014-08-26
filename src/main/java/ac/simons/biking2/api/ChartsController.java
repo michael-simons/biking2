@@ -16,6 +16,7 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.highcharts.HighchartsNgConfig;
+import ac.simons.biking2.highcharts.Series;
 import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.time.LocalDate;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summarizingInt;
+import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.IntStream.generate;
 import static java.util.stream.IntStream.rangeClosed;
 
@@ -264,13 +266,107 @@ public class ChartsController {
 		.build();
     }
     
-    public void getMonthlyAverage() {
+    @RequestMapping("/charts/monthlyAverage")
+    public HighchartsNgConfig getMonthlyAverage() {
 	// Get all bikes
 	final List<Bike> bikes = this.bikeRepository.findAll();		
-	
+
+	// Compute Integer Statistics by grouping periods by month
 	final Map<Integer, IntSummaryStatistics> statistics = bikes.stream()
 		.flatMap(bike -> bike.getPeriods().entrySet().stream())		
+		// Sum all bikes periods per year/month together
+		.collect(groupingBy(e -> e.getKey(), summingInt(Entry::getValue)))
+		.entrySet().stream()
+		// create monthly statistics
 		.collect(groupingBy(e -> e.getKey().getMonthValue(), summarizingInt(Entry::getValue)));	
+	
+	// Create stupid arrays from statistics...
+	final Double[] averages = new Double[12];
+	final Integer[][] ranges = new Integer[12][];	
+	for(int i=0; i<12; ++i) {
+	    final IntSummaryStatistics s = statistics.get(i+1);
+	    if(s == null) {
+		averages[i] = 0.0;
+		ranges[i] = new Integer[]{0,0};	
+	    } else {
+		averages[i] = s.getAverage();
+		ranges[i] = new Integer[]{s.getMin(), s.getMax()};
+	    }
+	}
+	
+	// Total average as plotline
+	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, null);
+	
+	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);	
+	final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);
+	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define()		
+		.options()
+		    .chart()
+			.withBorderWidth(1)
+			.withType("line")
+			.build()
+		    .credits()
+			.disable()
+			.build()
+		    .title()
+			.withText("Overall monthly average")
+			.build()
+		    .xAxis()
+			.withCategories(
+			    rangeClosed(1, 12).mapToObj(i -> january1st.withMonth(i).format(dateTimeFormat)).toArray(size -> new String[size])
+			)
+			.build()				    
+		    .yAxis()
+			.withMin(0)			
+			.withTickInterval(100)
+			.withPlotLine()
+			    .at(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0))
+			    .withWidth(2.0)
+			    .withColor("#F04124")
+			    .build()
+			.enableEndOnTick()
+			.title()
+			    .withText("Milage (km)")
+			    .build()
+			.build()
+		    .plotOptions()
+			.column()
+			    .withPointPadding(0.2)
+			    .withBorderWidth(0)
+			    .build()
+			.series()
+			    .disableAnimation()
+			    .build()
+			.build()
+		    .tooltip()
+			.share()
+			.enableCrosshairs()
+			.withValueSuffix("km")
+			.build()
+		    .build()
+		.<Number>series()
+		    .withName("Average")
+		    .withColor("#7CB5EB")
+		    .withZIndex(1)		
+		    .marker()
+			.withLineWidth(2.0)
+			.withFillColor("#FFFFFF")
+			.withLineColor("#7CB5EB")
+			.build()
+		    .withData(averages)	
+		    .build()
+		.<Number[]>series()
+		    .withName("Range")
+		    .withType("arearange")		    
+		    .withLineWidth(0.0)		    
+		    .withFillOpacity(0.3)
+		    .withColor("#7CB5EB")
+		    .withZIndex(0)
+		    .linkTo("previous")
+		    .withData(ranges)
+		    .build();
+	
+	return builder.build();
     }
     
     private static int[] addArrays(final int[] a, final int[] b) {
