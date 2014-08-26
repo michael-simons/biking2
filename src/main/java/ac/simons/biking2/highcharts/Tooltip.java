@@ -43,6 +43,8 @@ public class Tooltip {
 	private Boolean shared;
 
 	private Boolean useHTML;
+	
+	private Boolean crosshairs;
 
 	public Builder(Sink<PB, Tooltip> sink) {
 	    this.sink = sink;
@@ -73,9 +75,20 @@ public class Tooltip {
 	    return this;
 	}
 	
+	public Builder<PB> enableCrosshairs() {
+	    this.crosshairs = true;
+	    return this;
+	}
+	
+	public Builder<PB> disableCrosshairs() {
+	    this.crosshairs = false;
+	    return this;
+	}
+	
+	
 	public PB build() {
 	    return this.sink.setObject(
-		    new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML)
+		    new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML, crosshairs)
 	    );
 	}
     }
@@ -121,6 +134,8 @@ public class Tooltip {
      * Firefox. Defaults to false.
      */
     private final Boolean useHTML;
+    
+    private final Boolean crosshairs;
 
     @JsonCreator
     Tooltip(
@@ -128,13 +143,15 @@ public class Tooltip {
 	    @JsonProperty("headerFormat") String headerFormat, 
 	    @JsonProperty("pointFormat") String pointFormat, 
 	    @JsonProperty("shared") Boolean shared, 
-	    @JsonProperty("useHTML") Boolean useHTML
+	    @JsonProperty("useHTML") Boolean useHTML,
+	    @JsonProperty("crosshairs") Boolean crosshairs
     ) {
 	this.footerFormat = footerFormat;
 	this.headerFormat = headerFormat;
 	this.pointFormat = pointFormat;
 	this.shared = shared;
 	this.useHTML = useHTML;
+	this.crosshairs = crosshairs;		
     }
 
     public String getFooterFormat() {
@@ -155,5 +172,9 @@ public class Tooltip {
 
     public Boolean isUseHTML() {
 	return useHTML;
+    }
+
+    public Boolean isCrosshairs() {
+	return crosshairs;
     }
 }
