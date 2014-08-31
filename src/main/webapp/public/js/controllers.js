@@ -111,7 +111,7 @@ biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance,
 });
 
 biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emptyChart) {
-    $scope.currentYearConfig = $scope.historyConfig = emptyChart;
+    $scope.currentYearConfig = $scope.monthlyAverageConfig = $scope.historyConfig = emptyChart;
     $scope.alerts = [];
 
     $http.get('/api/charts/currentYear').success(function(data) {
