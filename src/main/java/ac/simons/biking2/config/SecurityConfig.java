@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -28,7 +29,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
  * @author Michael J. Simons, 2014-02-19
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Profile({"dev", "prod"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
