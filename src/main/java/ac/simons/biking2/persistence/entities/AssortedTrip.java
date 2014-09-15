@@ -101,9 +101,6 @@ public class AssortedTrip implements Serializable {
 	if (!Objects.equals(this.coveredOn, other.coveredOn)) {
 	    return false;
 	}
-	if (!Objects.equals(this.distance, other.distance)) {
-	    return false;
-	}
-	return true;
+	return Objects.equals(this.distance, other.distance);
     }   
 }
