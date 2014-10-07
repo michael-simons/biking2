@@ -53,6 +53,7 @@
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
 	<angular-file-upload.version>1.2.5</angular-file-upload.version>
 	<h2.version>1.4.181</h2.version>
+	<tomcat.version>8.0.14</tomcat.version>
 	
 	<maven.compiler.source>${java.version}</maven.compiler.source>
 	<maven.compiler.target>${java.version}</maven.compiler.target>
