@@ -19,8 +19,10 @@ import ac.simons.biking2.persistence.entities.Bike;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -78,6 +80,9 @@ public class BikesControllerTest {
 
 	final Bike bike = new Bike("testBike", now);
 	stub(repository.findOne(2)).toReturn(bike);
+	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));	
+	decommissionedBike.setDecommissionedOn(GregorianCalendar.from(now.minusMonths(1).atStartOfDay(ZoneId.systemDefault())));
+	stub(repository.findOne(3)).toReturn(decommissionedBike);
 
 	final NewMilageCmd newMilageCmd = new NewMilageCmd();
 	newMilageCmd.setAmount(23.0);
@@ -123,9 +128,20 @@ public class BikesControllerTest {
 		.andExpect(content().string(
 				objectMapper.writeValueAsString(new Bike("testBike", now).addMilage(now, 23.0)))
 		);
-
+	
+	// Decommisioned bike
+	mockMvc
+		.perform(
+			post("http://biking.michael-simons.eu/api/bikes/3/milages")
+			.contentType(APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(newMilageCmd))
+		)
+		.andExpect(status().isBadRequest())
+		.andExpect(MockMvcResultMatchers.content().string("Bike has already been decommissioned."));
+	
 	verify(repository, times(1)).findOne(1);
 	verify(repository, times(1)).findOne(2);
+	verify(repository, times(1)).findOne(3);
 	verify(repository, times(1)).save(any(Bike.class));
     }
 

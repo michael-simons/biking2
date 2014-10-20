@@ -72,6 +72,8 @@ public class BikesController {
 	ResponseEntity<Milage> rv;	
 	if(bike == null) {
 	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	} else if(bike.getDecommissionedOn() != null) { 
+	    throw new IllegalArgumentException("Bike has already been decommissioned.");
 	} else {
 	    final Milage milage = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
 	    this.bikeRepository.save(bike);
