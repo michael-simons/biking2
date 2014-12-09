@@ -76,10 +76,10 @@ public class BikeCmd {
     }
     
     public LocalDate boughtOnAsLocalDate() {
-	return LocalDateTime.ofInstant(this.getBoughtOn().toInstant(), ZoneId.systemDefault()).toLocalDate();
+	return LocalDateTime.ofInstant(this.boughtOn.toInstant(), ZoneId.systemDefault()).toLocalDate();
     }
     
     public LocalDate decommissionedOnAsLocalDate() {
-	return this.decommissionedOn == null ? null : LocalDateTime.ofInstant(this.getBoughtOn().toInstant(), ZoneId.systemDefault()).toLocalDate();
+	return this.decommissionedOn == null ? null : LocalDateTime.ofInstant(this.decommissionedOn.toInstant(), ZoneId.systemDefault()).toLocalDate();
     }
 }
