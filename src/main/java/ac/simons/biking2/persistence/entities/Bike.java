@@ -160,10 +160,18 @@ public class Bike implements Serializable {
 	return this.decommissionedOn;
     }
 
-    public void setDecommissionedOn(Calendar decommissionedOn) {
-	this.decommissionedOn = decommissionedOn;
+    /**
+     * Use a verb instead of a setter to show that the time part is explicitly stripped of
+     * @param decommissionedOn Date of decommission. If null nothing changes
+     * @return true if the bike was decommissioned
+     */
+    public boolean decommission(final LocalDate decommissionedOn) {
+	if(decommissionedOn != null) {
+	    this.decommissionedOn = GregorianCalendar.from(decommissionedOn.atStartOfDay(ZoneId.systemDefault()));	
+	}
+	return this.decommissionedOn != null;
     }
-
+    
     public Calendar getCreatedAt() {
 	return this.createdAt;
     }
@@ -255,10 +263,6 @@ public class Bike implements Serializable {
 
     public Calendar getBoughtOn() {
 	return boughtOn;
-    }
-
-    public void setBoughtOn(Calendar boughtOn) {
-	this.boughtOn = boughtOn;
     }
 
     public boolean hasMilages() {

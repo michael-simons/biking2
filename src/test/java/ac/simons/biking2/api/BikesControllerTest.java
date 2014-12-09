@@ -81,7 +81,7 @@ public class BikesControllerTest {
 	final Bike bike = new Bike("testBike", now);
 	stub(repository.findOne(2)).toReturn(bike);
 	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));	
-	decommissionedBike.setDecommissionedOn(GregorianCalendar.from(now.minusMonths(1).atStartOfDay(ZoneId.systemDefault())));
+	decommissionedBike.decommission(now.minusMonths(1));
 	stub(repository.findOne(3)).toReturn(decommissionedBike);
 
 	final NewMilageCmd newMilageCmd = new NewMilageCmd();
