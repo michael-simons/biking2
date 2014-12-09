@@ -26,6 +26,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /**
  * @author Michael J. Simons, 2014-02-19
@@ -64,8 +66,9 @@ public class BikesController {
     @RequestMapping(value = "/api/bikes/{id:\\d+}/milages", method = POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Milage> createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {	
-	if(bindingResult.hasErrors())
+	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
+	}
 	
 	final Bike bike = bikeRepository.findOne(id);
 	
@@ -86,15 +89,16 @@ public class BikesController {
     
     @RequestMapping(value = "/api/bikes", method = POST) 
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Bike> createBike(final @RequestBody @Valid NewBikeCmd newBikeCmd, final BindingResult bindingResult) {
-	if(bindingResult.hasErrors())
+    public ResponseEntity<Bike> createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
+	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
+	}
 	
 	ResponseEntity<Bike> rv;
 	
-	final Bike bike = new Bike(newBikeCmd.getName(), newBikeCmd.boughtOnAsLocalDate());
-	bike.setColor(newBikeCmd.getColor());
-	bike.addMilage(newBikeCmd.boughtOnAsLocalDate().withDayOfMonth(1), 0);
+	final Bike bike = new Bike(newBike.getName(), newBike.boughtOnAsLocalDate());
+	bike.setColor(newBike.getColor());
+	bike.addMilage(newBike.boughtOnAsLocalDate().withDayOfMonth(1), 0);
 	
 	try {
 	    this.bikeRepository.save(bike);
@@ -103,6 +107,29 @@ public class BikesController {
 	    rv = new ResponseEntity<>(HttpStatus.CONFLICT);
 	}
 	
+	return rv;
+    }
+    
+    @RequestMapping(value = "/api/bikes/{id:\\d+}", method = PUT)
+    @PreAuthorize("isAuthenticated()")
+    @Transactional
+    public ResponseEntity<Bike> updateBike(final @PathVariable Integer id, final @RequestBody @Valid BikeCmd updatedBike, final BindingResult bindingResult) {
+	if(bindingResult.hasErrors()) {
+	    throw new IllegalArgumentException("Invalid arguments.");
+	}
+	
+	final Bike bike = bikeRepository.findOne(id);
+	
+	ResponseEntity<Bike> rv;	
+	if(bike == null) {
+	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	} else if(bike.getDecommissionedOn() != null) { 
+	    throw new IllegalArgumentException("Bike has already been decommissioned.");
+	} else {
+	    bike.setColor(updatedBike.getColor());
+	    bike.decommission(updatedBike.decommissionedOnAsLocalDate());	  
+	    rv = new ResponseEntity<>(bike, HttpStatus.OK);
+	}
 	return rv;
     }
     

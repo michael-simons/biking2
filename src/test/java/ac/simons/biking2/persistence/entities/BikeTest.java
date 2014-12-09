@@ -52,17 +52,16 @@ public class BikeTest {
     
     @Test
     public void beanShouldWorkAsExpected() {
-	Bike bike = new Bike("poef", LocalDate.now().withDayOfMonth(1));
+	final LocalDate now = LocalDate.now();	
+	Bike bike = new Bike("poef", now.withDayOfMonth(1));
 	bike.prePersist();
 	
-	Bike same = new Bike("poef", LocalDate.now().withDayOfMonth(1));
+	Bike same = new Bike("poef", now.withDayOfMonth(1));
 	same.prePersist();
 	
-	Bike other = new Bike("other", LocalDate.now().withDayOfMonth(1));
-	other.prePersist();
-	final Calendar now = Calendar.getInstance();
-	other.setBoughtOn(now);
-	other.setDecommissionedOn(now);
+	Bike other = new Bike("other", now.withDayOfMonth(1));
+	other.prePersist();	
+	other.decommission(now);
 		
 	Assert.assertNull(bike.getId());
 	Assert.assertNotNull(bike.getCreatedAt());
@@ -71,10 +70,10 @@ public class BikeTest {
 	Assert.assertNotEquals(bike, null);
 	Assert.assertNotEquals(bike, "somethingElse");
 	Assert.assertNull(bike.getDecommissionedOn());
-	Assert.assertEquals(GregorianCalendar.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault())), bike.getBoughtOn());
+	Assert.assertEquals(GregorianCalendar.from(now.withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault())), bike.getBoughtOn());
 	
-	Assert.assertEquals(now, other.getBoughtOn());
-	Assert.assertEquals(now, other.getDecommissionedOn());
+	Assert.assertEquals(GregorianCalendar.from(now.withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault())), other.getBoughtOn());
+	Assert.assertEquals(GregorianCalendar.from(now.atStartOfDay(ZoneId.systemDefault())), other.getDecommissionedOn());
     }
     
     @Test

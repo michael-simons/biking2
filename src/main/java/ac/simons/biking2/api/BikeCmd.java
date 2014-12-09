@@ -28,7 +28,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author Michael J. Simons, 2014-02-20
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NewBikeCmd {
+public class BikeCmd {
 
     @NotBlank
     @Size(max = 255)
@@ -40,7 +40,9 @@ public class NewBikeCmd {
     @NotBlank
     @Size(max = 6)
     private String color;
-
+    
+    private Date decommissionedOn;
+    
     public String getName() {
 	return name;
     }
@@ -64,8 +66,20 @@ public class NewBikeCmd {
     public void setColor(String color) {
 	this.color = color;
     }
+
+    public Date getDecommissionedOn() {
+	return decommissionedOn;
+    }
+
+    public void setDecommissionedOn(Date decommissionedOn) {
+	this.decommissionedOn = decommissionedOn;
+    }
     
-     public LocalDate boughtOnAsLocalDate() {
+    public LocalDate boughtOnAsLocalDate() {
 	return LocalDateTime.ofInstant(this.getBoughtOn().toInstant(), ZoneId.systemDefault()).toLocalDate();
+    }
+    
+    public LocalDate decommissionedOnAsLocalDate() {
+	return this.decommissionedOn == null ? null : LocalDateTime.ofInstant(this.getBoughtOn().toInstant(), ZoneId.systemDefault()).toLocalDate();
     }
 }

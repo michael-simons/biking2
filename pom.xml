@@ -5,12 +5,12 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.4.8-SNAPSHOT</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>1.1.8.RELEASE</version>
+	<version>1.1.9.RELEASE</version>
     </parent>
 
     <name>biking2</name>
@@ -52,7 +52,7 @@
 	<openlayers.version>2.13.1</openlayers.version>
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
 	<angular-file-upload.version>1.2.5</angular-file-upload.version>
-	<h2.version>1.4.181</h2.version>
+	<h2.version>1.4.182</h2.version>
 	<tomcat.version>8.0.14</tomcat.version>
 	
 	<maven.compiler.source>${java.version}</maven.compiler.source>
