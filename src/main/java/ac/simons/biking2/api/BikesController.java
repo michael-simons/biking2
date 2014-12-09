@@ -86,7 +86,7 @@ public class BikesController {
     
     @RequestMapping(value = "/api/bikes", method = POST) 
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Bike> createBike(final @RequestBody @Valid NewBikeCmd newBikeCmd, final BindingResult bindingResult) {
+    public ResponseEntity<Bike> createBike(final @RequestBody @Valid BikeCmd newBikeCmd, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors())
 	    throw new IllegalArgumentException("Invalid arguments.");
 	

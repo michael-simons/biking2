@@ -28,7 +28,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author Michael J. Simons, 2014-02-20
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NewBikeCmd {
+public class BikeCmd {
 
     @NotBlank
     @Size(max = 255)

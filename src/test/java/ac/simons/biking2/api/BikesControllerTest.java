@@ -154,7 +154,7 @@ public class BikesControllerTest {
 	final BikesController controller = new BikesController(repository);
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-	final NewBikeCmd newBikeCmd = new NewBikeCmd();
+	final BikeCmd newBikeCmd = new BikeCmd();
 	newBikeCmd.setBoughtOn(new Date());
 	newBikeCmd.setColor("cccccc");
 	newBikeCmd.setName("test");
@@ -203,7 +203,7 @@ public class BikesControllerTest {
 	final BikesController controller = new BikesController(repository);
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-	final NewBikeCmd newBikeCmd = new NewBikeCmd();
+	final BikeCmd newBikeCmd = new BikeCmd();
 	newBikeCmd.setBoughtOn(new Date());
 	newBikeCmd.setColor("cccccc");
 	newBikeCmd.setName("test");
