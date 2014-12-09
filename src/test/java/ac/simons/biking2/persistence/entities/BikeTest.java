@@ -61,7 +61,10 @@ public class BikeTest {
 	
 	Bike other = new Bike("other", now.withDayOfMonth(1));
 	other.prePersist();	
+	other.decommission(null);
+	Assert.assertNull(other.getDecommissionedOn());
 	other.decommission(now);
+	Assert.assertNotNull(other.getDecommissionedOn());
 		
 	Assert.assertNull(bike.getId());
 	Assert.assertNotNull(bike.getCreatedAt());
