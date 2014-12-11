@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.Application;
+import ac.simons.biking2.config.OEmbedControllerTestConfig;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = OEmbedControllerTestConfig.class)
 @DirtiesContext
 @WebAppConfiguration
 public class OEmbedControllerTest {
