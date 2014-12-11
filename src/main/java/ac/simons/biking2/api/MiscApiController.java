@@ -27,7 +27,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +37,6 @@ import static java.lang.Runtime.getRuntime;
  */
 @RestController
 @RequestMapping("/api")
-@EnableConfigurationProperties(BuildProperties.class)
 public class MiscApiController {
 
     private final BikeRepository bikeRepository;
