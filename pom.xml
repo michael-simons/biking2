@@ -135,7 +135,7 @@
 	    <plugin>
 		<groupId>org.jacoco</groupId>
 		<artifactId>jacoco-maven-plugin</artifactId>
-		<version>0.7.1.201405082137</version>
+		<version>0.7.2.201409121644</version>
 		<configuration>
 		    <excludes>
 			<!-- Application starter -->
@@ -169,7 +169,7 @@
 					<limit implementation="org.jacoco.report.check.Limit">
 					    <counter>INSTRUCTION</counter>
 					    <value>COVEREDRATIO</value>
-					    <minimum>0.98</minimum>			
+					    <minimum>0.97</minimum>			
 					</limit>
 					<!--  implmentation is needed only for Maven 2  -->
 					<limit implementation="org.jacoco.report.check.Limit">
