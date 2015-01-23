@@ -141,7 +141,7 @@ public class GalleryController {
 	    final int cacheForDays = 365;
 	    response.setHeader("Content-Type", "image/jpeg");
 	    response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
-	    response.addHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME.withLocale(Locale.US)));
+	    response.addHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME));
 	    response.addHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
 	    
 	    // Attribute maybe null
