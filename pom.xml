@@ -73,6 +73,9 @@
 		    <target>${java.version}</target>
 		    <source>${java.version}</source>
 		    <encoding>${project.build.sourceEncoding}</encoding>
+		    <compilerArgs>
+			<arg>-parameters</arg>
+		    </compilerArgs>	
 		</configuration>
 	    </plugin>
 	    <plugin>
