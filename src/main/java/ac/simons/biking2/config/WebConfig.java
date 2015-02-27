@@ -60,7 +60,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    "/about"
 	})
 	public String index() {
-	    return "forward:/index.html";
+	    return "forward:index.html";
 	}
     }
     

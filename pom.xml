@@ -5,12 +5,12 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.4-SNAPSHOT</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>1.2.0.RELEASE</version>
+	<version>1.2.2.RELEASE</version>
     </parent>
 
     <name>biking2</name>
@@ -51,8 +51,7 @@
 	<highcharts.version>3.0.10</highcharts.version>
 	<openlayers.version>2.13.1</openlayers.version>
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
-	<angular-file-upload.version>1.2.5</angular-file-upload.version>
-	<h2.version>1.4.182</h2.version>
+	<angular-file-upload.version>1.2.5</angular-file-upload.version>	
 		
 	<maven.compiler.source>${java.version}</maven.compiler.source>
 	<maven.compiler.target>${java.version}</maven.compiler.target>
@@ -73,6 +72,9 @@
 		    <target>${java.version}</target>
 		    <source>${java.version}</source>
 		    <encoding>${project.build.sourceEncoding}</encoding>
+		    <compilerArgs>
+			<arg>-parameters</arg>
+		    </compilerArgs>	
 		</configuration>
 	    </plugin>
 	    <plugin>
@@ -135,7 +137,7 @@
 	    <plugin>
 		<groupId>org.jacoco</groupId>
 		<artifactId>jacoco-maven-plugin</artifactId>
-		<version>0.7.1.201405082137</version>
+		<version>0.7.2.201409121644</version>
 		<configuration>
 		    <excludes>
 			<!-- Application starter -->
@@ -169,7 +171,7 @@
 					<limit implementation="org.jacoco.report.check.Limit">
 					    <counter>INSTRUCTION</counter>
 					    <value>COVEREDRATIO</value>
-					    <minimum>0.98</minimum>			
+					    <minimum>0.97</minimum>			
 					</limit>
 					<!--  implmentation is needed only for Maven 2  -->
 					<limit implementation="org.jacoco.report.check.Limit">
