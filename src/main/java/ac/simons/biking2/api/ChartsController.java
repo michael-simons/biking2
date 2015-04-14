@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -151,7 +152,10 @@ public class ChartsController {
     }
     
     @RequestMapping("/charts/history")
-    public HighchartsNgConfig getHistory() {
+    public HighchartsNgConfig getHistory(
+	    @RequestParam(value = "start") Optional<Integer> yearStart, 
+	    @RequestParam(value = "end") Optional<Integer> yearEnd
+    ) {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	
 	final List<Bike> bikes = this.bikeRepository.findAll();	
@@ -166,6 +170,10 @@ public class ChartsController {
 	    .flatMap(bike -> bike.getPeriods().entrySet().stream())
 	    // we're only interested in periods before 1.1 of the current year
 	    .filter(entry -> entry.getKey().isBefore(january1st))
+	    .filter(entry -> {
+		final int year = entry.getKey().getYear();	    		
+		return yearStart.map(v -> v <= year).orElse(true) && yearEnd.map(v -> year < v).orElse(true);
+	    })
 	    // Collect those periods in
 	    .collect(
 		    // a tree map 
