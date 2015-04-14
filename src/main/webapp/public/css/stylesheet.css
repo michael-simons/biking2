@@ -96,3 +96,7 @@ table.track_table a {
 #chart-current-year {
     margin-bottom: 10px;
 }
+
+.form-inline label {
+    font-weight: normal;
+}

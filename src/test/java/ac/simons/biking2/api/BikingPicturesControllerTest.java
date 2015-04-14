@@ -91,7 +91,7 @@ public class BikingPicturesControllerTest {
 	stub(repository.findOne(1)).toReturn(new BikingPicture("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12"));
 
 	final BikingPicturesController controller = new BikingPicturesController(repository, tmpDir);
-	final ZonedDateTime expiresIn = ZonedDateTime.now(ZoneId.of("UTC")).plusYears(1);	
+	final ZonedDateTime expiresIn = ZonedDateTime.now(ZoneId.of("UTC")).plusDays(365);
 	
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 

@@ -51,6 +51,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     static class Routes {
 
 	@RequestMapping({
+	    "/",
 	    "/bikes",
 	    "/milages",
 	    "/gallery",
@@ -60,7 +61,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    "/about"
 	})
 	public String index() {
-	    return "forward:index.html";
+	    return "forward:/index.html";
 	}
     }
     

@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import org.junit.Test;
 
@@ -35,6 +36,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.generate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
@@ -134,7 +136,7 @@ public class ChartsControllerTest {
 	stub(bikeRepository.findAll()).toReturn(defaultTestData);
 	
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
-	final HighchartsNgConfig highchartDefinition = controller.getHistory();
+	final HighchartsNgConfig highchartDefinition = controller.getHistory(Optional.empty(), Optional.empty());
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
 	assertThat(hlp.size(), is(equalTo(0)));
@@ -180,7 +182,7 @@ public class ChartsControllerTest {
 	// Act
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
 	final HighchartsNgConfig currentYear = controller.getCurrentYear();
-	final HighchartsNgConfig history = controller.getHistory();
+	final HighchartsNgConfig history = controller.getHistory(Optional.empty(), Optional.empty());
 	final HighchartsNgConfig monthlyAverage = controller.getMonthlyAverage();	
 
 	// Assert	 	
@@ -241,12 +243,83 @@ public class ChartsControllerTest {
     }
     
     @Test
+    public void testCompleteDataFiltered() {
+	// Arange
+	final LocalDate startDate = january1st.minusYears(2);	
+	final Calendar _startDate = GregorianCalendar.from(startDate.atStartOfDay(ZoneId.systemDefault()));
+	
+	final Map<String, Integer[]> testData = new TreeMap<>();
+	testData.put("bike1", new Integer[]{
+	     10,  20,  30,  40,  50,  60,  70,  80,  90, 100, 110, 120, 
+	    150, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
+	    310, 310, 310, 320, 330, 340, 350, 360, 370, 380, 395, 400
+	 // 
+	});
+	testData.put("bike2", new Integer[]{
+	    0,   0,  30,  40,  50,  60,  70,  80,  90,  135,  135,  135,
+	  140, 140, 200, 300, 400, 500, 600, 700, 800,  900, 1500, 1500         
+	});
+	testData.put("bike3", new Integer[]{
+	    null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null
+	});
+
+	final List<Bike> bikes = testData.entrySet().stream().map(entry -> {
+	    final Bike bike = new Bike(entry.getKey(), LocalDate.now());
+	    final Integer[] amounts = entry.getValue();
+	    for (int i = 0; i < amounts.length; ++i) {
+		if (amounts[i] == null) {
+		    continue;
+		}
+		bike.addMilage(startDate.plusMonths(i), amounts[i]);
+	    }
+	    return bike;
+	}).collect(toList());		
+	final BikeRepository bikeRepository = mock(BikeRepository.class);	
+	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(bikes.get(0)));
+	stub(bikeRepository.findAll()).toReturn(bikes);	
+	stub(bikeRepository.getDateOfFirstRecord()).toReturn(_startDate);
+		
+	// Act
+	final ChartsController controller = new ChartsController(bikeRepository, "000000");	
+	final HighchartsNgConfig history1 = controller.getHistory(Optional.empty(), Optional.of(startDate.getYear() + 1));	
+	final HighchartsNgConfig history2 = controller.getHistory(Optional.of(startDate.getYear() + 1), Optional.empty());	
+	final HighchartsNgConfig history3 = controller.getHistory(Optional.of(startDate.getYear() - 4), Optional.of(startDate.getYear() - 2));	
+			
+	List<Series> hlp = new ArrayList<>(history1.getSeries());
+	assertThat(hlp.size(), is(equalTo(1)));
+	Series series = hlp.get(0);	
+	assertThat(series.getName(), is(equalTo(Integer.toString(startDate.getYear()))));
+	assertThat(series.getData(), is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 35))));
+	assertThat(((Map<String, Object>)history1.getUserData()).get("worstYear"), is(nullValue()));
+	assertThat(((Map<String, Object>)history1.getUserData()).get("bestYear"), is(nullValue()));	
+	Map<Integer, Bike> preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history1.getUserData()).get("preferredBikes");
+	assertThat(preferredBikes.get(startDate.getYear()).getName(), is(equalTo("bike1")));	
+	
+	hlp = new ArrayList<>(history2.getSeries());
+	assertThat(hlp.size(), is(equalTo(1)));
+	series = hlp.get(0);	
+	assertThat(series.getName(), is(equalTo(Integer.toString(startDate.getYear()+1))));
+	assertThat(series.getData(), is(equalTo(Arrays.asList(50, 70, 110, 110, 110, 110, 110, 110, 110, 610, 10, 10))));
+	assertThat(((Map<String, Object>)history2.getUserData()).get("worstYear"), is(nullValue()));
+	assertThat(((Map<String, Object>)history2.getUserData()).get("bestYear"), is(nullValue()));	
+	preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history2.getUserData()).get("preferredBikes");	
+	assertThat(preferredBikes.get(startDate.getYear()+1).getName(), is(equalTo("bike2")));
+	
+	hlp = new ArrayList<>(history3.getSeries());
+	assertThat(hlp.size(), is(equalTo(0)));
+	assertThat(((Map<String, Object>)history3.getUserData()).get("worstYear"), is(nullValue()));
+	assertThat(((Map<String, Object>)history3.getUserData()).get("bestYear"), is(nullValue()));	
+	preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history3.getUserData()).get("preferredBikes");	
+	assertThat(preferredBikes, is(nullValue()));
+    }
+    
+    @Test
     public void testGetHistoryNoData() {	
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findAll()).toReturn(new ArrayList<>());
 
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
-	final HighchartsNgConfig highchartDefinition = controller.getHistory();
+	final HighchartsNgConfig highchartDefinition = controller.getHistory(Optional.empty(), Optional.empty());
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
 	assertThat(hlp.size(), is(equalTo(0)));	
@@ -258,7 +331,7 @@ public class ChartsControllerTest {
 	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1", LocalDate.now()), new Bike("bike2", LocalDate.now())));
 
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
-	final HighchartsNgConfig highchartDefinition = controller.getHistory();
+	final HighchartsNgConfig highchartDefinition = controller.getHistory(Optional.empty(), Optional.empty());
 
 	final List<Series> hlp = new ArrayList<>(highchartDefinition.getSeries());
 	assertThat(hlp.size(), is(equalTo(0)));

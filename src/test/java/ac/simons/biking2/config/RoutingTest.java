@@ -53,7 +53,7 @@ public class RoutingTest {
 	    try {
 		mockMvc
 			.perform(get(path))
-			.andExpect(forwardedUrl("index.html"));
+			.andExpect(forwardedUrl("/index.html"));
 	    } catch (Exception e) {
 		throw new RuntimeException(e);
 	    }

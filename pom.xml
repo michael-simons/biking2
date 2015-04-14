@@ -5,12 +5,12 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>1.5.4-SNAPSHOT</version>
+    <version>1.6.2-SNAPSHOT</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>1.2.2.RELEASE</version>
+	<version>1.2.3.RELEASE</version>
     </parent>
 
     <name>biking2</name>

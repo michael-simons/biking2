@@ -49,13 +49,24 @@
 <div class="row">
     <div class="col-md-12">
 	<h2>History</h2>
-	<p>Those are the overall statistics since 2009. You see a massive decline in 2011, when i exessivly programmed on <a href="http://dailyfratze.de">Daily Fratze 2</a>. I hope the trend in the last 2 months of 2012 continues… Biking tends to keep me sane ;)</p>
+	<p>Those are historical statistics available since 2009. You see a massive decline in 2011, when i exessivly programmed on <a href="http://dailyfratze.de">Daily Fratze 2</a>. I hope the trend in the last 2 months of 2012 continues… Biking tends to keep me sane ;)</p>				
+	<form class="form-inline">
+	    <div class="form-group">
+	      <label for="start">History range from</label>
+	      <input type="number" class="form-control input-sm" id="start" min="2009" max="{{historyRange.end}}" data-ng-model="historyRange.start" data-ng-change="updateHistory()" placeholder="Start year (inclusive)">
+	    </div>
+	    <div class="form-group">
+	      <label for="end">to</label>
+	      <input type="number" class="form-control input-sm" id="end" min="{{historyRange.start}}" max="{{historyRange.max}}" data-ng-model="historyRange.end" data-ng-change="updateHistory()" placeholder="End year (exclusive)">
+	    </div>  	    
+	</form>	
+	<br />
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-8 col-lg-7">
-	<div data-ng-highchart id="chart-history"  config="historyConfig" ></div>				
+	<div data-ng-highchart id="chart-history"  config="historyConfig" ></div>					
     </div>
     <div class="col-md-4 hidden-sm hidden-xs">
 	<p ng-hide="historyConfig.userData.worstYear == null || historyConfig.userData.bestYear == null">
