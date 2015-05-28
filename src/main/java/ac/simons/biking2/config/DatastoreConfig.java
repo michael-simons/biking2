@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Michael J. Simons, 2014-02-08
  */
 @Configuration
-public class PersistenceConfig {
+public class DatastoreConfig {
 
     public static final String BIKING_PICTURES_DIRECTORY = "data/bikingPictures";
     public static final String GALLERY_PICTURES_DIRECTORY = "data/galleryPictures";

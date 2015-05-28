@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.GalleryPicture;
 import ac.simons.biking2.persistence.repositories.GalleryPictureRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,7 +65,7 @@ public class GalleryControllerTest {
     public GalleryControllerTest() {
 	this.tmpDir = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
 	this.tmpDir.deleteOnExit();
-	this.galleryPictures = new File(this.tmpDir, PersistenceConfig.GALLERY_PICTURES_DIRECTORY);
+	this.galleryPictures = new File(this.tmpDir, DatastoreConfig.GALLERY_PICTURES_DIRECTORY);
 	this.galleryPictures.mkdirs();	
     }
 

@@ -43,7 +43,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static ac.simons.biking2.api.BikingPicturesControllerTest.RegexMatcher.matches;
-import static ac.simons.biking2.config.PersistenceConfig.BIKING_PICTURES_DIRECTORY;
+import static ac.simons.biking2.config.DatastoreConfig.BIKING_PICTURES_DIRECTORY;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

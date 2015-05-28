@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.BikingPicture;
 import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
 import java.io.File;
@@ -69,7 +69,7 @@ public class BikingPicturesController {
 	if ((bikingPicture = this.bikingPictureRepository.findOne(id)) == null) {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {
-	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%d.jpg", PersistenceConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId()));
+	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%d.jpg", DatastoreConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId()));
 	    
 	    final int cacheForDays = 365;
 	    response.setHeader("Content-Type", "image/jpeg");

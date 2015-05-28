@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.GalleryPicture;
 import ac.simons.biking2.persistence.repositories.GalleryPictureRepository;
 import java.io.File;
@@ -105,7 +105,7 @@ public class GalleryController {
 	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	} else {
 	    final String filename = this.filenameGenerator.generateFile(imageData.getOriginalFilename());
-	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", PersistenceConfig.GALLERY_PICTURES_DIRECTORY, filename));
+	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, filename));
 
 	    try (FileOutputStream out = new FileOutputStream(imageFile);) {
 		out.getChannel().transferFrom(Channels.newChannel(imageData.getInputStream()), 0, Integer.MAX_VALUE);
@@ -136,7 +136,7 @@ public class GalleryController {
 	if ((galleryPicture = this.galleryPictureRepository.findOne(id)) == null) {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {
-	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", PersistenceConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
+	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
 	    
 	    final int cacheForDays = 365;
 	    response.setHeader("Content-Type", "image/jpeg");

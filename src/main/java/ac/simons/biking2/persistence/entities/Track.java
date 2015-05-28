@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.persistence.entities;
 
-import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.config.DatastoreConfig;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -184,7 +184,7 @@ public class Track implements Serializable {
     }
 
     public File getTrackFile(final File datastoreBaseDirectory, final String format) {
-	return new File(datastoreBaseDirectory, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, this.getId(), format));
+	return new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, this.getId(), format));
     }
 
     @Override
