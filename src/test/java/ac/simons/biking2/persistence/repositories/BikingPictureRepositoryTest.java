@@ -23,9 +23,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static java.time.ZonedDateTime.of;
@@ -37,8 +37,8 @@ import static org.hamcrest.CoreMatchers.is;
  * @author Michael J. Simons, 2014-02-18
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = TestConfig.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = TestConfig.class)
 @Transactional
 public class BikingPictureRepositoryTest {
 

@@ -34,10 +34,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -52,8 +52,8 @@ import static org.junit.rules.ExpectedException.none;
  * @author msimons, 2014-02-12
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = TestConfig.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = TestConfig.class)
 public class BikeRepositoryTest {
 
     @Autowired
