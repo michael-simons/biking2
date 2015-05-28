@@ -16,32 +16,14 @@
 package ac.simons.biking2.config;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import org.hibernate.dialect.H2Dialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
-import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "ac.simons.biking2.persistence.repositories")
-@EnableTransactionManagement
 public class PersistenceConfig {
 
     public static final String BIKING_PICTURES_DIRECTORY = "data/bikingPictures";
@@ -67,42 +49,4 @@ public class PersistenceConfig {
 	new File(rv, TRACK_DIRECTORY).mkdirs();
 	return rv;
     }
-
-    @Bean
-    public JpaVendorAdapter jpaVendorAdapter(final Environment environment) {
-	final HibernateJpaVendorAdapter rv = new HibernateJpaVendorAdapter();
-
-	rv.setDatabase(Database.H2);
-	rv.setDatabasePlatform(H2Dialect.class.getName());
-	rv.setGenerateDdl(environment.acceptsProfiles("dev"));
-	rv.setShowSql(environment.acceptsProfiles("dev", "test"));
-
-	return rv;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(final EntityManagerFactory entityManagerFactory) {
-	final JpaTransactionManager transactionManager = new JpaTransactionManager();
-	transactionManager.setEntityManagerFactory(entityManagerFactory);
-	return transactionManager;
-    }
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(final Environment environment, final DataSource dataSource, final JpaVendorAdapter jpaVendorAdapter) {
-	final Map<String, String> properties = new HashMap<>();
-	properties.put("hibernate.generate_statistics", "false");
-	if (environment.acceptsProfiles("dev")) {
-	    properties.put("hibernate.hbm2ddl.auto", "update");
-	}
-
-	final LocalContainerEntityManagerFactoryBean rv = new LocalContainerEntityManagerFactoryBean();
-	rv.setPersistenceUnitName("ac.simons.biking2.persistence.entities_resourceLocale");
-	rv.setPackagesToScan("ac.simons.biking2.persistence.entities");
-	rv.setJpaDialect(new HibernateJpaDialect());
-	rv.setJpaVendorAdapter(jpaVendorAdapter);
-	rv.setDataSource(dataSource);
-	rv.setLoadTimeWeaver(new InstrumentationLoadTimeWeaver());
-	rv.setJpaPropertyMap(properties);
-	return rv;
-    }    
 }
