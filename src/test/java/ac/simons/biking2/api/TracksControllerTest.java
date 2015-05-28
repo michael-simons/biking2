@@ -16,7 +16,7 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.api.BikingPicturesControllerTest.RegexMatcher;
-import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,7 +92,7 @@ public class TracksControllerTest {
 	
 	this.tmpDir = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
 	this.tmpDir.deleteOnExit();
-	this.tracksDir = new File(this.tmpDir, PersistenceConfig.TRACK_DIRECTORY);
+	this.tracksDir = new File(this.tmpDir, DatastoreConfig.TRACK_DIRECTORY);
 	this.tracksDir.mkdirs();
 	
 	// Try to find gpsbabel
@@ -269,8 +269,8 @@ public class TracksControllerTest {
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())
 		.andExpect(content().string(objectMapper.writeValueAsString(track)));
-	Assert.assertTrue(new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
-	Assert.assertTrue(new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
+	Assert.assertTrue(new File(tmpDir, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
+	Assert.assertTrue(new File(tmpDir, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
 	
 	trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/biking_pictures.rss"));
 	mockMvc
@@ -284,8 +284,8 @@ public class TracksControllerTest {
 		)
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isBadRequest());
-	Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
-	Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", PersistenceConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
+	Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
+	Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
 	Mockito.verify(trackRepository, Mockito.times(1)).delete(track);
     }
     

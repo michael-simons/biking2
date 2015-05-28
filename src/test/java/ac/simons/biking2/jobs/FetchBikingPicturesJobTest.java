@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.jobs;
 
-import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.BikingPicture;
 import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
 import ac.simons.biking2.rss.RSSDateTimeAdapter;
@@ -171,10 +171,10 @@ public class FetchBikingPicturesJobTest {
 	final List<BikingPicture> downloaded = job.download(downloadList);
 
 	assertThat(downloaded.size(), is(equalTo(1)));
-	assertThat(new File(this.tmpDir, PersistenceConfig.BIKING_PICTURES_DIRECTORY + "/45644.jpg").isFile(), is(true));
-	assertThat(new File(this.tmpDir, PersistenceConfig.BIKING_PICTURES_DIRECTORY + "/45325.jpg").isFile(), is(false));
-	assertThat(new File(this.tmpDir, PersistenceConfig.BIKING_PICTURES_DIRECTORY + "/44142.jpg").isFile(), is(false));
-	assertThat(new File(this.tmpDir, PersistenceConfig.BIKING_PICTURES_DIRECTORY + "/43461.jpg").isFile(), is(false));
+	assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/45644.jpg").isFile(), is(true));
+	assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/45325.jpg").isFile(), is(false));
+	assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/44142.jpg").isFile(), is(false));
+	assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/43461.jpg").isFile(), is(false));
 	// Verify number of calls with arbitrary ints
 	verify(dailyFratzeProvider, times(3)).getImageConnection(anyInt());
     }

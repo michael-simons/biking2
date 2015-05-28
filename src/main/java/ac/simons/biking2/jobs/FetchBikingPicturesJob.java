@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.jobs;
 
-import ac.simons.biking2.config.PersistenceConfig;
+import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.misc.JAXBContextFactory;
 import ac.simons.biking2.persistence.entities.BikingPicture;
 import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
@@ -67,7 +67,7 @@ public class FetchBikingPicturesJob {
 	this.dailyFratzeProvider = dailyFratzeProvider;
 	this.bikingPictureRepository = bikingPictureRepository;
 
-	this.bikingPicturesStorage = new File(datastoreBaseDirectory, PersistenceConfig.BIKING_PICTURES_DIRECTORY);
+	this.bikingPicturesStorage = new File(datastoreBaseDirectory, DatastoreConfig.BIKING_PICTURES_DIRECTORY);
 	if (!(this.bikingPicturesStorage.isDirectory() || this.bikingPicturesStorage.mkdirs())) {
 	    throw new RuntimeException("Could not create bikingPicturesStorage!");
 	}
