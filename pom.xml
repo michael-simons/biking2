@@ -5,7 +5,7 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>1.6.3-SNAPSHOT</version>
+    <version>1.6.3</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
