@@ -35,12 +35,14 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static java.time.LocalDate.now;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -153,7 +155,8 @@ public class BikesControllerTest {
 	LocalDate now = now();
 
 	final BikeRepository repository = mock(BikeRepository.class);
-
+	when(repository.save(any(Bike.class))).then(returnsFirstArg());	
+	
 	final BikesController controller = new BikesController(repository);
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 

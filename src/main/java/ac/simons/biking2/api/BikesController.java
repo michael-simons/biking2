@@ -100,9 +100,8 @@ public class BikesController {
 	bike.setColor(newBike.getColor());
 	bike.addMilage(newBike.boughtOnAsLocalDate().withDayOfMonth(1), 0);
 	
-	try {
-	    this.bikeRepository.save(bike);
-	    rv = new ResponseEntity<>(bike, HttpStatus.OK);
+	try {	    
+	    rv = new ResponseEntity<>(this.bikeRepository.save(bike), HttpStatus.OK);
 	} catch(DataIntegrityViolationException e) {	    
 	    rv = new ResponseEntity<>(HttpStatus.CONFLICT);
 	}
