@@ -39,6 +39,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -55,6 +57,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
 
 import static java.util.stream.Collectors.reducing;
 import static java.util.stream.IntStream.rangeClosed;
@@ -83,6 +86,57 @@ import static java.util.stream.IntStream.rangeClosed;
 public class Bike implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
+    
+    @Embeddable
+    public static class Link {
+	@Column(name = "url", length = 512)
+	@NotNull
+	@URL
+	private String url;
+	
+	@Column(name = "label", length = 255)
+	@NotBlank
+	private String label;
+	
+	protected Link() {	    
+	}
+
+	public Link(String url, String label) {
+	    this.url = url;
+	    this.label = label;
+	}
+
+	public String getUrl() {
+	    return url;
+	}
+
+	public String getLabel() {
+	    return label;
+	}
+
+	public void setLabel(String label) {
+	    this.label = label;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = 7;
+	    hash = 97 * hash + Objects.hashCode(this.url);
+	    return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Link other = (Link) obj;
+	    return Objects.equals(this.url, other.url);
+	}
+    }
 
     @Id
     @Column(name = "id")
@@ -118,6 +172,9 @@ public class Bike implements Serializable {
     @NotNull
     @JsonIgnore
     private Calendar createdAt;
+    
+    @Embedded
+    private Link story;
 
     /**
      * Contains all monthly periods that bike has been used
@@ -269,6 +326,14 @@ public class Bike implements Serializable {
 	return this.milages != null && this.milages.size() > 0;
     }
 
+    public Link getStory() {
+	return story;
+    }
+
+    public void setStory(Link story) {
+	this.story = story;
+    }
+    
     @Override
     public int hashCode() {
 	int hash = 7;

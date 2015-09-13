@@ -15,11 +15,12 @@
  */
 package ac.simons.biking2.persistence.entities;
 
+import ac.simons.biking2.persistence.entities.Bike.Link;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,9 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.outsideMyBox.testUtils.BeanLikeTester;
+import org.outsideMyBox.testUtils.BeanLikeTester.ConstructorSignatureAndPropertiesMapping;
+import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -51,6 +55,36 @@ public class BikeTest {
     }
     
     @Test
+    public void linkBeanShouldWorkAsExpected() {
+	ConstructorSignatureAndPropertiesMapping mapping = new ConstructorSignatureAndPropertiesMapping();	
+	mapping.put(Arrays.asList(String.class, String.class), Arrays.asList("url", "label"));
+
+	final BeanLikeTester beanLikeTester = new BeanLikeTester(Bike.Link.class, mapping);
+	
+	final PropertiesAndValues defaultValues = new PropertiesAndValues();
+	defaultValues.put("url", null);
+	defaultValues.put("label", null);
+	
+	final PropertiesAndValues values = new PropertiesAndValues();	
+	values.put("url", "http://heise.de");
+	values.put("label", "foobar");
+
+	beanLikeTester.testDefaultValues(defaultValues);
+	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	
+	Link l1 = new Link();
+	Link l2 = new Link("http://heise.de", "h");
+	Link l3 = new Link("http://heise.de", "H");
+	
+	Assert.assertEquals(l2, l3);
+	Assert.assertTrue(l2.hashCode() ==  l3.hashCode());
+	Assert.assertNotEquals(l2, l1);
+	Assert.assertFalse(l2.hashCode() ==  l1.hashCode());
+	Assert.assertNotEquals(l2, null);
+	Assert.assertNotEquals(l2, "asds");
+    }
+    
+    @Test
     public void beanShouldWorkAsExpected() {
 	final LocalDate now = LocalDate.now();	
 	Bike bike = new Bike("poef", now.withDayOfMonth(1));
@@ -66,6 +100,7 @@ public class BikeTest {
 	other.decommission(now);
 	Assert.assertNotNull(other.getDecommissionedOn());
 		
+	Assert.assertNull(bike.getStory());
 	Assert.assertNull(bike.getId());
 	Assert.assertNotNull(bike.getCreatedAt());
 	Assert.assertEquals(bike, same);
@@ -77,6 +112,10 @@ public class BikeTest {
 	
 	Assert.assertEquals(GregorianCalendar.from(now.withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault())), other.getBoughtOn());
 	Assert.assertEquals(GregorianCalendar.from(now.atStartOfDay(ZoneId.systemDefault())), other.getDecommissionedOn());
+	
+	final Bike.Link story = new Bike.Link("http://planet-punk.de/2015/08/11/nie-wieder-stadtschlampe/", "Nie wieder Stadtschlampe");
+	bike.setStory(story);
+	Assert.assertEquals(story, bike.getStory());
     }
     
     @Test
