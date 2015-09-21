@@ -90,7 +90,7 @@ public class Bike implements Serializable {
     @Embeddable
     public static class Link {
 	@Column(name = "url", length = 512)
-	@NotNull
+	@NotBlank
 	@URL
 	private String url;
 	
