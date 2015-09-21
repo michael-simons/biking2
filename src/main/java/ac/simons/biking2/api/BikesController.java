@@ -16,9 +16,11 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.persistence.entities.Bike;
+import ac.simons.biking2.persistence.entities.Bike.Link;
 import ac.simons.biking2.persistence.entities.Milage;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -127,6 +129,28 @@ public class BikesController {
 	} else {
 	    bike.setColor(updatedBike.getColor());
 	    bike.decommission(updatedBike.decommissionedOnAsLocalDate());	  
+	    rv = new ResponseEntity<>(bike, HttpStatus.OK);
+	}
+	return rv;
+    }
+    
+    @RequestMapping(value = "/api/bikes/{id:\\d+}/story", method = PUT)
+    @PreAuthorize("isAuthenticated()")
+    @Transactional
+    public ResponseEntity<Bike> updateBikeStory(final @PathVariable Integer id, final @RequestBody(required = false) @Valid StoryCmd newStory, final BindingResult bindingResult) {
+	if(bindingResult.hasErrors()) {
+	    throw new IllegalArgumentException("Invalid arguments.");
+	}
+	
+	final Bike bike = bikeRepository.findOne(id);
+	
+	ResponseEntity<Bike> rv;	
+	if(bike == null) {
+	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	} else if(bike.getDecommissionedOn() != null) { 
+	    throw new IllegalArgumentException("Bike has already been decommissioned.");
+	} else {
+	    bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));
 	    rv = new ResponseEntity<>(bike, HttpStatus.OK);
 	}
 	return rv;

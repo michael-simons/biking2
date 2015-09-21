@@ -5,12 +5,12 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>1.7.3-SNAPSHOT</version>
+    <version>1.8.2-SNAPSHOT</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>1.2.5.RELEASE</version>
+	<version>1.2.6.RELEASE</version>
     </parent>
 
     <name>biking2</name>
@@ -137,7 +137,7 @@
 	    <plugin>
 		<groupId>org.jacoco</groupId>
 		<artifactId>jacoco-maven-plugin</artifactId>
-		<version>0.7.2.201409121644</version>
+		<version>0.7.5.201505241946</version>
 		<configuration>
 		    <excludes>
 			<!-- Application starter -->
@@ -379,37 +379,9 @@
 	</dependency>
 	
 	<dependency>
-	    <groupId>org.hamcrest</groupId>
-	    <artifactId>hamcrest-all</artifactId>
-	    <version>${hamcrest.version}</version>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-test</artifactId>
 	    <scope>test</scope>
-	</dependency>
-	<dependency>
-	    <groupId>junit</groupId>
-	    <artifactId>junit</artifactId>
-	    <scope>test</scope>
-	    <exclusions>
-		<exclusion>
-		    <groupId>org.hamcrest</groupId>
-		    <artifactId>hamcrest-core</artifactId>
-		</exclusion>
-	    </exclusions>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-test</artifactId>
-	    <scope>test</scope>
-	</dependency>
-	<dependency>
-	    <groupId>org.mockito</groupId>
-	    <artifactId>mockito-core</artifactId>
-	    <scope>test</scope>
-	    <exclusions>
-		<exclusion>
-		    <groupId>org.hamcrest</groupId>
-		    <artifactId>hamcrest-core</artifactId>
-		</exclusion>
-	    </exclusions>
 	</dependency>
 	<dependency>
 	    <groupId>org.outsideMyBox</groupId>

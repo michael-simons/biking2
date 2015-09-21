@@ -18,6 +18,7 @@
 			    <th>Bought on</th>
 			    <th>Decommissioned on</th>
 			    <th class="text-right">Last milage</th>
+			    <th>Read more</th>
 			</tr>
 		    </thead>
 		    <tbody>
@@ -26,6 +27,7 @@
 			    <td>{{ bike.boughtOn | date: 'dd.MM.yyyy' }}</td>
 			    <td>{{ bike.decommissionedOn | date: 'dd.MM.yyyy' }}</td>
 			    <td class="text-right">{{ bike.lastMilage | number:0 }}km</td>
+			    <td><a ng-if="bike.story !== null" href="{{bike.story.url}}">{{ bike.story.label }}</a></td>
 			</tr>
 		    </tbody>
 		</table>		

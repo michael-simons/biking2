@@ -9,6 +9,8 @@ CREATE TABLE bikes (
     name VARCHAR(255) NOT NULL, 
     bought_on DATE NOT NULL,
     color VARCHAR(6) NOT NULL DEFAULT 'CCCCCC', 
+    url VARCHAR(512) NULL, 
+    label VARCHAR(255) NULL, 
     decommissioned_on DATE,
     created_at DATETIME NOT NULL,         
     CONSTRAINT bikes_unique_name UNIQUE(name),
