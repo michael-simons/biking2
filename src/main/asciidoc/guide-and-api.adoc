@@ -1,0 +1,50 @@
+= biking.michael-simons.eu Guide and API
+Michael Simons;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[introduction]
+== Introduction
+
+http://biking.michael-simons.eu[biking.michael-simons.eu] is a project for 
+
+* tracking my bike activities
+* evaluating technology
+* learn stuff
+* showcasing my skills
+
+For my information see http://info.michael-simons.eu/2014/02/20/developing-a-web-application-with-spring-boot-angularjs-and-java-8/[this blog post] as a starting point.
+
+I'd like to thank all the people working at the Spring Eco System for doing their amazing work.
+
+[api]
+== Api
+
+[[bikes]]
+=== Bikes
+
+[[listing-bikes]]
+
+==== Listing bikes
+
+A `GET` request will list all of the service's bikes.
+
+===== Request Parameter
+
+include::{snippets}/api/bikes/get/request-parameters.adoc[]
+
+===== Response structure
+
+include::{snippets}/api/bikes/get/response-fields.adoc[]
+
+===== Example request
+
+include::{snippets}/api/bikes/get/curl-request.adoc[]
+
+===== Example response
+
+include::{snippets}/api/bikes/get/http-response.adoc[]

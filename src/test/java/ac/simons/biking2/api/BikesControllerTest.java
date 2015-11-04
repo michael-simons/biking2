@@ -16,20 +16,25 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.persistence.entities.Bike;
+import ac.simons.biking2.persistence.entities.Bike.Link;
 import ac.simons.biking2.persistence.repositories.BikeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import org.joor.Reflect;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
+import org.springframework.restdocs.RestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -44,8 +49,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,27 +65,88 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class BikesControllerTest {
 
+    @Rule
+    public final RestDocumentation restDocumentation = new RestDocumentation("target/generated-snippets");
+    
     private final ObjectMapper objectMapper = new ObjectMapper();
-
+    
     @Test
-    public void shouldGetBikes() {
+    public void shouldGetBikes() throws Exception {			
+	final List<Bike> allbikes = Arrays.asList(
+		Reflect.on(Bike.class).create()
+		    .set("id", 4711)
+		    .set("name", "Bike 1")
+		    .set("color", "FF0000")
+		    .set("boughtOn", GregorianCalendar.from(LocalDate.of(2015, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault())))
+		    .set("decommissionedOn", GregorianCalendar.from(LocalDate.of(2015, Month.DECEMBER, 31).atStartOfDay(ZoneId.systemDefault())))
+		    .set("story", new Link("http://test.com/test", "Test Story"))
+		    .call("addMilage", LocalDate.of(2015, Month.JANUARY, 1), 0.0)
+		    .call("getBike")
+		    .call("addMilage", LocalDate.of(2015, Month.FEBRUARY, 1), 100.0)
+		    .call("getBike")
+		    .call("addMilage", LocalDate.of(2015, Month.MARCH, 1), 200.0)
+		    .call("getBike")
+		    .get(),
+		Reflect.on(Bike.class).create()
+		    .set("id", 23)
+		    .set("name", "Bike 2")
+		    .set("color", "CCCCCC")
+		    .set("boughtOn", GregorianCalendar.from(LocalDate.of(2014, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault())))
+		    .call("addMilage", LocalDate.of(2014, Month.JANUARY, 1), 0.0)
+		    .call("getBike")		    
+		    .get()
+	);
+	final List<Bike> activeBikes = Arrays.asList(allbikes.get(0));
+	
 	final BikeRepository repository = mock(BikeRepository.class);
-	stub(repository.findAll(any(Sort.class))).toReturn(new ArrayList<>());
-	stub(repository.findByDecommissionedOnIsNull(any(Sort.class))).toReturn(new ArrayList<>());
+	stub(repository.findAll(any(Sort.class))).toReturn(allbikes);
+	stub(repository.findByDecommissionedOnIsNull(any(Sort.class))).toReturn(activeBikes);
 	
 	final BikesController controller = new BikesController(repository);
-		
-	List<Bike> bikes = controller.getBikes(false);
-	Assert.assertNotNull(bikes);
-	Assert.assertEquals(0, bikes.size());
 	
-	bikes = controller.getBikes(true);
-	Assert.assertNotNull(bikes);
-	Assert.assertEquals(0, bikes.size());
+	final MockMvc mockMvc = MockMvcBuilders
+		.standaloneSetup(controller)
+		.apply(documentationConfiguration(this.restDocumentation))
+		.build();
+		
+	mockMvc
+		.perform(
+			get("http://biking.michael-simons.eu/api/bikes")    
+			.param("all", "true")
+		)
+		.andExpect(status().isOk())
+		.andExpect(content().string(objectMapper.writeValueAsString(allbikes)))
+		.andDo(document("api/bikes/get",
+				requestParameters(
+				    parameterWithName("all").description("Flag, if all bikes, including decommissioned bikes, should be returned.")
+				),
+				org.springframework.restdocs.payload.PayloadDocumentation.responseFields(
+					fieldWithPath("[].id").description("The unique Id of the bike"),
+					fieldWithPath("[].name").description("The name of the bike"),
+					fieldWithPath("[].color").description("The color of the bike (used in charts etc.)"),
+					fieldWithPath("[].boughtOn").description("The date the bike was bought"),
+					fieldWithPath("[].decommissionedOn").optional().description("The date the bike was decommissioned"),
+					fieldWithPath("[].story").optional().description("The story of the bike"),
+					fieldWithPath("[].story.url").description("Link to the story"),
+					fieldWithPath("[].story.label").description("A title for the story"),
+					fieldWithPath("[].milage").description("The total milage of the bike"),
+					fieldWithPath("[].lastMilage").description("The last recorded milage of the bike")				
+				)
+			)
+		);
+		;
+	
+	mockMvc
+		.perform(
+			get("http://biking.michael-simons.eu/api/bikes")    			
+		)
+		.andExpect(status().isOk())
+		.andExpect(content().string(objectMapper.writeValueAsString(activeBikes)))		
+		;						
 	
 	Mockito.verify(repository).findAll(Mockito.any(Sort.class));
 	Mockito.verify(repository).findByDecommissionedOnIsNull(Mockito.any(Sort.class));
-	Mockito.verifyNoMoreInteractions(repository);	
+	Mockito.verifyNoMoreInteractions(repository);		
     }
     
     @Test
