@@ -48,3 +48,19 @@ include::{snippets}/api/bikes/get/curl-request.adoc[]
 ===== Example response
 
 include::{snippets}/api/bikes/get/http-response.adoc[]
+
+==== Creating a bike
+
+A `POST` request is used to create a new bike
+
+===== Request structure
+
+include::{snippets}/api/bikes/post/request-fields.adoc[]
+
+===== Example request
+
+include::{snippets}/api/bikes/post/curl-request.adoc[]
+
+===== Example response
+
+include::{snippets}/api/bikes/post/http-response.adoc[]

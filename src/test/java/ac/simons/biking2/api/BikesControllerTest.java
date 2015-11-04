@@ -52,6 +52,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -120,7 +122,8 @@ public class BikesControllerTest {
 				requestParameters(
 				    parameterWithName("all").description("Flag, if all bikes, including decommissioned bikes, should be returned.")
 				),
-				org.springframework.restdocs.payload.PayloadDocumentation.responseFields(
+				responseFields(
+					fieldWithPath("[]").description("An array of bikes"),
 					fieldWithPath("[].id").description("The unique Id of the bike"),
 					fieldWithPath("[].name").description("The name of the bike"),
 					fieldWithPath("[].color").description("The color of the bike (used in charts etc.)"),
@@ -228,9 +231,8 @@ public class BikesControllerTest {
 
 	final BikeRepository repository = mock(BikeRepository.class);
 	when(repository.save(any(Bike.class))).then(returnsFirstArg());	
-	
-	final BikesController controller = new BikesController(repository);
-	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		
+	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new BikesController(repository)).apply(documentationConfiguration(this.restDocumentation)).build();
 
 	final BikeCmd newBikeCmd = new BikeCmd();
 	newBikeCmd.setBoughtOn(new Date());
@@ -266,7 +268,17 @@ public class BikesControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(content().string(
 				objectMapper.writeValueAsString(bike))
-		);
+		)
+		.andDo(document("api/bikes/post",				
+				requestFields(
+					fieldWithPath("name").description("The name of the new bike"),					
+					fieldWithPath("boughtOn").description("The date the new bike was bought"),
+					fieldWithPath("color").description("The color of the new bike"),
+					fieldWithPath("decommissionedOn").ignored()
+				)
+			)
+		)
+		;
 
 	verify(repository, times(1)).save(any(Bike.class));
     }
