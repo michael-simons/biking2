@@ -74,11 +74,11 @@ public class BikesControllerTest {
 
     @Rule
     public final RestDocumentation restDocumentation = new RestDocumentation("target/generated-snippets");
-    
+
     private final ObjectMapper objectMapper = new ObjectMapper();
-    
+
     @Test
-    public void shouldGetBikes() throws Exception {			
+    public void shouldGetBikes() throws Exception {
 	final List<Bike> allbikes = Arrays.asList(
 		Reflect.on(Bike.class).create()
 		    .set("id", 4711)
@@ -100,25 +100,25 @@ public class BikesControllerTest {
 		    .set("color", "CCCCCC")
 		    .set("boughtOn", GregorianCalendar.from(LocalDate.of(2014, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault())))
 		    .call("addMilage", LocalDate.of(2014, Month.JANUARY, 1), 0.0)
-		    .call("getBike")		    
+		    .call("getBike")
 		    .get()
 	);
 	final List<Bike> activeBikes = Arrays.asList(allbikes.get(0));
-	
+
 	final BikeRepository repository = mock(BikeRepository.class);
 	stub(repository.findAll(any(Sort.class))).toReturn(allbikes);
 	stub(repository.findByDecommissionedOnIsNull(any(Sort.class))).toReturn(activeBikes);
-	
+
 	final BikesController controller = new BikesController(repository);
-	
+
 	final MockMvc mockMvc = MockMvcBuilders
 		.standaloneSetup(controller)
 		.apply(documentationConfiguration(this.restDocumentation))
 		.build();
-		
+
 	mockMvc
 		.perform(
-			get("http://biking.michael-simons.eu/api/bikes")    
+			get("http://biking.michael-simons.eu/api/bikes")
 			.param("all", "true")
 		)
 		.andExpect(status().isOk())
@@ -140,25 +140,25 @@ public class BikesControllerTest {
 					fieldWithPath("[].story.url").description("Link to the story"),
 					fieldWithPath("[].story.label").description("A title for the story"),
 					fieldWithPath("[].milage").description("The total milage of the bike"),
-					fieldWithPath("[].lastMilage").description("The last recorded milage of the bike")				
+					fieldWithPath("[].lastMilage").description("The last recorded milage of the bike")
 				)
 			)
-		);
+		)
 		;
-	
+
 	mockMvc
 		.perform(
-			get("http://biking.michael-simons.eu/api/bikes")    			
+			get("http://biking.michael-simons.eu/api/bikes")
 		)
 		.andExpect(status().isOk())
-		.andExpect(content().string(objectMapper.writeValueAsString(activeBikes)))		
-		;						
-	
+		.andExpect(content().string(objectMapper.writeValueAsString(activeBikes)))
+		;
+
 	Mockito.verify(repository).findAll(Mockito.any(Sort.class));
 	Mockito.verify(repository).findByDecommissionedOnIsNull(Mockito.any(Sort.class));
-	Mockito.verifyNoMoreInteractions(repository);		
+	Mockito.verifyNoMoreInteractions(repository);
     }
-    
+
     @Test
     public void testCreateMilage() throws Exception {
 	LocalDate now = now();
@@ -167,7 +167,7 @@ public class BikesControllerTest {
 
 	final Bike bike = new Bike("testBike", now);
 	stub(repository.findOne(2)).toReturn(bike);
-	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));	
+	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));
 	decommissionedBike.decommission(now.minusMonths(1));
 	stub(repository.findOne(3)).toReturn(decommissionedBike);
 
@@ -220,14 +220,14 @@ public class BikesControllerTest {
 		)
 		.andDo(
 			document(
-				"api/bikes/milages/post", 					
+				"api/bikes/milages/post",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
-				pathParameters(					
+				pathParameters(
 					parameterWithName("id").description("The id of the bike to which a milage should be added")
-				),				
+				),
 				requestFields(
-					fieldWithPath("recordedOn").description("The date the new milage was recorded"),					
+					fieldWithPath("recordedOn").description("The date the new milage was recorded"),
 					fieldWithPath("amount").description("The total milage of the bike on the given date")
 				),
 				responseFields(
@@ -240,7 +240,7 @@ public class BikesControllerTest {
 			)
 		)
 		;
-	
+
 	// Decommisioned bike
 	mockMvc
 		.perform(
@@ -250,7 +250,7 @@ public class BikesControllerTest {
 		)
 		.andExpect(status().isBadRequest())
 		.andExpect(MockMvcResultMatchers.content().string("Bike has already been decommissioned."));
-	
+
 	verify(repository, times(1)).findOne(1);
 	verify(repository, times(1)).findOne(2);
 	verify(repository, times(1)).findOne(3);
@@ -262,8 +262,8 @@ public class BikesControllerTest {
 	LocalDate now = now();
 
 	final BikeRepository repository = mock(BikeRepository.class);
-	when(repository.save(any(Bike.class))).then(returnsFirstArg());	
-		
+	when(repository.save(any(Bike.class))).then(returnsFirstArg());
+
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new BikesController(repository)).apply(documentationConfiguration(this.restDocumentation)).build();
 
 	final BikeCmd newBikeCmd = new BikeCmd();
@@ -301,11 +301,11 @@ public class BikesControllerTest {
 		.andExpect(content().string(
 				objectMapper.writeValueAsString(bike))
 		)
-		.andDo(document("api/bikes/post",	
+		.andDo(document("api/bikes/post",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestFields(
-					fieldWithPath("name").description("The name of the new bike"),					
+					fieldWithPath("name").description("The name of the new bike"),
 					fieldWithPath("boughtOn").description("The date the new bike was bought"),
 					fieldWithPath("color").description("The color of the new bike"),
 					fieldWithPath("decommissionedOn").ignored()
@@ -343,30 +343,30 @@ public class BikesControllerTest {
 
 	verify(repository, times(1)).save(any(Bike.class));
     }
-    
+
     @Test
     public void testUpdateBike() throws Exception {
 	LocalDate now = now();
 
 	final BikeRepository repository = mock(BikeRepository.class);
-	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));	
+	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));
 	decommissionedBike.decommission(now.minusMonths(1));
 	stub(repository.findOne(3)).toReturn(decommissionedBike);
-	
+
 	Bike bike = new Bike("test", now.minusMonths(1));
 	bike.setColor("000000");
 	Calendar boughtOn = bike.getBoughtOn();
 	stub(repository.findOne(2)).toReturn(bike);
-	
+
 	final BikesController controller = new BikesController(repository);
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
 	final BikeCmd updatedBikeCmd = new BikeCmd();
 	updatedBikeCmd.setBoughtOn(new Date());
-	updatedBikeCmd.setDecommissionedOn(new Date());	
+	updatedBikeCmd.setDecommissionedOn(new Date());
 	updatedBikeCmd.setColor("FFFCCC");
-	updatedBikeCmd.setName("neuer name");	
-	
+	updatedBikeCmd.setName("neuer name");
+
 	// Empty content
 	mockMvc
 		.perform(put("http://biking.michael-simons.eu/api/bikes/2").contentType(APPLICATION_JSON))
@@ -381,7 +381,7 @@ public class BikesControllerTest {
 			.content("{}")
 		)
 		.andExpect(status().isBadRequest())
-		.andExpect(MockMvcResultMatchers.content().string("Invalid arguments."));		
+		.andExpect(MockMvcResultMatchers.content().string("Invalid arguments."));
 
 	// Valid request, invalid bike
 	mockMvc
@@ -392,7 +392,7 @@ public class BikesControllerTest {
 		)
 		.andExpect(status().isNotFound())
 		.andExpect(MockMvcResultMatchers.content().string(""));
-	
+
 	mockMvc
 		.perform(
 			put("http://biking.michael-simons.eu/api/bikes/2")
@@ -400,7 +400,7 @@ public class BikesControllerTest {
 			.content(objectMapper.writeValueAsString(updatedBikeCmd))
 		)
 		.andExpect(status().isOk());
-	
+
 	// Decommisioned bike
 	mockMvc
 		.perform(
@@ -422,21 +422,21 @@ public class BikesControllerTest {
 
 	verifyNoMoreInteractions(repository);
     }
-    
+
     @Test
     public void testUpdateBikeStory() throws Exception {
 	LocalDate now = now();
 
 	final BikeRepository repository = mock(BikeRepository.class);
-	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));	
+	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));
 	decommissionedBike.decommission(now.minusMonths(1));
 	stub(repository.findOne(3)).toReturn(decommissionedBike);
-	
+
 	Bike bike = new Bike("test", now.minusMonths(1));
 	bike.setColor("000000");
 	Calendar boughtOn = bike.getBoughtOn();
 	stub(repository.findOne(2)).toReturn(bike);
-	
+
 	final BikesController controller = new BikesController(repository);
 	final MockMvc mockMvc = MockMvcBuilders
 		.standaloneSetup(controller)
@@ -458,7 +458,7 @@ public class BikesControllerTest {
 		)
 		.andExpect(status().isBadRequest())
 		.andExpect(MockMvcResultMatchers.content().string("Invalid arguments."));
-	
+
 	// Invalid content
 	mockMvc
 		.perform(
@@ -478,7 +478,7 @@ public class BikesControllerTest {
 		)
 		.andExpect(status().isNotFound())
 		.andExpect(MockMvcResultMatchers.content().string(""));
-	
+
 	mockMvc
 		.perform(
 			RestDocumentationRequestBuilders.put("/api/bikes/{id}/story", 2)
@@ -488,42 +488,42 @@ public class BikesControllerTest {
 		.andExpect(status().isOk())
 		.andDo(
 			document(
-				"api/bikes/story/put", 					
+				"api/bikes/story/put",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
-				pathParameters(					
+				pathParameters(
 					parameterWithName("id").description("The id of the bike whose story should be updated")
-				),				
+				),
 				requestFields(
 					fieldWithPath("url").description("Link to the story"),
 					fieldWithPath("label").description("A title for the story")
 				)
 			)
-		)		
+		)
 		;
-	
+
 	Assert.assertEquals("test", bike.getName());
 	Assert.assertEquals(boughtOn, bike.getBoughtOn());
 	Assert.assertEquals("000000", bike.getColor());
 	Assert.assertNotNull(bike.getStory());
 	Assert.assertEquals(validNewStoryCmd.getLabel(), bike.getStory().getLabel());
 	Assert.assertEquals(validNewStoryCmd.getUrl(), bike.getStory().getUrl());
-			
+
 	// Empty content
 	mockMvc
 		.perform(put("/api/bikes/2/story").contentType(APPLICATION_JSON))
 		.andExpect(status().isOk())
 		.andDo(
 			document(
-				"api/bikes/story/put-empty", 					
+				"api/bikes/story/put-empty",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint())
 			)
-		)		
+		)
 		;
 
 	Assert.assertNull(bike.getStory());
-	
+
 	// Decommisioned bike
 	mockMvc
 		.perform(
