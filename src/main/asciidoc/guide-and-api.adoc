@@ -64,3 +64,25 @@ include::{snippets}/api/bikes/post/curl-request.adoc[]
 ===== Example response
 
 include::{snippets}/api/bikes/post/http-response.adoc[]
+
+==== Adding milages to bikes
+
+A bike manages its total milage at a given date. To make it easy for the user, no difference needs to be calculated, the user can enter the milage of is bike as stated on the odometer or whatever.
+
+A `POST` request will add a new milage to a given bike.
+
+===== Path Parameters
+
+include::{snippets}/api/bikes/milages/post/path-parameters.adoc[]
+
+===== Request structure
+
+include::{snippets}/api/bikes/milages/post/request-fields.adoc[]
+
+===== Example request
+
+include::{snippets}/api/bikes/milages/post/curl-request.adoc[]
+
+===== Example response
+
+include::{snippets}/api/bikes/milages/post/http-response.adoc[]

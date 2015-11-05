@@ -35,6 +35,7 @@ import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.restdocs.RestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -51,10 +52,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -169,18 +174,21 @@ public class BikesControllerTest {
 	newMilageCmd.setRecordedOn(new Date());
 
 	final BikesController controller = new BikesController(repository);
-	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	final MockMvc mockMvc = MockMvcBuilders
+		.standaloneSetup(controller)
+		.apply(documentationConfiguration(this.restDocumentation))
+		.build();
 
 	// Empty content
 	mockMvc
-		.perform(post("http://biking.michael-simons.eu/api/bikes/1/milages").contentType(APPLICATION_JSON))
+		.perform(post("/api/bikes/1/milages").contentType(APPLICATION_JSON))
 		.andExpect(status().isBadRequest())
 		.andExpect(MockMvcResultMatchers.content().string(""));
 
 	// Invalid content
 	mockMvc
 		.perform(
-			post("http://biking.michael-simons.eu/api/bikes/1/milages")
+			post("/api/bikes/1/milages")
 			.contentType(APPLICATION_JSON)
 			.content("{}")
 		)
@@ -190,7 +198,7 @@ public class BikesControllerTest {
 	// Invalid bike
 	mockMvc
 		.perform(
-			post("http://biking.michael-simons.eu/api/bikes/1/milages")
+			post("/api/bikes/1/milages")
 			.contentType(APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(newMilageCmd))
 		)
@@ -200,19 +208,41 @@ public class BikesControllerTest {
 	// Valid request
 	mockMvc
 		.perform(
-			post("http://biking.michael-simons.eu/api/bikes/2/milages")
+			RestDocumentationRequestBuilders.post("/api/bikes/{id}/milages", 2)
 			.contentType(APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(newMilageCmd))
 		)
 		.andExpect(status().isOk())
 		.andExpect(content().string(
 				objectMapper.writeValueAsString(new Bike("testBike", now).addMilage(now, 23.0)))
-		);
+		)
+		.andDo(
+			document(
+				"api/bikes/milages/post", 					
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				pathParameters(					
+					parameterWithName("id").description("The id of the bike to which a milage should be added")
+				),				
+				requestFields(
+					fieldWithPath("recordedOn").description("The date the new milage was recorded"),					
+					fieldWithPath("amount").description("The total milage of the bike on the given date")
+				),
+				responseFields(
+					fieldWithPath("id").description("The unique id of the newly recorded milage"),
+					fieldWithPath("recordedOn").description("The date the new milage was recorded"),
+					fieldWithPath("amount").description("The total milage of the bike on the given date"),
+					fieldWithPath("createdAt").description("The date the new milage record was created"),
+					fieldWithPath("bike").description("The bike object the new milage belongs to")
+				)
+			)
+		)
+		;
 	
 	// Decommisioned bike
 	mockMvc
 		.perform(
-			post("http://biking.michael-simons.eu/api/bikes/3/milages")
+			post("/api/bikes/3/milages")
 			.contentType(APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(newMilageCmd))
 		)
