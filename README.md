@@ -8,7 +8,18 @@ This is a project where i try out Java 8, Spring / Spring Boot and AngularJS. Th
 
 You may also want to have a look at the client companion of this app, [BikingFX][4]
 
+## NOTE
+
+You'll need [GPSBabel][5] to build this project without errors and to use the tracks / log database. Errors running the `TracksControllerTest` are the result of a missing `gpsbabel` binary in the path.
+
+Per default, biking2 looks at `/opt/local/bin/gpsbabel` for the GPSBabel binary. This can be overwritten by adding an application.properties to the root of the project containing the following property:
+
+    biking2.gpsBabel = path/to/gpsbabel/binary
+
+GPSBabel is available for all major operating systems, including windows. So please check if it's available on your platform if biking2 doesn't compile for you.
+
 [1]: http://biking.michael-simons.eu
 [2]: http://biking.michael-simons.eu/about
 [3]: http://info.michael-simons.eu/2014/02/20/developing-a-web-application-with-spring-boot-angularjs-and-java-8/
 [4]: https://github.com/michael-simons/bikingFX
+[5]: http://www.gpsbabel.org
