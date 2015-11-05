@@ -7,7 +7,7 @@ Michael Simons;
 :toclevels: 3
 :sectlinks:
 
-[introduction]
+[[introduction]]
 == Introduction
 
 http://biking.michael-simons.eu[biking.michael-simons.eu] is a project for 
@@ -21,7 +21,7 @@ For my information see http://info.michael-simons.eu/2014/02/20/developing-a-web
 
 I'd like to thank all the people working at the Spring Eco System for doing their amazing work.
 
-[api]
+[[api]]
 == Api
 
 [[bikes]]
@@ -37,6 +37,7 @@ A `GET` request will list all of the service's bikes.
 
 include::{snippets}/api/bikes/get/request-parameters.adoc[]
 
+[[bike-structure]]
 ===== Response structure
 
 include::{snippets}/api/bikes/get/response-fields.adoc[]
@@ -86,3 +87,35 @@ include::{snippets}/api/bikes/milages/post/curl-request.adoc[]
 ===== Example response
 
 include::{snippets}/api/bikes/milages/post/http-response.adoc[]
+
+==== Adding a story to a bike
+
+Bikes can have an associated story, how they were build or whatever.
+
+A `PUT` request will update a given bike with a new story.
+
+===== Path Parameters
+
+include::{snippets}/api/bikes/story/put/path-parameters.adoc[]
+
+===== Request structure
+
+include::{snippets}/api/bikes/story/put/request-fields.adoc[]
+
+===== Example request
+
+include::{snippets}/api/bikes/story/put/curl-request.adoc[]
+
+===== Example response
+
+The reponse is an updated <<bike-structure,bike>>.
+
+include::{snippets}/api/bikes/story/put/http-response.adoc[]
+
+===== Deleting a story
+
+An empty `PUT` request deletes a bikes story:
+
+include::{snippets}/api/bikes/story/put-empty/curl-request.adoc[]
+
+include::{snippets}/api/bikes/story/put-empty/http-response.adoc[]

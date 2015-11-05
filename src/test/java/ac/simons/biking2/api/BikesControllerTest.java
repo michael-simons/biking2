@@ -438,18 +438,21 @@ public class BikesControllerTest {
 	stub(repository.findOne(2)).toReturn(bike);
 	
 	final BikesController controller = new BikesController(repository);
-	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	final MockMvc mockMvc = MockMvcBuilders
+		.standaloneSetup(controller)
+		.apply(documentationConfiguration(this.restDocumentation))
+		.build();
 
 	final StoryCmd validNewStoryCmd = new StoryCmd();
-	validNewStoryCmd.setLabel("foobar");
-	validNewStoryCmd.setUrl("http://heise.de");
+	validNewStoryCmd.setLabel("Nie wieder Stadtschlampe");
+	validNewStoryCmd.setUrl("http://planet-punk.de/2015/08/11/nie-wieder-stadtschlampe/");
 	final StoryCmd invalidNewStoryCmd = new StoryCmd();
 	invalidNewStoryCmd.setUrl("asdasd");
 
 	// Invalid content
 	mockMvc
 		.perform(
-			put("http://biking.michael-simons.eu/api/bikes/2/story")
+			put("/api/bikes/2/story")
 			.contentType(APPLICATION_JSON)
 			.content("{}")
 		)
@@ -459,7 +462,7 @@ public class BikesControllerTest {
 	// Invalid content
 	mockMvc
 		.perform(
-			put("http://biking.michael-simons.eu/api/bikes/2/story")
+			put("/api/bikes/2/story")
 			.contentType(APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(invalidNewStoryCmd))
 		)
@@ -469,7 +472,7 @@ public class BikesControllerTest {
 	// Valid request, invalid bike
 	mockMvc
 		.perform(
-			put("http://biking.michael-simons.eu/api/bikes/1/story")
+			put("/api/bikes/1/story")
 			.contentType(APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(validNewStoryCmd))
 		)
@@ -478,30 +481,53 @@ public class BikesControllerTest {
 	
 	mockMvc
 		.perform(
-			put("http://biking.michael-simons.eu/api/bikes/2/story")
+			RestDocumentationRequestBuilders.put("/api/bikes/{id}/story", 2)
 			.contentType(APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(validNewStoryCmd))
 		)
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andDo(
+			document(
+				"api/bikes/story/put", 					
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				pathParameters(					
+					parameterWithName("id").description("The id of the bike whose story should be updated")
+				),				
+				requestFields(
+					fieldWithPath("url").description("Link to the story"),
+					fieldWithPath("label").description("A title for the story")
+				)
+			)
+		)		
+		;
 	
 	Assert.assertEquals("test", bike.getName());
 	Assert.assertEquals(boughtOn, bike.getBoughtOn());
 	Assert.assertEquals("000000", bike.getColor());
 	Assert.assertNotNull(bike.getStory());
-	Assert.assertEquals("foobar", bike.getStory().getLabel());
-	Assert.assertEquals("http://heise.de", bike.getStory().getUrl());
+	Assert.assertEquals(validNewStoryCmd.getLabel(), bike.getStory().getLabel());
+	Assert.assertEquals(validNewStoryCmd.getUrl(), bike.getStory().getUrl());
 			
 	// Empty content
 	mockMvc
-		.perform(put("http://biking.michael-simons.eu/api/bikes/2/story").contentType(APPLICATION_JSON))
-		.andExpect(status().isOk());
+		.perform(put("/api/bikes/2/story").contentType(APPLICATION_JSON))
+		.andExpect(status().isOk())
+		.andDo(
+			document(
+				"api/bikes/story/put-empty", 					
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint())
+			)
+		)		
+		;
 
 	Assert.assertNull(bike.getStory());
 	
 	// Decommisioned bike
 	mockMvc
 		.perform(
-			put("http://biking.michael-simons.eu/api/bikes/3/story")
+			put("/api/bikes/3/story")
 			.contentType(APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(validNewStoryCmd))
 		)
