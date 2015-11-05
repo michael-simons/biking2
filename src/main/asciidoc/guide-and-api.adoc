@@ -119,3 +119,28 @@ An empty `PUT` request deletes a bikes story:
 include::{snippets}/api/bikes/story/put-empty/curl-request.adoc[]
 
 include::{snippets}/api/bikes/story/put-empty/http-response.adoc[]
+
+[[trips]]
+=== Trips
+
+To keep track of all milage including time not spent on persistent bikes, the user can store assorted trips. A trip is a distance covered at a certain date.
+
+==== Creating a trip
+
+A `POST` request is used to create a new trip
+
+===== Request structure
+
+include::{snippets}/api/trips/post/request-fields.adoc[]
+
+===== Example request
+
+include::{snippets}/api/trips/post/curl-request.adoc[]
+
+===== Response structure
+
+include::{snippets}/api/trips/post/response-fields.adoc[]
+
+===== Example response
+
+include::{snippets}/api/trips/post/http-response.adoc[]
