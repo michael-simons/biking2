@@ -124,6 +124,8 @@ public class BikesControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(content().string(objectMapper.writeValueAsString(allbikes)))
 		.andDo(document("api/bikes/get",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
 				requestParameters(
 				    parameterWithName("all").description("Flag, if all bikes, including decommissioned bikes, should be returned.")
 				),
@@ -299,7 +301,9 @@ public class BikesControllerTest {
 		.andExpect(content().string(
 				objectMapper.writeValueAsString(bike))
 		)
-		.andDo(document("api/bikes/post",				
+		.andDo(document("api/bikes/post",	
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
 				requestFields(
 					fieldWithPath("name").description("The name of the new bike"),					
 					fieldWithPath("boughtOn").description("The date the new bike was bought"),
