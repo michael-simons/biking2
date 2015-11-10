@@ -67,23 +67,21 @@ public class BikesController {
     
     @RequestMapping(value = "/api/bikes/{id:\\d+}/milages", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Milage> createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {	
+    public Milage createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {	
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
 	
 	final Bike bike = bikeRepository.findOne(id);
 	
-	ResponseEntity<Milage> rv;	
+	Milage rv;	
 	if(bike == null) {
-	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    throw new ResourceNotFoundException();
 	} else if(bike.getDecommissionedOn() != null) { 
 	    throw new IllegalArgumentException("Bike has already been decommissioned.");
 	} else {
-	    final Milage milage = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
+	    rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
 	    this.bikeRepository.save(bike);
-
-	    rv = new ResponseEntity<>(milage, HttpStatus.OK);
 	}
 	
 	return rv;
@@ -91,73 +89,68 @@ public class BikesController {
     
     @RequestMapping(value = "/api/bikes", method = POST) 
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Bike> createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
+    public Bike createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
-	
-	ResponseEntity<Bike> rv;
 	
 	final Bike bike = new Bike(newBike.getName(), newBike.boughtOnAsLocalDate());
 	bike.setColor(newBike.getColor());
 	bike.addMilage(newBike.boughtOnAsLocalDate().withDayOfMonth(1), 0);
 	
-	try {	    
-	    rv = new ResponseEntity<>(this.bikeRepository.save(bike), HttpStatus.OK);
-	} catch(DataIntegrityViolationException e) {	    
-	    rv = new ResponseEntity<>(HttpStatus.CONFLICT);
-	}
-	
-	return rv;
+	return this.bikeRepository.save(bike);	
     }
     
     @RequestMapping(value = "/api/bikes/{id:\\d+}", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
-    public ResponseEntity<Bike> updateBike(final @PathVariable Integer id, final @RequestBody @Valid BikeCmd updatedBike, final BindingResult bindingResult) {
+    public Bike updateBike(final @PathVariable Integer id, final @RequestBody @Valid BikeCmd updatedBike, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
 	
 	final Bike bike = bikeRepository.findOne(id);
-	
-	ResponseEntity<Bike> rv;	
+		
 	if(bike == null) {
-	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    throw new ResourceNotFoundException();
 	} else if(bike.getDecommissionedOn() != null) { 
 	    throw new IllegalArgumentException("Bike has already been decommissioned.");
 	} else {
 	    bike.setColor(updatedBike.getColor());
-	    bike.decommission(updatedBike.decommissionedOnAsLocalDate());	  
-	    rv = new ResponseEntity<>(bike, HttpStatus.OK);
-	}
-	return rv;
+	    bike.decommission(updatedBike.decommissionedOnAsLocalDate());	  	    
+	}	
+	return bike;
     }
     
     @RequestMapping(value = "/api/bikes/{id:\\d+}/story", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
-    public ResponseEntity<Bike> updateBikeStory(final @PathVariable Integer id, final @RequestBody(required = false) @Valid StoryCmd newStory, final BindingResult bindingResult) {
+    public Bike updateBikeStory(final @PathVariable Integer id, final @RequestBody(required = false) @Valid StoryCmd newStory, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
 	
 	final Bike bike = bikeRepository.findOne(id);
-	
-	ResponseEntity<Bike> rv;	
+		
 	if(bike == null) {
-	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    throw new ResourceNotFoundException();
 	} else if(bike.getDecommissionedOn() != null) { 
 	    throw new IllegalArgumentException("Bike has already been decommissioned.");
 	} else {
-	    bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));
-	    rv = new ResponseEntity<>(bike, HttpStatus.OK);
+	    bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));	    
 	}
-	return rv;
+	return bike;
     }
     
+    // TODO Replace those with an @ControllerAdvice
+    // https://github.com/spring-projects/spring-framework/commit/2dd587596437a4bbe9f62ba0dc9f7b13382fb533
     @ExceptionHandler(IllegalArgumentException.class)    
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) throws Exception {	
 	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler(DataIntegrityViolationException.class)    
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException e) throws Exception {		
+	return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 }
