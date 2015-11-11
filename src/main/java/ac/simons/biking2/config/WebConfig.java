@@ -21,7 +21,6 @@ import ac.simons.biking2.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
-import javax.servlet.MultipartConfigElement;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -61,11 +60,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
     }
     
-    @Bean
-    public MultipartConfigElement multipartConfigElement() {
-	return new MultipartConfigElement("", 5 * 1024 * 1024, 5 * 1024 * 1024, 1024 * 1024);	
-    }
-
     /**
      * Enable favor of format parameter over requested content type, needed for
      * {@link OEmbedController#getEmbeddableTrack(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, javax.servlet.http.HttpServletRequest)}
