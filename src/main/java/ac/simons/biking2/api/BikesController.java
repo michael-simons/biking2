@@ -23,14 +23,10 @@ import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -140,17 +136,5 @@ public class BikesController {
 	    bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));	    
 	}
 	return bike;
-    }
-    
-    // TODO Replace those with an @ControllerAdvice
-    // https://github.com/spring-projects/spring-framework/commit/2dd587596437a4bbe9f62ba0dc9f7b13382fb533
-    @ExceptionHandler(IllegalArgumentException.class)    
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) throws Exception {	
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-    
-    @ExceptionHandler(DataIntegrityViolationException.class)    
-    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException e) throws Exception {		
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-    }
+    }     
 }
