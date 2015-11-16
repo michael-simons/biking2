@@ -72,6 +72,8 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
 	private String password;
 	
+	private String device;
+	
 	private int inboundPoolSize = 1;
 
 	private int outboundPoolSize = 2;
@@ -118,6 +120,14 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	    this.password = password;
 	}
 
+	public String getDevice() {
+	    return device;
+	}
+
+	public void setDevice(String device) {
+	    this.device = device;
+	}
+	
 	public int getInboundPoolSize() {
 	    return inboundPoolSize;
 	}
@@ -205,8 +215,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	});
 	rv.setConnectionFactory(connectionFactory);
 	rv.setPubSubDomain(true);
-	rv.setDestinationName("locations");
-
+	rv.setDestinationName(String.format("owntracks.%s.%s", properties.getUsername(), properties.getDevice()));	
 	return rv;
     }
 
