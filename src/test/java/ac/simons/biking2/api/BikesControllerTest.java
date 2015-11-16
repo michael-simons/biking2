@@ -113,7 +113,8 @@ public class BikesControllerTest {
 
 	final MockMvc mockMvc = MockMvcBuilders
 		.standaloneSetup(controller)
-		.apply(documentationConfiguration(this.restDocumentation))
+		.setControllerAdvice(new ExceptionHandlerAdvice())
+		.apply(documentationConfiguration(this.restDocumentation))		
 		.build();
 
 	mockMvc
@@ -178,6 +179,7 @@ public class BikesControllerTest {
 	final BikesController controller = new BikesController(repository);
 	final MockMvc mockMvc = MockMvcBuilders
 		.standaloneSetup(controller)
+		.setControllerAdvice(new ExceptionHandlerAdvice())
 		.apply(documentationConfiguration(this.restDocumentation))
 		.build();
 
@@ -264,7 +266,11 @@ public class BikesControllerTest {
 	final BikeRepository repository = mock(BikeRepository.class);
 	when(repository.save(any(Bike.class))).then(returnsFirstArg());
 
-	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new BikesController(repository)).apply(documentationConfiguration(this.restDocumentation)).build();
+	final MockMvc mockMvc = MockMvcBuilders
+		.standaloneSetup(new BikesController(repository))
+		.setControllerAdvice(new ExceptionHandlerAdvice())
+		.apply(documentationConfiguration(this.restDocumentation))
+		.build();
 
 	final BikeCmd newBikeCmd = new BikeCmd();
 	newBikeCmd.setBoughtOn(new Date());
@@ -325,7 +331,10 @@ public class BikesControllerTest {
 	stub(repository.save(any(Bike.class))).toThrow(new DataIntegrityViolationException(""));
 
 	final BikesController controller = new BikesController(repository);
-	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	final MockMvc mockMvc = MockMvcBuilders
+		.standaloneSetup(controller)
+		.setControllerAdvice(new ExceptionHandlerAdvice())
+		.build();
 
 	final BikeCmd newBikeCmd = new BikeCmd();
 	newBikeCmd.setBoughtOn(new Date());
@@ -359,7 +368,10 @@ public class BikesControllerTest {
 	stub(repository.findOne(2)).toReturn(bike);
 
 	final BikesController controller = new BikesController(repository);
-	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	final MockMvc mockMvc = MockMvcBuilders
+		.standaloneSetup(controller)
+		.setControllerAdvice(new ExceptionHandlerAdvice())
+		.build();
 
 	final BikeCmd updatedBikeCmd = new BikeCmd();
 	updatedBikeCmd.setBoughtOn(new Date());
@@ -440,6 +452,7 @@ public class BikesControllerTest {
 	final BikesController controller = new BikesController(repository);
 	final MockMvc mockMvc = MockMvcBuilders
 		.standaloneSetup(controller)
+		.setControllerAdvice(new ExceptionHandlerAdvice())
 		.apply(documentationConfiguration(this.restDocumentation))
 		.build();
 

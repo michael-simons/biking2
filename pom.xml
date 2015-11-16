@@ -5,12 +5,12 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>1.9.3-SNAPSHOT</version>
+    <version>1.10.3-SNAPSHOT</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>1.2.7.RELEASE</version>
+	<version>1.3.0.RELEASE</version>
     </parent>
 
     <name>biking2</name>
@@ -117,7 +117,7 @@
 			</goals>
 			<configuration>
 			    <outputDirectory>
-				${project.build.outputDirectory}/static/docs
+				${project.build.outputDirectory}/public/docs
 			    </outputDirectory>
 			    <resources>
 				<resource>
@@ -261,19 +261,17 @@
 	    <artifactId>spring-boot-starter-web</artifactId>
 	</dependency>
 	<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>	
+	<dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-thymeleaf</artifactId>
-	    <exclusions>
-		<exclusion>
-		    <groupId>org.javassist</groupId>
-		    <artifactId>javassist</artifactId>
-		</exclusion>
-	    </exclusions>
 	</dependency>
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-websocket</artifactId>
-	</dependency>
+	</dependency>	
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -283,39 +281,76 @@
 	    <groupId>com.fasterxml.jackson.module</groupId>
 	    <artifactId>jackson-module-jaxb-annotations</artifactId>
 	    <version>${jackson.version}</version>
-	    <exclusions>
-		<exclusion>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-annotations</artifactId>
-		</exclusion>
-	    </exclusions>
 	</dependency>
 	
 	<dependency>
 	    <groupId>com.h2database</groupId>
 	    <artifactId>h2</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.tomcat</groupId>
-	    <artifactId>tomcat-jdbc</artifactId>
-	</dependency>
-
-	<dependency>
-	    <groupId>org.springframework.security</groupId>
-	    <artifactId>spring-security-core</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework.security</groupId>
-	    <artifactId>spring-security-config</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework.security</groupId>
-	    <artifactId>spring-security-web</artifactId>
-	</dependency>
+	</dependency>	
 	<dependency>
 	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-aspects</artifactId>
+	    <artifactId>spring-jms</artifactId>
+	</dependency>		
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-spring</artifactId>	    
 	</dependency>
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-stomp</artifactId>	    		
+	</dependency>		
+	<!-- Resolve for activemq-client and activemq-mqtt -->
+	<dependency>
+	    <groupId>org.fusesource.hawtbuf</groupId>
+	    <artifactId>hawtbuf</artifactId>
+	    <version>1.11</version>
+	</dependency>	
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-mqtt</artifactId>	    	  
+	    <exclusions>
+		<exclusion>
+		    <groupId>org.fusesource.hawtbuf</groupId>
+		    <artifactId>hawtbuf</artifactId>
+		</exclusion>
+	    </exclusions>
+	</dependency>
+	<!-- Needed for MessageBrokerRegistry#enableStompBrokerRelay -->
+	<dependency>
+	    <groupId>io.projectreactor</groupId>
+	    <artifactId>reactor-net</artifactId>        
+	</dependency>   
+	<dependency>
+	    <groupId>io.netty</groupId>
+	    <artifactId>netty-all</artifactId>
+	    <version>4.0.31.Final</version>
+	</dependency>  	
+		
+	<!-- Tests and development -->
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-test</artifactId>
+	    <scope>test</scope>
+	</dependency>
+	<dependency>
+	    <groupId>org.outsideMyBox</groupId>
+	    <artifactId>testUtils</artifactId>
+	    <version>0.1.3</version>
+	    <scope>test</scope>
+	</dependency>
+	<dependency>
+	    <groupId>org.jooq</groupId>
+	    <artifactId>joor</artifactId>
+	    <version>0.9.5</version>
+	    <scope>test</scope>
+	</dependency>
+	<dependency> 
+	    <groupId>org.springframework.restdocs</groupId>
+	    <artifactId>spring-restdocs-mockmvc</artifactId>	    	    
+	    <scope>test</scope>
+	</dependency>
+	
+	<!-- Web UI -->
 	<dependency>
 	    <groupId>org.webjars</groupId>
 	    <artifactId>bootstrap</artifactId>
@@ -367,83 +402,5 @@
 	    <artifactId>openlayers</artifactId>
 	    <version>${openlayers.version}</version>
 	</dependency>	
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-jms</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-messaging</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-websocket</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>org.projectreactor</groupId>
-	    <artifactId>reactor-net</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>org.fusesource.hawtdispatch</groupId>
-	    <artifactId>hawtdispatch-transport</artifactId>
-	    <version>1.21</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-broker</artifactId>	    		
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-client</artifactId>	    	    
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-mqtt</artifactId>
-	    <version>${activemq.version}</version>	
-	    <exclusions>
-		<exclusion>
-		    <groupId>org.fusesource.hawtdispatch</groupId>
-		    <artifactId>hawtdispatch-transport</artifactId>
-		</exclusion>
-	    </exclusions>		
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-stomp</artifactId>
-	    <version>${activemq.version}</version>			
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-pool</artifactId>	    
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-spring</artifactId>
-	    <version>${activemq.version}</version>
-	</dependency>
-	
-	<dependency>
-	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-test</artifactId>
-	    <scope>test</scope>
-	</dependency>
-	<dependency>
-	    <groupId>org.outsideMyBox</groupId>
-	    <artifactId>testUtils</artifactId>
-	    <version>0.1.3</version>
-	    <scope>test</scope>
-	</dependency>
-	<dependency>
-	    <groupId>org.jooq</groupId>
-	    <artifactId>joor</artifactId>
-	    <version>0.9.5</version>
-	    <scope>test</scope>
-	</dependency>
-	<dependency> 
-	    <groupId>org.springframework.restdocs</groupId>
-	    <artifactId>spring-restdocs-mockmvc</artifactId>	    
-	    <version>1.0.0.RELEASE</version>
-	    <scope>test</scope>
-	</dependency>
     </dependencies>
 </project>
