@@ -8,5 +8,6 @@
 | Daily Fratze                | df, DF                  | An online community where users can upload a daily picture of themself (a selfie, but the site did them before they where called selfies)
 | Gallery picture             |                         | Pictures from tours provided manually by the hours in addition to the pictures collected automatically from _Daily Fratze_
 | GPX                         | GPS Exchange Format     | GPX, or GPS Exchange Format, is an XML schema designed as a common GPS data format for software applications. It can be used to describe waypoints, tracks, and routes.
+| Java 8                      | JDK 8                   | The eight installment of the https://en.wikipedia.org/wiki/Java_(programming_language)[Java programmning language] and the first one to support functional paradigmns in the form Lambda expressions.
 | TCX                         |                         | Training Center XML (TCX) is a data exchange format introduced in 2007 as part of Garmin's Training Center product.
 |===

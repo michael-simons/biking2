@@ -40,20 +40,14 @@ The images should be collected from https://dailyfratze[Daily Fratze], the sourc
 
 === Stakeholders
 
-[role="arc42help"]
-****
-.Contents
-A list of the most important persons or organizations that are affected by can contribute to the architecture.
+The following lists contains the most important personas for this application
 
-.Motivation
-If you do not know the persons participating in or concerned with the project you may get nasty surprises later in the development process. Should your project manager maintain this list, make sure that all the people influencing the architecture are part of it.
-
-.Form
-Simple table with role names, person names, their knowledge as pertaining to architecture, their availability, etc.
+[options="header",cols="1,2"]
 .Stakeholders
-[options="header",cols="<.<1,<.<2, <.<2"]
 |===
-|Role/Name|Goal/Boundaries|Expected Participation and Contribution
-| The name or role of a stakeholder| Why will this stakeholder have an interest in the architecture? | what do you expect as a contribution
+| Role/Name           | Goal/Boundaries
+| Developers          | Developers who want to learn about developing modern applications with Spring Boot and various frontends, preferable using _Java 8_ in the backend.
+| Bikers              | Bike aficionados that are looking for a non-excel, self-hosted solution to keep track of their bikes and milages.
+| Software Architects | Looking for an _arc42_ example; want to get ideas for their daily work.
+| Michael Simons      | Improving his skills; wants to blog about Spring Boot; looking for a topic he can eventually hold a talk about; needed a project to try out new _Java 8_ features.
 |===
-****
