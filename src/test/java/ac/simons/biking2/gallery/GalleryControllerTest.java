@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.gallery;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.GalleryPicture;

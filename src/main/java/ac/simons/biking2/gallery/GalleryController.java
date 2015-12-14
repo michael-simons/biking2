@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.gallery;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.GalleryPicture;
@@ -28,7 +28,6 @@ import java.security.NoSuchAlgorithmException;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
