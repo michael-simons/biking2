@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikingPictures;
 
 import ac.simons.biking2.persistence.entities.BikingPicture;
 import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
@@ -42,7 +42,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static ac.simons.biking2.api.BikingPicturesControllerTest.RegexMatcher.matches;
+import static ac.simons.biking2.bikingPictures.BikingPicturesControllerTest.RegexMatcher.matches;
 import static ac.simons.biking2.config.DatastoreConfig.BIKING_PICTURES_DIRECTORY;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;

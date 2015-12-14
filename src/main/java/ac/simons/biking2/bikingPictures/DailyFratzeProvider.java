@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.jobs;
+package ac.simons.biking2.bikingPictures;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConditionalOnExpression(value = "environment['biking2.dailyfratze-access-token'] != null && !environment['biking2.dailyfratze-access-token'].isEmpty()")
-public class DailyFratzeProvider {    
+class DailyFratzeProvider {    
     private final String accessToken;    
     private final String imageUrlFormat;
     

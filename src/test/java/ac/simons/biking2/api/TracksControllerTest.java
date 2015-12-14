@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.api.BikingPicturesControllerTest.RegexMatcher;
+import ac.simons.biking2.bikingPictures.BikingPicturesControllerTest.RegexMatcher;
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;

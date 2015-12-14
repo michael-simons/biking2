@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.jobs;
+package ac.simons.biking2.bikingPictures;
 
 import java.net.URLConnection;
 import org.junit.Assert;

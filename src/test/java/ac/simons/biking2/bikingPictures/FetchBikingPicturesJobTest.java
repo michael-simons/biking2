@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.jobs;
+package ac.simons.biking2.bikingPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.BikingPicture;
@@ -46,7 +46,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- *
  * @author Michael J. Simons
  */
 public class FetchBikingPicturesJobTest {
