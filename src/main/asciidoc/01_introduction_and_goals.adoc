@@ -27,40 +27,16 @@ The images should be collected from https://dailyfratze[Daily Fratze], the sourc
 
 === Quality Goals
 
-[role="arc42help"]
-****
-.Contents
-The top three (max five) goals for the architecture and/or constraints whose fulfillment is of highest importance to the major stakeholders. Goals that define the architecture’s quality could be:
-
-* availability
-* modifiability
-* performance
-* security
-* testability
-* usability
-
-.Motivation
-If you as an architect do not know how the quality of your work can be judged …
-
-.Form
-Simple tabular representation, ordered by priorities
-
-.Background Information
-*NEVER* start developing an architecture if these goals have not been put into writing and have not been signed by the major stakeholders.
-
-[WARNING]
-===========
-We have endured projects lacking defined quality goals much too often.
-We do not like to suffer, therefore we are by now highly convinced that
-the few hours spent on collecting quality goals are well invested.
-PH & GS.
-===========
-
-.Sources
-The DIN/ISO 92000 Standard contains an extensive set of possible quality goals.Or use chapters 10 – 17 of the http://www.volere.co.uk[VOLERE template] as a starting point .
-PH
-
-****
+[cols="1,2,3" options="header"]
+.Quality Goals
+|===
+| Nr. | Quality                        | Motivation
+| 1   | Understandability              | The functional requirements are simple enough to allow a simple, understandable solution that allows focus on learning about Spring Boot and AngularJS.
+| 2   | Efficiency                     | Collecting milage data should be a no brainer: Reading the milage from an odometer and entering it.
+| 3   | Interoperability               | The application should provide a simple API that allows access to new clients.
+| 4   | Attractiveness                 | Collected milages should be presented in easy to grasp charts.
+| 5   | Testability                    | The architecture should allow easy testing of all main building blocks.
+|===
 
 === Stakeholders
 
