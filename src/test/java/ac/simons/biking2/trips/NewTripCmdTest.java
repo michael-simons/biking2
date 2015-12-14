@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.trips;
 
 import java.util.Date;
 import org.junit.Test;
