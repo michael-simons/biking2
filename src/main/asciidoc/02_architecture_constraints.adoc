@@ -1,0 +1,45 @@
+[[section-architecture-constraints]]
+== Architecture Constraints
+
+The few constraints on this project are reflected in the final solution. This section shows them and if applicable, their motivation.
+
+=== Technical Constraints
+
+.List of Technical Constraints
+[options="header", cols="0,1,2"]
+|===
+|     | Constraint                    | Background and / or motivation
+   3+e| Software and programming constraints
+| TC1 | Implementation in Java        | The application should be part of a Java 8 and Spring Boot show case. Clients can be implemented using various frameworks, languages and what not.
+| TC2 | Third party software must be available under an compatible open source license and installable via a package manager | The interested developer or architect should be able to check out the sources, compile and run the application without problems compiling or installing dependencies. All external dependencies should be available via the package manager of the operation system or at least through an installer.
+   3+e| Operating System Constraints
+| TC3 | OS independent development    | The application should be compilable on all 3 mayor operation systems (Mac OS X, Linux and Windows)
+| TC4 | Deployable to a Linux server  | The application should be deployable through standard means on a Linux based server
+   3+e| Hardware Constraints
+| TC5 | Memory friendly               | Memory can be limited (due to availability on a shared host or deployment to cloud based host). If deployed to a cloud based solution, every megabyte of memory costs.
+|===
+
+=== Organizational Constraints
+
+.List of Organizational Constraints
+[options="header", cols="0,1,2"]
+|===
+|     | Constraint                                     | Background and / or motivation
+| OC1 | Team                                           | Michael Simons
+| OC2 | Time schedule                                  | Start in early 2014 with Spring Boot beta based prototypes running on Java 8 early access builds, first "release" version March 2014 together with the initial release of Java 8. Upgrade to a final Spring Boot release when they are available.
+| OC3 | IDE independent project setup                  | No need to continue the editor and IDE wars. The project must be compilable on the command line via standard build tools. Due to _OC2_ there is only one IDE supporting Java 8 features out of the box: _NetBeans 8_ beta and release candidates.
+| OC4 | Configuration and version control / management | Private git repository with a complete commit history and a public master branch pushed to GitHub and linked a project blog.
+| OC5 | Testing                                        | JUnit used for functional correctness and integration tests, using JaCoCo to ensure a high test coverage (at least 90%).
+| OC6 | Published under an Open Source license         | The source, including documentation, should be published as Open Source under the Apache 2 License.
+|===
+
+=== Conventions
+
+.List of Conventions
+[options="header", cols="0,1,2"]
+|===
+|     | Conventions                                     | Background and / or motivation
+| C1  | Architecture documentation                      | Structure based on the english arc42-Template in version 6.5
+| C2  | Coding conventions                              | Standard Oracle Java Coding Conventions, tabs instead of spaces. Not enforced / checked but semi-automatic enforced using NetBeans formatting templates.
+| C3  | Language                                        | English. The project and the corresponding blog targets an international audience, so English should be used throughout the whole project.
+|===

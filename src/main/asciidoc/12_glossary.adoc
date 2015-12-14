@@ -1,13 +1,16 @@
 [[section-glossary]]
 == Glossary
 
-[cols="1,2,3" options="header"]
+[cols="1,1,3" options="header"]
 .Glossar
 |===
 | Term                        | Synonym(s)              | Description
-| Daily Fratze                | df, DF                  | An online community where users can upload a daily picture of themself (a selfie, but the site did them before they where called selfies)
+| Apache License              |                         | The http://www.apache.org/licenses/LICENSE-2.0[Apache License] is a permissive Open Source license, especially designed for free software.
+| Daily Fratze                | df, DF                  | An online community where users can upload a daily picture of themselves (a selfie, but the site did them before they where called selfies)
 | Gallery picture             |                         | Pictures from tours provided manually by the hours in addition to the pictures collected automatically from _Daily Fratze_
 | GPX                         | GPS Exchange Format     | GPX, or GPS Exchange Format, is an XML schema designed as a common GPS data format for software applications. It can be used to describe waypoints, tracks, and routes.
+| JaCoCo                      |                         | http://eclemma.org/jacoco/[JaCoCo] is a code coverage library which can be used very easily from within NetBeans.
 | Java 8                      | JDK 8                   | The eight installment of the https://en.wikipedia.org/wiki/Java_(programming_language)[Java programmning language] and the first one to support functional paradigmns in the form Lambda expressions.
+| NetBeans                    |                         | https://netbeans.org[NetBeans] is a free and open Source IDE that fits the pieces of modern development together.
 | TCX                         |                         | Training Center XML (TCX) is a data exchange format introduced in 2007 as part of Garmin's Training Center product.
 |===
