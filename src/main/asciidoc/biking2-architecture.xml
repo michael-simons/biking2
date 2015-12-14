@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_E79E3211_2539_4190_B18C_F249912FFBE0" name="biking2 architecture overview" visibility="public">
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" name="3. Context" visibility="public">
+				<packagedElement xmi:type="uml:Actor" xmi:id="EAID_DA7FD65B_91DD_427d_A459_A187F9A72E8E" name="Biker" visibility="public"/>
+				<packagedElement xmi:type="uml:InformationFlow" xmi:id="EAID_2B6D3256_CA4C_4f51_8B83_F510BA433415" name="Adds milages, uploads tracks and gallery pictures" informationSource="EAID_DA7FD65B_91DD_427d_A459_A187F9A72E8E" informationTarget="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8">
+					<conveyed/>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Component" xmi:id="EAID_0C65D32E_3428_4e14_BCB9_B10F2F0146C6" name="dailyfratze.de" visibility="public">
+					<provided xmi:id="EAID_9219CEAB_E4C9_465f_9FF1_472F40E419A4" name="RSS Feed with biking pictures"/>
+					<ownedPort xmi:type="uml:Port" xmi:id="EAID_F7F80AA1_D0B5_4ed7_9C72_DD6254077E5D" name="Port1" visibility="public" aggregation="composite" isService="true" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false"/>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Component" xmi:id="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7" name="GPSBabel" visibility="public">
+					<provided xmi:id="EAID_9A3FC951_3DFD_47b5_97C6_115C8BE06236" name="command line interface"/>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Component" xmi:id="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8" name="biking2" visibility="public">
+					<provided xmi:id="EAID_62231E45_E67A_4e9d_BF0F_D1BAD19D098F" name="oEmbed API"/>
+					<required xmi:id="EAID_265E6491_7B7C_444a_991D_6DFAF1F709DA" name="commands"/>
+					<required xmi:id="EAID_3751DE2A_AE68_448f_8FD1_941F3649E789" name="RSS Reader"/>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_65F1A3D4_388A_4fad_9502_A34931FF41E9" visibility="public" supplier="EAID_9219CEAB_E4C9_465f_9FF1_472F40E419A4" client="EAID_3751DE2A_AE68_448f_8FD1_941F3649E789"/>
+				<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_C379B05A_4945_4216_A9B9_37CCFE66AC67" visibility="public" supplier="EAID_9A3FC951_3DFD_47b5_97C6_115C8BE06236" client="EAID_265E6491_7B7C_444a_991D_6DFAF1F709DA"/>
+				<packagedElement xmi:type="uml:Component" xmi:id="EAID_6DEB20BE_4F12_4e96_97CE_57A7FEBB107D" name="Arbitrary websites" visibility="public">
+					<required xmi:id="EAID_64D08D2D_A288_4bbc_A1C4_626CCB6C12FB" name="oEmbed client"/>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_F041664A_2276_4b41_B8C4_04A4C0777ED7" visibility="public" supplier="EAID_62231E45_E67A_4e9d_BF0F_D1BAD19D098F" client="EAID_64D08D2D_A288_4bbc_A1C4_626CCB6C12FB"/>
+				<packagedElement xmi:type="uml:Class" xmi:id="EAID_AA0A90E0_F31E_49b2_BE9A_185D30F01299" name="biking2 system scope" visibility="public"/>
+			</packagedElement>
+		</packagedElement>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAPK_E79E3211_2539_4190_B18C_F249912FFBE0">
+				<packageproperties/>
+				<paths/>
+				<times created="2012-04-17 00:00:00" modified="2012-04-17 00:00:00"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" usedtd="FALSE" logxml="FALSE" packageFlags="isModel=1;"/>
+			</element>
+			<element xmi:idref="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" xmi:type="uml:Package" name="3. Context" scope="public">
+				<model package2="EAID_47BB2663_1776_4a99_BC0B_19572F184831" package="EAPK_E79E3211_2539_4190_B18C_F249912FFBE0" tpos="0" ea_localid="3" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 21:55:43" modified="2015-12-14 21:55:43" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="biking2 architecture overview"/>
+				<packageproperties version="1.0"/>
+				<paths/>
+				<times created="2015-12-14 21:55:43" modified="2015-12-14 21:55:43"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" usedtd="FALSE" logxml="FALSE" packageFlags="isModel=1;VICON=3;"/>
+			</element>
+			<element xmi:idref="EAID_DA7FD65B_91DD_427d_A459_A187F9A72E8E" xmi:type="uml:Actor" name="Biker" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" tpos="1" ea_localid="17" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Actor" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:47:25" modified="2015-12-14 22:47:31" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<InformationFlow xmi:id="EAID_2B6D3256_CA4C_4f51_8B83_F510BA433415" start="EAID_DA7FD65B_91DD_427d_A459_A187F9A72E8E" end="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_0C65D32E_3428_4e14_BCB9_B10F2F0146C6" xmi:type="uml:Component" name="dailyfratze.de" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" tpos="2" ea_localid="6" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Component" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:06:57" modified="2015-12-14 22:07:05" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+			</element>
+			<element xmi:idref="EAID_F7F80AA1_D0B5_4ed7_9C72_DD6254077E5D" xmi:type="uml:Port" name="Port1" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" owner="EAID_0C65D32E_3428_4e14_BCB9_B10F2F0146C6" tpos="0" ea_localid="7" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Port" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:08:57" modified="2015-12-14 22:08:57" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+			</element>
+			<element xmi:idref="EAID_9219CEAB_E4C9_465f_9FF1_472F40E419A4" xmi:type="uml:ProvidedInterface" name="RSS Feed with biking pictures" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" owner="EAID_0C65D32E_3428_4e14_BCB9_B10F2F0146C6" tpos="0" ea_localid="9" ea_eleType="element"/>
+				<properties isSpecification="false" sType="ProvidedInterface" nType="0" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:11:31" modified="2015-12-14 22:11:50" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<Dependency xmi:id="EAID_65F1A3D4_388A_4fad_9502_A34931FF41E9" start="EAID_3751DE2A_AE68_448f_8FD1_941F3649E789" end="EAID_9219CEAB_E4C9_465f_9FF1_472F40E419A4"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7" xmi:type="uml:Component" name="GPSBabel" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" tpos="3" ea_localid="14" ea_eleType="element"/>
+				<properties documentation="A command line tool for manipulating GPS related files." isSpecification="false" sType="Component" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:42:36" modified="2015-12-14 22:43:15" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+			</element>
+			<element xmi:idref="EAID_9A3FC951_3DFD_47b5_97C6_115C8BE06236" xmi:type="uml:ProvidedInterface" name="command line interface" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" owner="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7" tpos="0" ea_localid="15" ea_eleType="element"/>
+				<properties isSpecification="false" sType="ProvidedInterface" nType="0" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:43:30" modified="2015-12-14 22:43:35" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<Dependency xmi:id="EAID_C379B05A_4945_4216_A9B9_37CCFE66AC67" start="EAID_265E6491_7B7C_444a_991D_6DFAF1F709DA" end="EAID_9A3FC951_3DFD_47b5_97C6_115C8BE06236"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8" xmi:type="uml:Component" name="biking2" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" tpos="4" ea_localid="4" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Component" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:02:26" modified="2015-12-14 22:02:46" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<InformationFlow xmi:id="EAID_2B6D3256_CA4C_4f51_8B83_F510BA433415" start="EAID_DA7FD65B_91DD_427d_A459_A187F9A72E8E" end="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_3751DE2A_AE68_448f_8FD1_941F3649E789" xmi:type="uml:RequiredInterface" name="RSS Reader" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" owner="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8" tpos="0" ea_localid="10" ea_eleType="element"/>
+				<properties isSpecification="false" sType="RequiredInterface" nType="1" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:27:40" modified="2015-12-14 22:27:59" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<Dependency xmi:id="EAID_65F1A3D4_388A_4fad_9502_A34931FF41E9" start="EAID_3751DE2A_AE68_448f_8FD1_941F3649E789" end="EAID_9219CEAB_E4C9_465f_9FF1_472F40E419A4"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_265E6491_7B7C_444a_991D_6DFAF1F709DA" xmi:type="uml:RequiredInterface" name="commands" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" owner="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8" tpos="0" ea_localid="16" ea_eleType="element"/>
+				<properties isSpecification="false" sType="RequiredInterface" nType="1" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:43:52" modified="2015-12-14 22:44:30" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<Dependency xmi:id="EAID_C379B05A_4945_4216_A9B9_37CCFE66AC67" start="EAID_265E6491_7B7C_444a_991D_6DFAF1F709DA" end="EAID_9A3FC951_3DFD_47b5_97C6_115C8BE06236"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_62231E45_E67A_4e9d_BF0F_D1BAD19D098F" xmi:type="uml:ProvidedInterface" name="oEmbed API" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" owner="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8" tpos="0" ea_localid="12" ea_eleType="element"/>
+				<properties isSpecification="false" sType="ProvidedInterface" nType="0" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:32:51" modified="2015-12-14 22:33:02" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<Dependency xmi:id="EAID_F041664A_2276_4b41_B8C4_04A4C0777ED7" start="EAID_64D08D2D_A288_4bbc_A1C4_626CCB6C12FB" end="EAID_62231E45_E67A_4e9d_BF0F_D1BAD19D098F"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_6DEB20BE_4F12_4e96_97CE_57A7FEBB107D" xmi:type="uml:Component" name="Arbitrary websites" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" tpos="5" ea_localid="11" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Component" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:30:55" modified="2015-12-14 22:31:03" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+			</element>
+			<element xmi:idref="EAID_64D08D2D_A288_4bbc_A1C4_626CCB6C12FB" xmi:type="uml:RequiredInterface" name="oEmbed client" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" owner="EAID_6DEB20BE_4F12_4e96_97CE_57A7FEBB107D" tpos="0" ea_localid="13" ea_eleType="element"/>
+				<properties isSpecification="false" sType="RequiredInterface" nType="1" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:33:39" modified="2015-12-14 22:33:48" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<Dependency xmi:id="EAID_F041664A_2276_4b41_B8C4_04A4C0777ED7" start="EAID_64D08D2D_A288_4bbc_A1C4_626CCB6C12FB" end="EAID_62231E45_E67A_4e9d_BF0F_D1BAD19D098F"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_AA0A90E0_F31E_49b2_BE9A_185D30F01299" xmi:type="uml:Boundary" name="biking2 system scope" scope="public">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" tpos="0" ea_localid="3" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Boundary" nType="0" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-14 22:01:11" modified="2015-12-14 22:02:26" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="3. Context"/>
+			</element>
+		</elements>
+		<connectors>
+			<connector xmi:idref="EAID_2B6D3256_CA4C_4f51_8B83_F510BA433415" name="Adds milages, uploads tracks and gallery pictures">
+				<source xmi:idref="EAID_DA7FD65B_91DD_427d_A459_A187F9A72E8E">
+					<model ea_localid="17" type="Actor" name="Biker"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8">
+					<model ea_localid="4" type="Component" name="biking2"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="9"/>
+				<properties ea_type="InformationFlow" direction="Source -&gt; Destination"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels mb="«flow»" mt="Adds milages, uploads tracks and gallery pictures"/>
+				<extendedProperties conditional="«flow»"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_65F1A3D4_388A_4fad_9502_A34931FF41E9">
+				<source xmi:idref="EAID_3751DE2A_AE68_448f_8FD1_941F3649E789">
+					<model ea_localid="10" type="RequiredInterface" name="RSS Reader"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_9219CEAB_E4C9_465f_9FF1_472F40E419A4">
+					<model ea_localid="9" type="ProvidedInterface" name="RSS Feed with biking pictures"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="3"/>
+				<properties ea_type="Dependency" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_C379B05A_4945_4216_A9B9_37CCFE66AC67">
+				<source xmi:idref="EAID_265E6491_7B7C_444a_991D_6DFAF1F709DA">
+					<model ea_localid="16" type="RequiredInterface" name="commands"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_9A3FC951_3DFD_47b5_97C6_115C8BE06236">
+					<model ea_localid="15" type="ProvidedInterface" name="command line interface"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="6"/>
+				<properties ea_type="Dependency" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_F041664A_2276_4b41_B8C4_04A4C0777ED7">
+				<source xmi:idref="EAID_64D08D2D_A288_4bbc_A1C4_626CCB6C12FB">
+					<model ea_localid="13" type="RequiredInterface" name="oEmbed client"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_62231E45_E67A_4e9d_BF0F_D1BAD19D098F">
+					<model ea_localid="12" type="ProvidedInterface" name="oEmbed API"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="4"/>
+				<properties ea_type="Dependency" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+		</connectors>
+		<primitivetypes>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPrimitiveTypesPackage" name="EA_PrimitiveTypes_Package" visibility="public"/>
+		</primitivetypes>
+		<profiles/>
+		<diagrams>
+			<diagram xmi:id="EAID_354A3857_DBCC_412b_879C_481A871E10A9">
+				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" localID="1" owner="EAPK_47BB2663_1776_4a99_BC0B_19572F184831"/>
+				<properties name="Business Context" type="Component"/>
+				<project author="michael.simons" version="1.0" created="2015-12-14 00:00:00" modified="2015-12-14 22:51:28"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=1;PPgs.cy=1;DocSize.cx=815;DocSize.cy=1067;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=119;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ProfileData=;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;SaveTag=7816845E;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;hl=1;cls=0;SwimlaneFont=lfh:-10,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<elements>
+					<element geometry="Left=476;Top=350;Right=489;Bottom=390;" subject="EAID_265E6491_7B7C_444a_991D_6DFAF1F709DA" seqno="1" style="DUID=E960D2F7;LBL=CX=51:CY=13:OX=15:OY=12:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=478;Top=228;Right=491;Bottom=268;" subject="EAID_9A3FC951_3DFD_47b5_97C6_115C8BE06236" seqno="2" style="DUID=176723F1;LBL=CX=112:CY=13:OX=20:OY=10:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=344;Top=572;Right=357;Bottom=612;" subject="EAID_64D08D2D_A288_4bbc_A1C4_626CCB6C12FB" seqno="3" style="DUID=CF66C830;LBL=CX=69:CY=13:OX=-75:OY=16:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=346;Top=476;Right=359;Bottom=516;" subject="EAID_62231E45_E67A_4e9d_BF0F_D1BAD19D098F" seqno="4" style="DUID=FC2C430D;LBL=CX=60:CY=13:OX=24:OY=10:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=346;Top=350;Right=359;Bottom=390;" subject="EAID_3751DE2A_AE68_448f_8FD1_941F3649E789" seqno="5" style="DUID=342717A2;LBL=CX=58:CY=13:OX=23:OY=15:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=345;Top=228;Right=358;Bottom=268;" subject="EAID_9219CEAB_E4C9_465f_9FF1_472F40E419A4" seqno="6" style="DUID=DF4CE4F4;LBL=CX=140:CY=13:OX=-152:OY=10:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=48;Top=382;Right=92;Bottom=470;" subject="EAID_DA7FD65B_91DD_427d_A459_A187F9A72E8E" seqno="7" style="DUID=2E3D1312;"/>
+					<element geometry="Left=455;Top=169;Right=572;Bottom=229;" subject="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7" seqno="8" style="DUID=E42778E0;"/>
+					<element geometry="Left=263;Top=611;Right=395;Bottom=671;" subject="EAID_6DEB20BE_4F12_4e96_97CE_57A7FEBB107D" seqno="9" style="DUID=F06D9960;"/>
+					<element geometry="Left=256;Top=169;Right=393;Bottom=229;" subject="EAID_0C65D32E_3428_4e14_BCB9_B10F2F0146C6" seqno="10" style="DUID=C8123A25;"/>
+					<element geometry="Left=331;Top=389;Right=518;Bottom=477;" subject="EAID_D41DE000_D2A1_4371_B38E_43AAE6A564F8" seqno="11" style="DUID=9E415DFC;"/>
+					<element geometry="Left=260;Top=320;Right=572;Bottom=542;" subject="EAID_AA0A90E0_F31E_49b2_BE9A_185D30F01299" seqno="12" style="DUID=8B518158;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=CX=43:CY=91:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=CX=31:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_2B6D3256_CA4C_4f51_8B83_F510BA433415" style="Mode=3;EOID=9E415DFC;SOID=2E3D1312;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_C379B05A_4945_4216_A9B9_37CCFE66AC67" style="Mode=3;EOID=176723F1;SOID=E960D2F7;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_F041664A_2276_4b41_B8C4_04A4C0777ED7" style="Mode=3;EOID=FC2C430D;SOID=CF66C830;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_65F1A3D4_388A_4fad_9502_A34931FF41E9" style="Mode=3;EOID=DF4CE4F4;SOID=342717A2;Color=-1;LWidth=0;Hidden=0;"/>
+				</elements>
+			</diagram>
+		</diagrams>
+	</xmi:Extension>
+</xmi:XMI>

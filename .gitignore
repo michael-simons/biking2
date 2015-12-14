@@ -3,3 +3,4 @@ target/
 var/
 /application.properties
 /activemq-data/
+biking2-architecture.eap
