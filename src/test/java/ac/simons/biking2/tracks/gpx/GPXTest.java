@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.gpx;
+package ac.simons.biking2.tracks.gpx;
 
+import ac.simons.biking2.tracks.gpx.GPX;
+import ac.simons.biking2.tracks.gpx.Bounds;
 import org.junit.Test;
 import org.outsideMyBox.testUtils.BeanLikeTester;
 import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;

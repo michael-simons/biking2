@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.gpx.GPX;
+import ac.simons.biking2.tracks.gpx.GPX;
 import ac.simons.biking2.misc.JAXBContextFactory;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.entities.Track.Type;

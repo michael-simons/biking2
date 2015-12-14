@@ -16,7 +16,7 @@
 package ac.simons.biking2.config;
 
 import ac.simons.biking2.api.OEmbedController;
-import ac.simons.biking2.api.TracksController;
+import ac.simons.biking2.tracks.TracksController;
 import ac.simons.biking2.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;

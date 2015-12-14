@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.bikingPictures.BikingPicturesControllerTest.RegexMatcher;
 import ac.simons.biking2.config.DatastoreConfig;
@@ -22,7 +22,6 @@ import ac.simons.biking2.persistence.repositories.TrackRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;

@@ -17,6 +17,6 @@
 	namespace = "http://www.topografix.com/GPX/1/0", 
 	elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
 )
-package ac.simons.biking2.gpx;
+package ac.simons.biking2.tracks.gpx;
 
 import javax.xml.bind.annotation.XmlSchema;

@@ -13,44 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.gpx;
+package ac.simons.biking2.tracks.gpx;
 
-import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Michael J. Simons, 2014-02-21
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Bounds {
+public class GPX {
 
-    @XmlAttribute
-    private BigDecimal minlat;
+    private Bounds bounds;
 
-    @XmlAttribute
-    private BigDecimal minlon;
-
-    @XmlAttribute
-    private BigDecimal maxlat;
-
-    @XmlAttribute
-    private BigDecimal maxlon;
-
-    public BigDecimal getMinlat() {
-	return minlat;
+    public Bounds getBounds() {
+	return bounds;
     }
 
-    public BigDecimal getMinlon() {
-	return minlon;
-    }
-
-    public BigDecimal getMaxlat() {
-	return maxlat;
-    }
-
-    public BigDecimal getMaxlon() {
-	return maxlon;
+    public void setBounds(Bounds bounds) {
+	this.bounds = bounds;
     }
 }
