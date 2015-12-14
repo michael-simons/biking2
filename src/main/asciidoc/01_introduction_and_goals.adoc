@@ -27,7 +27,7 @@ The images should be collected from https://dailyfratze[Daily Fratze], the sourc
 
 === Quality Goals
 
-[cols="1,2,3" options="header"]
+[cols="0,1,3" options="header"]
 .Quality Goals
 |===
 | Nr. | Quality                        | Motivation
