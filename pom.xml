@@ -93,6 +93,7 @@
 			<configuration>
 			    <backend>html</backend>
 			    <doctype>book</doctype>
+			    <imagesDir>img</imagesDir>
 			    <attributes>
 				<snippets>${snippetsDirectory}</snippets> 
 			    </attributes>

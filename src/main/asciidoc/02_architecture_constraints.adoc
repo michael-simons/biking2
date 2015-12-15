@@ -3,6 +3,7 @@
 
 The few constraints on this project are reflected in the final solution. This section shows them and if applicable, their motivation.
 
+
 === Technical Constraints
 
 .List of Technical Constraints
@@ -18,6 +19,7 @@ The few constraints on this project are reflected in the final solution. This se
    3+e| Hardware Constraints
 | TC5 | Memory friendly               | Memory can be limited (due to availability on a shared host or deployment to cloud based host). If deployed to a cloud based solution, every megabyte of memory costs.
 |===
+
 
 === Organizational Constraints
 
