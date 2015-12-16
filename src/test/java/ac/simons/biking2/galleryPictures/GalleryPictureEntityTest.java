@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.galleryPictures;
 
+import ac.simons.biking2.galleryPictures.GalleryPictureEntity;
 import ac.simons.biking2.tests.BeanTester;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import org.junit.Test;
 /**
  * @author Michael J. Simons, 2014-05-23
  */
-public class GalleryPictureTest {
+public class GalleryPictureEntityTest {
     
     @Test
     public void beanShouldWorkAsExpected() {
@@ -34,11 +35,11 @@ public class GalleryPictureTest {
 	final Map<String, Object> values = new HashMap<>();	
 	values.put("description", "description");		
 
-	values.forEach(new BeanTester(GalleryPicture.class));
+	values.forEach(new BeanTester(GalleryPictureEntity.class));
 
-	final GalleryPicture bean = new GalleryPicture(now, "poef");
+	final GalleryPictureEntity bean = new GalleryPictureEntity(now, "poef");
 	bean.prePersist();
-	final GalleryPicture otherBean = new GalleryPicture(now, "poef");
+	final GalleryPictureEntity otherBean = new GalleryPictureEntity(now, "poef");
 	Assert.assertEquals(bean, otherBean);
 	Assert.assertEquals(bean.hashCode(), otherBean.hashCode());
 	Assert.assertNotEquals(bean, "something else");
@@ -50,9 +51,9 @@ public class GalleryPictureTest {
 	
 	final Calendar then = Calendar.getInstance();
 	then.add(Calendar.YEAR, 1);
-	GalleryPicture other = new GalleryPicture(now, "something else");
+	GalleryPictureEntity other = new GalleryPictureEntity(now, "something else");
 	Assert.assertNotEquals(bean, other);
-	other = new GalleryPicture(then, "poef");
+	other = new GalleryPictureEntity(then, "poef");
 	Assert.assertNotEquals(bean, other);		
     }
 }

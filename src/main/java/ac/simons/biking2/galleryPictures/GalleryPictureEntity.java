@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.galleryPictures;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -37,7 +37,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity
 @Table(name = "gallery_pictures")
-public class GalleryPicture implements Serializable {
+class GalleryPictureEntity implements Serializable {
 
     private static final long serialVersionUID = -5303688860568518942L;
 
@@ -67,10 +67,10 @@ public class GalleryPicture implements Serializable {
     @JsonIgnore
     private Calendar createdAt;
 
-    protected GalleryPicture() {
+    protected GalleryPictureEntity() {
     }
 
-    public GalleryPicture(Calendar takenOn, String filename) {
+    public GalleryPictureEntity(Calendar takenOn, String filename) {
 	this.takenOn = takenOn;
 	this.filename = filename;
     }
@@ -122,7 +122,7 @@ public class GalleryPicture implements Serializable {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final GalleryPicture other = (GalleryPicture) obj;
+	final GalleryPictureEntity other = (GalleryPictureEntity) obj;
 	if (!Objects.equals(this.takenOn, other.takenOn)) {
 	    return false;
 	}

@@ -16,8 +16,6 @@
 package ac.simons.biking2.galleryPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
-import ac.simons.biking2.persistence.entities.GalleryPicture;
-import ac.simons.biking2.persistence.repositories.GalleryPictureRepository;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,13 +43,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static java.lang.String.format;
 import static java.security.MessageDigest.getInstance;
 import static java.time.ZoneId.of;
 import static java.time.ZonedDateTime.now;
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Michael J. Simons, 2014-02-22
@@ -84,13 +82,13 @@ class GalleryController {
 
     @RequestMapping("/api/galleryPictures")
     public @ResponseBody
-    List<GalleryPicture> getGalleryPictures() {
+    List<GalleryPictureEntity> getGalleryPictures() {
 	return galleryPictureRepository.findAll(new Sort(Sort.Direction.ASC, "takenOn"));
     }
 
     @RequestMapping(value = "/api/galleryPictures", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<GalleryPicture> createGalleryPicture(
+    public ResponseEntity<GalleryPictureEntity> createGalleryPicture(
 	    @RequestParam(value = "takenOn", required = true)
 	    @DateTimeFormat(iso = DATE_TIME)
 	    final ZonedDateTime takenOn,
@@ -99,7 +97,7 @@ class GalleryController {
 	    @RequestParam("imageData")
 	    final MultipartFile imageData
     ) {
-	ResponseEntity<GalleryPicture> rv;
+	ResponseEntity<GalleryPictureEntity> rv;
 	if (imageData == null || imageData.isEmpty()) {
 	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	} else {
@@ -110,7 +108,7 @@ class GalleryController {
 		out.getChannel().transferFrom(Channels.newChannel(imageData.getInputStream()), 0, Integer.MAX_VALUE);
 		out.flush();
 
-		GalleryPicture galleryPicture = new GalleryPicture(GregorianCalendar.from(takenOn), filename);
+		GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
 		galleryPicture.setDescription(description);
 
 		rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);
@@ -131,7 +129,7 @@ class GalleryController {
 	    final HttpServletResponse response
     ) throws IOException {
 
-	GalleryPicture galleryPicture;
+	GalleryPictureEntity galleryPicture;
 	if ((galleryPicture = this.galleryPictureRepository.findOne(id)) == null) {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {

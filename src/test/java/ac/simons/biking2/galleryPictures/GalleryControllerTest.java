@@ -16,8 +16,6 @@
 package ac.simons.biking2.galleryPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
-import ac.simons.biking2.persistence.entities.GalleryPicture;
-import ac.simons.biking2.persistence.repositories.GalleryPictureRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -52,6 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static java.util.TimeZone.getTimeZone;
 
 /**
  * @author Michael J. Simons, 2014-03-07
@@ -74,7 +73,7 @@ public class GalleryControllerTest {
 	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
 	final GregorianCalendar takenOn = new GregorianCalendar(getTimeZone("UTC"));
 	takenOn.set(2014, 2, 24, 23, 0, 0);
-	final GalleryPicture galleryPicture = new GalleryPicture(takenOn, "description") {
+	final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(takenOn, "description") {
 	    private static final long serialVersionUID = -3391535625175956488L;
 
 	    @Override
@@ -82,7 +81,7 @@ public class GalleryControllerTest {
 		return 23;
 	    }
 	};
-	stub(repository.save(Mockito.any(GalleryPicture.class))).toReturn(galleryPicture);
+	stub(repository.save(Mockito.any(GalleryPictureEntity.class))).toReturn(galleryPicture);
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
@@ -104,7 +103,7 @@ public class GalleryControllerTest {
 	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
 	final GregorianCalendar takenOn = new GregorianCalendar(getTimeZone("UTC"));
 	takenOn.set(2014, 2, 24, 23, 0, 0);
-	final GalleryPicture galleryPicture = new GalleryPicture(takenOn, "description") {
+	final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(takenOn, "description") {
 	    private static final long serialVersionUID = -3391535625175956488L;
 
 	    @Override
@@ -112,7 +111,7 @@ public class GalleryControllerTest {
 		return 23;
 	    }
 	};
-	stub(repository.save(Mockito.any(GalleryPicture.class))).toReturn(galleryPicture);
+	stub(repository.save(Mockito.any(GalleryPictureEntity.class))).toReturn(galleryPicture);
 	// use non existing dir
 	final GalleryController controller = new GalleryController(repository, new File(this.tmpDir, "haha, got you"));
 
@@ -132,7 +131,7 @@ public class GalleryControllerTest {
     @Test
     public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
 	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);	
-	stub(repository.save(Mockito.any(GalleryPicture.class))).toThrow(new DataIntegrityViolationException("fud"));
+	stub(repository.save(Mockito.any(GalleryPictureEntity.class))).toThrow(new DataIntegrityViolationException("fud"));
 
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
 	
@@ -219,7 +218,7 @@ public class GalleryControllerTest {
 	Files.copy(new ByteArrayInputStream(imageData), imageFile.toPath());
 	
 	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);		
-	Mockito.stub(repository.findOne(42)).toReturn(new GalleryPicture(Calendar.getInstance(), imageFile.getName()));
+	Mockito.stub(repository.findOne(42)).toReturn(new GalleryPictureEntity(Calendar.getInstance(), imageFile.getName()));
 	
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
@@ -266,7 +265,7 @@ public class GalleryControllerTest {
 	Mockito.stub(repository.findAll(Mockito.any(Sort.class))).toReturn(new ArrayList<>());
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
-	final List<GalleryPicture> galleryPictures = controller.getGalleryPictures();
+	final List<GalleryPictureEntity> galleryPictures = controller.getGalleryPictures();
 	Assert.assertNotNull(galleryPictures);
 	Assert.assertEquals(0, galleryPictures.size());
 	
