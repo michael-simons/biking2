@@ -16,11 +16,11 @@
 package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.bikes.BikeEntity.Link;
+import ac.simons.biking2.tests.BeanTester;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +28,6 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.ConstructorSignatureAndPropertiesMapping;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -56,22 +53,6 @@ public class BikeEntityTest {
     
     @Test
     public void linkBeanShouldWorkAsExpected() {
-	ConstructorSignatureAndPropertiesMapping mapping = new ConstructorSignatureAndPropertiesMapping();	
-	mapping.put(Arrays.asList(String.class, String.class), Arrays.asList("url", "label"));
-
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(BikeEntity.Link.class, mapping);
-	
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("url", null);
-	defaultValues.put("label", null);
-	
-	final PropertiesAndValues values = new PropertiesAndValues();	
-	values.put("url", "http://heise.de");
-	values.put("label", "foobar");
-
-	beanLikeTester.testDefaultValues(defaultValues);
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
-	
 	Link l1 = new Link();
 	Link l2 = new Link("http://heise.de", "h");
 	Link l3 = new Link("http://heise.de", "H");
@@ -82,6 +63,11 @@ public class BikeEntityTest {
 	Assert.assertFalse(l2.hashCode() ==  l1.hashCode());
 	Assert.assertNotEquals(l2, null);
 	Assert.assertNotEquals(l2, "asds");
+	
+	Assert.assertEquals("http://heise.de", l2.getUrl());
+	Assert.assertEquals("h", l2.getLabel());
+	l2.setLabel("H");
+	Assert.assertEquals("H", l2.getLabel());
     }
     
     @Test

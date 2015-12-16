@@ -16,11 +16,12 @@
 
 package ac.simons.biking2.rss;
 
+import ac.simons.biking2.tests.BeanTester;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 /**
  * @author Michael J. Simons, 2014-05-23
@@ -28,20 +29,7 @@ import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 public class ItemTest {
     @Test
     public void beanShouldWorkAsExpected() {
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(Item.class);
-	
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("title", null);	
-	defaultValues.put("link", null);	
-	defaultValues.put("description", null);	
-	defaultValues.put("pubDate", null);	
-	defaultValues.put("guid", null);	
-	defaultValues.put("thumbnail", null);	
-	defaultValues.put("content", null);	
- 
-	beanLikeTester.testDefaultValues(defaultValues);
-	
-	final PropertiesAndValues values = new PropertiesAndValues();
+	final Map<String, Object> values = new HashMap<>();
 	values.put("title", "title");	
 	values.put("link", "link");	
 	values.put("description", "description");	
@@ -50,6 +38,6 @@ public class ItemTest {
 	values.put("thumbnail", new Thumbnail());	
 	values.put("content", new ArrayList<>());	
 	
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(Item.class));
     }   
 }

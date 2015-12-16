@@ -15,12 +15,13 @@
  */
 package ac.simons.biking2.rss;
 
+import ac.simons.biking2.tests.BeanTester;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 /**
  * @author Michael J. Simons, 2014-05-23
@@ -29,21 +30,7 @@ public class ChannelTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(Channel.class);
-
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("title", null);
-	defaultValues.put("link", null);
-	defaultValues.put("description", null);
-	defaultValues.put("pubDate", null);
-	defaultValues.put("links", null);
-	defaultValues.put("items", null);
-        defaultValues.put("previous", null);
-	defaultValues.put("next", null);
-
-	beanLikeTester.testDefaultValues(defaultValues);
-
-	final PropertiesAndValues values = new PropertiesAndValues();
+	final Map<String, Object> values = new HashMap<>();
 	values.put("title", "title");
 	values.put("link", "link");
 	values.put("description", "description");
@@ -51,7 +38,7 @@ public class ChannelTest {
 	values.put("links", new ArrayList<>());
 	values.put("items", new ArrayList<>());
 
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(Channel.class));
     }
 
     @Test

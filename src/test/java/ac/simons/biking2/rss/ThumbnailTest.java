@@ -15,9 +15,10 @@
  */
 package ac.simons.biking2.rss;
 
+import ac.simons.biking2.tests.BeanTester;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 /**
  * @author Michael J. Simons, 2014-05-23
@@ -26,20 +27,11 @@ public class ThumbnailTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(Thumbnail.class);
-
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("url", null);
-	defaultValues.put("width", null);
-	defaultValues.put("height", null);
-
-	beanLikeTester.testDefaultValues(defaultValues);
-
-	final PropertiesAndValues values = new PropertiesAndValues();
+	final Map<String, Object> values = new HashMap<>();
 	values.put("url", "https://dailyfratze.de/attachments/michael/2012/11/13535048936935471334.jpg");
 	values.put("width", 23);
 	values.put("height", 42);
 
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(Thumbnail.class));
     }
 }

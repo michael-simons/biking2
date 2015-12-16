@@ -16,15 +16,9 @@
 package ac.simons.biking2.persistence.entities;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.ConstructorSignatureAndPropertiesMapping;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 /**
  * @author Michael J. Simons, 2014-05-23
@@ -33,27 +27,11 @@ public class AssortedTripTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-
-	ConstructorSignatureAndPropertiesMapping mapping = new ConstructorSignatureAndPropertiesMapping();
-	final List<Class<?>> signature1 = new ArrayList<>();
-	signature1.add(Calendar.class);
-	signature1.add(BigDecimal.class);
-	mapping.put(signature1, Arrays.asList("coveredOn", "distance"));
-
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(AssortedTrip.class, mapping);
-
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("id", null);
-	defaultValues.put("coveredOn", null);
-	defaultValues.put("distance", null);
-
-	final PropertiesAndValues values = new PropertiesAndValues();
-	values.put("id", null);
-	values.put("coveredOn", Calendar.getInstance());
-	values.put("distance", BigDecimal.TEN);
-
-	beanLikeTester.testBeanLike(defaultValues, values);
-
+	Calendar now = Calendar.getInstance();
+	final AssortedTrip trip = new AssortedTrip(now, BigDecimal.TEN);
+	Assert.assertNull(trip.getId());
+	Assert.assertEquals(now, trip.getCoveredOn());
+	Assert.assertEquals(BigDecimal.TEN, trip.getDistance());
 	Assert.assertEquals(new AssortedTrip(), new AssortedTrip());
     }
 }

@@ -15,11 +15,10 @@
  */
 package ac.simons.biking2.tracks.gpx;
 
-import ac.simons.biking2.tracks.gpx.GPX;
-import ac.simons.biking2.tracks.gpx.Bounds;
+import ac.simons.biking2.tests.BeanTester;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 /**
  * @author Michael J. Simons, 2014-05-23
@@ -28,16 +27,9 @@ public class GPXTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(GPX.class);
-
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("bounds", null);
-
-	beanLikeTester.testDefaultValues(defaultValues);
-
-	final PropertiesAndValues values = new PropertiesAndValues();
+	final Map<String, Object> values = new HashMap<>();
 	values.put("bounds", new Bounds());
-
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	
+	values.forEach(new BeanTester(GPX.class));
     }
 }

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.config;
+package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.api.Coordinate;
-import ac.simons.biking2.oembed.OEmbedController;
-import ac.simons.biking2.persistence.repositories.TrackRepository;
+import ac.simons.biking2.tracks.OEmbedController;
+import ac.simons.biking2.tracks.TrackRepository;
 import java.math.BigDecimal;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;

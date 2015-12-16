@@ -216,7 +216,7 @@
 					<limit implementation="org.jacoco.report.check.Limit">
 					    <counter>INSTRUCTION</counter>
 					    <value>COVEREDRATIO</value>
-					    <minimum>0.97</minimum>			
+					    <minimum>0.95</minimum>			
 					</limit>
 					<!--  implmentation is needed only for Maven 2  -->
 					<limit implementation="org.jacoco.report.check.Limit">
@@ -332,13 +332,7 @@
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-test</artifactId>
 	    <scope>test</scope>
-	</dependency>
-	<dependency>
-	    <groupId>org.outsideMyBox</groupId>
-	    <artifactId>testUtils</artifactId>
-	    <version>0.1.3</version>
-	    <scope>test</scope>
-	</dependency>
+	</dependency>	
 	<dependency>
 	    <groupId>org.jooq</groupId>
 	    <artifactId>joor</artifactId>

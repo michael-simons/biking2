@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.persistence.repositories;
+package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.persistence.entities.Track;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
-public interface TrackRepository extends JpaRepository<Track, Integer> {
+interface TrackRepository extends JpaRepository<TrackEntity, Integer> {
 }

@@ -17,11 +17,11 @@
 package ac.simons.biking2.misc;
 
 import ac.simons.biking2.misc.About.VMProperties;
+import ac.simons.biking2.tests.BeanTester;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 /**
  * @author Michael J. Simons, 2014-05-23
@@ -29,25 +29,13 @@ import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 public class AboutTest {    
     @Test
     public void beanShouldWorkAsExpected() {
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(VMProperties.class);
-	
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("version", System.getProperty("java.runtime.version"));	
-	defaultValues.put("uptime", null);	
-	defaultValues.put("usedMemory", null);	
-	defaultValues.put("freeMemory", null);	
-	defaultValues.put("totalMemory", null);	
-	defaultValues.put("maxMemory", null);	
- 
-	beanLikeTester.testDefaultValues(defaultValues);
-	
-	final PropertiesAndValues values = new PropertiesAndValues();
+	final Map<String, Object> values = new HashMap<>();
 	values.put("uptime", Duration.ofDays(1));	
 	values.put("usedMemory", 2l);	
 	values.put("freeMemory", 3l);	
 	values.put("totalMemory", 5l);	
 	values.put("maxMemory", 10l);	
 	
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(VMProperties.class));
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -52,7 +52,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Track implements Serializable {
+class TrackEntity implements Serializable {
 
     private static final long serialVersionUID = 7630613853916630933L;
 
@@ -110,10 +110,10 @@ public class Track implements Serializable {
     @Enumerated(EnumType.STRING)
     private Type type = Type.biking;
 
-    protected Track() {	
+    protected TrackEntity() {	
     }
     
-    public Track(String name, Calendar coveredOn) {
+    public TrackEntity(String name, Calendar coveredOn) {
 	this.name = name;
 	this.coveredOn = coveredOn;
     }
@@ -203,7 +203,7 @@ public class Track implements Serializable {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final Track other = (Track) obj;
+	final TrackEntity other = (TrackEntity) obj;
 	if (!Objects.equals(this.name, other.name)) {
 	    return false;
 	}

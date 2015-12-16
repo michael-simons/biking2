@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.oembed;
+package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.api.Coordinate;
-import ac.simons.biking2.persistence.entities.Track;
-import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Michael J. Simons, 2014-02-14
  */
 @Controller
-public class OEmbedController {
+class OEmbedController {
     private final static Pattern EMBEDDABLE_TRACK_URL_PATTERN = Pattern.compile(".*?\\/tracks\\/(\\w+)(\\/|\\.(\\w+))?$");
     private final static Map<String, String> acceptableFormats;
     static {
@@ -70,9 +68,9 @@ public class OEmbedController {
     ) {
 	ResponseEntity<OEmbedResponse> rv = null;
 	final Matcher m = EMBEDDABLE_TRACK_URL_PATTERN.matcher(url);
-	final Integer id = m.matches() ? Track.getId(m.group(1)) : null;
+	final Integer id = m.matches() ? TrackEntity.getId(m.group(1)) : null;
 	final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
-	Track track;
+	TrackEntity track;
 	if(id == null || !acceptableFormats.containsKey(_format))
 	    rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	else if((track = this.trackRepository.findOne(id)) == null)
@@ -120,8 +118,8 @@ public class OEmbedController {
 	    final Model model,
 	    final HttpServletResponse response
     ) {	
-	final Integer _id = Track.getId(id);	
-	Track track;
+	final Integer _id = TrackEntity.getId(id);	
+	TrackEntity track;
 	String rv = null;
 	if (_id == null) {
 	    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);

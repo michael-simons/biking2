@@ -15,10 +15,11 @@
  */
 package ac.simons.biking2.trips;
 
+import ac.simons.biking2.tests.BeanTester;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 /**
  * @author Michael J. Simons, 2015-06-09
@@ -27,16 +28,10 @@ public class NewTripCmdTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(NewTripCmd.class);
-
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("coveredOn", null);
-	defaultValues.put("distance", null);
-
-	final PropertiesAndValues values = new PropertiesAndValues();
+	final Map<String, Object> values = new HashMap<>();
 	values.put("coveredOn", new Date());
 	values.put("distance", 2342.0);
 
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(NewTripCmd.class));
     }
 }

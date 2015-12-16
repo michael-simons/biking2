@@ -17,9 +17,7 @@ package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.tracks.gpx.GPX;
 import ac.simons.biking2.misc.JAXBContextFactory;
-import ac.simons.biking2.persistence.entities.Track;
-import ac.simons.biking2.persistence.entities.Track.Type;
-import ac.simons.biking2.persistence.repositories.TrackRepository;
+import ac.simons.biking2.tracks.TrackEntity.Type;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,7 +58,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2014-02-15
  */
 @Controller
-public class TracksController {
+class TracksController {
 
     private final static Map<String, String> acceptableFormats;
 
@@ -87,13 +85,13 @@ public class TracksController {
 
     @RequestMapping("/api/tracks")
     public @ResponseBody
-    List<Track> getTracks() {
+    List<TrackEntity> getTracks() {
 	return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
     }
     
     @RequestMapping(value = "/api/tracks", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Track> createTrack(	    
+    public ResponseEntity<TrackEntity> createTrack(	    
 	    @RequestParam(value = "name", required = true)
 	    final String name,	    
 	    @RequestParam(value = "coveredOn", required = true)
@@ -106,12 +104,12 @@ public class TracksController {
 	    @RequestParam("trackData")
 	    final MultipartFile trackData
     ) throws IOException {
-	ResponseEntity<Track> rv;
+	ResponseEntity<TrackEntity> rv;
 	if(trackData == null || trackData.isEmpty())
 	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	else {
 	    try {
-		Track track = new Track(name, GregorianCalendar.from(coveredOn));
+		TrackEntity track = new TrackEntity(name, GregorianCalendar.from(coveredOn));
 		track.setDescription(description);
 		track.setType(type);
 		
@@ -137,7 +135,7 @@ public class TracksController {
 	return rv;
     }
     
-    Track storeFile(final Track track, final InputStream tcxData) {
+    TrackEntity storeFile(final TrackEntity track, final InputStream tcxData) {
 	final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
 	final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");	
 
@@ -169,11 +167,11 @@ public class TracksController {
     }
     
     @RequestMapping("/api/tracks/{id:\\w+}")
-    public ResponseEntity<Track> getTrack(final @PathVariable String id) {
-	final Integer _id = Track.getId(id);
+    public ResponseEntity<TrackEntity> getTrack(final @PathVariable String id) {
+	final Integer _id = TrackEntity.getId(id);
 
-	Track track;
-	ResponseEntity<Track> rv;
+	TrackEntity track;
+	ResponseEntity<TrackEntity> rv;
 	if (_id == null) {
 	    rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	} else if ((track = this.trackRepository.findOne(_id)) == null) {
@@ -192,9 +190,9 @@ public class TracksController {
 	    final HttpServletRequest request,
 	    final HttpServletResponse response
     ) throws IOException {
-	final Integer _id = Track.getId(id);
+	final Integer _id = TrackEntity.getId(id);
 	final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
-	Track track;
+	TrackEntity track;
 	if (_id == null || !acceptableFormats.containsKey(_format)) {
 	    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
 	} else if ((track = this.trackRepository.findOne(_id)) == null) {

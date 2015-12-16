@@ -13,56 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.persistence.entities;
 
+import ac.simons.biking2.tests.BeanTester;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.ConstructorSignatureAndPropertiesMapping;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
-
 
 /**
  * @author Michael J. Simons, 2014-05-23
  */
 public class LocationTest {
-    
+
     @Test
     public void beanShouldWorkAsExpected() {
-
-	ConstructorSignatureAndPropertiesMapping mapping = new ConstructorSignatureAndPropertiesMapping();
-	final List<Class<?>> signature1 = new ArrayList<>();
-	signature1.add(BigDecimal.class);	
-	signature1.add(BigDecimal.class);	
-	signature1.add(Calendar.class);	
-	mapping.put(signature1, Arrays.asList("latitude", "longitude", "createdAt"));
-
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(Location.class, mapping);
-
 	final Calendar now = Calendar.getInstance();
-	
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("id", null);
-	defaultValues.put("latitude", null);
-	defaultValues.put("longitude", null);
-	defaultValues.put("createdAt", null);	
-	defaultValues.put("description", null);
 
-	final PropertiesAndValues values = new PropertiesAndValues();	
-	values.put("id", null);
-	values.put("latitude", BigDecimal.ONE);
-	values.put("longitude", BigDecimal.TEN);
-	values.put("createdAt", now);
+	final Map<String, Object> values = new HashMap<>();	
 	values.put("description", "description");
 
-	beanLikeTester.testDefaultValues(defaultValues);
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(Location.class));
 
 	final Location l1 = new Location(BigDecimal.ONE, BigDecimal.TEN, now);
 	final Location otherL1 = new Location(BigDecimal.ONE, BigDecimal.TEN, now);
@@ -70,7 +43,11 @@ public class LocationTest {
 	Assert.assertEquals(l1.hashCode(), otherL1.hashCode());
 	Assert.assertNotEquals(l1, "something else");
 	Assert.assertNotEquals(l1, null);
-	
+	Assert.assertEquals(BigDecimal.ONE, l1.getLatitude());
+	Assert.assertEquals(BigDecimal.TEN, l1.getLongitude());
+	Assert.assertEquals(now, l1.getCreatedAt());
+	Assert.assertNull(l1.getId());
+
 	final Calendar then = Calendar.getInstance();
 	then.add(Calendar.YEAR, 1);
 	Location other = new Location(BigDecimal.ZERO, BigDecimal.TEN, now);

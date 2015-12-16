@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.persistence.entities;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import ac.simons.biking2.tests.BeanTester;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.ConstructorSignatureAndPropertiesMapping;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
-
 
 /**
  * @author Michael J. Simons, 2014-05-23
@@ -34,32 +29,12 @@ public class GalleryPictureTest {
     
     @Test
     public void beanShouldWorkAsExpected() {
-
-	ConstructorSignatureAndPropertiesMapping mapping = new ConstructorSignatureAndPropertiesMapping();
-	final List<Class<?>> signature1 = new ArrayList<>();	
-	signature1.add(Calendar.class);	
-	signature1.add(String.class);	
-	mapping.put(signature1, Arrays.asList("takenOn", "filename"));
-
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(GalleryPicture.class, mapping);
-
 	final Calendar now = Calendar.getInstance();
 	
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("id", null);
-	defaultValues.put("takenOn", null);
-	defaultValues.put("filename", null);
-	defaultValues.put("description", null);	
-	defaultValues.put("createdAt", null);
-
-	final PropertiesAndValues values = new PropertiesAndValues();	
-	values.put("id", null);
-	values.put("takenOn", now);
-	values.put("filename", "filename");
+	final Map<String, Object> values = new HashMap<>();	
 	values.put("description", "description");		
 
-	beanLikeTester.testDefaultValues(defaultValues);
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(GalleryPicture.class));
 
 	final GalleryPicture bean = new GalleryPicture(now, "poef");
 	bean.prePersist();
@@ -68,7 +43,10 @@ public class GalleryPictureTest {
 	Assert.assertEquals(bean.hashCode(), otherBean.hashCode());
 	Assert.assertNotEquals(bean, "something else");
 	Assert.assertNotEquals(bean, null);
+	Assert.assertEquals(now, bean.getTakenOn());
 	Assert.assertNotNull(bean.getCreatedAt());
+	Assert.assertEquals("poef", bean.getFilename());
+	Assert.assertNull(bean.getId());
 	
 	final Calendar then = Calendar.getInstance();
 	then.add(Calendar.YEAR, 1);

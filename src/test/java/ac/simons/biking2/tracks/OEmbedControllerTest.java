@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.oembed;
+package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.api.Coordinate;
-import ac.simons.biking2.config.OEmbedControllerTestConfig;
-import ac.simons.biking2.persistence.repositories.TrackRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

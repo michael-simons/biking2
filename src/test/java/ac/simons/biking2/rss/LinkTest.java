@@ -15,9 +15,10 @@
  */
 package ac.simons.biking2.rss;
 
+import ac.simons.biking2.tests.BeanTester;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 
 /**
  * @author Michael J. Simons, 2014-05-23
@@ -25,20 +26,11 @@ import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
 public class LinkTest {
     @Test
     public void beanShouldWorkAsExpected() {
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(Link.class);
-
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("rel", null);
-	defaultValues.put("type", null);
-	defaultValues.put("href", null);	
-
-	beanLikeTester.testDefaultValues(defaultValues);
-
-	final PropertiesAndValues values = new PropertiesAndValues();
+	final Map<String, Object> values = new HashMap<>();
 	values.put("rel", "rel");
 	values.put("type", "type");
 	values.put("href", "href");
 
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(Link.class));
     }
 }

@@ -14,42 +14,21 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.oembed;
+package ac.simons.biking2.tracks;
 
+import ac.simons.biking2.tests.BeanTester;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
-import org.outsideMyBox.testUtils.BeanLikeTester;
-import org.outsideMyBox.testUtils.BeanLikeTester.PropertiesAndValues;
-
 
 /**
  * @author Michael J. Simons, 2014-05-23
  */
 public class OEmbedResponseTest {
     
-     @Test
+    @Test
     public void beanShouldWorkAsExpected() {
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(OEmbedResponse.class);
-
-	final PropertiesAndValues defaultValues = new PropertiesAndValues();
-	defaultValues.put("type", null);
-	defaultValues.put("version", null);
-	defaultValues.put("title", null);
-	defaultValues.put("authorName", null);
-	defaultValues.put("authorUrl", null);
-	defaultValues.put("providerName", null);
-	defaultValues.put("providerUrl", null);
-	defaultValues.put("cacheAge", null);
-	defaultValues.put("thumbnailUrl", null);
-	defaultValues.put("thumbnailWidth", null);
-	defaultValues.put("thumbnailHeight", null);
-	defaultValues.put("url", null);
-	defaultValues.put("html", null);
-	defaultValues.put("width", null);
-	defaultValues.put("height", null);
-
-	beanLikeTester.testDefaultValues(defaultValues);
-
-	final PropertiesAndValues values = new PropertiesAndValues();
+	final Map<String, Object> values = new HashMap<>();
 	values.put("type", "type");
 	values.put("version", "version");
 	values.put("title", "title");
@@ -66,6 +45,6 @@ public class OEmbedResponseTest {
 	values.put("width", 42);
 	values.put("height", 42);
 
-	beanLikeTester.testMutatorsAndAccessors(defaultValues, values);
+	values.forEach(new BeanTester(OEmbedResponse.class));	
     }   
 }
