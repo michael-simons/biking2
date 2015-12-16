@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.repositories;
+package ac.simons.biking2.trips;
 
 import ac.simons.biking2.config.TestConfig;
 import org.junit.Test;

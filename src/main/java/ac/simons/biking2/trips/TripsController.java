@@ -15,8 +15,6 @@
  */
 package ac.simons.biking2.trips;
 
-import ac.simons.biking2.persistence.entities.AssortedTrip;
-import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.validation.Valid;
@@ -33,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * Api for creating new {@link AssortedTrip assorted trips}.
+ * Api for creating new {@link AssortedTripEntity assorted trips}.
  *
  * @author Michael J. Simons, 2015-06-09
  */
@@ -59,7 +57,7 @@ public class TripsController {
 	    final Calendar coveredOn = Calendar.getInstance();
 	    coveredOn.setTime(newTrip.getCoveredOn());
 	    try {
-		final AssortedTrip trip = this.assortedTripRepository.save(new AssortedTrip(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
+		final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
 		rv = new ResponseEntity<>(trip, HttpStatus.OK);
 	    } catch (DataIntegrityViolationException e) {
 		rv = new ResponseEntity<>(HttpStatus.CONFLICT);

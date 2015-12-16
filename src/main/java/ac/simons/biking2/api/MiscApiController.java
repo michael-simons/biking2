@@ -19,7 +19,7 @@ import ac.simons.biking2.misc.About;
 import ac.simons.biking2.misc.About.VMProperties;
 import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.bikes.BikeEntity;
-import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
+import ac.simons.biking2.trips.AssortedTripRepository;
 import ac.simons.biking2.bikes.BikeRepository;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;

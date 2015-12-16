@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.trips;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -38,12 +38,12 @@ import javax.validation.constraints.NotNull;
 @Table(name = "assorted_trips")
 @NamedQueries({
     @NamedQuery(
-	    name = "AssortedTrip.getTotalDistance",
+	    name = "AssortedTripEntity.getTotalDistance",
 	    query
-	    = "Select coalesce(sum(t.distance), 0) from AssortedTrip t"
+	    = "Select coalesce(sum(t.distance), 0) from AssortedTripEntity t"
     )
 })
-public class AssortedTrip implements Serializable {
+public class AssortedTripEntity implements Serializable {
 
     private static final long serialVersionUID = 3222189732938547117L;
 
@@ -61,10 +61,10 @@ public class AssortedTrip implements Serializable {
     @NotNull
     private BigDecimal distance;
 
-    protected AssortedTrip() {	
+    protected AssortedTripEntity() {	
     }
     
-    public AssortedTrip(Calendar coveredOn, BigDecimal distance) {
+    public AssortedTripEntity(Calendar coveredOn, BigDecimal distance) {
 	this.coveredOn = coveredOn;
 	this.distance = distance;
     }
@@ -97,7 +97,7 @@ public class AssortedTrip implements Serializable {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final AssortedTrip other = (AssortedTrip) obj;
+	final AssortedTripEntity other = (AssortedTripEntity) obj;
 	if (!Objects.equals(this.coveredOn, other.coveredOn)) {
 	    return false;
 	}

@@ -15,8 +15,6 @@
  */
 package ac.simons.biking2.trips;
 
-import ac.simons.biking2.persistence.entities.AssortedTrip;
-import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -73,8 +71,8 @@ public class TripsControllerTest {
 		.build();
 
 	
-	final AssortedTrip trip = Reflect
-		.on(new AssortedTrip(Calendar.getInstance(), BigDecimal.valueOf(23.42)))
+	final AssortedTripEntity trip = Reflect
+		.on(new AssortedTripEntity(Calendar.getInstance(), BigDecimal.valueOf(23.42)))
 		.set("id", 42)
 		.get();
 	
@@ -85,12 +83,12 @@ public class TripsControllerTest {
 	newTripCmd2.setCoveredOn(trip.getCoveredOn().getTime());
 	newTripCmd2.setDistance(666.0);	
 		 	
-	when(repository.save(any(AssortedTrip.class))).then(invocation -> {
-	    final AssortedTrip arg = invocation.getArgumentAt(0, AssortedTrip.class);
-	    return arg == null ? arg : Reflect.on(invocation.getArgumentAt(0, AssortedTrip.class)).set("id", 42).get();
+	when(repository.save(any(AssortedTripEntity.class))).then(invocation -> {
+	    final AssortedTripEntity arg = invocation.getArgumentAt(0, AssortedTripEntity.class);
+	    return arg == null ? arg : Reflect.on(invocation.getArgumentAt(0, AssortedTripEntity.class)).set("id", 42).get();
 	});	
 	// Using hamcrest to check for properties of the passed object
-	when(repository.save(argThat(Matchers.<AssortedTrip>hasProperty("distance", is(BigDecimal.valueOf(666.0)))))).thenThrow(new DataIntegrityViolationException(""));
+	when(repository.save(argThat(Matchers.<AssortedTripEntity>hasProperty("distance", is(BigDecimal.valueOf(666.0)))))).thenThrow(new DataIntegrityViolationException(""));
 	
 	// Empty content
 	mockMvc
@@ -143,6 +141,6 @@ public class TripsControllerTest {
 		.andExpect(status().isConflict())
 		.andExpect(MockMvcResultMatchers.content().string(""));
 
-	verify(repository, times(2)).save(any(AssortedTrip.class));
+	verify(repository, times(2)).save(any(AssortedTripEntity.class));
     }
 }

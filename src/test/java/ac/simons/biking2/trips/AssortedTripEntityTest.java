@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.trips;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -23,15 +23,15 @@ import org.junit.Test;
 /**
  * @author Michael J. Simons, 2014-05-23
  */
-public class AssortedTripTest {
+public class AssortedTripEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
 	Calendar now = Calendar.getInstance();
-	final AssortedTrip trip = new AssortedTrip(now, BigDecimal.TEN);
+	final AssortedTripEntity trip = new AssortedTripEntity(now, BigDecimal.TEN);
 	Assert.assertNull(trip.getId());
 	Assert.assertEquals(now, trip.getCoveredOn());
 	Assert.assertEquals(BigDecimal.TEN, trip.getDistance());
-	Assert.assertEquals(new AssortedTrip(), new AssortedTrip());
+	Assert.assertEquals(new AssortedTripEntity(), new AssortedTripEntity());
     }
 }
