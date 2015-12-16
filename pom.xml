@@ -47,7 +47,7 @@
 	<junit.version>4.11</junit.version>
 	<bootstrap.version>3.1.1</bootstrap.version>
 	<jquery.version>1.11.0</jquery.version>
-	<angularjs.version>1.2.12</angularjs.version>
+	<angularjs.version>1.2.29</angularjs.version>
 	<highcharts.version>3.0.10</highcharts.version>
 	<openlayers.version>2.13.1</openlayers.version>
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
