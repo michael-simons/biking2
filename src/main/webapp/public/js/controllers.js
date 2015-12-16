@@ -424,7 +424,7 @@ biking2Controllers.controller('LocationCtrl', function($scope, $http) {
     });
 });
 
-biking2Controllers.controller('AboutCtrl', function($scope, $http, $filter, $interval) {
+biking2Controllers.controller('AboutCtrl', function($scope, $q, $http, $filter, $interval) {
     $scope.refreshInterval = 30;
     $scope.memoryConfig = {
 	options: {
@@ -478,8 +478,10 @@ biking2Controllers.controller('AboutCtrl', function($scope, $http, $filter, $int
 	}
     };
     
-    $http.get('/api/system/info').success(function(data) {
-	$scope.info = data;
+    
+     $q.all([$http.get('/api/system/info'), $http.get('/api/system/env/java.(runtime|vm).*')]).then(function(values) {
+	$scope.info = values[0].data;	
+	$scope.info.env = values[1].data;	
     });
 
     $scope.refresh = function() {

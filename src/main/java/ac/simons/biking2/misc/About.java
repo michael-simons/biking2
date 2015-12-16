@@ -31,8 +31,6 @@ public class About {
     @JsonPropertyOrder(alphabetic = true)
     public static class VMProperties {
 
-	private final String version = System.getProperty("java.runtime.version");
-
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Duration uptime;
 
@@ -43,10 +41,6 @@ public class About {
 	private Long totalMemory;
 
 	private Long maxMemory;
-
-	public String getVersion() {
-	    return version;
-	}
 
 	public Duration getUptime() {
 	    return uptime;
