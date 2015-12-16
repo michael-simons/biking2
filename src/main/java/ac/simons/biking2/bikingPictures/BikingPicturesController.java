@@ -16,8 +16,6 @@
 package ac.simons.biking2.bikingPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
-import ac.simons.biking2.persistence.entities.BikingPicture;
-import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,15 +31,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static java.time.ZoneId.of;
 import static java.time.ZonedDateTime.now;
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 
 /**
  * @author Michael J. Simons, 2014-02-19
  */
 @Controller
-public class BikingPicturesController {
+class BikingPicturesController {
 
     private final BikingPictureRepository bikingPictureRepository;
     private final File datastoreBaseDirectory;
@@ -54,7 +52,7 @@ public class BikingPicturesController {
 
     @RequestMapping("/api/bikingPictures")
     public @ResponseBody
-    List<BikingPicture> getBikingPictures() {
+    List<BikingPictureEntity> getBikingPictures() {
 	return bikingPictureRepository.findAll(new Sort(Sort.Direction.ASC, "pubDate"));
     }
 
@@ -65,7 +63,7 @@ public class BikingPicturesController {
 	    final HttpServletResponse response
     ) throws IOException {
 
-	BikingPicture bikingPicture;
+	BikingPictureEntity bikingPicture;
 	if ((bikingPicture = this.bikingPictureRepository.findOne(id)) == null) {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {

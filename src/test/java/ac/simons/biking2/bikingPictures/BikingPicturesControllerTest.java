@@ -15,8 +15,6 @@
  */
 package ac.simons.biking2.bikingPictures;
 
-import ac.simons.biking2.persistence.entities.BikingPicture;
-import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
 import ac.simons.biking2.rss.RSSDateTimeAdapter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,6 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ac.simons.biking2.bikingPictures.BikingPicturesControllerTest.RegexMatcher.matches;
 
 /**
  * @author Michael J. Simons, 2014-02-19
@@ -88,7 +87,7 @@ public class BikingPicturesControllerTest {
     @Test
     public void testGetBikingPicture() throws Exception {
 	final BikingPictureRepository repository = mock(BikingPictureRepository.class);
-	stub(repository.findOne(1)).toReturn(new BikingPicture("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12"));
+	stub(repository.findOne(1)).toReturn(new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12"));
 
 	final BikingPicturesController controller = new BikingPicturesController(repository, tmpDir);
 	final ZonedDateTime expiresIn = ZonedDateTime.now(ZoneId.of("UTC")).plusDays(365);
@@ -124,7 +123,7 @@ public class BikingPicturesControllerTest {
 	Mockito.stub(repository.findAll(Mockito.any(Sort.class))).toReturn(new ArrayList<>());
 	final BikingPicturesController controller = new BikingPicturesController(repository, this.tmpDir);
 
-	final List<BikingPicture> pictures = controller.getBikingPictures();
+	final List<BikingPictureEntity> pictures = controller.getBikingPictures();
 	Assert.assertNotNull(pictures);
 	Assert.assertEquals(0, pictures.size());
 	

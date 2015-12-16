@@ -16,8 +16,6 @@
 package ac.simons.biking2.bikingPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
-import ac.simons.biking2.persistence.entities.BikingPicture;
-import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
 import ac.simons.biking2.rss.RSSDateTimeAdapter;
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +42,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static java.time.ZonedDateTime.of;
+import static java.util.Calendar.getInstance;
 
 /**
  * @author Michael J. Simons
@@ -70,7 +70,7 @@ public class FetchBikingPicturesJobTest {
 
 	final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
-	final List<BikingPicture> toDownload = job.createDownloadList();
+	final List<BikingPictureEntity> toDownload = job.createDownloadList();
 
 	assertThat(toDownload.size(), is(equalTo(5)));
 	verify(dailyFratzeProvider).getRSSConnection(null);
@@ -87,7 +87,7 @@ public class FetchBikingPicturesJobTest {
 
 	final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
-	final List<BikingPicture> toDownload = job.createDownloadList();
+	final List<BikingPictureEntity> toDownload = job.createDownloadList();
 
 	assertThat(toDownload.size(), is(equalTo(46)));
 	verify(dailyFratzeProvider).getRSSConnection(null);
@@ -103,7 +103,7 @@ public class FetchBikingPicturesJobTest {
 	stub(bikingPictureRepository.getMaxPubDate()).toReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));	
 	
 	final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
-	final List<BikingPicture> toDownload = job.createDownloadList();
+	final List<BikingPictureEntity> toDownload = job.createDownloadList();
 	assertThat(toDownload.size(), is(equalTo(0)));
     }
 
@@ -131,7 +131,7 @@ public class FetchBikingPicturesJobTest {
 	stub(bikingPictureRepository.getMaxPubDate()).toReturn(GregorianCalendar.from(of(2000, 1, 1, 21, 21, 00, 0, ZoneId.systemDefault())));
 	final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
-	final List<BikingPicture> toDownload = job.createDownloadList();
+	final List<BikingPictureEntity> toDownload = job.createDownloadList();
 
 	assertThat(toDownload.size(), is(equalTo(48)));
 	verify(dailyFratzeProvider).getRSSConnection(null);
@@ -154,20 +154,19 @@ public class FetchBikingPicturesJobTest {
 	stub(dailyFratzeProvider.getImageConnection(43461)).toReturn(null);
 
 	// One picture exists
-	final BikingPicture existingPicture = new BikingPicture("http://dailyfratze.de/fratzen/m/45325.jpg", dateTimeAdapter.unmarshal("Mon, 30 Dec 2013 23:18:35 GMT"), "http://dailyfratze.de/michael/2013/12/30");
+	final BikingPictureEntity existingPicture = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45325.jpg", dateTimeAdapter.unmarshal("Mon, 30 Dec 2013 23:18:35 GMT"), "http://dailyfratze.de/michael/2013/12/30");
 	final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
 	stub(bikingPictureRepository.findByExternalId(45325)).toReturn(existingPicture);
 
 	final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
-	final List<BikingPicture> downloadList = Arrays.asList(
-		new BikingPicture("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12"),
+	final List<BikingPictureEntity> downloadList = Arrays.asList(new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12"),
 		existingPicture,
-		new BikingPicture("http://dailyfratze.de/fratzen/m/44142.jpg", dateTimeAdapter.unmarshal("Sun, 03 Nov 2013 21:01:01 GMT"), "http://dailyfratze.de/michael/2013/11/3"),
-		new BikingPicture("http://dailyfratze.de/fratzen/m/43461.jpg", dateTimeAdapter.unmarshal("Sat, 05 Oct 2013 18:13:20 GMT"), "http://dailyfratze.de/michael/2013/10/3")
+		new BikingPictureEntity("http://dailyfratze.de/fratzen/m/44142.jpg", dateTimeAdapter.unmarshal("Sun, 03 Nov 2013 21:01:01 GMT"), "http://dailyfratze.de/michael/2013/11/3"),
+		new BikingPictureEntity("http://dailyfratze.de/fratzen/m/43461.jpg", dateTimeAdapter.unmarshal("Sat, 05 Oct 2013 18:13:20 GMT"), "http://dailyfratze.de/michael/2013/10/3")
 	);
 
-	final List<BikingPicture> downloaded = job.download(downloadList);
+	final List<BikingPictureEntity> downloaded = job.download(downloadList);
 
 	assertThat(downloaded.size(), is(equalTo(1)));
 	assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/45644.jpg").isFile(), is(true));

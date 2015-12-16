@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.repositories;
+package ac.simons.biking2.bikingPictures;
 
-import ac.simons.biking2.persistence.entities.BikingPicture;
 import java.util.Calendar;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
-public interface BikingPictureRepository extends JpaRepository<BikingPicture, Integer> {
+interface BikingPictureRepository extends JpaRepository<BikingPictureEntity, Integer> {
     public Calendar getMaxPubDate();
     
-    public BikingPicture findByExternalId(final Integer externalId);
+    public BikingPictureEntity findByExternalId(final Integer externalId);
 }

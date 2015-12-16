@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.bikingPictures;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -43,12 +43,12 @@ import org.hibernate.validator.constraints.URL;
 @Table(name = "biking_pictures")
 @NamedQueries({
      @NamedQuery(
-	    name = "BikingPicture.getMaxPubDate",
+	    name = "BikingPictureEntity.getMaxPubDate",
 	    query
-	    = "Select coalesce(max(bp.pubDate), '2005-08-07 18:30:42') from BikingPicture bp"
+	    = "Select coalesce(max(bp.pubDate), '2005-08-07 18:30:42') from BikingPictureEntity bp"
     )
 })
-public class BikingPicture implements Serializable {
+class BikingPictureEntity implements Serializable {
 
     private static final long serialVersionUID = -7050582813676065697L;
 
@@ -76,10 +76,10 @@ public class BikingPicture implements Serializable {
     @Size(max = 512)
     private String link;
 
-    protected BikingPicture() {
+    protected BikingPictureEntity() {
     }
 
-    public BikingPicture(final String guid, final ZonedDateTime pubDate, String link) {
+    public BikingPictureEntity(final String guid, final ZonedDateTime pubDate, String link) {
 	final Matcher matcher = GUID_PATTERN.matcher(guid);
 	if(!matcher.matches())
 	    throw new RuntimeException("Invalid GUID");	
@@ -119,7 +119,7 @@ public class BikingPicture implements Serializable {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final BikingPicture other = (BikingPicture) obj;
+	final BikingPictureEntity other = (BikingPictureEntity) obj;
 	return Objects.equals(this.externalId, other.externalId);
     }
 }

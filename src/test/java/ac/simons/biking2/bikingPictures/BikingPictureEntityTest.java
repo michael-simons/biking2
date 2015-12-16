@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.bikingPictures;
 
+import ac.simons.biking2.bikingPictures.BikingPictureEntity;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 import org.junit.Assert;
@@ -27,26 +28,26 @@ import static org.junit.rules.ExpectedException.none;
 /**
  * @author Michael J. Simons, 2014-05-23
  */
-public class BikingPictureTest {
+public class BikingPictureEntityTest {
     @Rule
     public final ExpectedException expectedException = none();
     
     @Test
     public void beanShouldWorkAsExpected() {
 	// Test default constructor
-	BikingPicture bikingPicture;
+	BikingPictureEntity bikingPicture;
 	
-	bikingPicture = new BikingPicture();
-	Assert.assertEquals(bikingPicture, new BikingPicture());
+	bikingPicture = new BikingPictureEntity();
+	Assert.assertEquals(bikingPicture, new BikingPictureEntity());
 	Assert.assertNull(bikingPicture.getExternalId());
 	Assert.assertNull(bikingPicture.getId());
 	Assert.assertNull(bikingPicture.getLink());
 	Assert.assertNull(bikingPicture.getPubDate());
 	
 	final ZonedDateTime now = ZonedDateTime.now();
-	bikingPicture = new BikingPicture("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
+	bikingPicture = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
 	
-	Assert.assertNotEquals(bikingPicture, new BikingPicture());
+	Assert.assertNotEquals(bikingPicture, new BikingPictureEntity());
 	Assert.assertNotEquals(bikingPicture, null);
 	Assert.assertNotEquals(bikingPicture, "not equals");
 	Assert.assertEquals(new Integer(45644), bikingPicture.getExternalId());
@@ -54,7 +55,7 @@ public class BikingPictureTest {
 	Assert.assertEquals("http://dailyfratze.de/michael/2014/1/12", bikingPicture.getLink());
 	Assert.assertEquals(GregorianCalendar.from(now), bikingPicture.getPubDate());	
 	
-	final BikingPicture bikingPicture2 = new BikingPicture("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
+	final BikingPictureEntity bikingPicture2 = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
 	Assert.assertEquals(bikingPicture, bikingPicture2);
 	Assert.assertEquals(bikingPicture.hashCode(), bikingPicture2.hashCode());
     }
@@ -65,6 +66,6 @@ public class BikingPictureTest {
 	this.expectedException.expectMessage("Invalid GUID");
 	
 	final ZonedDateTime now = ZonedDateTime.now();
-	new BikingPicture("http://www.heise.de", now, "http://www.heise.de");	
+	new BikingPictureEntity("http://www.heise.de", now, "http://www.heise.de");	
     }
 }

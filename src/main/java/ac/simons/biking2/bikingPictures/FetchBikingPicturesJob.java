@@ -17,8 +17,6 @@ package ac.simons.biking2.bikingPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.misc.JAXBContextFactory;
-import ac.simons.biking2.persistence.entities.BikingPicture;
-import ac.simons.biking2.persistence.repositories.BikingPictureRepository;
 import ac.simons.biking2.rss.RSS;
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +40,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import static java.time.ZonedDateTime.ofInstant;
 import static java.util.stream.Collectors.toList;
+import static java.time.ZonedDateTime.ofInstant;
 
 /**
  * @author Michael J. Simons, 2014-02-17
@@ -81,8 +79,8 @@ class FetchBikingPicturesJob {
 	download(createDownloadList());
     }
 
-    List<BikingPicture> createDownloadList() {
-	final List<BikingPicture> rv = new ArrayList<>();
+    List<BikingPictureEntity> createDownloadList() {
+	final List<BikingPictureEntity> rv = new ArrayList<>();
 
 	// Current (or 1st) url
 	String url = null;
@@ -97,12 +95,12 @@ class FetchBikingPicturesJob {
 	    if (rss == null) {
 		Logger.getLogger(FetchBikingPicturesJob.class.getName()).log(Level.WARNING, "There was a problem getting the feed data");
 	    } else {
-		final List<BikingPicture> intermediateResult
+		final List<BikingPictureEntity> intermediateResult
 			= rss.getChannel()
 			.getItems()
 			.stream()
 			.filter(item -> item.getPubDate().isAfter(maxPubDate))
-			.map(item -> new BikingPicture(item.getGuid().getValue(), item.getPubDate(), item.getLink()))
+			.map(item -> new BikingPictureEntity(item.getGuid().getValue(), item.getPubDate(), item.getLink()))
 			.collect(toList());
 		rv.addAll(intermediateResult);
 		foundOlderThanMaxPubDate = intermediateResult.size() < rss.getChannel().getItems().size();
@@ -112,11 +110,11 @@ class FetchBikingPicturesJob {
 	return rv;
     }
 
-    List<BikingPicture> download(final List<BikingPicture> list) {
-	final List<BikingPicture> rv = new ArrayList<>();
+    List<BikingPictureEntity> download(final List<BikingPictureEntity> list) {
+	final List<BikingPictureEntity> rv = new ArrayList<>();
 
-	list.forEach((BikingPicture incoming) -> {
-	    final BikingPicture existingPicture = this.bikingPictureRepository.findByExternalId(incoming.getExternalId());
+	list.forEach((BikingPictureEntity incoming) -> {
+	    final BikingPictureEntity existingPicture = this.bikingPictureRepository.findByExternalId(incoming.getExternalId());
 	    if (existingPicture == null) {
 		synchronized (this) {
 		    final URLConnection connection = this.dailyFratzeProvider.getImageConnection(incoming.getExternalId());
