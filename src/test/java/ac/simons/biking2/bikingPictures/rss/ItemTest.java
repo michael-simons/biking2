@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
+import ac.simons.biking2.bikingPictures.rss.Guid;
+import ac.simons.biking2.bikingPictures.rss.Item;
+import ac.simons.biking2.bikingPictures.rss.Thumbnail;
 import ac.simons.biking2.tests.BeanTester;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

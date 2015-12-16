@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.bikingPictures;
 
-import ac.simons.biking2.rss.RSSDateTimeAdapter;
+import ac.simons.biking2.bikingPictures.rss.RSSDateTimeAdapter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

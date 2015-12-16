@@ -13,37 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * @author Michael J. Simons, 2014-02-17
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-public class Content {
+public class RSSDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
 
-    @XmlAttribute
-    private String type;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
 
-    @XmlAttribute
-    private String url;
-
-    public String getType() {
-	return type;
+    @Override
+    public ZonedDateTime unmarshal(String v) throws Exception {
+	return ZonedDateTime.parse(v, formatter);
     }
 
-    public void setType(String type) {
-	this.type = type;
-    }
-
-    public String getUrl() {
-	return url;
-    }
-
-    public void setUrl(String url) {
-	this.url = url;
+    @Override
+    public String marshal(ZonedDateTime v) throws Exception {
+	return v.format(formatter);
     }
 }

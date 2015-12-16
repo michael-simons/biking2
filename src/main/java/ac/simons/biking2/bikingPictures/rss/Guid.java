@@ -13,33 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  * @author Michael J. Simons, 2014-02-17
  */
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RSS {
+public class Guid {
+
     @XmlAttribute
-    private final String version = "2.0";
+    private Boolean isPermaLink;
+    
+    @XmlValue
+    private String value;
 
-    private Channel channel;
-
-    public String getVersion() {
-	return version;
+    public Boolean isIsPermaLink() {
+	return isPermaLink;
     }
 
-    public Channel getChannel() {
-	return channel;
+    public void setIsPermaLink(Boolean isPermaLink) {
+	this.isPermaLink = isPermaLink;
+    }
+    
+    public String getValue() {
+	return value;
     }
 
-    public void setChannel(Channel channel) {
-	this.channel = channel;
+    public void setValue(String value) {
+	this.value = value;
     }
+
 }

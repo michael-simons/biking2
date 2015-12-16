@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
+import ac.simons.biking2.bikingPictures.rss.RSSDateTimeAdapter;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import org.junit.Assert;

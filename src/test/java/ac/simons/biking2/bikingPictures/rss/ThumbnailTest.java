@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
+import ac.simons.biking2.bikingPictures.rss.Thumbnail;
 import ac.simons.biking2.tests.BeanTester;
 import java.util.HashMap;
 import java.util.Map;

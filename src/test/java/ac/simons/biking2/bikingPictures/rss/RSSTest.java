@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
+import ac.simons.biking2.bikingPictures.rss.Item;
+import ac.simons.biking2.bikingPictures.rss.RSS;
 import ac.simons.biking2.support.JAXBContextFactory;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

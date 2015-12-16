@@ -13,46 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import static java.util.Optional.ofNullable;
-
 /**
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Channel {
+public class Item {
+
     private String title;
-    
+
     private String link;
-    
+
     private String description;
-    
+
     @XmlJavaTypeAdapter(RSSDateTimeAdapter.class)
     private ZonedDateTime pubDate;
-   
-    @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
-    private List<Link> links;
 
-    @XmlElement(name = "item")
-    private List<Item> items;
-    
-    public String getPrevious() {
-	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
-    }
-    
-    public String getNext() {
-	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();	
-    }
-    
+    private Guid guid;
+
+    @XmlElement(namespace = "http://search.yahoo.com/mrss/")
+    private Thumbnail thumbnail;
+
+    @XmlElement(namespace = "http://search.yahoo.com/mrss/")
+    private List<Content> content;
+
     public String getTitle() {
 	return title;
     }
@@ -85,19 +77,27 @@ public class Channel {
 	this.pubDate = pubDate;
     }
 
-    public List<Link> getLinks() {
-	return links;
+    public Guid getGuid() {
+	return guid;
     }
 
-    public void setLinks(List<Link> links) {
-	this.links = links;
+    public void setGuid(Guid guid) {
+	this.guid = guid;
     }
 
-    public List<Item> getItems() {
-	return items;
+    public Thumbnail getThumbnail() {
+	return thumbnail;
     }
 
-    public void setItems(List<Item> items) {
-	this.items = items;
+    public void setThumbnail(Thumbnail thumbnail) {
+	this.thumbnail = thumbnail;
+    }
+
+    public List<Content> getContent() {
+	return content;
+    }
+
+    public void setContent(List<Content> content) {
+	this.content = content;
     }
 }

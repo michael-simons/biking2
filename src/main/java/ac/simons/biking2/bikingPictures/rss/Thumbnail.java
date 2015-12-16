@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,38 +23,38 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Link {
+public class Thumbnail {
 
     @XmlAttribute
-    private String rel;
+    private String url;
 
     @XmlAttribute
-    private String type;
+    private Integer width;
 
     @XmlAttribute
-    private String href;
+    private Integer height;
 
-    public String getRel() {
-	return rel;
+    public String getUrl() {
+	return url;
     }
 
-    public void setRel(String rel) {
-	this.rel = rel;
+    public void setUrl(String url) {
+	this.url = url;
     }
 
-    public String getType() {
-	return type;
+    public Integer getWidth() {
+	return width;
     }
 
-    public void setType(String type) {
-	this.type = type;
+    public void setWidth(Integer width) {
+	this.width = width;
     }
 
-    public String getHref() {
-	return href;
+    public Integer getHeight() {
+	return height;
     }
 
-    public void setHref(String href) {
-	this.href = href;
+    public void setHeight(Integer height) {
+	this.height = height;
     }
 }

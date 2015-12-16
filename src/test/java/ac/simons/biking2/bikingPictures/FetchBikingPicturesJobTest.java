@@ -16,7 +16,7 @@
 package ac.simons.biking2.bikingPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
-import ac.simons.biking2.rss.RSSDateTimeAdapter;
+import ac.simons.biking2.bikingPictures.rss.RSSDateTimeAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;

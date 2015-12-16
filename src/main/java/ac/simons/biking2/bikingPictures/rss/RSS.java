@@ -13,48 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.rss;
+package ac.simons.biking2.bikingPictures.rss;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Michael J. Simons, 2014-02-17
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Thumbnail {
-
+public class RSS {
     @XmlAttribute
-    private String url;
+    private final String version = "2.0";
 
-    @XmlAttribute
-    private Integer width;
+    private Channel channel;
 
-    @XmlAttribute
-    private Integer height;
-
-    public String getUrl() {
-	return url;
+    public String getVersion() {
+	return version;
     }
 
-    public void setUrl(String url) {
-	this.url = url;
+    public Channel getChannel() {
+	return channel;
     }
 
-    public Integer getWidth() {
-	return width;
-    }
-
-    public void setWidth(Integer width) {
-	this.width = width;
-    }
-
-    public Integer getHeight() {
-	return height;
-    }
-
-    public void setHeight(Integer height) {
-	this.height = height;
+    public void setChannel(Channel channel) {
+	this.channel = channel;
     }
 }

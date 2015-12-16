@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@XmlSchema(    
-    xmlns={
-	@XmlNs(prefix="atom", namespaceURI="http://www.w3.org/2005/Atom"),
-	@XmlNs(prefix="media", namespaceURI="http://search.yahoo.com/mrss/"),
+package ac.simons.biking2.bikingPictures.rss;
+
+import ac.simons.biking2.bikingPictures.rss.Link;
+import ac.simons.biking2.tests.BeanTester;
+import java.util.HashMap;
+import java.util.Map;
+import org.junit.Test;
+
+/**
+ * @author Michael J. Simons, 2014-05-23
+ */
+public class LinkTest {
+    @Test
+    public void beanShouldWorkAsExpected() {
+	final Map<String, Object> values = new HashMap<>();
+	values.put("rel", "rel");
+	values.put("type", "type");
+	values.put("href", "href");
+
+	values.forEach(new BeanTester(Link.class));
     }
-) 
-package ac.simons.biking2.rss;
-
-import javax.xml.bind.annotation.XmlNs;
-import javax.xml.bind.annotation.XmlSchema;
-
+}
