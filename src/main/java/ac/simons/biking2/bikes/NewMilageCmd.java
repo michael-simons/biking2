@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  * @author Michael J. Simons, 2014-02-19
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NewMilageCmd {
+class NewMilageCmd {
     @NotNull
     private Date recordedOn;
     @NotNull

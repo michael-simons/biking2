@@ -16,8 +16,8 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.highcharts.HighchartsNgConfig;
-import ac.simons.biking2.persistence.entities.Bike;
-import ac.simons.biking2.persistence.repositories.BikeRepository;
+import ac.simons.biking2.bikes.BikeEntity;
+import ac.simons.biking2.bikes.BikeRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -39,11 +39,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.IntStream.generate;
 import static java.util.stream.IntStream.rangeClosed;
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * @author Michael J. Simons, 2014-02-09
@@ -67,14 +67,14 @@ public class ChartsController {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 
 	// All active bikes
-	final List<Bike> bikes = this.bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())));
-	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, entry -> !entry.getKey().isBefore(january1st));
+	final List<BikeEntity> bikes = this.bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())));
+	final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(bikes, entry -> !entry.getKey().isBefore(january1st));
 	
 	final Map<String, Object> userData = new HashMap<>();
-	userData.put("worstPeriod", Bike.getWorstPeriod(summarizedPeriods));
-	userData.put("bestPeriod", Bike.getBestPeriod(summarizedPeriods));
+	userData.put("worstPeriod", BikeEntity.getWorstPeriod(summarizedPeriods));
+	userData.put("bestPeriod", BikeEntity.getBestPeriod(summarizedPeriods));
 	userData.put("average", summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
-	userData.put("preferredBike", bikes.stream().max(new Bike.BikeByMilageInYearComparator(january1st.getYear())).orElse(null));
+	userData.put("preferredBike", bikes.stream().max(new BikeEntity.BikeByMilageInYearComparator(january1st.getYear())).orElse(null));
 	userData.put("currentYear", january1st.getYear());
 	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
@@ -158,7 +158,7 @@ public class ChartsController {
     ) {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	
-	final List<Bike> bikes = this.bikeRepository.findAll();	
+	final List<BikeEntity> bikes = this.bikeRepository.findAll();	
 	
 	final Map<String, Object> userData = new HashMap<>();	
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
@@ -278,7 +278,7 @@ public class ChartsController {
     @RequestMapping("/charts/monthlyAverage")
     public HighchartsNgConfig getMonthlyAverage() {
 	// Get all bikes
-	final List<Bike> bikes = this.bikeRepository.findAll();		
+	final List<BikeEntity> bikes = this.bikeRepository.findAll();		
 
 	// Compute Integer Statistics by grouping periods by month
 	final Map<Integer, IntSummaryStatistics> statistics = bikes.stream()
@@ -304,7 +304,7 @@ public class ChartsController {
 	}
 	
 	// Total average as plotline
-	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(bikes, null);
+	final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(bikes, null);
 	
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);	
 	final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);

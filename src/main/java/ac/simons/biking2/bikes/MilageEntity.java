@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.bikes;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -44,7 +44,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "milages", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"bike_id", "recorded_on"})
 })
-public class Milage implements Serializable, Comparable<Milage> {
+public class MilageEntity implements Serializable, Comparable<MilageEntity> {
 
     private static final long serialVersionUID = 3561438569324691479L;
 
@@ -64,17 +64,17 @@ public class Milage implements Serializable, Comparable<Milage> {
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "bike_id", referencedColumnName = "id")
-    private Bike bike;
+    private BikeEntity bike;
     
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Calendar createdAt;
 
-    protected Milage() {
+    protected MilageEntity() {
     }
 
-    protected Milage(final Bike bike, final LocalDate recordedOn, final double amount) {
+    protected MilageEntity(final BikeEntity bike, final LocalDate recordedOn, final double amount) {
 	this.bike = bike;
 	this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));	
 	this.amount = BigDecimal.valueOf(amount);
@@ -103,7 +103,7 @@ public class Milage implements Serializable, Comparable<Milage> {
 	return createdAt;
     }  
 
-    public Bike getBike() {
+    public BikeEntity getBike() {
 	return bike;
     }
 
@@ -123,7 +123,7 @@ public class Milage implements Serializable, Comparable<Milage> {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final Milage other = (Milage) obj;
+	final MilageEntity other = (MilageEntity) obj;
 	if (!Objects.equals(this.recordedOn, other.recordedOn)) {
 	    return false;
 	}
@@ -134,7 +134,7 @@ public class Milage implements Serializable, Comparable<Milage> {
     }
 
     @Override
-    public int compareTo(Milage o) {
+    public int compareTo(MilageEntity o) {
 	return this.recordedOn.compareTo(o.recordedOn);
     }
 }

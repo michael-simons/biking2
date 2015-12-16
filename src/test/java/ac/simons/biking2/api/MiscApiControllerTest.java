@@ -17,9 +17,9 @@ package ac.simons.biking2.api;
 
 import ac.simons.biking2.misc.About;
 import ac.simons.biking2.misc.Summary;
-import ac.simons.biking2.persistence.entities.Bike;
+import ac.simons.biking2.bikes.BikeEntity;
 import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
-import ac.simons.biking2.persistence.repositories.BikeRepository;
+import ac.simons.biking2.bikes.BikeRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -38,6 +38,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
+import static java.time.LocalDate.now;
+import static java.time.LocalDate.now;
+import static java.time.LocalDate.now;
 
 /**
  * @author Michael J. Simons, 2014-02-17
@@ -70,17 +73,15 @@ public class MiscApiControllerTest {
     @Test
     public void testGetSummaryMinMaxPeriods() {
 	final Calendar now = Calendar.getInstance();	
-	final List<Bike> bikes = new ArrayList<>();	
+	final List<BikeEntity> bikes = new ArrayList<>();	
 	// A bike with no milage should not lead to an error
-	bikes.add(new Bike("no-milage", now()));
-	bikes.add(
-		new Bike("some-milage", now())
+	bikes.add(new BikeEntity("no-milage", now()));
+	bikes.add(new BikeEntity("some-milage", now())
 		    .addMilage(LocalDate.of(2009,1,1), 10).getBike()
 		    .addMilage(LocalDate.of(2009,2,1), 30).getBike()		
 		    .addMilage(LocalDate.of(2009,3,1), 33).getBike()		
 	);
-	bikes.add(
-		new Bike("more-milage", now())
+	bikes.add(new BikeEntity("more-milage", now())
 		    .addMilage(LocalDate.of(2009,1,1),  0).getBike()
 		    .addMilage(LocalDate.of(2009,2,1), 30).getBike()		
 		    .addMilage(LocalDate.of(2009,3,1), 70).getBike()						    	
@@ -106,8 +107,8 @@ public class MiscApiControllerTest {
     @Test
     public void testGetSummaryMinMaxPeriodsWithoutPeriods() {
 	final Calendar now = Calendar.getInstance();	
-	final List<Bike> bikes = new ArrayList<>();	
-	bikes.add(new Bike("no-milage", now()));
+	final List<BikeEntity> bikes = new ArrayList<>();	
+	bikes.add(new BikeEntity("no-milage", now()));
 	
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
 	stub(bikeRepository.findAll()).toReturn(bikes);

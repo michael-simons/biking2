@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikes;
 
 import java.io.Serializable;
 import org.hibernate.validator.constraints.NotBlank;
@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.URL;
 /**
  * @author Michael J. Simons, 2015-09-21
  */
-public class StoryCmd implements Serializable {
+class StoryCmd implements Serializable {
 
     private static final long serialVersionUID = -3074796999424910373L;
 

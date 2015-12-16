@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
@@ -28,7 +28,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author Michael J. Simons, 2014-02-20
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BikeCmd {
+class BikeCmd {
 
     @NotBlank
     @Size(max = 255)

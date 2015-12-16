@@ -18,8 +18,8 @@ package ac.simons.biking2.api;
 import ac.simons.biking2.highcharts.HighchartsNgConfig;
 import ac.simons.biking2.highcharts.Series;
 import ac.simons.biking2.misc.AccumulatedPeriod;
-import ac.simons.biking2.persistence.entities.Bike;
-import ac.simons.biking2.persistence.repositories.BikeRepository;
+import ac.simons.biking2.bikes.BikeEntity;
+import ac.simons.biking2.bikes.BikeRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -47,9 +47,9 @@ import static org.mockito.Mockito.stub;
  */
 public class ChartsControllerTest {
     private final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
-    private final List<Bike> defaultTestData;
+    private final List<BikeEntity> defaultTestData;
     
-    public static List<Bike> generateTestData() {
+    public static List<BikeEntity> generateTestData() {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	
 	final Map<String, Integer[]> testData = new TreeMap<>();
@@ -58,7 +58,7 @@ public class ChartsControllerTest {
 	testData.put("bike3", new Integer[]{null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null});
 	
 	return testData.entrySet().stream().map(entry -> {
-	    final Bike bike = new Bike(entry.getKey(), LocalDate.now());
+	    final BikeEntity bike = new BikeEntity(entry.getKey(), LocalDate.now());
 	    final Integer[] amounts = entry.getValue();
 	    for (int i = 0; i < amounts.length; ++i) {
 		if (amounts[i] == null) {
@@ -119,7 +119,7 @@ public class ChartsControllerTest {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(new Bike("bike1", LocalDate.now()), new Bike("bike2", LocalDate.now())));
+	stub(bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())))).toReturn(Arrays.asList(new BikeEntity("bike1", LocalDate.now()), new BikeEntity("bike2", LocalDate.now())));
 
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
 	final HighchartsNgConfig highchartDefinition = controller.getCurrentYear();
@@ -163,8 +163,8 @@ public class ChartsControllerTest {
 	    null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null
 	});
 
-	final List<Bike> bikes = testData.entrySet().stream().map(entry -> {
-	    final Bike bike = new Bike(entry.getKey(), LocalDate.now());
+	final List<BikeEntity> bikes = testData.entrySet().stream().map(entry -> {
+	    final BikeEntity bike = new BikeEntity(entry.getKey(), LocalDate.now());
 	    final Integer[] amounts = entry.getValue();
 	    for (int i = 0; i < amounts.length; ++i) {
 		if (amounts[i] == null) {
@@ -207,7 +207,7 @@ public class ChartsControllerTest {
 	assertThat(series.getData(), is(equalTo(Arrays.asList(50, 70, 110, 110, 110, 110, 110, 110, 110, 610, 10, 10))));	
 	assertThat(((Map.Entry<Integer, Integer>)((Map<String, Object>)history.getUserData()).get("worstYear")).getKey(), is(equalTo(startDate.getYear())));
 	assertThat(((Map.Entry<Integer, Integer>)((Map<String, Object>)history.getUserData()).get("bestYear")).getKey(), is(equalTo(startDate.getYear() + 1)));
-	final Map<Integer, Bike> preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history.getUserData()).get("preferredBikes");
+	final Map<Integer, BikeEntity> preferredBikes = (Map<Integer, BikeEntity>) ((Map<String, Object>)history.getUserData()).get("preferredBikes");
 	assertThat(preferredBikes.get(startDate.getYear()).getName(), is(equalTo("bike1")));
 	assertThat(preferredBikes.get(startDate.getYear()+1).getName(), is(equalTo("bike2")));	
 		
@@ -263,8 +263,8 @@ public class ChartsControllerTest {
 	    null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null
 	});
 
-	final List<Bike> bikes = testData.entrySet().stream().map(entry -> {
-	    final Bike bike = new Bike(entry.getKey(), LocalDate.now());
+	final List<BikeEntity> bikes = testData.entrySet().stream().map(entry -> {
+	    final BikeEntity bike = new BikeEntity(entry.getKey(), LocalDate.now());
 	    final Integer[] amounts = entry.getValue();
 	    for (int i = 0; i < amounts.length; ++i) {
 		if (amounts[i] == null) {
@@ -292,7 +292,7 @@ public class ChartsControllerTest {
 	assertThat(series.getData(), is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 35))));
 	assertThat(((Map<String, Object>)history1.getUserData()).get("worstYear"), is(nullValue()));
 	assertThat(((Map<String, Object>)history1.getUserData()).get("bestYear"), is(nullValue()));	
-	Map<Integer, Bike> preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history1.getUserData()).get("preferredBikes");
+	Map<Integer, BikeEntity> preferredBikes = (Map<Integer, BikeEntity>) ((Map<String, Object>)history1.getUserData()).get("preferredBikes");
 	assertThat(preferredBikes.get(startDate.getYear()).getName(), is(equalTo("bike1")));	
 	
 	hlp = new ArrayList<>(history2.getSeries());
@@ -302,14 +302,14 @@ public class ChartsControllerTest {
 	assertThat(series.getData(), is(equalTo(Arrays.asList(50, 70, 110, 110, 110, 110, 110, 110, 110, 610, 10, 10))));
 	assertThat(((Map<String, Object>)history2.getUserData()).get("worstYear"), is(nullValue()));
 	assertThat(((Map<String, Object>)history2.getUserData()).get("bestYear"), is(nullValue()));	
-	preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history2.getUserData()).get("preferredBikes");	
+	preferredBikes = (Map<Integer, BikeEntity>) ((Map<String, Object>)history2.getUserData()).get("preferredBikes");	
 	assertThat(preferredBikes.get(startDate.getYear()+1).getName(), is(equalTo("bike2")));
 	
 	hlp = new ArrayList<>(history3.getSeries());
 	assertThat(hlp.size(), is(equalTo(0)));
 	assertThat(((Map<String, Object>)history3.getUserData()).get("worstYear"), is(nullValue()));
 	assertThat(((Map<String, Object>)history3.getUserData()).get("bestYear"), is(nullValue()));	
-	preferredBikes = (Map<Integer, Bike>) ((Map<String, Object>)history3.getUserData()).get("preferredBikes");	
+	preferredBikes = (Map<Integer, BikeEntity>) ((Map<String, Object>)history3.getUserData()).get("preferredBikes");	
 	assertThat(preferredBikes, is(nullValue()));
     }
     
@@ -328,7 +328,7 @@ public class ChartsControllerTest {
     @Test
     public void testGetHistoryNoMilages() {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1", LocalDate.now()), new Bike("bike2", LocalDate.now())));
+	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new BikeEntity("bike1", LocalDate.now()), new BikeEntity("bike2", LocalDate.now())));
 
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
 	final HighchartsNgConfig highchartDefinition = controller.getHistory(Optional.empty(), Optional.empty());
@@ -368,7 +368,7 @@ public class ChartsControllerTest {
     @Test
     public void testGetMonthlyAverageNoMilages() {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new Bike("bike1", LocalDate.now()), new Bike("bike2", LocalDate.now())));
+	stub(bikeRepository.findAll()).toReturn(Arrays.asList(new BikeEntity("bike1", LocalDate.now()), new BikeEntity("bike2", LocalDate.now())));
 
 	final ChartsController controller = new ChartsController(bikeRepository, "000000");
 	

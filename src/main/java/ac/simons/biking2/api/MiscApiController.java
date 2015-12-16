@@ -18,9 +18,9 @@ package ac.simons.biking2.api;
 import ac.simons.biking2.misc.About;
 import ac.simons.biking2.misc.About.VMProperties;
 import ac.simons.biking2.misc.Summary;
-import ac.simons.biking2.persistence.entities.Bike;
+import ac.simons.biking2.bikes.BikeEntity;
 import ac.simons.biking2.persistence.repositories.AssortedTripRepository;
-import ac.simons.biking2.persistence.repositories.BikeRepository;
+import ac.simons.biking2.bikes.BikeRepository;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -54,19 +54,18 @@ public class MiscApiController {
 
     @RequestMapping("/summary")
     public Summary getSummary() {
-	final List<Bike> allBikes = this.bikeRepository.findAll();
+	final List<BikeEntity> allBikes = this.bikeRepository.findAll();
 
 	final Summary summary = new Summary();
 	summary.setDateOfFirstRecord(this.bikeRepository.getDateOfFirstRecord());
-	summary.setTotal(
-		allBikes.stream().mapToInt(Bike::getMilage).sum()
+	summary.setTotal(allBikes.stream().mapToInt(BikeEntity::getMilage).sum()
 		+ this.assortedTripRepository.getTotalDistance().doubleValue()
 	);	
 	
-	final Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(allBikes, null);
+	final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(allBikes, null);
 		
-	summary.setWorstPeriod(Bike.getWorstPeriod(summarizedPeriods));	
-	summary.setBestPeriod(Bike.getBestPeriod(summarizedPeriods));
+	summary.setWorstPeriod(BikeEntity.getWorstPeriod(summarizedPeriods));	
+	summary.setBestPeriod(BikeEntity.getBestPeriod(summarizedPeriods));
 	summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
 		
 	return summary;

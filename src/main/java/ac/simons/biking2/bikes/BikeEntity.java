@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.misc.AccumulatedPeriod;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -61,6 +61,9 @@ import org.hibernate.validator.constraints.URL;
 
 import static java.util.stream.Collectors.reducing;
 import static java.util.stream.IntStream.rangeClosed;
+import static java.util.stream.Collectors.reducing;
+import static java.util.stream.Collectors.reducing;
+import static java.util.stream.Collectors.reducing;
 
 /**
  * @author Michael J. Simons, 2014-02-08
@@ -69,21 +72,21 @@ import static java.util.stream.IntStream.rangeClosed;
 @Table(name = "bikes")
 @NamedQueries({
     @NamedQuery(
-	    name = "Bike.findActive",
+	    name = "BikeEntity.findActive",
 	    query
-	    = "Select b from Bike b "
+	    = "Select b from BikeEntity b "
 	    + " where b.decommissionedOn is null "
 	    + "    or b.decommissionedOn >= :cutoffDate "
 	    + " order by b.name asc "
     ),
     @NamedQuery(
-	    name = "Bike.getDateOfFirstRecord",
+	    name = "BikeEntity.getDateOfFirstRecord",
 	    query
-	    = "Select coalesce(min(m.recordedOn), current_date()) from Milage m"
+	    = "Select coalesce(min(m.recordedOn), current_date()) from MilageEntity m"
     )
 })
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
-public class Bike implements Serializable {
+public class BikeEntity implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
     
@@ -165,7 +168,7 @@ public class Bike implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
     @JsonIgnore
-    private final List<Milage> milages = new ArrayList<>();
+    private final List<MilageEntity> milages = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -182,10 +185,10 @@ public class Bike implements Serializable {
     @JsonIgnore
     private transient Map<LocalDate, Integer> periods;
 
-    protected Bike() {
+    protected BikeEntity() {
     }
 
-    public Bike(String name, final LocalDate boughtOn) {
+    public BikeEntity(String name, final LocalDate boughtOn) {
 	this.name = name;
 	this.boughtOn = GregorianCalendar.from(boughtOn.atStartOfDay(ZoneId.systemDefault()));	
     }
@@ -233,16 +236,16 @@ public class Bike implements Serializable {
 	return this.createdAt;
     }
   
-    public synchronized Milage addMilage(final LocalDate recordedOn, final double amount) {
+    public synchronized MilageEntity addMilage(final LocalDate recordedOn, final double amount) {
 	if(this.milages.size() > 0) {
-	    final Milage lastMilage = this.milages.get(this.milages.size() - 1);
+	    final MilageEntity lastMilage = this.milages.get(this.milages.size() - 1);
 	    LocalDate nextValidDate = lastMilage.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusMonths(1);
 	    if(!recordedOn.equals(nextValidDate))
 		throw new IllegalArgumentException("Next valid date for milage is " + nextValidDate);
 	    if(lastMilage.getAmount().doubleValue() > amount)
 		throw new IllegalArgumentException("New amount must be greater than or equal " + lastMilage.getAmount().toPlainString());
 	}
-	final Milage milage = new Milage(this, recordedOn.withDayOfMonth(1), amount);
+	final MilageEntity milage = new MilageEntity(this, recordedOn.withDayOfMonth(1), amount);
 	this.milages.add(milage);	
 	this.periods = null;	
 	return milage;
@@ -258,7 +261,7 @@ public class Bike implements Serializable {
     public synchronized Map<LocalDate, Integer> getPeriods() {
 	if (this.periods == null) {
 	    this.periods = IntStream.range(1, this.milages.size()).collect(TreeMap::new, (map, i) -> {
-		final Milage left = milages.get(i - 1);
+		final MilageEntity left = milages.get(i - 1);
 		map.put(
 			left.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
 			milages.get(i).getAmount().subtract(left.getAmount()).intValue()
@@ -349,7 +352,7 @@ public class Bike implements Serializable {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final Bike other = (Bike) obj;
+	final BikeEntity other = (BikeEntity) obj;
 	if (!Objects.equals(this.name, other.name)) {
 	    return false;
 	}
@@ -360,7 +363,7 @@ public class Bike implements Serializable {
 	return Integer.compare(period1.getValue(), period2.getValue());
     }
     
-    public static class BikeByMilageInYearComparator implements Comparator<Bike> {
+    public static class BikeByMilageInYearComparator implements Comparator<BikeEntity> {
 	private final int year;
 
 	public BikeByMilageInYearComparator(int year) {
@@ -368,7 +371,7 @@ public class Bike implements Serializable {
 	}
 	
 	@Override
-	public int compare(Bike o1, Bike o2) {
+	public int compare(BikeEntity o1, BikeEntity o2) {
 	    return Integer.compare(o1.getMilageInYear(year), o2.getMilageInYear(year));
 	}
     }
@@ -381,9 +384,9 @@ public class Bike implements Serializable {
      * @param entryFilter An optional filter for the entries
      * @return A map of grouped periods
      */
-    public static Map<LocalDate, Integer> summarizePeriods(final List<Bike> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {	
+    public static Map<LocalDate, Integer> summarizePeriods(final List<BikeEntity> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {	
 	return bikes.stream()
-	    .filter(Bike::hasMilages)
+	    .filter(BikeEntity::hasMilages)
 	    .flatMap(bike -> bike.getPeriods().entrySet().stream())			
 	    .filter(Optional.ofNullable(entryFilter).orElse(entry -> true))
 	    .collect(
@@ -404,7 +407,7 @@ public class Bike implements Serializable {
 	 return summarizedPeriods
 			.entrySet()
 			.stream()
-			.min(Bike::comparePeriodsByValue)
+			.min(BikeEntity::comparePeriodsByValue)
 			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
 			.orElse(null);
     }
@@ -419,7 +422,7 @@ public class Bike implements Serializable {
 	 return summarizedPeriods
 			.entrySet()
 			.stream()
-			.max(Bike::comparePeriodsByValue)
+			.max(BikeEntity::comparePeriodsByValue)
 			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
 			.orElse(null);
     }

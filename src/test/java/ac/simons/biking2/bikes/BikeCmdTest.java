@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2014 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikes;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Michael J. Simons, 2015-09-21
+ * @author Michael J. Simons, 2014-12-09
  */
-public class StoryCmdTest {
+public class BikeCmdTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final StoryCmd bean = new StoryCmd();
+	BikeCmd bean = new BikeCmd();
 
-	bean.setLabel("foobar");
-	bean.setUrl("http://heise.de");
-	Assert.assertEquals("foobar", bean.getLabel());
-	Assert.assertEquals("http://heise.de", bean.getUrl());
+	bean.setBoughtOn(new Date());
+	Assert.assertEquals(LocalDate.now(), bean.boughtOnAsLocalDate());
+	Assert.assertNull(bean.decommissionedOnAsLocalDate());
+	Calendar hlp = Calendar.getInstance();
+	hlp.add(Calendar.DAY_OF_MONTH, 1);
+	bean.setDecommissionedOn(hlp.getTime());
+	Assert.assertEquals(LocalDate.now().plusDays(1), bean.decommissionedOnAsLocalDate());
     }
 }

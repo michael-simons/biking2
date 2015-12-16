@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.persistence.entities.Bike;
-import ac.simons.biking2.persistence.entities.Bike.Link;
-import ac.simons.biking2.persistence.repositories.BikeRepository;
+import ac.simons.biking2.api.ExceptionHandlerAdvice;
+import ac.simons.biking2.bikes.BikeEntity.Link;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.Month;
@@ -40,7 +39,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static java.time.LocalDate.now;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -66,6 +64,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static java.time.LocalDate.now;
 
 /**
  * @author Michael J. Simons, 2014-02-20
@@ -79,8 +78,7 @@ public class BikesControllerTest {
 
     @Test
     public void shouldGetBikes() throws Exception {
-	final List<Bike> allbikes = Arrays.asList(
-		Reflect.on(Bike.class).create()
+	final List<BikeEntity> allbikes = Arrays.asList(Reflect.on(BikeEntity.class).create()
 		    .set("id", 4711)
 		    .set("name", "Bike 1")
 		    .set("color", "FF0000")
@@ -94,7 +92,7 @@ public class BikesControllerTest {
 		    .call("addMilage", LocalDate.of(2015, Month.MARCH, 1), 200.0)
 		    .call("getBike")
 		    .get(),
-		Reflect.on(Bike.class).create()
+		Reflect.on(BikeEntity.class).create()
 		    .set("id", 23)
 		    .set("name", "Bike 2")
 		    .set("color", "CCCCCC")
@@ -103,7 +101,7 @@ public class BikesControllerTest {
 		    .call("getBike")
 		    .get()
 	);
-	final List<Bike> activeBikes = Arrays.asList(allbikes.get(0));
+	final List<BikeEntity> activeBikes = Arrays.asList(allbikes.get(0));
 
 	final BikeRepository repository = mock(BikeRepository.class);
 	stub(repository.findAll(any(Sort.class))).toReturn(allbikes);
@@ -166,9 +164,9 @@ public class BikesControllerTest {
 
 	final BikeRepository repository = mock(BikeRepository.class);
 
-	final Bike bike = new Bike("testBike", now);
+	final BikeEntity bike = new BikeEntity("testBike", now);
 	stub(repository.findOne(2)).toReturn(bike);
-	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));
+	final BikeEntity decommissionedBike = new BikeEntity("decommissioned", now.minusMonths(2).withDayOfMonth(1));
 	decommissionedBike.decommission(now.minusMonths(1));
 	stub(repository.findOne(3)).toReturn(decommissionedBike);
 
@@ -217,8 +215,7 @@ public class BikesControllerTest {
 			.content(objectMapper.writeValueAsString(newMilageCmd))
 		)
 		.andExpect(status().isOk())
-		.andExpect(content().string(
-				objectMapper.writeValueAsString(new Bike("testBike", now).addMilage(now, 23.0)))
+		.andExpect(content().string(objectMapper.writeValueAsString(new BikeEntity("testBike", now).addMilage(now, 23.0)))
 		)
 		.andDo(
 			document(
@@ -256,7 +253,7 @@ public class BikesControllerTest {
 	verify(repository, times(1)).findOne(1);
 	verify(repository, times(1)).findOne(2);
 	verify(repository, times(1)).findOne(3);
-	verify(repository, times(1)).save(any(Bike.class));
+	verify(repository, times(1)).save(any(BikeEntity.class));
     }
 
     @Test
@@ -264,7 +261,7 @@ public class BikesControllerTest {
 	LocalDate now = now();
 
 	final BikeRepository repository = mock(BikeRepository.class);
-	when(repository.save(any(Bike.class))).then(returnsFirstArg());
+	when(repository.save(any(BikeEntity.class))).then(returnsFirstArg());
 
 	final MockMvc mockMvc = MockMvcBuilders
 		.standaloneSetup(new BikesController(repository))
@@ -277,7 +274,7 @@ public class BikesControllerTest {
 	newBikeCmd.setColor("cccccc");
 	newBikeCmd.setName("test");
 
-	final Bike bike = new Bike("test", now);
+	final BikeEntity bike = new BikeEntity("test", now);
 	bike.setColor("cccccc");
 
 	// Empty content
@@ -320,7 +317,7 @@ public class BikesControllerTest {
 		)
 		;
 
-	verify(repository, times(1)).save(any(Bike.class));
+	verify(repository, times(1)).save(any(BikeEntity.class));
     }
 
     @Test
@@ -328,7 +325,7 @@ public class BikesControllerTest {
 	LocalDate now = now();
 
 	final BikeRepository repository = mock(BikeRepository.class);
-	stub(repository.save(any(Bike.class))).toThrow(new DataIntegrityViolationException(""));
+	stub(repository.save(any(BikeEntity.class))).toThrow(new DataIntegrityViolationException(""));
 
 	final BikesController controller = new BikesController(repository);
 	final MockMvc mockMvc = MockMvcBuilders
@@ -350,7 +347,7 @@ public class BikesControllerTest {
 		.andExpect(status().isConflict())
 		.andExpect(MockMvcResultMatchers.content().string(""));
 
-	verify(repository, times(1)).save(any(Bike.class));
+	verify(repository, times(1)).save(any(BikeEntity.class));
     }
 
     @Test
@@ -358,11 +355,11 @@ public class BikesControllerTest {
 	LocalDate now = now();
 
 	final BikeRepository repository = mock(BikeRepository.class);
-	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));
+	final BikeEntity decommissionedBike = new BikeEntity("decommissioned", now.minusMonths(2).withDayOfMonth(1));
 	decommissionedBike.decommission(now.minusMonths(1));
 	stub(repository.findOne(3)).toReturn(decommissionedBike);
 
-	Bike bike = new Bike("test", now.minusMonths(1));
+	BikeEntity bike = new BikeEntity("test", now.minusMonths(1));
 	bike.setColor("000000");
 	Calendar boughtOn = bike.getBoughtOn();
 	stub(repository.findOne(2)).toReturn(bike);
@@ -440,11 +437,11 @@ public class BikesControllerTest {
 	LocalDate now = now();
 
 	final BikeRepository repository = mock(BikeRepository.class);
-	final Bike decommissionedBike = new Bike("decommissioned", now.minusMonths(2).withDayOfMonth(1));
+	final BikeEntity decommissionedBike = new BikeEntity("decommissioned", now.minusMonths(2).withDayOfMonth(1));
 	decommissionedBike.decommission(now.minusMonths(1));
 	stub(repository.findOne(3)).toReturn(decommissionedBike);
 
-	Bike bike = new Bike("test", now.minusMonths(1));
+	BikeEntity bike = new BikeEntity("test", now.minusMonths(1));
 	bike.setColor("000000");
 	Calendar boughtOn = bike.getBoughtOn();
 	stub(repository.findOne(2)).toReturn(bike);

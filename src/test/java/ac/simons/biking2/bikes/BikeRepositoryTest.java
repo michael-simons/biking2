@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.repositories;
+package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.config.TestConfig;
-import ac.simons.biking2.persistence.entities.Bike;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -71,13 +70,13 @@ public class BikeRepositoryTest {
     public void nameShouldBeUnique() {
 	// There's a bike1 in the test data
 	this.expectedException.expect(DataIntegrityViolationException.class);
-	this.bikeRepository.save(new Bike("bike1", LocalDate.now()));		
+	this.bikeRepository.save(new BikeEntity("bike1", LocalDate.now()));		
     }
     
     @Test
     public void testFindActive() {
 	final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);
-	final List<Bike> activeBikes = this.bikeRepository.findActive(GregorianCalendar.from(cutOffDate.atStartOfDay(ZoneId.systemDefault())));
+	final List<BikeEntity> activeBikes = this.bikeRepository.findActive(GregorianCalendar.from(cutOffDate.atStartOfDay(ZoneId.systemDefault())));
 
 	assertThat(activeBikes.size(), is(equalTo(3)));
 	assertThat(activeBikes.get(0).getName(), is(equalTo("bike1")));
@@ -86,7 +85,7 @@ public class BikeRepositoryTest {
 
     @Test
     public void testFindByName() {
-	final Bike bike = this.bikeRepository.findByName("bike1");
+	final BikeEntity bike = this.bikeRepository.findByName("bike1");
 	assertThat(bike, is(notNullValue()));
     }
 
@@ -99,7 +98,7 @@ public class BikeRepositoryTest {
      */
     @Test
     public void testAddMilage() throws SQLException {
-	final Bike bike = this.bikeRepository.findByName("testAddMilageBike");
+	final BikeEntity bike = this.bikeRepository.findByName("testAddMilageBike");
 
 	bike.addMilage(LocalDate.now(), 23).getBike()
 		.addMilage(LocalDate.now().plusMonths(1).withDayOfMonth(1), 42);

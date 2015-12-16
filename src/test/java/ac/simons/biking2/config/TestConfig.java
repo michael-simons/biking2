@@ -31,8 +31,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @ComponentScan("ac.simons.biking2.config")
 @EnableAutoConfiguration
-@EntityScan("ac.simons.biking2.persistence.entities")
-@EnableJpaRepositories("ac.simons.biking2.persistence.repositories")
+@EntityScan("ac.simons.biking2")
+@EnableJpaRepositories("ac.simons.biking2")
 @EnableTransactionManagement
 public class TestConfig {
 

@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ac.simons.biking2.bikes;
 
-package ac.simons.biking2.persistence.repositories;
-
-import ac.simons.biking2.persistence.entities.Bike;
 import java.util.Calendar;
 import java.util.List;
 import org.springframework.data.domain.Sort;
@@ -25,12 +23,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * @author Michael J. Simons, 2014-02-08
  */
-public interface BikeRepository extends JpaRepository<Bike, Integer> {
-    public List<Bike> findActive(final Calendar cutoffDate);
+public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
+    public List<BikeEntity> findActive(final Calendar cutoffDate);
     
-    public Bike findByName(final String name);
+    public BikeEntity findByName(final String name);
  
-    public List<Bike> findByDecommissionedOnIsNull(final Sort sort);
+    public List<BikeEntity> findByDecommissionedOnIsNull(final Sort sort);
     
     public Calendar getDateOfFirstRecord();
 }

@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.persistence.entities.Bike;
-import ac.simons.biking2.persistence.entities.Bike.Link;
-import ac.simons.biking2.persistence.entities.Milage;
-import ac.simons.biking2.persistence.repositories.BikeRepository;
+import ac.simons.biking2.api.ResourceNotFoundException;
+import ac.simons.biking2.bikes.BikeEntity.Link;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -41,7 +39,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
  * @author Michael J. Simons, 2014-02-19
  */
 @RestController
-public class BikesController {
+class BikesController {
 
     private final BikeRepository bikeRepository;
 
@@ -51,8 +49,8 @@ public class BikesController {
     }
 
     @RequestMapping(value = "/api/bikes", method = GET)
-    public List<Bike> getBikes(final @RequestParam(required = false, defaultValue = "false") boolean all) {
-	List<Bike> rv;
+    public List<BikeEntity> getBikes(final @RequestParam(required = false, defaultValue = "false") boolean all) {
+	List<BikeEntity> rv;
 	if(all) {
 	    rv = bikeRepository.findAll(new Sort(Sort.Direction.ASC, "boughtOn", "decommissionedOn", "name"));
 	} else {
@@ -63,14 +61,14 @@ public class BikesController {
     
     @RequestMapping(value = "/api/bikes/{id:\\d+}/milages", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public Milage createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {	
+    public MilageEntity createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {	
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
 	
-	final Bike bike = bikeRepository.findOne(id);
+	final BikeEntity bike = bikeRepository.findOne(id);
 	
-	Milage rv;	
+	MilageEntity rv;	
 	if(bike == null) {
 	    throw new ResourceNotFoundException();
 	} else if(bike.getDecommissionedOn() != null) { 
@@ -85,12 +83,12 @@ public class BikesController {
     
     @RequestMapping(value = "/api/bikes", method = POST) 
     @PreAuthorize("isAuthenticated()")
-    public Bike createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
+    public BikeEntity createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
 	
-	final Bike bike = new Bike(newBike.getName(), newBike.boughtOnAsLocalDate());
+	final BikeEntity bike = new BikeEntity(newBike.getName(), newBike.boughtOnAsLocalDate());
 	bike.setColor(newBike.getColor());
 	bike.addMilage(newBike.boughtOnAsLocalDate().withDayOfMonth(1), 0);
 	
@@ -100,12 +98,12 @@ public class BikesController {
     @RequestMapping(value = "/api/bikes/{id:\\d+}", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
-    public Bike updateBike(final @PathVariable Integer id, final @RequestBody @Valid BikeCmd updatedBike, final BindingResult bindingResult) {
+    public BikeEntity updateBike(final @PathVariable Integer id, final @RequestBody @Valid BikeCmd updatedBike, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
 	
-	final Bike bike = bikeRepository.findOne(id);
+	final BikeEntity bike = bikeRepository.findOne(id);
 		
 	if(bike == null) {
 	    throw new ResourceNotFoundException();
@@ -121,12 +119,12 @@ public class BikesController {
     @RequestMapping(value = "/api/bikes/{id:\\d+}/story", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
-    public Bike updateBikeStory(final @PathVariable Integer id, final @RequestBody(required = false) @Valid StoryCmd newStory, final BindingResult bindingResult) {
+    public BikeEntity updateBikeStory(final @PathVariable Integer id, final @RequestBody(required = false) @Valid StoryCmd newStory, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
 	
-	final Bike bike = bikeRepository.findOne(id);
+	final BikeEntity bike = bikeRepository.findOne(id);
 		
 	if(bike == null) {
 	    throw new ResourceNotFoundException();

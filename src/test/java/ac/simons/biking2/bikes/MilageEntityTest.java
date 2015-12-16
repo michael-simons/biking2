@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.bikes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,28 +23,28 @@ import org.junit.Test;
 /**
  * @author Michael J. Simons, 2014-05-23
  */
-public class MilageTest {
+public class MilageEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	Bike bike = new Bike("poef", LocalDate.now().withDayOfMonth(1));
-	Milage milage = bike.addMilage(LocalDate.now().withDayOfMonth(1).plusMonths(1), 23);
+	BikeEntity bike = new BikeEntity("poef", LocalDate.now().withDayOfMonth(1));
+	MilageEntity milage = bike.addMilage(LocalDate.now().withDayOfMonth(1).plusMonths(1), 23);
 	milage.prePersist();
-	Milage otherMilage = bike.addMilage(LocalDate.now().withDayOfMonth(1).plusMonths(2), 50);
+	MilageEntity otherMilage = bike.addMilage(LocalDate.now().withDayOfMonth(1).plusMonths(2), 50);
 	otherMilage.prePersist();		
 	
 	// Its overwritten...
-	final Bike poef = bike;
+	final BikeEntity poef = bike;
 	
 	// need two differend objects here...
-	bike = new Bike("poef", LocalDate.now().withDayOfMonth(1));
-	Milage milage2 = bike.addMilage(LocalDate.now().plusMonths(1), 23);
+	bike = new BikeEntity("poef", LocalDate.now().withDayOfMonth(1));
+	MilageEntity milage2 = bike.addMilage(LocalDate.now().plusMonths(1), 23);
 	
-	bike = new Bike("bike2", LocalDate.now().withDayOfMonth(1));
-	Milage otherMilage2 = bike.addMilage(LocalDate.now().plusMonths(1), 23);
+	bike = new BikeEntity("bike2", LocalDate.now().withDayOfMonth(1));
+	MilageEntity otherMilage2 = bike.addMilage(LocalDate.now().plusMonths(1), 23);
 	
-	bike = new Bike("bike3", LocalDate.now().withDayOfMonth(1));
-	Milage otherMilage3 = bike.addMilage(LocalDate.now().plusMonths(1), 22);
+	bike = new BikeEntity("bike3", LocalDate.now().withDayOfMonth(1));
+	MilageEntity otherMilage3 = bike.addMilage(LocalDate.now().plusMonths(1), 22);
 	
 	Assert.assertNull(milage.getId());
 	Assert.assertEquals(BigDecimal.valueOf(23d), milage.getAmount());

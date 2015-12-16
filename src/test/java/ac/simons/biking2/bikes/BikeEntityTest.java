@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.persistence.entities.Bike.Link;
+import ac.simons.biking2.bikes.BikeEntity.Link;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
@@ -41,14 +41,14 @@ import static org.junit.rules.ExpectedException.none;
 /**
  * @author Michael J. Simons
  */
-public class BikeTest {
+public class BikeEntityTest {
     @Rule
     public final ExpectedException expectedException = none();
     
-    private final Bike defaultTestBike;
+    private final BikeEntity defaultTestBike;
     
-    public BikeTest() {
-	this.defaultTestBike = new Bike()
+    public BikeEntityTest() {
+	this.defaultTestBike = new BikeEntity()
 		.addMilage(LocalDate.of(2014, 1, 1), 0).getBike()
 		.addMilage(LocalDate.of(2014, 2, 1), 20).getBike()
 		.addMilage(LocalDate.of(2014, 3, 1), 50).getBike();	
@@ -59,7 +59,7 @@ public class BikeTest {
 	ConstructorSignatureAndPropertiesMapping mapping = new ConstructorSignatureAndPropertiesMapping();	
 	mapping.put(Arrays.asList(String.class, String.class), Arrays.asList("url", "label"));
 
-	final BeanLikeTester beanLikeTester = new BeanLikeTester(Bike.Link.class, mapping);
+	final BeanLikeTester beanLikeTester = new BeanLikeTester(BikeEntity.Link.class, mapping);
 	
 	final PropertiesAndValues defaultValues = new PropertiesAndValues();
 	defaultValues.put("url", null);
@@ -87,13 +87,13 @@ public class BikeTest {
     @Test
     public void beanShouldWorkAsExpected() {
 	final LocalDate now = LocalDate.now();	
-	Bike bike = new Bike("poef", now.withDayOfMonth(1));
+	BikeEntity bike = new BikeEntity("poef", now.withDayOfMonth(1));
 	bike.prePersist();
 	
-	Bike same = new Bike("poef", now.withDayOfMonth(1));
+	BikeEntity same = new BikeEntity("poef", now.withDayOfMonth(1));
 	same.prePersist();
 	
-	Bike other = new Bike("other", now.withDayOfMonth(1));
+	BikeEntity other = new BikeEntity("other", now.withDayOfMonth(1));
 	other.prePersist();	
 	other.decommission(null);
 	Assert.assertNull(other.getDecommissionedOn());
@@ -113,7 +113,7 @@ public class BikeTest {
 	Assert.assertEquals(GregorianCalendar.from(now.withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault())), other.getBoughtOn());
 	Assert.assertEquals(GregorianCalendar.from(now.atStartOfDay(ZoneId.systemDefault())), other.getDecommissionedOn());
 	
-	final Bike.Link story = new Bike.Link("http://planet-punk.de/2015/08/11/nie-wieder-stadtschlampe/", "Nie wieder Stadtschlampe");
+	final BikeEntity.Link story = new BikeEntity.Link("http://planet-punk.de/2015/08/11/nie-wieder-stadtschlampe/", "Nie wieder Stadtschlampe");
 	bike.setStory(story);
 	Assert.assertEquals(story, bike.getStory());
     }
@@ -125,12 +125,12 @@ public class BikeTest {
     }
 
     /**
-     * Test of getPeriods method, of class Bike.
+     * Test of getPeriods method, of class BikeEntity.
      */
     @Test
     public void testGetPeriods() {
 
-	Bike instance = new Bike();
+	BikeEntity instance = new BikeEntity();
 	Map<LocalDate, Integer> expResult = new HashMap<>();
 	Map<LocalDate, Integer> result = instance.getPeriods();
 	assertEquals(expResult, result);
@@ -152,7 +152,7 @@ public class BikeTest {
     @Test
     public void testGetMilage() {	
 	assertEquals(50, defaultTestBike.getMilage());
-	assertEquals(0, new Bike("test", LocalDate.now()).getMilage());
+	assertEquals(0, new BikeEntity("test", LocalDate.now()).getMilage());
     }
     
     @Test
@@ -166,7 +166,7 @@ public class BikeTest {
     @Test
     public void testSummarizePeriods() {
 	// Assert, that an empty list doesn't result in an error
-	Map<LocalDate, Integer> summarizedPeriods = Bike.summarizePeriods(new ArrayList<>(), null);
+	Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(new ArrayList<>(), null);
 	Assert.assertNotNull(summarizedPeriods);
 	assertThat(summarizedPeriods.size(), is(0));
     }
