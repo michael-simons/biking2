@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
 import ac.simons.biking2.support.Sink;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,65 +26,65 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlotLine {
+public class Marker {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, PlotLine> sink;
+	private final Sink<PB, Marker> sink;
 
-	private Number value;
+	private Double lineWidth;
 
-	private Double width;
+	private String lineColor;
 
-	private String color;
+	private String fillColor;
 
-	public Builder(Sink<PB, PlotLine> sink) {
+	public Builder(Sink<PB, Marker> sink) {
 	    this.sink = sink;
 	}
 
-	public Builder<PB> at(final Number value) {
-	    this.value = value;
-	    return this;
-	}
-	
-	public Builder<PB> withWidth(final Double lineWidth) {
-	    this.width = lineWidth;
+	public Builder<PB> withLineWidth(final Double lineWidth) {
+	    this.lineWidth = lineWidth;
 	    return this;
 	}
 
-	public Builder<PB> withColor(final String lineColor) {
-	    this.color = lineColor;
+	public Builder<PB> withFillColor(final String fillColor) {
+	    this.fillColor = fillColor;
+	    return this;
+	}
+
+	public Builder<PB> withLineColor(final String lineColor) {
+	    this.lineColor = lineColor;
 	    return this;
 	}
 
 	public PB build() {
 	    return this.sink.setObject(
-		    new PlotLine(value, width, color)
+		    new Marker(lineWidth, lineColor, fillColor)
 	    );
 	}
     }
 
-    private final Number value;
+    private final Double lineWidth;
 
-    private final Double width;
+    private final String lineColor;
 
-    private final String color;
+    private final String fillColor;
 
-    public PlotLine(Number value, Double width, String color) {
-	this.value = value;
-	this.width = width;
-	this.color = color;
+    public Marker(Double lineWidth, String lineColor, String fillColor) {
+	this.lineWidth = lineWidth;
+	this.lineColor = lineColor;
+	this.fillColor = fillColor;
     }
 
-    public Number getValue() {
-	return value;
+    public Double getLineWidth() {
+	return lineWidth;
     }
 
-    public Double getWidth() {
-	return width;
+    public String getLineColor() {
+	return lineColor;
     }
 
-    public String getColor() {
-	return color;
+    public String getFillColor() {
+	return fillColor;
     }
 }

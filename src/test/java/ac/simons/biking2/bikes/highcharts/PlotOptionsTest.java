@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,37 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
+import ac.simons.biking2.bikes.highcharts.PlotOptions;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author Michael J. Simons, 2014-08-26
+ * @author Michael J. Simons, 2014-02-11
  */
-public class PlotLineTest {
-
+public class PlotOptionsTest {
+    
     @Test
     public void testBuilder() {
-	PlotLine plotline = new PlotLine.Builder<>(object -> object)
-		.at(23.0)
-		.withWidth(42.0)
-		.withColor("#FFFFFF")
-		.build();
-
-	assertThat(plotline.getValue(), is(equalTo(23.0)));
-	assertThat(plotline.getWidth(), is(equalTo(42.0)));
-	assertThat(plotline.getColor(), is(equalTo("#FFFFFF")));
-
-	plotline = new PlotLine.Builder<>(object -> object)
-		.build();
-
-	assertThat(plotline.getValue(), is(nullValue()));
-	assertThat(plotline.getWidth(), is(nullValue()));
-	assertThat(plotline.getColor(), is(nullValue()));
+	PlotOptions plotOptions = new PlotOptions.Builder<>(object -> object)
+		.column()		    
+		    .withPointPadding(0.2)
+		    .withBorderWidth(0)
+		.build()
+		.series()
+		    .disableAnimation()
+		.build()	
+	.build();
+	assertThat(plotOptions.getColumn().getPointPadding(), is(equalTo(0.2)));
+	assertThat(plotOptions.getColumn().getBorderWidth(), is(equalTo(0)));
+	assertThat(plotOptions.getSeries().isAnimation(), is(false));
     }
+    
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
 import ac.simons.biking2.support.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,59 +28,55 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Column {
+public class Chart {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Column> sink;
+	private final Sink<PB, Chart> sink;
 
-	private Number borderWidth;
+	private Integer borderWidth;
 
-	private Number pointPadding;
+	private String type;
 
-	Builder(Sink<PB, Column> sink) {
+	Builder(final Sink<PB, Chart> sink) {
 	    this.sink = sink;
 	}
 
-	public Builder<PB> withBorderWidth(final Number borderWidth) {
+	public Builder<PB> withBorderWidth(final Integer borderWidth) {
 	    this.borderWidth = borderWidth;
 	    return this;
 	}
 
-	public Builder<PB> withPointPadding(final Number pointPadding) {
-	    this.pointPadding = pointPadding;
+	public Builder<PB> withType(final String type) {
+	    this.type = type;
 	    return this;
 	}
 
 	public PB build() {
-	    return this.sink.setObject(new Column(borderWidth, pointPadding));
+	    return this.sink.setObject(
+		    new Chart(borderWidth, type)
+	    );
 	}
     }
 
-    /**
-     * The width of the border surronding each column or bar. Defaults to 1.
-     */
-    private final Number borderWidth;
+    private final Integer borderWidth;
 
-    /**
-     * Padding between each column or bar, in x axis units. Defaults to 0.1.
-     */
-    private final Number pointPadding;
+    private final String type;
 
     @JsonCreator
-    Column(
-	    @JsonProperty("borderWidth") Number borderWidth,
-	    @JsonProperty("pointPadding") Number pointPadding
+    Chart(
+	    @JsonProperty("borderWidth") Integer borderWidth, 
+	    @JsonProperty("type") String type
     ) {
 	this.borderWidth = borderWidth;
-	this.pointPadding = pointPadding;
+	this.type = type;
     }
 
-    public Number getBorderWidth() {
+    public Integer getBorderWidth() {
 	return borderWidth;
     }
 
-    public Number getPointPadding() {
-	return pointPadding;
+    public String getType() {
+	return type;
     }
 }

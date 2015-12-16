@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
 import ac.simons.biking2.support.Sink;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,65 +26,65 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Marker {
+public class PlotLine {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Marker> sink;
+	private final Sink<PB, PlotLine> sink;
 
-	private Double lineWidth;
+	private Number value;
 
-	private String lineColor;
+	private Double width;
 
-	private String fillColor;
+	private String color;
 
-	public Builder(Sink<PB, Marker> sink) {
+	public Builder(Sink<PB, PlotLine> sink) {
 	    this.sink = sink;
 	}
 
-	public Builder<PB> withLineWidth(final Double lineWidth) {
-	    this.lineWidth = lineWidth;
+	public Builder<PB> at(final Number value) {
+	    this.value = value;
+	    return this;
+	}
+	
+	public Builder<PB> withWidth(final Double lineWidth) {
+	    this.width = lineWidth;
 	    return this;
 	}
 
-	public Builder<PB> withFillColor(final String fillColor) {
-	    this.fillColor = fillColor;
-	    return this;
-	}
-
-	public Builder<PB> withLineColor(final String lineColor) {
-	    this.lineColor = lineColor;
+	public Builder<PB> withColor(final String lineColor) {
+	    this.color = lineColor;
 	    return this;
 	}
 
 	public PB build() {
 	    return this.sink.setObject(
-		    new Marker(lineWidth, lineColor, fillColor)
+		    new PlotLine(value, width, color)
 	    );
 	}
     }
 
-    private final Double lineWidth;
+    private final Number value;
 
-    private final String lineColor;
+    private final Double width;
 
-    private final String fillColor;
+    private final String color;
 
-    public Marker(Double lineWidth, String lineColor, String fillColor) {
-	this.lineWidth = lineWidth;
-	this.lineColor = lineColor;
-	this.fillColor = fillColor;
+    public PlotLine(Number value, Double width, String color) {
+	this.value = value;
+	this.width = width;
+	this.color = color;
     }
 
-    public Double getLineWidth() {
-	return lineWidth;
+    public Number getValue() {
+	return value;
     }
 
-    public String getLineColor() {
-	return lineColor;
+    public Double getWidth() {
+	return width;
     }
 
-    public String getFillColor() {
-	return fillColor;
+    public String getColor() {
+	return color;
     }
 }

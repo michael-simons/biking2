@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
 import ac.simons.biking2.support.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,50 +28,59 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SeriesOptions {
+public class Column {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, SeriesOptions> sink;
+	private final Sink<PB, Column> sink;
 
-	private Boolean animation;
+	private Number borderWidth;
 
-	Builder(Sink<PB, SeriesOptions> sink) {
+	private Number pointPadding;
+
+	Builder(Sink<PB, Column> sink) {
 	    this.sink = sink;
 	}
 
-	public Builder<PB> enableAnimation() {
-	    this.animation = Boolean.TRUE;
+	public Builder<PB> withBorderWidth(final Number borderWidth) {
+	    this.borderWidth = borderWidth;
 	    return this;
 	}
-	
-	public Builder<PB> disableAnimation() {
-	    this.animation = Boolean.FALSE;
+
+	public Builder<PB> withPointPadding(final Number pointPadding) {
+	    this.pointPadding = pointPadding;
 	    return this;
 	}
 
 	public PB build() {
-	    return this.sink.setObject(new SeriesOptions(animation));
+	    return this.sink.setObject(new Column(borderWidth, pointPadding));
 	}
     }
 
     /**
-     * Enable or disable the initial animation when a series is displayed. The
-     * animation can also be set as a configuration object. Please note that
-     * this option only applies to the initial animation of the series itself.
-     * For other animations, see chart.animation and the animation parameter
-     * under the API methods.	The following properties are supported:
+     * The width of the border surronding each column or bar. Defaults to 1.
      */
-    private final Boolean animation;
+    private final Number borderWidth;
+
+    /**
+     * Padding between each column or bar, in x axis units. Defaults to 0.1.
+     */
+    private final Number pointPadding;
 
     @JsonCreator
-    SeriesOptions(
-	    @JsonProperty("animation") Boolean animation
+    Column(
+	    @JsonProperty("borderWidth") Number borderWidth,
+	    @JsonProperty("pointPadding") Number pointPadding
     ) {
-	this.animation = animation;
+	this.borderWidth = borderWidth;
+	this.pointPadding = pointPadding;
     }
 
-    public Boolean isAnimation() {
-	return animation;
+    public Number getBorderWidth() {
+	return borderWidth;
+    }
+
+    public Number getPointPadding() {
+	return pointPadding;
     }
 }

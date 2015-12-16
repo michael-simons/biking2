@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
+import ac.simons.biking2.bikes.highcharts.PlotLine;
+import ac.simons.biking2.bikes.highcharts.Axis;
 import java.util.Arrays;
 import org.junit.Test;
 

@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.api;
 
+import ac.simons.biking2.bikes.ChartsControllerTest;
 import ac.simons.biking2.misc.About;
 import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.bikes.BikeEntity;

@@ -13,32 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
+import ac.simons.biking2.bikes.highcharts.Credits;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
+ *
  * @author Michael J. Simons, 2014-02-11
  */
-public class SeriesOptionsTest {
+public class CreditsTest {
 
     @Test
     public void testBuilder() {
-	SeriesOptions seriesOptions = new SeriesOptions.Builder<>(object -> object).build();
-	assertThat(seriesOptions.isAnimation(), is(nullValue()));
+	Credits credits = new Credits.Builder<>(object -> object).build();
+	assertThat(credits.isEnabled(), is(true));
 
-	seriesOptions = new SeriesOptions.Builder<>(object -> object)
-		.enableAnimation()
-		.build();
-	assertThat(seriesOptions.isAnimation(), is(true));
+	credits = new Credits.Builder<>(object -> object).disable().build();
+	assertThat(credits.isEnabled(), is(false));
 
-	seriesOptions = new SeriesOptions.Builder<>(object -> object)
-		.disableAnimation()
-		.build();
-	assertThat(seriesOptions.isAnimation(), is(false));
+	credits = new Credits.Builder<>(object -> object).enable().build();
+	assertThat(credits.isEnabled(), is(true));
     }
 }

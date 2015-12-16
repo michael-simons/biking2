@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
+import ac.simons.biking2.bikes.highcharts.PlotLine;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -23,18 +24,27 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author Michael J. Simons, 2014-02-11
+ * @author Michael J. Simons, 2014-08-26
  */
-public class TitleTest {
+public class PlotLineTest {
 
     @Test
     public void testBuilder() {
-	Title title = new Title.Builder<>(object -> object).build();
-	assertThat(title.getText(), is(nullValue()));
+	PlotLine plotline = new PlotLine.Builder<>(object -> object)
+		.at(23.0)
+		.withWidth(42.0)
+		.withColor("#FFFFFF")
+		.build();
 
-	title = new Title.Builder<>(object -> object)
-	    .withText("test 123")
-	.build();
-	assertThat(title.getText(), is(equalTo("test 123")));
+	assertThat(plotline.getValue(), is(equalTo(23.0)));
+	assertThat(plotline.getWidth(), is(equalTo(42.0)));
+	assertThat(plotline.getColor(), is(equalTo("#FFFFFF")));
+
+	plotline = new PlotLine.Builder<>(object -> object)
+		.build();
+
+	assertThat(plotline.getValue(), is(nullValue()));
+	assertThat(plotline.getWidth(), is(nullValue()));
+	assertThat(plotline.getColor(), is(nullValue()));
     }
 }

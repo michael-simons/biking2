@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
 import ac.simons.biking2.support.Sink;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,55 +28,50 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Chart {
+public class SeriesOptions {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Chart> sink;
+	private final Sink<PB, SeriesOptions> sink;
 
-	private Integer borderWidth;
+	private Boolean animation;
 
-	private String type;
-
-	Builder(final Sink<PB, Chart> sink) {
+	Builder(Sink<PB, SeriesOptions> sink) {
 	    this.sink = sink;
 	}
 
-	public Builder<PB> withBorderWidth(final Integer borderWidth) {
-	    this.borderWidth = borderWidth;
+	public Builder<PB> enableAnimation() {
+	    this.animation = Boolean.TRUE;
 	    return this;
 	}
-
-	public Builder<PB> withType(final String type) {
-	    this.type = type;
+	
+	public Builder<PB> disableAnimation() {
+	    this.animation = Boolean.FALSE;
 	    return this;
 	}
 
 	public PB build() {
-	    return this.sink.setObject(
-		    new Chart(borderWidth, type)
-	    );
+	    return this.sink.setObject(new SeriesOptions(animation));
 	}
     }
 
-    private final Integer borderWidth;
-
-    private final String type;
+    /**
+     * Enable or disable the initial animation when a series is displayed. The
+     * animation can also be set as a configuration object. Please note that
+     * this option only applies to the initial animation of the series itself.
+     * For other animations, see chart.animation and the animation parameter
+     * under the API methods.	The following properties are supported:
+     */
+    private final Boolean animation;
 
     @JsonCreator
-    Chart(
-	    @JsonProperty("borderWidth") Integer borderWidth, 
-	    @JsonProperty("type") String type
+    SeriesOptions(
+	    @JsonProperty("animation") Boolean animation
     ) {
-	this.borderWidth = borderWidth;
-	this.type = type;
+	this.animation = animation;
     }
 
-    public Integer getBorderWidth() {
-	return borderWidth;
-    }
-
-    public String getType() {
-	return type;
+    public Boolean isAnimation() {
+	return animation;
     }
 }

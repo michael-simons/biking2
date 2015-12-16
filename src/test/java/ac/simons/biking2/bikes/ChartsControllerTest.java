@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.highcharts.HighchartsNgConfig;
-import ac.simons.biking2.highcharts.Series;
+import ac.simons.biking2.bikes.ChartsController;
+import ac.simons.biking2.bikes.highcharts.HighchartsNgConfig;
+import ac.simons.biking2.bikes.highcharts.Series;
 import ac.simons.biking2.misc.AccumulatedPeriod;
 import ac.simons.biking2.bikes.BikeEntity;
 import ac.simons.biking2.bikes.BikeRepository;

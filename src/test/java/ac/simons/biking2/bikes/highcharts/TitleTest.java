@@ -13,33 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.highcharts;
+package ac.simons.biking2.bikes.highcharts;
 
+import ac.simons.biking2.bikes.highcharts.Title;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
  * @author Michael J. Simons, 2014-02-11
  */
-public class PlotOptionsTest {
-    
+public class TitleTest {
+
     @Test
     public void testBuilder() {
-	PlotOptions plotOptions = new PlotOptions.Builder<>(object -> object)
-		.column()		    
-		    .withPointPadding(0.2)
-		    .withBorderWidth(0)
-		.build()
-		.series()
-		    .disableAnimation()
-		.build()	
+	Title title = new Title.Builder<>(object -> object).build();
+	assertThat(title.getText(), is(nullValue()));
+
+	title = new Title.Builder<>(object -> object)
+	    .withText("test 123")
 	.build();
-	assertThat(plotOptions.getColumn().getPointPadding(), is(equalTo(0.2)));
-	assertThat(plotOptions.getColumn().getBorderWidth(), is(equalTo(0)));
-	assertThat(plotOptions.getSeries().isAnimation(), is(false));
+	assertThat(title.getText(), is(equalTo("test 123")));
     }
-    
 }

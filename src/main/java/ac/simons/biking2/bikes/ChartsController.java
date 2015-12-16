@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.highcharts.HighchartsNgConfig;
-import ac.simons.biking2.bikes.BikeEntity;
-import ac.simons.biking2.bikes.BikeRepository;
+import ac.simons.biking2.bikes.highcharts.HighchartsNgConfig;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -50,7 +48,7 @@ import static java.util.stream.Collectors.groupingBy;
  */
 @RestController
 @RequestMapping("/api")
-public class ChartsController {
+class ChartsController {
 
     private final BikeRepository bikeRepository;
     private final String colorOfCumulativeGraph;
