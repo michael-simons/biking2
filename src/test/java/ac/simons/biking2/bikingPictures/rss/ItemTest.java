@@ -19,7 +19,7 @@ package ac.simons.biking2.bikingPictures.rss;
 import ac.simons.biking2.bikingPictures.rss.Guid;
 import ac.simons.biking2.bikingPictures.rss.Item;
 import ac.simons.biking2.bikingPictures.rss.Thumbnail;
-import ac.simons.biking2.tests.BeanTester;
+import ac.simons.biking2.support.BeanTester;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;

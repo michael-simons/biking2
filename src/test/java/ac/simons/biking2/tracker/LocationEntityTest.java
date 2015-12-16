@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.tracker;
 
-import ac.simons.biking2.tests.BeanTester;
+import ac.simons.biking2.support.BeanTester;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;

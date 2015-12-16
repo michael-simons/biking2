@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.trips;
 
-import ac.simons.biking2.tests.BeanTester;
+import ac.simons.biking2.support.BeanTester;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

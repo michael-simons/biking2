@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.tests;
+package ac.simons.biking2.support;
 
 import java.util.Locale;
 import java.util.function.BiConsumer;

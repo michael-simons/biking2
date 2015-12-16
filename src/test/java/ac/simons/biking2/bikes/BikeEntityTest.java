@@ -16,7 +16,7 @@
 package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.bikes.BikeEntity.Link;
-import ac.simons.biking2.tests.BeanTester;
+import ac.simons.biking2.support.BeanTester;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
