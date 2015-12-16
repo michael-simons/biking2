@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.misc;
 
-import ac.simons.biking2.api.BuildProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -38,7 +37,7 @@ public class About {
 	private Duration uptime;
 
 	private Long usedMemory;
-	
+
 	private Long freeMemory;
 
 	private Long totalMemory;
@@ -72,7 +71,7 @@ public class About {
 	public void setFreeMemory(Long freeMemory) {
 	    this.freeMemory = freeMemory;
 	}
-	
+
 	public Long getTotalMemory() {
 	    return totalMemory;
 	}
@@ -92,21 +91,11 @@ public class About {
 
     private VMProperties vm;
 
-    private BuildProperties build;
-
     public VMProperties getVm() {
 	return vm;
     }
 
     public void setVm(VMProperties vm) {
 	this.vm = vm;
-    }
-
-    public BuildProperties getBuild() {
-	return build;
-    }
-
-    public void setBuild(BuildProperties build) {
-	this.build = build;
     }
 }

@@ -42,14 +42,12 @@ public class MiscApiController {
     private final BikeRepository bikeRepository;
     private final AssortedTripRepository assortedTripRepository;
     private final Coordinate home;
-    private final BuildProperties builtProperties;
-
+    
     @Autowired
-    public MiscApiController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository, final Coordinate home, final BuildProperties builtProperties) {
+    public MiscApiController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository, final Coordinate home) {
 	this.bikeRepository = bikeRepository;
 	this.assortedTripRepository = assortedTripRepository;
-	this.home = home;
-	this.builtProperties = builtProperties;
+	this.home = home;	
     }
 
     @RequestMapping("/summary")
@@ -90,7 +88,6 @@ public class MiscApiController {
 	vMProperties.setUptime(Duration.ofSeconds(ManagementFactory.getRuntimeMXBean().getUptime() / 1000));
 
 	about.setVm(vMProperties);
-	about.setBuild(builtProperties);
 
 	return about;
     }

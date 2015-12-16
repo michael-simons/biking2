@@ -28,7 +28,7 @@
 			</tr>
 		    </thead>
 		    <tbody>
-			<tr ng-repeat="(key, value) in about.build.versions" ng-show="key !== 'app'">
+			<tr ng-repeat="(key, value) in info.versions" ng-show="key !== 'app'">
 			    <td>{{ key }}</td>
 			    <td>{{ value }}</td>			
 			</tr>
@@ -39,7 +39,7 @@
 
 	<h3>Runtime</h3>
 	<p>
-	    Running build <strong>{{about.build.versions.app || 'n/a'}}</strong> from <strong>{{about.build.buildDate || 'unknown'}}</strong> 
+	    Running build <strong>{{info.versions.app || 'n/a'}}</strong> from <strong>{{info.buildDate || 'unknown'}}</strong> 
 	    for <strong>{{ humanizedUptime || 'n/a'}}</strong>
 	    on Java <strong>{{ about.vm.version || 'n/a'}}</strong>, 
 	    using <strong>{{ about.vm.usedMemory | bytes }}</strong> of <strong>{{ about.vm.totalMemory | bytes }}</strong>. 

@@ -31,7 +31,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static java.time.LocalDate.now;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
@@ -39,8 +38,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
-import static java.time.LocalDate.now;
-import static java.time.LocalDate.now;
 import static java.time.LocalDate.now;
 
 /**
@@ -63,7 +60,7 @@ public class MiscApiControllerTest {
 	stub(bikeRepository.findAll()).toReturn(ChartsControllerTest.generateTestData());
 	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
 
-	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home);
 
 	final Summary summary = controller.getSummary();
 
@@ -92,7 +89,7 @@ public class MiscApiControllerTest {
 	stub(bikeRepository.findAll()).toReturn(bikes);
 	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
 
-	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home);
 	final Summary summary = controller.getSummary();
 	assertNotNull(summary.getWorstPeriod());	
 	assertThat(summary.getWorstPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,2,1).atStartOfDay(ZoneId.systemDefault())))));
@@ -115,7 +112,7 @@ public class MiscApiControllerTest {
 	stub(bikeRepository.findAll()).toReturn(bikes);
 	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
 	
-	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home);
 	final Summary summary = controller.getSummary();
 	assertNull(summary.getWorstPeriod());	
 	assertNull(summary.getBestPeriod());	
@@ -126,22 +123,18 @@ public class MiscApiControllerTest {
     @Test
     public void testGetHome() {
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, null);
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home);
 	
 	Assert.assertEquals(this.home, controller.getHome());
     }
     
     @Test
     public void testGetAbout() {
-	final BuildProperties buildProperties = new BuildProperties();
-	
 	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home, buildProperties);
+	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home);
 	
 	final About about = controller.getAbout();
 	Assert.assertNotNull(about);
-	Assert.assertNotNull(about.getVm());
-	Assert.assertNotNull(about.getBuild());
-	Assert.assertEquals(buildProperties, about.getBuild());
+	Assert.assertNotNull(about.getVm());	
     }
 }

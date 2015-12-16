@@ -477,6 +477,10 @@ biking2Controllers.controller('AboutCtrl', function($scope, $http, $filter, $int
 	    }
 	}
     };
+    
+    $http.get('/api/system/info').success(function(data) {
+	$scope.info = data;
+    });
 
     $scope.refresh = function() {
 	var formatBytes = function(bytes) {
