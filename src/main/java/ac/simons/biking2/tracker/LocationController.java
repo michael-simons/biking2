@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.tracker;
 
-import ac.simons.biking2.tracker.NewLocationCmd;
-import ac.simons.biking2.persistence.entities.Location;
-import ac.simons.biking2.tracker.LocationService;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @RestController
 @RequestMapping("/api")
-public class LocationController {
+class LocationController {
 
     private final LocationService locationService;
 
@@ -48,18 +45,18 @@ public class LocationController {
     }
     
     @RequestMapping(value = "/locations", method = GET)
-    public List<Location> getLocations() {
+    public List<LocationEntity> getLocations() {
 	return this.locationService.getLocationsForTheLastNHours(1);
     }
 
     @RequestMapping(value = "/locations", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Location> createLocation(final @RequestBody @Valid NewLocationCmd newLocationCmd, final BindingResult bindingResult) {
+    public ResponseEntity<LocationEntity> createLocation(final @RequestBody @Valid NewLocationCmd newLocationCmd, final BindingResult bindingResult) {
 	if (bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
 
-	ResponseEntity<Location> rv;
+	ResponseEntity<LocationEntity> rv;
 
 	try {
 	    rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.CREATED);

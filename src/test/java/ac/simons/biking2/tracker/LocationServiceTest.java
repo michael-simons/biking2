@@ -15,8 +15,6 @@
  */
 package ac.simons.biking2.tracker;
 
-import ac.simons.biking2.persistence.entities.Location;
-import ac.simons.biking2.persistence.repositories.LocationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -53,7 +51,7 @@ public class LocationServiceTest {
 	
 	final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
 	
-	final List<Location> locations = locationService.getLocationsForTheLastNHours(3);	
+	final List<LocationEntity> locations = locationService.getLocationsForTheLastNHours(3);	
 	Assert.assertNotNull(locations);
 	Assert.assertEquals(0, locations.size());
 	
@@ -66,18 +64,18 @@ public class LocationServiceTest {
     @Test
     public void shouldCreateAndSendNewLocation() throws IOException {
 	final LocationRepository locationRepository = Mockito.mock(LocationRepository.class);	
-	stub(locationRepository.save(any(Location.class))).toAnswer(AdditionalAnswers.returnsFirstArg());
+	stub(locationRepository.save(any(LocationEntity.class))).toAnswer(AdditionalAnswers.returnsFirstArg());
 	final SimpMessagingTemplate simpMessagingTemplate = mock(SimpMessagingTemplate.class);
 	
 	final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
 	
-	final Location location = locationService.createAndSendNewLocation(objectMapper.readValue("{\"lon\":\"5\", \"lat\":\"50\"}", NewLocationCmd.class));
+	final LocationEntity location = locationService.createAndSendNewLocation(objectMapper.readValue("{\"lon\":\"5\", \"lat\":\"50\"}", NewLocationCmd.class));
 	Assert.assertEquals(new BigDecimal(50), location.getLatitude());
 	Assert.assertEquals(new BigDecimal(5), location.getLongitude());
 	
-	Mockito.verify(locationRepository).save(any(Location.class));
+	Mockito.verify(locationRepository).save(any(LocationEntity.class));
 	final ArgumentCaptor<String> destinationNameArg = ArgumentCaptor.forClass(String.class);
-	final ArgumentCaptor<Location> locationArg = ArgumentCaptor.forClass(Location.class);
+	final ArgumentCaptor<LocationEntity> locationArg = ArgumentCaptor.forClass(LocationEntity.class);
 	Mockito.verify(simpMessagingTemplate).convertAndSend(destinationNameArg.capture(), locationArg.capture());	  
 	Mockito.verifyNoMoreInteractions(locationRepository, simpMessagingTemplate);
 	

@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.repositories;
+package ac.simons.biking2.tracker;
 
-import ac.simons.biking2.persistence.entities.Location;
 import java.util.Calendar;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * @author Michael J. Simons, 2014-03-19
  */
-public interface LocationRepository extends JpaRepository<Location, Integer> {
+public interface LocationRepository extends JpaRepository<LocationEntity, Integer> {
 
-    public List<Location> findByCreatedAtGreaterThanOrderByCreatedAtAsc(Calendar value);
+    public List<LocationEntity> findByCreatedAtGreaterThanOrderByCreatedAtAsc(Calendar value);
 }

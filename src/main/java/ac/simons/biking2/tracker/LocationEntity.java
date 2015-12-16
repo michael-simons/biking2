@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.tracker;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -34,7 +34,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "locations")
-public class Location implements Serializable {
+public class LocationEntity implements Serializable {
 
     private static final long serialVersionUID = -9075950345524958606L;
 
@@ -59,10 +59,10 @@ public class Location implements Serializable {
     @NotNull
     private Calendar createdAt;
 
-    protected Location() {
+    protected LocationEntity() {
     }
 
-    public Location(BigDecimal latitude, BigDecimal longitude, Calendar createdAt) {
+    public LocationEntity(BigDecimal latitude, BigDecimal longitude, Calendar createdAt) {
 	this.latitude = latitude;
 	this.longitude = longitude;
 	this.createdAt = createdAt;
@@ -109,7 +109,7 @@ public class Location implements Serializable {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final Location other = (Location) obj;
+	final LocationEntity other = (LocationEntity) obj;
 	if (!Objects.equals(this.latitude, other.latitude)) {
 	    return false;
 	}

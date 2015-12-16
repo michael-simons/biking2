@@ -15,8 +15,6 @@
  */
 package ac.simons.biking2.tracker;
 
-import ac.simons.biking2.persistence.entities.Location;
-import ac.simons.biking2.persistence.repositories.LocationRepository;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -41,13 +39,13 @@ public class LocationService {
 	this.messagingTemplate = messagingTemplate;
     }
 
-    public Location createAndSendNewLocation(final NewLocationCmd newLocation) {
-	final Location location = this.locationRepository.save(new Location(newLocation.getLatitude(), newLocation.getLongitude(), newLocation.getCreatedAt()));
+    public LocationEntity createAndSendNewLocation(final NewLocationCmd newLocation) {
+	final LocationEntity location = this.locationRepository.save(new LocationEntity(newLocation.getLatitude(), newLocation.getLongitude(), newLocation.getCreatedAt()));
 	this.messagingTemplate.convertAndSend("/topic/currentLocation", location);
 	return location;
     }
 
-    public List<Location> getLocationsForTheLastNHours(int hours) {
+    public List<LocationEntity> getLocationsForTheLastNHours(int hours) {
 	return locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(GregorianCalendar.from(ZonedDateTime.now(systemDefault()).minusHours(hours)));
     }
 }

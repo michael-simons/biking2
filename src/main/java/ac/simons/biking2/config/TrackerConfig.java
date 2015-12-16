@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.config;
 
-import ac.simons.biking2.api.LocationController;
 import ac.simons.biking2.config.TrackerConfig.TrackerProperties;
 import ac.simons.biking2.tracker.LocationService;
 import ac.simons.biking2.tracker.NewLocationCmd;
@@ -200,7 +199,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 		    hlp = new String(bytes);
 		}
 	    } catch (JMSException ex) {
-		Logger.getLogger(LocationController.class.getName()).log(Level.WARNING, null, ex);
+		Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, null, ex);
 	    }
 
 	    if (hlp == null) {
@@ -210,7 +209,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	    try {
 		locationService.createAndSendNewLocation(objectMapper.readValue(hlp, NewLocationCmd.class));
 	    } catch (DataIntegrityViolationException | IOException ex) {
-		Logger.getLogger(LocationController.class.getName()).log(Level.WARNING, null, ex);
+		Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, null, ex);
 	    }
 	});
 	rv.setConnectionFactory(connectionFactory);

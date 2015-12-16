@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.persistence.entities;
+package ac.simons.biking2.tracker;
 
 import ac.simons.biking2.tests.BeanTester;
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ import org.junit.Test;
 /**
  * @author Michael J. Simons, 2014-05-23
  */
-public class LocationTest {
+public class LocationEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
@@ -35,10 +35,10 @@ public class LocationTest {
 	final Map<String, Object> values = new HashMap<>();	
 	values.put("description", "description");
 
-	values.forEach(new BeanTester(Location.class));
+	values.forEach(new BeanTester(LocationEntity.class));
 
-	final Location l1 = new Location(BigDecimal.ONE, BigDecimal.TEN, now);
-	final Location otherL1 = new Location(BigDecimal.ONE, BigDecimal.TEN, now);
+	final LocationEntity l1 = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, now);
+	final LocationEntity otherL1 = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, now);
 	Assert.assertEquals(l1, otherL1);
 	Assert.assertEquals(l1.hashCode(), otherL1.hashCode());
 	Assert.assertNotEquals(l1, "something else");
@@ -50,11 +50,11 @@ public class LocationTest {
 
 	final Calendar then = Calendar.getInstance();
 	then.add(Calendar.YEAR, 1);
-	Location other = new Location(BigDecimal.ZERO, BigDecimal.TEN, now);
+	LocationEntity other = new LocationEntity(BigDecimal.ZERO, BigDecimal.TEN, now);
 	Assert.assertNotEquals(l1, other);
-	other = new Location(BigDecimal.ONE, BigDecimal.ZERO, now);
+	other = new LocationEntity(BigDecimal.ONE, BigDecimal.ZERO, now);
 	Assert.assertNotEquals(l1, other);
-	other = new Location(BigDecimal.ONE, BigDecimal.TEN, then);
+	other = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, then);
 	Assert.assertNotEquals(l1, other);
     }
 }
