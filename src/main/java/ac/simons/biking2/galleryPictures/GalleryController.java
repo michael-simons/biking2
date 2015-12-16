@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.gallery;
+package ac.simons.biking2.galleryPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.persistence.entities.GalleryPicture;
@@ -57,7 +57,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2014-02-22
  */
 @Controller
-public class GalleryController {
+class GalleryController {
 
     @FunctionalInterface
     public interface FilenameGenerator {
