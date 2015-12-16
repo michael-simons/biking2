@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.rss;
 
-import ac.simons.biking2.misc.JAXBContextFactory;
+import ac.simons.biking2.support.JAXBContextFactory;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import javax.xml.bind.JAXBContext;

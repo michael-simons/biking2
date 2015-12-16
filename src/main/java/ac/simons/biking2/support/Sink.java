@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2014 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.api;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+package ac.simons.biking2.support;
 
 /**
- * @author Michael J. Simons, 2015-11-10
+ * A generic Sink that consists of a target <em>T</em> that takes
+ * an object <em>O</em> and is then returned
+ * @author Michael J. Simons, 2014-02-11
+ * @param <T>
+ * @param <O>
  */
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException {
+@FunctionalInterface
+public interface Sink<T, O> {
+    public T setObject(final O object);
 }

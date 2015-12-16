@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.api.ExceptionHandlerAdvice;
+import ac.simons.biking2.support.ExceptionHandlerAdvice;
 import ac.simons.biking2.bikes.BikeEntity.Link;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;

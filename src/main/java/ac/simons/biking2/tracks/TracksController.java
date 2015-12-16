@@ -16,7 +16,7 @@
 package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.tracks.gpx.GPX;
-import ac.simons.biking2.misc.JAXBContextFactory;
+import ac.simons.biking2.support.JAXBContextFactory;
 import ac.simons.biking2.tracks.TrackEntity.Type;
 import java.io.File;
 import java.io.FileOutputStream;

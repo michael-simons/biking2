@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.misc;
+package ac.simons.biking2.support;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

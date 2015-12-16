@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.api.ResourceNotFoundException;
+import ac.simons.biking2.support.ResourceNotFoundException;
 import ac.simons.biking2.bikes.BikeEntity.Link;
 import java.util.List;
 import java.util.Optional;

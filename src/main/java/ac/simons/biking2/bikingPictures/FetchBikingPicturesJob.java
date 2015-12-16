@@ -16,7 +16,7 @@
 package ac.simons.biking2.bikingPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
-import ac.simons.biking2.misc.JAXBContextFactory;
+import ac.simons.biking2.support.JAXBContextFactory;
 import ac.simons.biking2.rss.RSS;
 import java.io.File;
 import java.io.IOException;

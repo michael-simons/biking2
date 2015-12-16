@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.highcharts;
 
-import ac.simons.biking2.misc.Sink;
+import ac.simons.biking2.support.Sink;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
