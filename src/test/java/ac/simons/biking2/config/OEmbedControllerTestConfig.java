@@ -16,7 +16,7 @@
 package ac.simons.biking2.config;
 
 import ac.simons.biking2.api.Coordinate;
-import ac.simons.biking2.api.OEmbedController;
+import ac.simons.biking2.oembed.OEmbedController;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.math.BigDecimal;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.api;
+package ac.simons.biking2.oembed;
 
-import ac.simons.biking2.oembed.OEmbedResponse;
+import ac.simons.biking2.api.Coordinate;
 import ac.simons.biking2.persistence.entities.Track;
 import ac.simons.biking2.persistence.repositories.TrackRepository;
 import java.util.Arrays;
