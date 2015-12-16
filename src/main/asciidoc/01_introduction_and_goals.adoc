@@ -32,7 +32,7 @@ The images should be collected from https://dailyfratze[Daily Fratze], the sourc
 .Quality Goals
 |===
 | Nr. | Quality                        | Motivation
-| 1   | Understandability              | The functional requirements are simple enough to allow a simple, understandable solution that allows focus on learning about Spring Boot and AngularJS.
+| 1   | Understandability              | The functional requirements are simple enough to allow a simple, understandable solution that allows focus on learning about new Java 8 features, Spring Boot and AngularJS.
 | 2   | Efficiency                     | Collecting milage data should be a no brainer: Reading the milage from an odometer and entering it.
 | 3   | Interoperability               | The application should provide a simple API that allows access to new clients.
 | 4   | Attractiveness                 | Collected milages should be presented in easy to grasp charts.

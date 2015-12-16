@@ -43,5 +43,9 @@ include::02_architecture_constraints.adoc[]
 include::03_system_scope_and_context.adoc[]
 
 <<<<
+// 4. Solution Strategy
+include::04_solution_strategy.adoc[]
+
+<<<<
 // 12. Glossary
 include::12_glossary.adoc[]
