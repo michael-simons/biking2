@@ -15,14 +15,10 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.misc.About;
-import ac.simons.biking2.misc.About.VMProperties;
 import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.bikes.BikeEntity;
 import ac.simons.biking2.trips.AssortedTripRepository;
 import ac.simons.biking2.bikes.BikeRepository;
-import java.lang.management.ManagementFactory;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static java.lang.Runtime.getRuntime;
 
 /**
  * @author Michael J. Simons, 2014-02-17
@@ -72,23 +67,5 @@ public class MiscApiController {
     @RequestMapping("/home")
     public Coordinate getHome() {
 	return this.home;
-    }
-
-    @RequestMapping("/about")
-    public About getAbout() {
-	final About about = new About();
-	final VMProperties vMProperties = new VMProperties();
-
-	final Runtime runtime = getRuntime();	
-	final long freeMemory = runtime.freeMemory();
-	vMProperties.setTotalMemory(runtime.totalMemory());
-	vMProperties.setUsedMemory(runtime.totalMemory() - freeMemory);
-	vMProperties.setFreeMemory(freeMemory);
-	vMProperties.setMaxMemory(runtime.maxMemory());
-	vMProperties.setUptime(Duration.ofSeconds(ManagementFactory.getRuntimeMXBean().getUptime() / 1000));
-
-	about.setVm(vMProperties);
-
-	return about;
     }
 }

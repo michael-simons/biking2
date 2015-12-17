@@ -485,13 +485,14 @@ biking2Controllers.controller('AboutCtrl', function($scope, $q, $http, $filter, 
     });
 
     $scope.refresh = function() {
-	var formatBytes = function(bytes) {
-	    return Math.round((bytes / Math.pow(1024, Math.floor(2))) * 10) / 10;
+	var formatKibiBytes = function(bytes) {
+	    return Math.round((bytes / Math.pow(1024, Math.floor(1))) * 10) / 10;
 	};
 
-	$http.get('/api/about').success(function(data) {
-	    $scope.about = data;
-	    $scope.humanizedUptime = nezasa.iso8601.Period.parseToString(data.vm.uptime, null, null, true);
+	$http.get('/api/system/metrics').success(function(data) {
+	    $scope.metrics = data;
+	    $scope.metrics["mem.used"] = $scope.metrics.mem - $scope.metrics["mem.free"];
+	    $scope.humanizedUptime = moment.duration($scope.metrics.uptime).humanize();
 	    var max = 10;
 	    var cur = $scope.memoryConfig.series[0].data.length;
 
@@ -500,8 +501,8 @@ biking2Controllers.controller('AboutCtrl', function($scope, $q, $http, $filter, 
 		$scope.memoryConfig.series[1].data.splice(0, 1);
 		$scope.memoryConfig.xAxis.categories.splice(0, 1);
 	    }
-	    $scope.memoryConfig.series[0].data.push(formatBytes($scope.about.vm.freeMemory));
-	    $scope.memoryConfig.series[1].data.push(formatBytes($scope.about.vm.usedMemory));
+	    $scope.memoryConfig.series[0].data.push(formatKibiBytes($scope.metrics["mem.free"]));
+	    $scope.memoryConfig.series[1].data.push(formatKibiBytes($scope.metrics["mem.used"]));
 	    $scope.memoryConfig.xAxis.categories.push($filter('date')(new Date(), "HH:mm:ss"));
 	});
     };

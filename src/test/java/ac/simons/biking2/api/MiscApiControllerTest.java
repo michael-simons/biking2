@@ -16,7 +16,6 @@
 package ac.simons.biking2.api;
 
 import ac.simons.biking2.bikes.ChartsControllerTest;
-import ac.simons.biking2.misc.About;
 import ac.simons.biking2.misc.Summary;
 import ac.simons.biking2.bikes.BikeEntity;
 import ac.simons.biking2.trips.AssortedTripRepository;
@@ -126,15 +125,5 @@ public class MiscApiControllerTest {
 	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home);
 	
 	Assert.assertEquals(this.home, controller.getHome());
-    }
-    
-    @Test
-    public void testGetAbout() {
-	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	final MiscApiController controller = new MiscApiController(bikeRepository, this.assortedTripRepository, this.home);
-	
-	final About about = controller.getAbout();
-	Assert.assertNotNull(about);
-	Assert.assertNotNull(about.getVm());	
     }
 }
