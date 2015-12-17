@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.misc.AccumulatedPeriod;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;

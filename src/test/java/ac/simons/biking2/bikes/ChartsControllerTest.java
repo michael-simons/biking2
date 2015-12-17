@@ -15,12 +15,8 @@
  */
 package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.bikes.ChartsController;
 import ac.simons.biking2.bikes.highcharts.HighchartsNgConfig;
 import ac.simons.biking2.bikes.highcharts.Series;
-import ac.simons.biking2.misc.AccumulatedPeriod;
-import ac.simons.biking2.bikes.BikeEntity;
-import ac.simons.biking2.bikes.BikeRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;

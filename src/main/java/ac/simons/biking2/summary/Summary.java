@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.misc;
+package ac.simons.biking2.summary;
 
+import ac.simons.biking2.bikes.AccumulatedPeriod;
 import java.util.Calendar;
 
 /**
  * @author Michael J. Simons, 2014-02-13
  */
-public class Summary {
+class Summary {
 
     private Calendar dateOfFirstRecord;
 

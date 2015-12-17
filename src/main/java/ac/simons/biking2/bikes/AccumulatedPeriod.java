@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ac.simons.biking2.misc;
+package ac.simons.biking2.bikes;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

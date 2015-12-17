@@ -15,17 +15,9 @@
  */
 package ac.simons.biking2.api;
 
-import ac.simons.biking2.misc.Summary;
-import ac.simons.biking2.bikes.BikeEntity;
-import ac.simons.biking2.trips.AssortedTripRepository;
-import ac.simons.biking2.bikes.BikeRepository;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 /**
  * @author Michael J. Simons, 2014-02-17
@@ -34,34 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class MiscApiController {
 
-    private final BikeRepository bikeRepository;
-    private final AssortedTripRepository assortedTripRepository;
     private final Coordinate home;
     
     @Autowired
-    public MiscApiController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository, final Coordinate home) {
-	this.bikeRepository = bikeRepository;
-	this.assortedTripRepository = assortedTripRepository;
+    public MiscApiController(final Coordinate home) {
 	this.home = home;	
-    }
-
-    @RequestMapping("/summary")
-    public Summary getSummary() {
-	final List<BikeEntity> allBikes = this.bikeRepository.findAll();
-
-	final Summary summary = new Summary();
-	summary.setDateOfFirstRecord(this.bikeRepository.getDateOfFirstRecord());
-	summary.setTotal(allBikes.stream().mapToInt(BikeEntity::getMilage).sum()
-		+ this.assortedTripRepository.getTotalDistance().doubleValue()
-	);	
-	
-	final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(allBikes, null);
-		
-	summary.setWorstPeriod(BikeEntity.getWorstPeriod(summarizedPeriods));	
-	summary.setBestPeriod(BikeEntity.getBestPeriod(summarizedPeriods));
-	summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
-		
-	return summary;
     }
 
     @RequestMapping("/home")
