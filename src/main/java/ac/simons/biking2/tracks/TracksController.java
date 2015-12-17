@@ -72,14 +72,15 @@ class TracksController {
     private final TrackRepository trackRepository;
     private final File datastoreBaseDirectory;
     private final String gpsBabel;
+    private final Coordinate home;
     private final JAXBContext gpxContext;
 
     @Autowired
-    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") String gpsBabel) {
+    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") String gpsBabel, final Coordinate home) {
 	this.trackRepository = trackRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
 	this.gpsBabel = gpsBabel;
-	
+	this.home = home;
 	this.gpxContext = JAXBContextFactory.createContext(GPX.class);	
     }
 
@@ -216,5 +217,10 @@ class TracksController {
 	}
 
 	response.flushBuffer();
+    }
+    
+    @RequestMapping("/api/home")
+    public @ResponseBody Coordinate getHome() {
+	return this.home;
     }
 }

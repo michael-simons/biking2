@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.api.Coordinate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;

@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.api.Coordinate;
 import ac.simons.biking2.tracks.OEmbedController;
 import ac.simons.biking2.tracks.TrackRepository;
 import java.math.BigDecimal;

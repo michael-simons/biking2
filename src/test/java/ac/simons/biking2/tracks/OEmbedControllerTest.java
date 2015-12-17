@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.api.Coordinate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

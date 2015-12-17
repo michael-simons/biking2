@@ -110,7 +110,7 @@ public class TracksControllerTest {
     public void testGetTracks() {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"))).toReturn(defaultTestData);
-	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 
 	final List<TrackEntity> tracks = tracksController.getTracks();
 
@@ -140,7 +140,7 @@ public class TracksControllerTest {
 	trackTcx.deleteOnExit();	
 	stub(t.getTrackFile(tmpDir, "tcx")).toReturn(trackTcx);
 		
-	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 	
 	MockHttpServletRequest request;
 	MockHttpServletResponse response;
@@ -206,7 +206,7 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.findOne(validId)).toReturn(t);
 	
-	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 	
 	ResponseEntity<TrackEntity> response;
 	response = tracksController.getTrack(Integer.toString(validId, 36));
@@ -249,7 +249,7 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.save(Matchers.any(TrackEntity.class))).toReturn(track);
 	
-	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 		
 	// Test valid track
@@ -289,7 +289,7 @@ public class TracksControllerTest {
     @Test
     public void shouldNotCreateInvalidTracks() throws Exception {
 	final TrackRepository trackRepository = mock(TrackRepository.class);	
-	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 	
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 	
@@ -323,7 +323,7 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);
 	stub(trackRepository.save(Matchers.any(TrackEntity.class))).toThrow(new DataIntegrityViolationException("fud"));
 	
-	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 	
 	MockMultipartFile trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/test.tcx"));
@@ -351,7 +351,7 @@ public class TracksControllerTest {
 	Mockito.stub(track.getTrackFile(this.tmpDir, "tcx")).toReturn(this.tmpDir);
 	
 	final TrackRepository trackRepository = mock(TrackRepository.class);	
-	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 	
 	this.expectedException.expect(RuntimeException.class);	
 	this.expectedException.expectMessage(new RegexMatcher(".*\\(Is a directory\\)$"));
@@ -368,7 +368,7 @@ public class TracksControllerTest {
 	Mockito.stub(track.getTrackFile(this.tmpDir, "gpx")).toReturn(File.createTempFile("4223", ".gpx"));
 	
 	final TrackRepository trackRepository = mock(TrackRepository.class);	
-	final TracksController controller = new TracksController(trackRepository, this.tmpDir, new File("/iam/not/gpsBabel").getAbsolutePath());
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, new File("/iam/not/gpsBabel").getAbsolutePath(), null);
 	
 	this.expectedException.expect(RuntimeException.class);	
 	this.expectedException.expectMessage("java.io.IOException: Cannot run program \"/iam/not/gpsBabel\": error=2, No such file or directory");
@@ -385,7 +385,7 @@ public class TracksControllerTest {
 	Mockito.stub(track.getTrackFile(this.tmpDir, "gpx")).toReturn(File.createTempFile("4223", ".gpx"));
 	
 	final TrackRepository trackRepository = mock(TrackRepository.class);	
-	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath());
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 	
 	this.expectedException.expect(RuntimeException.class);	
 	this.expectedException.expectMessage("GPSBabel could not convert the input file!");
@@ -393,5 +393,14 @@ public class TracksControllerTest {
 	
 	Mockito.verify(track);
 	Mockito.verifyNoMoreInteractions(track);
+    }
+    
+    @Test
+    public void testGetHome() {
+	final Coordinate home = new Coordinate("13.408056", "52.518611");
+	final TrackRepository trackRepository = mock(TrackRepository.class);	
+	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), home);
+	
+	Assert.assertEquals(home, controller.getHome());
     }
 }
