@@ -53,6 +53,8 @@
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
 	<angular-file-upload.version>1.2.5</angular-file-upload.version>
 	<momentjs.version>2.10.6</momentjs.version>	
+	<sockjs-client.version>1.0.2</sockjs-client.version>
+	<stomp-websocket.version>2.3.3</stomp-websocket.version>	
 		
 	<maven.compiler.source>${java.version}</maven.compiler.source>
 	<maven.compiler.target>${java.version}</maven.compiler.target>
@@ -407,5 +409,15 @@
 	    <artifactId>openlayers</artifactId>
 	    <version>${openlayers.version}</version>
 	</dependency>	
+	<dependency>
+	    <groupId>org.webjars</groupId>
+	    <artifactId>sockjs-client</artifactId>
+	    <version>${sockjs-client.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.webjars</groupId>
+	    <artifactId>stomp-websocket</artifactId>
+	    <version>${stomp-websocket.version}</version>
+	</dependency>
     </dependencies>
 </project>
