@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.trips;
 
-import ac.simons.biking2.trips.AssortedTripEntity;
 import java.math.BigDecimal;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
-public interface AssortedTripRepository extends JpaRepository<AssortedTripEntity, Integer> {    
-    public BigDecimal getTotalDistance();
+public interface AssortedTripRepository extends JpaRepository<AssortedTripEntity, Integer> {
+
+    BigDecimal getTotalDistance();
 }

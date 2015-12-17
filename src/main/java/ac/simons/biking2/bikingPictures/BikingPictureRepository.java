@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Michael J. Simons, 2014-02-08
  */
 interface BikingPictureRepository extends JpaRepository<BikingPictureEntity, Integer> {
-    public Calendar getMaxPubDate();
+    Calendar getMaxPubDate();
     
-    public BikingPictureEntity findByExternalId(final Integer externalId);
+    BikingPictureEntity findByExternalId(final Integer externalId);
 }

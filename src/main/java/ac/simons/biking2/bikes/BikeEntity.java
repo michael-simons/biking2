@@ -58,10 +58,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
-import static java.util.stream.Collectors.reducing;
 import static java.util.stream.IntStream.rangeClosed;
-import static java.util.stream.Collectors.reducing;
-import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.reducing;
 
 /**

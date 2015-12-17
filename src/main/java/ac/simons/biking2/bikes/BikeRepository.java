@@ -24,11 +24,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Michael J. Simons, 2014-02-08
  */
 public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
-    public List<BikeEntity> findActive(final Calendar cutoffDate);
+    List<BikeEntity> findActive(final Calendar cutoffDate);
     
-    public BikeEntity findByName(final String name);
+    BikeEntity findByName(final String name);
  
-    public List<BikeEntity> findByDecommissionedOnIsNull(final Sort sort);
+    List<BikeEntity> findByDecommissionedOnIsNull(final Sort sort);
     
-    public Calendar getDateOfFirstRecord();
+    Calendar getDateOfFirstRecord();
 }

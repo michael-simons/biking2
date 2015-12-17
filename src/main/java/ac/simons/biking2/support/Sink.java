@@ -25,5 +25,5 @@ package ac.simons.biking2.support;
  */
 @FunctionalInterface
 public interface Sink<T, O> {
-    public T setObject(final O object);
+    T setObject(final O object);
 }
