@@ -39,6 +39,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
  * @author Michael J. Simons, 2014-02-19
  */
 @RestController
+@RequestMapping("/api")
 class BikesController {
 
     private final BikeRepository bikeRepository;
@@ -48,7 +49,7 @@ class BikesController {
 	this.bikeRepository = bikeRepository;
     }
 
-    @RequestMapping(value = "/api/bikes", method = GET)
+    @RequestMapping(value = "/bikes", method = GET)
     public List<BikeEntity> getBikes(final @RequestParam(required = false, defaultValue = "false") boolean all) {
 	List<BikeEntity> rv;
 	if(all) {
@@ -59,7 +60,7 @@ class BikesController {
 	return rv;
     }
     
-    @RequestMapping(value = "/api/bikes/{id:\\d+}/milages", method = POST)
+    @RequestMapping(value = "/bikes/{id:\\d+}/milages", method = POST)
     @PreAuthorize("isAuthenticated()")
     public MilageEntity createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {	
 	if(bindingResult.hasErrors()) {
@@ -81,7 +82,7 @@ class BikesController {
 	return rv;
     }
     
-    @RequestMapping(value = "/api/bikes", method = POST) 
+    @RequestMapping(value = "/bikes", method = POST) 
     @PreAuthorize("isAuthenticated()")
     public BikeEntity createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
@@ -95,7 +96,7 @@ class BikesController {
 	return this.bikeRepository.save(bike);	
     }
     
-    @RequestMapping(value = "/api/bikes/{id:\\d+}", method = PUT)
+    @RequestMapping(value = "/bikes/{id:\\d+}", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
     public BikeEntity updateBike(final @PathVariable Integer id, final @RequestBody @Valid BikeCmd updatedBike, final BindingResult bindingResult) {
@@ -116,7 +117,7 @@ class BikesController {
 	return bike;
     }
     
-    @RequestMapping(value = "/api/bikes/{id:\\d+}/story", method = PUT)
+    @RequestMapping(value = "/bikes/{id:\\d+}/story", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
     public BikeEntity updateBikeStory(final @PathVariable Integer id, final @RequestBody(required = false) @Valid StoryCmd newStory, final BindingResult bindingResult) {
