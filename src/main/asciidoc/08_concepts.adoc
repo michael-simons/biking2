@@ -76,18 +76,19 @@ runtime views to explain these recurring structures.
 
 === Persistency
 
-[role="arc42help"]
-****
-Persistency means moving data from (volatile) memory to a durable storage medium (and back).
+_biking2_ uses an http://www.h2database.com/html/main.html[H2] database for storing relational data and the file system for binary image files and large ascii files (especially all GPS files).
 
-Some of the data that a software system is processing must be written to and read from persistent storage media.
+During development and production the H2 database is retained and not in-memory based. The location of this file is configured through the `biking2.database-file` property and the default during development is `./var/dev/db/biking-dev` relative to the working directory of the VM.
 
-* Volatile storage media (main memory or cache) are not designed for permanent storage. Data is lost if the hardware is switched off.
-* The amount of data processed by commercial software systems normally exceeds the capacity of main memory.
-* Hard disks, optical media and tapes often contain large amounts of existing business data that represent a significant investment.
+All access to the database goes through JPA using Hibernate as provider. See the <<Domain Models>> for all entities used in the application.
 
-Persistency is a technical issue that normally does not appear as part of the actual business functionality. An architect must deal with this issue nevertheless because most software systems require efficient access to persistently stored data. This is relevant for essentially all commercial and most technical systems; embedded systems on the other hand often differ in their data management requirements.
-****
+The JPA Entity Manager isn't accessed directly but only through the facilities offered by Spring Data JPA, that is through repositories only.
+
+All data stored as files is stored relative to `biking2.datastore-base-directory` which defaults to `./var/dev`. Inside are 3 directories:
+
+* `bikingPictures`: Contains all pictures collected from _Daily Fratze_
+* `galleryPictures`: Contains all uploaded pictures
+* `tracks`: Contains uploaded GPS data and the result of converting TCX files into GPX files
 
 === User Interface
 

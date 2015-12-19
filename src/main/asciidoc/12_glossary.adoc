@@ -21,5 +21,6 @@
                                 Really Simple Syndication
                                                         | https://en.wikipedia.org/wiki/RSS[RSS] uses a family of standard web feed formats to publish frequently updated information: blog entries, news headlines, audio, video
 | SPA                         | spa                     | Single Page Application
+| Spring Data JPA             |                         | http://projects.spring.io/spring-data-jpa/[Spring Data JPA], part of the larger Spring Data family, makes it easy to easily implement JPA based repositories.
 | TCX                         |                         | Training Center XML (TCX) is a data exchange format introduced in 2007 as part of Garmin's Training Center product.
 |===
