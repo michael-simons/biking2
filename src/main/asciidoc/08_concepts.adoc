@@ -7,39 +7,50 @@ _biking2_ is datacentric application, therefore everything is based around an En
 
 image::8.1_er-diagram.png[align="center"]
 
-[cols="1,1" options="header"]
+[cols="1,2" options="header"]
 .Tables
 |===
 | Name | Description
 | bikes | Stores the bikes. Contains dates when the bike was bought and decomissioned, an optional link, color for the charts and also an auditing column when a row was created.
 | milages | Stores milages for a bike (when and how much)
+| tracks | Stores GPS tracks recorded and uploaded with an optional description. For each day the track names must be unique. The columns _minlat_, _minlon_, _maxlat_ and _maxlon_ store the encapsulating rectangle for the track. The _type_ column is constrainted to "biking" and "running".
+| assorted_trips | Stores a date and a distance on that day. Multiple distances per day are allowed.
+| locations | Stores arbitrary locations (latitude and longitude based) for given timestamp with an optional description.
+| biking_pictures | Stores pictures collected from _Daily Fratze_ together with their original date of publication, their unique external id and a link to the page the picture originaly appeared.
+| gallery_pictures | Stores all pictures uploaded by the user with a description and the date the picture was taken. The _filename_ column contains a single, computed filename without path information.
 |===
 
 Those tables are mapped to the following domain model:
 
 image::8.1_domain-model.png[align="center"]
 
-[cols="1,1" options="header"]
+[cols="1,2" options="header"]
 .Domain model
 |===
 | Name | Description
-| AssortedTripEntity | This entity captures a distance which was covered on at a certain date and can used for keeping track on trips with bikes not stored in this application for example.
-| BikeEntity | A bike was bought on a given date and can be decommisioned. It has a color and an optional link to an arbitrary website. It may or may not have milages recorded.
+| BikeEntity | A bike was bought on a given date and can be decommisioned. It has a color and an optional link to an arbitrary website. It may or may not have milages recorded. It has some important functions, see <<BikingEntityMethods,Important business methods on BikeEntity>>
 | MilageEntity | A milage is part of a bike. For each bike one milage per month can be recored. The milage is the combination of it's recording date, the amount and the bike.
+| TrackEntity | The representation of _tracks_ contents. The type is an enumeration. Notable public operations are `getPrettyId` (computes a "pretty" id based on the instances id) and `getTrackFile` (generates a reference to the GPS track file in the passed data storage directory).
+| BikingPictureEntity | For handling pictures collected from _Daily Fratze_. The BikingPictureEntity parses the image link on construction the retrieve the unique, external id.
+| GalleryPictureEntity | A bean for handling the pictures uploaded by the user. `prePersist` fills the `createdAt` attribute prior to inserting into the database.
+| AssortedTripEntity | This entity captures a distance which was covered on at a certain date and can used for keeping track on trips with bikes not stored in this application for example.
+| LocationEntity | Used in the tracker module for working with real time locations.
 |===
 
-[role="arc42help"]
-****
-.Contents
-Business (or logical) models, domain models - they all describe subject-specific, business aspects, without relation to technology.
-Often these structures or concepts are re-used at many places within an architecture, especially within chapter [Building Block View]…
-
-.Motivation
-Often parts of these models reappear in the building block view, but in order to „keep them clean from technnology“  they can be captured as a concept.
-
-.Form
-Usually either ER-Models (Entity-Relationship Models) or UML class diagrams (mainly containing entity classes) are used to document domain models.
-****
+[cols="1,2" options="header"]
+.Important business methods on BikeEntity
+[[BikingEntityMethods]]
+|===
+| Name | Description
+| `decommission` | Decommissions a bike on a given date.
+| `addMilage` | Adds a new milage for a given date and returns it. The milage will only be added if the date is after the date the last milage was added and if the amount is greater than the last milage.
+| `getPeriods` | Gets all monthly periods in which milages have been recorded.
+| `getMilage` | Gets the total milage of this bike.
+| `getLastMilage` | Gets the last milage recorded. In most cases the same as `getMilage`.
+| `getMilageInPeriod` | Gets the milage in a given period.
+| `getMilagesInYear` | Gets all milages in a year as an array (of months).
+| `getMilageInYear` | Gets the total milage in a given year.
+|===
 
 === Recurring or Generic Structures and Patterns
 
