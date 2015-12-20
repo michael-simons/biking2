@@ -47,6 +47,10 @@ include::03_system_scope_and_context.adoc[]
 include::04_solution_strategy.adoc[]
 
 <<<<
+// 5. Building Block View
+include::05_building_block_view.adoc[]
+
+<<<<
 // 8. Concepts
 include::08_concepts.adoc[]
 

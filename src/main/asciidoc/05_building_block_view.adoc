@@ -1,0 +1,194 @@
+[[section-building-block-view]]
+== Building Block View
+
+The application packaged as _biking2.jar_ contains two (the api and the spa) of three main parts, as shown in the <<Business Context>>:
+
+image::5.0_level0.png[align="center"]
+
+From those two we have a closer look at the api only. For details regarding the structure of an AngularJS 1.2.x application, have a look at their https://code.angularjs.org/1.2.28/docs/guide[developers guide].
+
+=== Whitebox biking2::api
+
+The following diagram shows the main building blocks of the system and their interdependencies:
+
+image::5.1_level1-biking_api.png[align="center"]
+
+I used _functional decomposition_ to separate responsibilities. The single parts of the api are all encapsulated in their own components, represented as Java packages.
+
+All components depend on a standard JPA EntityManager and some on local file storage. I won't go into detail for those blackboxes.
+
+Contained blackboxes::
+
+[cols="1,3"]
+.biking2::api building blocks
+|===
+| bikes | Managing bikes, adding monthly milages, computing statistics and generating charts.
+| tracks | Uploading tracks (TCX files), converting to GPX, providing an oEmbed interface.
+| trips | Managing assorted trips.
+| locations | MQTT and STOMP interface for creating new locations and providing them in real time on websockets via stomp.
+| bikingPictures | Reading biking pictures from an RSS feed provided by _Daily Fratze_ and providing an API to them.
+| galleryPictures | Uploading and managing arbitrary pictures
+|===
+
+Interfaces::
+[cols="1,3" options="header"]
+.biking2::Interfaces
+|===
+| Interface | Description
+| bikes Api | REST api containing methods for reading, adding and decommissioning bikes and for adding milages to single bikes.
+| tracks Api | REST api for uploading and reading TCX files.
+| trips Api  | REST api for adding new trips.
+| oEmbed    | HTTP based oEmbed interface, generating URLs with embeddable content.
+| Real time locations | WebSocket / STOMP based interface on which new locations are published.
+| Real time location updates | MQTT interface to which MQTT compatible systems like http://owntracks.org[OwnTracks] can offer location updates.
+| RSS feed reader | Needs an _Daily Fratze_ OAuth token for accessing a RSS feed containing biking pictures which are than grabbed from _Daily Fratze_.
+| galleryPictures Api | REST api for uploading and reading arbitrary image files (pictures related to biking).
+|===
+
+==== Building Block Name 1 (Black Box Description)
+[role="arc42help"]
+****
+Structure according to black box template:
+
+* Purpose / Responsibility:
+* Interface(s):
+* Implemented requirements:
+* Variability:
+* Performance attributes:
+* Repository / Files:
+* Other administrative information: Author, Version, Date, Revision History
+* Open issues:
+
+****
+
+<insert the building block’s black box template here>
+
+==== Building Block Name 2 (Black Box Description)
+
+<insert the building block’s black box template here>
+
+==== ...
+
+<insert the building block’s black box template here>
+
+==== Building Block Name n (Black Box Description)
+
+<insert the building block’s black box template here>
+
+==== Open Issues
+
+=== Level 2
+
+[role="arc42help"]
+****
+Describe all building blocks comprising level 1 as a series of white box templates. The structure is given below for three building blocks and should be duplicated as needed.
+****
+
+==== Building Block Name 1 (White Box Description)
+
+[role="arc42help"]
+****
+Shows the inner workings of the building block in form of a diagrams with local building blocks 1 – n, as well as their relationships and interdependencies.
+
+It is also useful to list the most important reasons that led to this structure, esp. as relevant to the interdependencies / relationships among the building blocks at this level.
+
+You should also mention rejected alternatives incl. reasons for their rejection.
+****
+<insert diagram of building block 1 here>
+
+===== Building Block Name 1.1 (Black Box Description)
+[role="arc42help"]
+****
+Structure according to black box template:
+
+* Purpose / Responsibility:
+* Interface(s):
+* Implemented requirements:
+* Variability:
+* Performance attributes:
+* Repository / Files:
+* Other administrative information: Author, Version, Date, Revision History
+* Open issues:
+
+****
+
+===== Building Block Name 1.2 (Black Box Description)
+
+Structure according to black box template
+
+===== ...
+
+===== Building Block Name 1.n (Black Box Description)
+[role="arc42help"]
+****
+Structure according to black box template
+
+****
+
+===== Description of Relationships
+
+===== Open Issues
+
+==== Building Block Name 2 (White Box Description)
+
+…
+
+<insert diagram of building block 2 here>
+
+===== Building Block Name 2.1 (Black Box Description)
+
+Structure according to black box template
+
+===== Building Block Name 2.2 (Black Box Description)
+[role="arc42help"]
+****
+Structure according to black box template
+****
+
+===== ...
+
+===== Building Block Name 2.n (Black Box Description)
+[role="arc42help"]
+****
+Structure according to black box template
+****
+
+===== Description of Relationships
+
+===== Open Issues
+
+==== Building Block Name 3 (White Box Description)
+
+...
+
+<insert diagram of building block 3 here>
+
+===== Building Block Name 3.1 (Black Box Description)
+[role="arc42help"]
+****
+Structure according to black box template
+****
+
+===== Building Block Name 3.2 (Black Box Description)
+[role="arc42help"]
+****
+Structure according to black box template
+****
+===== ...
+
+===== Building Block Name 3.n (Black Box Description)
+[role="arc42help"]
+****
+Structure according to black box template
+****
+
+===== Description of Relationships
+
+===== Open Issues
+
+=== Level 3
+[role="arc42help"]
+****
+Describe all building blocks comprising level 2 as a series of white box templates. The structure is identical to the structure of level 2. Duplicate the corresponding sub-sections as needed.
+Simply use this section structure for any additional levels you would like to describe.
+****

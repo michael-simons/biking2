@@ -16,11 +16,14 @@
 | Java 8                      | JDK 8                   | The eight installment of the https://en.wikipedia.org/wiki/Java_(programming_language)[Java programmning language] and the first one to support functional paradigmns in the form Lambda expressions.
 | MQTT                        | MQ Telemetry Transport  | https://en.wikipedia.org/wiki/MQTT[MQTT] is a publish-subscribe based "light weight" messaging protocol for use on top of the TCP/IP protocol.
 | NetBeans                    |                         | https://netbeans.org[NetBeans] is a free and open Source IDE that fits the pieces of modern development together.
+| OAuth                       |                         | https://en.wikipedia.org/wiki/OAuth[OAuth] is an open standard for authorization. OAuth provides client applications a 'secure delegated access' to server resources on behalf of a resource owner.
 | oEmbed                      |                         | The http://oembed.com[oEmbed] protocol is a simple and lightweight format for allowing an embedded representation of an URL on third party sites.
 | RSS                         | Rich Site Summary,
                                 Really Simple Syndication
                                                         | https://en.wikipedia.org/wiki/RSS[RSS] uses a family of standard web feed formats to publish frequently updated information: blog entries, news headlines, audio, video
 | SPA                         | spa                     | Single Page Application
 | Spring Data JPA             |                         | http://projects.spring.io/spring-data-jpa/[Spring Data JPA], part of the larger Spring Data family, makes it easy to easily implement JPA based repositories.
+| STOMP                       | The Simple Text Oriented Messaging Protocol
+                                                        | https://stomp.github.io[STOMP] provides an interoperable wire format so that STOMP clients can communicate with any STOMP message broker to provide easy and widespread messaging interoperability among many languages, platforms and brokers.
 | TCX                         |                         | Training Center XML (TCX) is a data exchange format introduced in 2007 as part of Garmin's Training Center product.
 |===
