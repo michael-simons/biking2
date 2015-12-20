@@ -92,10 +92,11 @@ All data stored as files is stored relative to `biking2.datastore-base-directory
 
 === User Interface
 
-[role="arc42help"]
-****
-Software systems that are used interactively by (human) users require a user interface. These can be graphical, textual, or voice user interfaces.
-****
+The default user interface for _biking2_ and packaged within the final artifact is a Single Page Application written in JavaScript using _Angular JS_ together with a very default _Bootstrap_ template.
+
+For using the realtime location update interface, choose one of the many MQTT clients outthere.
+
+There is a second user interface written in Java called http://info.michael-simons.eu/2014/10/22/getting-started-with-javafx-8-developing-a-rest-client-application-from-scratch/[bikingFX].
 
 === Ergonomics
 
@@ -113,41 +114,21 @@ Flow of control for software systems is related to visible flows (on the - graph
 
 === Transaction Processing
 
-[role="arc42help"]
-****
-A transaction is a sets of operations or activities that must be processed either in its entirety or not at all. The term is especially relevant in the database area with the important notion of ACID-transactions (atomic, consistent, isolated, durable).
-****
+_biking2_ relies on Spring Boot to create all necessary beans for handling local transactions within the JPA EntityManager. _biking2_ does not support distributed transactions.
 
 === Session Handling
 
-[role="arc42help"]
-****
-A session identifies an active connection between a client and a server. The session state must be preserved, which is esp. important if stateless protocols such as HTTP are used for communications. Session handling is a critical challenge esp. for intra- and internet-systems and can strongly influence the performance of a system.
-****
+_biking2_ only provides a stateless public API, there is no session handling.
 
 === Security
 
-[role="arc42help"]
-****
-The security of software systems deals with mechanisms that ensure data confidentiality, integrity, and availability.
+_biking2_ offers security for its API endpoints only via https://en.wikipedia.org/wiki/Basic_access_authentication[HTTP basic access authentication] and in case of the MQTT module with MQTTs default security model. Security can be increased by running the application behind a SSL proxy or configuring SSL support in the embedded Tomcat container.
 
-Typical issues are:
-
-* How can data be protected during transport (e.g. via open networks such as the internet)?
-* How can communicating entities ensure mutual trust?
-* How can communicating entities identify each other and be protected against faked identities?
-* How can communicating entities prove data provenience or certify validity of data?
-
-The topic of IT-security often touches upon legal aspects, sometimes even international law.
-****
+For the kind of data managed here it's an agreed tradeoff to keep the application simple. See also <<Safety>>.
 
 === Safety
 
-[role="arc42help"]
-****
-The safety of software systems deals with mechanisms that ensure that human life or our environment is not endangered.
-Describe your concept here: identify those parts of the system that might endanger life and describe mechanism to ensure proper safety.
-****
+No part of the system has life endangering aspect.
 
 === Communications and Integration
 
@@ -240,24 +221,11 @@ guards, semaphores, etc. – processes and threads, parallelism in the operating
 
 === Internationalization
 
-[role="arc42help"]
-****
-This section covers support for usage of the system in different countries, i.e. adjusting the system to country specific attributes. Internationalization (often abbreviated as “i18n” where “18” refers to the eighteen characters between the I and the n) covers translation of text, usage of character encodings, display of fonts, writing of numbers and dates, and other (external) aspects.
-****
+Only supported language is English. There is no hook for doing internationalization in the frontend and there are no plans for creating one.
 
 === Migration
 
-[role="arc42help"]
-****
-In many cases a new software system is intended to replace an existing legacy system. As an architect you should not only consider your shiny new architecture but also all organizational and technical aspects that must be considered for the introduction or migration of the architecture.
-
-.Examples:
-
-* Concept, process, or tools for data transfer and initial data creation.
-* Concept for system introduction or temporary parallel operations of legacy system and new system.
-
-Is it necessary to migrate existing data? How do you execute any needed syntactic or semantic transformations?
-****
+_biking2_ replaced a Ruby application based on the _Sinatra_ framework. Data was stored in a SQLite database which has been migrated by hand to the H2 database.
 
 === Testability
 
@@ -266,30 +234,6 @@ Is it necessary to migrate existing data? How do you execute any needed syntacti
 Support for simple (and if possible automated) tests. This aspect is the basis for the important implementation pattern of “continuous integration”. Projects should support at least daily build-and-test cycles. Important keywords for this aspect are unit tests and mock objects.
 ****
 
-=== Scaling, Clustering
-
-[role="arc42help"]
-****
-How can your system grow in a way that can cope with more load or a larger number of users and still keep up performance and throughput.
-****
-
-=== High Availability
-
-[role="arc42help"]
-****
-How can you achieve high availability of your system? Do you use redundancy of major parts? Or do you distribute your system to different processors or locations. Are you running standby- systems?
-****
-
-=== Code Generation
-
-[role="arc42help"]
-****
-How and where do you use code generators to create parts of the system from models or domain specific languages (DSL’s)?
-****
-
 === Build-Management
 
-[role="arc42help"]
-****
-How is the overall system created from is (source code) building blocks? Which repositories contain source code, where are configuration files, test cases, test data and build scripts (make, ant, maven) stored?
-****
+The application can be build with Maven without external dependencies outside Maven. To run all tests _gpsbabel_ must be on the path.

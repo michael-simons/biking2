@@ -8,6 +8,7 @@
 | AngularJS                   |                         | https://en.wikipedia.org/wiki/AngularJS[AngularJS] is an open-source web application framework mainly maintained by Google and by a community of individual developers and corporations to address many of the challenges encountered in developing single-page applications.
 | Apache ActiveMQ             |                         | https://en.wikipedia.org/wiki/Apache_ActiveMQ[Apache ActiveMQ] is an open source message broker written in Java.
 | Apache License              |                         | The http://www.apache.org/licenses/LICENSE-2.0[Apache License] is a permissive Open Source license, especially designed for free software.
+| Bootstrap                   |                         | http://getbootstrap.com[Bootstrap] is the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web.
 | Daily Fratze                | df, DF, DailyFratze     | An online community where users can upload a daily picture of themselves (a selfie, but the site did them before they where called selfies)
 | Gallery picture             |                         | Pictures from tours provided manually by the hours in addition to the pictures collected automatically from _Daily Fratze_
 | GPSBabel                    |                         | http://www.gpsbabel.org[GPSBabel] is a command line utility that converts waypoints, tracks, and routes between popular GPS receivers such as Garmin or Magellan and mapping programs like Google Earth or Basecamp.
@@ -22,6 +23,7 @@
                                 Really Simple Syndication
                                                         | https://en.wikipedia.org/wiki/RSS[RSS] uses a family of standard web feed formats to publish frequently updated information: blog entries, news headlines, audio, video
 | SPA                         | spa                     | Single Page Application
+| Spring Boot                 |                         | http://projects.spring.io/spring-boot/[Spring Boot] makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run".
 | Spring Data JPA             |                         | http://projects.spring.io/spring-data-jpa/[Spring Data JPA], part of the larger Spring Data family, makes it easy to easily implement JPA based repositories.
 | STOMP                       | The Simple Text Oriented Messaging Protocol
                                                         | https://stomp.github.io[STOMP] provides an interoperable wire format so that STOMP clients can communicate with any STOMP message broker to provide easy and widespread messaging interoperability among many languages, platforms and brokers.
