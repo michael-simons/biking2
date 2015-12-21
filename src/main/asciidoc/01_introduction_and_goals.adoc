@@ -1,6 +1,17 @@
 [[section-introduction-and-goals]]
 == Introduction and Goals
 
+http://biking.michael-simons.eu[biking.michael-simons.eu] is a project for
+
+* tracking my bike activities
+* evaluating technology
+* learn stuff
+* showcasing my skills
+
+For my information see http://info.michael-simons.eu/2014/02/20/developing-a-web-application-with-spring-boot-angularjs-and-java-8/[this blog post] as a starting point.
+
+I'd like to thank all the people working at the Spring Eco System for doing their amazing work.
+
 === Requirements Overview
 
 .What is biking2?

@@ -6,9 +6,14 @@
 // configuration
 include::config.adoc[]
 
-= image:arc42-logo.png[arc42] The architecture of biking2
-// toc-title definition MUST follow document title without blank line!
+= image:arc42-logo.png[arc42] biking2, Architecture and API
 :toc-title: Table of Contents
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
 
 //additional style for arc42 help callouts
 ifdef::basebackend-html[]
@@ -24,8 +29,6 @@ ifdef::basebackend-html[]
 </style>
 ++++
 endif::basebackend-html[]
-
-include::about-arc42.adoc[]
 
 // numbering from here on
 :numbered:
@@ -57,3 +60,12 @@ include::08_concepts.adoc[]
 <<<<
 // 12. Glossary
 include::12_glossary.adoc[]
+
+// appendices:
+// =====================================
+
+<<<<
+// Appendix References
+include::appendix-api.adoc[]
+
+include::about-arc42.adoc[]
