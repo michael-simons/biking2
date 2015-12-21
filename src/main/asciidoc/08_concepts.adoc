@@ -151,10 +151,13 @@ Distribution covers issues such as calling methods on remote systems (remote pro
 
 === Plausibility and Validity Checks
 
-[role="arc42help"]
-****
-How and where do you check plausibility and validity of (input) data, esp. user inputs?
-****
+Datatypes and ranges are checked via http://beanvalidation.org/1.0/spec/[JSR-303] annotations on classes representing the <<Domain Models>>. Those classes are directly bound to external REST interfaces.
+
+There are three important business checks:
+
+. Bikes which have been decommissioned cannot be modified (i.e. they can have no new milages): Checked in `BikesController`.
+. For each unique month only one milage can be added to a bike. Checked in the `BikeEntity`.
+. A new milage must be greater than the last one. Also checked inside `BikeEntity`.
 
 === Exception/Error Handling
 
