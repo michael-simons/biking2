@@ -134,7 +134,8 @@ Interfaces::
 [cols="1,3" options="header"]
 |===
 | Interface | Description
-| `DailyFratzeProvider` | Provides access to the _Daily Fratze_ RSS Feed and the image files contained
+| RSS Feed reader | Provides access to the _Daily Fratze_ RSS Feed
+| Image reader | Provides access to images hosted on _Daily Fratze_
 | REST interface `/api/bikingPictures/*` | Contains all methods for accessing biking pictures
 |===
 
@@ -160,118 +161,63 @@ Files::
 
 The `galleryPictures` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.galleryPictures`.
 
-=== Level 2
+=== Building Blocks - Level 2
 
-[role="arc42help"]
-****
-Describe all building blocks comprising level 1 as a series of white box templates. The structure is given below for three building blocks and should be duplicated as needed.
-****
+==== bikes (Whitebox)
 
-==== Building Block Name 1 (White Box Description)
+image::5.2_level2-bikes.png[align="center"]
 
-[role="arc42help"]
-****
-Shows the inner workings of the building block in form of a diagrams with local building blocks 1 – n, as well as their relationships and interdependencies.
+The `BikeRepository` is a Spring Data JPA based repository for `BikeEntities`. The `BikeController` and the `ChartsController` access it to retrieve and store instances of `BikeEntity` and provide external interfaces.
 
-It is also useful to list the most important reasons that led to this structure, esp. as relevant to the interdependencies / relationships among the building blocks at this level.
+Contained blackboxes::
 
-You should also mention rejected alternatives incl. reasons for their rejection.
-****
-<insert diagram of building block 1 here>
+[cols="1,3"]
+|===
+| highcharts | Contains logic for generating configurations and definitions for http://www.highcharts.com[Highcharts] on the server side.
+|===
 
-===== Building Block Name 1.1 (Black Box Description)
-[role="arc42help"]
-****
-Structure according to black box template:
+==== tracks (Whitebox)
 
-* Purpose / Responsibility:
-* Interface(s):
-* Implemented requirements:
-* Variability:
-* Performance attributes:
-* Repository / Files:
-* Other administrative information: Author, Version, Date, Revision History
-* Open issues:
+image::5.2_level2-tracks.png[align="center"]
 
-****
+The `TrackRepository` is a Spring Data JPA based repository for `TrackEntities`. The `TracksController` and the `OembedController` access it to retrieve and store instances of `TrackEntity` and provide external interfaces.
 
-===== Building Block Name 1.2 (Black Box Description)
+Contained blackboxes::
 
-Structure according to black box template
+[cols="1,3"]
+|===
+| gpx | Generated _JAXB_ classes for parsing GPX files. Used by the `TracksController` to retrieve the surrounding rectangle (envelope) for new tracks.
+|===
 
-===== ...
+==== trips (Whitebox)
 
-===== Building Block Name 1.n (Black Box Description)
-[role="arc42help"]
-****
-Structure according to black box template
+image::5.2_level2-trips.png[align="center"]
 
-****
+The `AssortedTripRepository` is a Spring Data JPA based repository for `AssortedTripEntities`. The `TripsController` accesses it to retrieve and store instances of `TrackEntity` and provide external interfaces.
 
-===== Description of Relationships
+==== locations (Whitebox)
 
-===== Open Issues
+image::5.2_level2-locations.png[align="center"]
 
-==== Building Block Name 2 (White Box Description)
+Locations are stored and read via a Spring Data JPA based repository named `LocationRepository`. This repository is only accessed through the `LocationService`. The `LocationService` provides real time updates for connected clients through a `SimpMessagingTemplate` and the `LocationController` uses the service to provide access to all locations created within the last 30 minutes.
 
-…
+New locations are created through the service either through a REST interface in form of the `LocationController` or via a `MessageListener` on a MQTT channel.
 
-<insert diagram of building block 2 here>
+==== bikingPictures (Whitebox)
 
-===== Building Block Name 2.1 (Black Box Description)
+image::5.2_level2-bikingPictures.png[align="center"]
 
-Structure according to black box template
+A Spring Data JPA repository `BikingPicturesRepository` is used for all access to `BikingPictureEntities`, the external REST api for reading pictures is implemented with `BikingPicturesController`. The RSS feed is read from `FetchBikingPicturesJob` by using a JAXBContext "rss". The URLs to the image files which may are protected by various means are provided to the job via a `DailyFratzeProvider`.
 
-===== Building Block Name 2.2 (Black Box Description)
-[role="arc42help"]
-****
-Structure according to black box template
-****
+Contained blackboxes::
 
-===== ...
+[cols="1,3"]
+|===
+| rss | Generated _JAXB_ classes for parsing RSS feeds. Used by the `FetchBikingPicturesJob` to read the contents of an RSS feed.
+|===
 
-===== Building Block Name 2.n (Black Box Description)
-[role="arc42help"]
-****
-Structure according to black box template
-****
+==== galleryPictures (Whitebox)
 
-===== Description of Relationships
+image::5.2_level2-galleryPictures.png[align="center"]
 
-===== Open Issues
-
-==== Building Block Name 3 (White Box Description)
-
-...
-
-<insert diagram of building block 3 here>
-
-===== Building Block Name 3.1 (Black Box Description)
-[role="arc42help"]
-****
-Structure according to black box template
-****
-
-===== Building Block Name 3.2 (Black Box Description)
-[role="arc42help"]
-****
-Structure according to black box template
-****
-===== ...
-
-===== Building Block Name 3.n (Black Box Description)
-[role="arc42help"]
-****
-Structure according to black box template
-****
-
-===== Description of Relationships
-
-===== Open Issues
-
-=== Level 3
-[role="arc42help"]
-****
-Describe all building blocks comprising level 2 as a series of white box templates. The structure is identical to the structure of level 2. Duplicate the corresponding sub-sections as needed.
-Simply use this section structure for any additional levels you would like to describe.
-****
+The `GalleryPictureRepository` is a Spring Data JPA based repository for `GalleryPictureEntities`. The `GalleryController` accesses it to retrieve and store instances of `GalleryPictureEntity` and provide external interfaces.
