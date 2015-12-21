@@ -97,6 +97,8 @@
 			    <backend>html</backend>
 			    <doctype>book</doctype>
 			    <imagesDir>img</imagesDir>
+			    <sourceDirectory>${basedir}/src/docs</sourceDirectory>
+			    <sourceDocumentName>index.adoc</sourceDocumentName>
 			    <attributes>
 				<snippets>${snippetsDirectory}</snippets> 
 			    </attributes>
@@ -128,8 +130,11 @@
 				    <directory>
 					${project.build.directory}/generated-docs
 				    </directory>
-				</resource>
-			    </resources>
+				    <excludes>
+					<exclude>biking2-architecture.*</exclude>
+				    </excludes>
+				</resource>				
+			    </resources>			    
 			</configuration>
 		    </execution>
 		</executions>
