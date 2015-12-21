@@ -58,6 +58,10 @@ include::05_building_block_view.adoc[]
 include::08_concepts.adoc[]
 
 <<<<
+// 11. Technical Risks
+include::11_technical_risks.adoc[]
+
+<<<<
 // 12. Glossary
 include::12_glossary.adoc[]
 
