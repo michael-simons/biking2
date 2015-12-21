@@ -7,3 +7,6 @@
 
 // where are images located?
 :imagesdir: ./img
+
+:arc42-url: http://github.com/arc42
+:aim42-url: http://github.com/aim42

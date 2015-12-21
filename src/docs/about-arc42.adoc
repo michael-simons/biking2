@@ -5,17 +5,15 @@
 :numbered!:
 == About this template
 
-[role="lead"]
-arc42, the Template for documentation of
-software and system architecture.
+[cols="1,4" options=""]
+|===
+| image:arc42-logo.png[arc42, link={arc42-url}]
+| (C) This document uses material from the http://arc42.de[arc42 architecture
+template^], freely available at {arc42-url}[{arc42-url}^].
 
-By Dr. Gernot Starke, Dr. Peter Hruschka and contributors.
-
-
-Template Revision: 6.5 EN (based on asciidoc), Juni 2014
-
-(C)
-We acknowledge that this document uses material from the
-arc 42 architecture template, http://www.arc42.de.
-Created by Dr. Peter Hruschka & Dr. Gernot Starke.
-For additional contributors see http://arc42.de/sonstiges/contributors.html
+[small]#This material is open source and provided under the Creative Commons Sharealike 4.0 license.
+It comes *without any guarantee*. Use on your own risk.
+arc42 and its structure by Dr. Peter Hruschka and Dr. Gernot Starke.
+Asciidoc version initiated by Markus Schärtel and Jürgen Krey,
+completed and maintained by Ralf Müller and Gernot Starke.#
+|===
