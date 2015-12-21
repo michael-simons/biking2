@@ -52,28 +52,6 @@ image::8.1_domain-model.png[align="center"]
 | `getMilageInYear` | Gets the total milage in a given year.
 |===
 
-=== Recurring or Generic Structures and Patterns
-
-[role="arc42help"]
-****
-.Motivation
-Sometimes a hierarchical decomposition of building blocks is insufficient for giving an overview of detailed interdependencies between individual building blocks. The following sections are intended to describe generic or specific dependencies among any set of building blocks – possibly even across different levels.
-We call a dependency *generic* if it appears more than once in the architecture, and *specific*if it is unique.
-
-.Form
-Use building block models (class diagrams, package diagrams, component diagrams, etc.) and related descriptions in the same way as in the hierarchical decomposition.
-Often it is practical to support understandability by adding specific
-runtime views to explain these recurring structures.
-****
-
-==== Recurring or Generic Structure 1
-
-<insert diagram and descriptions here>
-
-==== Recurring or Generic Structure 2
-
-<insert diagram and descriptions here>
-
 === Persistency
 
 _biking2_ uses an http://www.h2database.com/html/main.html[H2] database for storing relational data and the file system for binary image files and large ascii files (especially all GPS files).
@@ -98,20 +76,6 @@ For using the realtime location update interface, choose one of the many MQTT cl
 
 There is a second user interface written in Java called http://info.michael-simons.eu/2014/10/22/getting-started-with-javafx-8-developing-a-rest-client-application-from-scratch/[bikingFX].
 
-=== Ergonomics
-
-[role="arc42help"]
-****
-Ergonomics of software systems deals with the improvement (optimization) of their usability with respect to objective and subjective factors. Key ergonomic factors are user interface, reactivity (subjective performance) as well as availability and robustness of the system.
-****
-
-=== Flow of Control
-
-[role="arc42help"]
-****
-Flow of control for software systems is related to visible flows (on the - graphical - user interface) as well as the flow of background activities. Therefore this section should cover control of the user interface as well as control of workflows.
-****
-
 === Transaction Processing
 
 _biking2_ relies on Spring Boot to create all necessary beans for handling local transactions within the JPA EntityManager. _biking2_ does not support distributed transactions.
@@ -132,22 +96,7 @@ No part of the system has life endangering aspect.
 
 === Communications and Integration
 
-
-[role="arc42help"]
-****
-*Communication*: Exchange of data between system components. Covers communications within one process or address space, between different processes (inter-process communication – IPC), and between different systems.
-
-*Integration*: Combination of existing systems in a new context. Also known as: (Legacy) Wrapper, Gateway, Enterprise Application Integration (EAI).
-****
-
-=== Distribution
-
-[role="arc42help"]
-****
-**Distribution**: Design of software systems whose parts are executed on different – physically separated – hardware systems.
-
-Distribution covers issues such as calling methods on remote systems (remote procedure call – RPC or remote method invocation – RMI), the transfer of data or documents among distributed parties, the choice of optimal modes of interaction or communications patterns (such as synchronous / asynchronous, publish-subscribe, peer-to-peer).
-****
+_biking2_ uses an internal Apache ActiveMQ broker on the same VM as the application for providing STOMP channels and a MQTT transport. This broker is volatile, messages are not persisted during application restarts.
 
 === Plausibility and Validity Checks
 
@@ -161,66 +110,45 @@ There are three important business checks:
 
 === Exception/Error Handling
 
-[role="arc42help"]
-****
-How are exceptions and errors handled systematically and consistently?
-
-How can the system reach a consistent state after an error? Is this done automatically or is manual interaction required?
-
-This aspect is also related to logging and tracing,
-
-Which kind of exceptions and errors are handled by the system? Which kinds of errors are forwarded to which external interface and which are handled fully internally?
-
-How do you use the exception handling mechanisms of your programming language? Do you use checked or unchecked exceptions?
-****
-
-=== System Management and Administration
-
-[role="arc42help"]
-****
-Larger software systems are often executed in controlled environments (data centers) under oversight of operators or administrators. These stakeholders require specific information on the applications’ states during runtime as well as special means of control and configuration.
-****
+Errors handling to inconsistent data (in regard to the data models constraint) as well as failures to <<Plausibility and Validity Checks,validation>> are mapped to HTTP errors. Those errors are handled by the frontends controller code. Technical errors (hardware, database etc.) are not handled and may lead to application failure or lost data.
 
 === Logging, Tracing
 
-[role="arc42help"]
-****
-There are two ways of documenting an application’s status during runtime: *Logging* and *Tracing*. In both cases the application is extended with function or method calls that write state information, but there is a difference in their usage:
+Spring Boot configures logging per default to standard out. The default <<Configurability, configuration>> isn't change in that regard, so all framework logging (especially Spring and Hiberate) go to standard out in standard format and can be grabbed or ignored via OS specific means.
 
-* Logging can cover business or technical aspects or any combination of both.
-* Business logs are normally prepared for end users, administrators or operators. They contain information on the business processes that are executed by the application. This kind of logging may also be related to auditing.
-* Technical logs contain information for operators or developers. These are used for error detection and system optimization.
-* Tracing is intended to provide debugging information for developers or support personnel. It is primarily used for error detection and analysis.
-****
-
-=== Business Rules
-
-[role="arc42help"]
-****
-How do you deal with business logic and business rules? Is business logic implemented in the corresponding business classes or is it handled in a central component? Do you use a rule engine for the interpretation of business rules (production system, forward-/backward-chaining)?
-****
+All business components use `java.util.logging` facilities which are configured through the Spring Boot runtime.
 
 === Configurability
 
-[role="arc42help"]
-****
-The flexibility of a software system is influenced by its configurability, i.e. the possibility to make certain decisions about usage of the system at a late point in time.
+Spring Boot offers a plethora of configuration options, those are just the main options to configure Spring Boot and available starters: https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html[Common application properties].
 
-Configurability can occur at the following events:
+The default configuration is available in `src/main/resources/application.properties`. During development those properties are merged with `src/main/resources/application-dev.properties`. Additional properties can be added through system environment or through an `application-*.properties` in the current JVM directory.
 
-* During development: For example server, file, or directory names could be stored directly in the code (“hard-coded”).
-* During deployment or installation: Configuration information for a specific installation (such as the installation path) can be given.
-* At system startup: Information can be read dynamically before or during system startup.
-* During application execution: Configuration information is queried or read during runtime.
-****
+During tests an additional `application-test.properties` can be used to add or overwrite additional properties or values.
 
-=== Parallelization and Threading
+Those are the _biking2_ specific properties:
 
-[role="arc42help"]
-****
-Applications can be executed in parallel processes or threads. This creates a need for synchronization points. The theory of parallel processing serves as a foundation for this aspect. The architecture and implementation of parallel systems needs to consider many technical details such as address spaces, applied mechanisms for synchronization –
-guards, semaphores, etc. – processes and threads, parallelism in the operating system, parallelism in virtual machines. etc.
-****
+[cols="1,1,2" options="header"]
+.biking2 specific configuration properties
+|===
+| Property | Default | Description
+| biking2.color-of-cumulative-graph | 000000 | Color of the cumulative line graph
+| biking2.dailyfratze-access-token | n/a | An OAuth access token for _Daily Fratze_
+| biking2.datastore-base-directory | ${user.dir}/var/dev | Directory for storing files (tracks and images)
+| biking2.fetch-biking-picture-cron | 0 0 */8 * * * | A cron expression for configuring the `FetchBikingPicturesJob`
+| biking2.home.longitude | 6.179489185520004 | Longitude of the home coordinate
+| biking2.home.latitude | 50.75144902272457 | Latitude of the home coordinate
+| biking2.connector.proxyName | n/a | The name of a proxy if _biking2_ runs behind one
+| biking2.connector.proxyPort | 80 | The port of a proxy if _biking2_ runs behind one
+| biking2.gpsBabel | /opt/local/bin/gpsbabel | Fully qualified path to the _GPSBabel_ binary
+| biking2.scheduled-thread-pool-size | 10 | Thread pool size for the job pool
+| biking2.tracker.host | localhost | The host on which the tracker (MQTT channel) should listen
+| biking2.tracker.stompPort | 2307 | STOMP port
+| biking2.tracker.mqttPort | 4711 | MQTT port
+| biking2.tracker.username | ${security.user.name} | Username for the MQTT channel
+| biking2.tracker.password | ${security.user.password} | Password for the MQTT channel
+| biking2.tracker.device | iPhone | Name of the OwnTracks device
+|===
 
 === Internationalization
 
@@ -232,10 +160,7 @@ _biking2_ replaced a Ruby application based on the _Sinatra_ framework. Data was
 
 === Testability
 
-[role="arc42help"]
-****
-Support for simple (and if possible automated) tests. This aspect is the basis for the important implementation pattern of “continuous integration”. Projects should support at least daily build-and-test cycles. Important keywords for this aspect are unit tests and mock objects.
-****
+The project contains a JUnit tests in the standard location of a Maven project. At the time of writing those tests covers >95% of the code written. Tests must be executed during build and should not be skipped.
 
 === Build-Management
 
