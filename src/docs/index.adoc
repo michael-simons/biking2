@@ -7,6 +7,7 @@
 include::config.adoc[]
 
 = biking2, Architecture and API
+Michael Simons;
 :toc-title: Table of Contents
 :doctype: book
 :icons: font
@@ -57,6 +58,10 @@ include::04_solution_strategy.adoc[]
 <<<<
 // 5. Building Block View
 include::05_building_block_view.adoc[]
+
+<<<<
+// 6. Runtime View
+include::06_runtime_view.adoc[]
 
 <<<<
 // 7. Deployment View
