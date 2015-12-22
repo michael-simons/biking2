@@ -59,11 +59,18 @@
 	<div class="container">
 	    <div data-ng-view></div>
 	    <hr />
-	    <footer>
-		<p>
-		    &#160; &copy; 2009-{{ currentYear }}
-		    <a href="http://michael-simons.eu">Michael Simons</a>
-		</p>
+	    <footer class="row">
+		<div class="col-xs-10 col-sm-11 vcenter">
+		    <p>
+			&#160; &copy; 2009-{{ currentYear }}
+			<a href="http://michael-simons.eu">Michael Simons</a>
+		    </p>
+		</div><!-- ignore additional whitespaces which would take up space
+		--><div class="col-xs-2 col-sm-1 vcenter">		    		    
+		    <p>
+		    <img alt="Biker Smilie" id="header_smilie" src="/img/biker.gif" />
+		    </p>
+		</div>
 	    </footer>
 	</div>
 	<script type="text/javascript">
