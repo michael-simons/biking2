@@ -87,11 +87,11 @@ include::11_technical_risks.adoc[]
 // 12. Glossary
 include::12_glossary.adoc[]
 
+include::about-arc42.adoc[]
+
 // appendices:
 // =====================================
 
 <<<<
 // Appendix References
 include::appendix-api.adoc[]
-
-include::about-arc42.adoc[]

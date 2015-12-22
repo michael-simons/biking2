@@ -1,3 +1,6 @@
+:numbered!:
+
+[appendix]
 [[api]]
 == Api
 
