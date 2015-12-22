@@ -59,6 +59,10 @@ include::04_solution_strategy.adoc[]
 include::05_building_block_view.adoc[]
 
 <<<<
+// 7. Deployment View
+include::07_deployment_view.adoc[]
+
+<<<<
 // 8. Concepts
 include::08_concepts.adoc[]
 

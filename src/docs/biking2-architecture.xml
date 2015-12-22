@@ -11,16 +11,6 @@
 				<packagedElement xmi:type="uml:Node" xmi:id="EAID_3FF8C46B_C0EC_4bb4_90F3_CDD8D6253125" name="Application server" visibility="public">
 					<nestedClassifier xmi:type="uml:Component" xmi:id="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7" name="GPSBabel" visibility="public"/>
 				</packagedElement>
-				<packagedElement xmi:type="uml:Association" xmi:id="EAID_B7E7446A_7F7B_41b6_AFA6_2581C01D0E43" name="command line / local process" visibility="public">
-					<memberEnd xmi:idref="EAID_dstE7446A_7F7B_41b6_AFA6_2581C01D0E43"/>
-					<memberEnd xmi:idref="EAID_srcE7446A_7F7B_41b6_AFA6_2581C01D0E43"/>
-					<ownedEnd xmi:type="uml:Property" xmi:id="EAID_srcE7446A_7F7B_41b6_AFA6_2581C01D0E43" visibility="public" association="EAID_B7E7446A_7F7B_41b6_AFA6_2581C01D0E43" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
-						<type xmi:idref="EAID_320B17B9_DFD6_45b9_B235_342173204222"/>
-					</ownedEnd>
-					<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dstE7446A_7F7B_41b6_AFA6_2581C01D0E43" visibility="public" association="EAID_B7E7446A_7F7B_41b6_AFA6_2581C01D0E43" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
-						<type xmi:idref="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7"/>
-					</ownedEnd>
-				</packagedElement>
 				<packagedElement xmi:type="uml:Node" xmi:id="EAID_4CBEE2C7_98EF_4577_AE21_30BC00AC474F" name="Webserver" visibility="public">
 					<nestedClassifier xmi:type="uml:Component" xmi:id="EAID_0C65D32E_3428_4e14_BCB9_B10F2F0146C6" name="dailyfratze.de" visibility="public"/>
 				</packagedElement>
@@ -51,6 +41,7 @@
 					<conveyed/>
 				</packagedElement>
 				<packagedElement xmi:type="uml:Device" xmi:id="EAID_26BFD283_144D_47d7_A4B2_9A5BB6C78EAE" name="Browser" visibility="public"/>
+				<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_F898550D_C164_4394_9BA8_FF1D5DD3A69A" visibility="public" supplier="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC" client="EAID_26BFD283_144D_47d7_A4B2_9A5BB6C78EAE"/>
 				<packagedElement xmi:type="uml:Device" xmi:id="EAID_4676BAB5_B08D_4d10_B62F_9E88EA7395BD" name="JavaFX capable device" visibility="public"/>
 				<packagedElement xmi:type="uml:Package" xmi:id="EAPK_E614EB24_34D7_44ef_94F1_63846D3FD4C0" name="biking2" visibility="public">
 					<packagedElement xmi:type="uml:Component" xmi:id="EAID_320B17B9_DFD6_45b9_B235_342173204222" name="api" visibility="public">
@@ -77,16 +68,6 @@
 							<type xmi:idref="EAID_88112E03_41F5_48bc_AE66_EB79C7142216"/>
 						</ownedEnd>
 						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dstC42A74_8BF7_4e8b_8A44_DA7C51098146" visibility="public" association="EAID_99C42A74_8BF7_4e8b_8A44_DA7C51098146" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
-							<type xmi:idref="EAID_320B17B9_DFD6_45b9_B235_342173204222"/>
-						</ownedEnd>
-					</packagedElement>
-					<packagedElement xmi:type="uml:Association" xmi:id="EAID_AD72DCD4_8372_4e89_B49C_8C55B948A641" name="Internet (http)" visibility="public">
-						<memberEnd xmi:idref="EAID_dst72DCD4_8372_4e89_B49C_8C55B948A641"/>
-						<memberEnd xmi:idref="EAID_src72DCD4_8372_4e89_B49C_8C55B948A641"/>
-						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_src72DCD4_8372_4e89_B49C_8C55B948A641" visibility="public" association="EAID_AD72DCD4_8372_4e89_B49C_8C55B948A641" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
-							<type xmi:idref="EAID_3562411B_D92E_402d_9893_4D3B12F8DDB1"/>
-						</ownedEnd>
-						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst72DCD4_8372_4e89_B49C_8C55B948A641" visibility="public" association="EAID_AD72DCD4_8372_4e89_B49C_8C55B948A641" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
 							<type xmi:idref="EAID_320B17B9_DFD6_45b9_B235_342173204222"/>
 						</ownedEnd>
 					</packagedElement>
@@ -201,6 +182,14 @@
 				<packagedElement xmi:type="uml:Realization" xmi:id="EAID_71F06F9E_CD56_44f4_9C9B_E2958748E528" visibility="public" supplier="EAID_E9E0E1F4_AF92_41d1_A96E_1E36F48E3739" client="EAID_81952A57_0F85_45a9_9620_8C70E615038C"/>
 				<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_952C25DE_7727_4e7c_BA4C_7EADD0BAAB37" visibility="public" supplier="EAID_09103C21_8632_4dd0_91F3_A74C25423EE9" client="EAID_81952A57_0F85_45a9_9620_8C70E615038C"/>
 				<packagedElement xmi:type="uml:Class" xmi:id="EAID_CD468C21_714C_47d3_85CD_4A0FB72254B8" name="bikes" visibility="public"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPK_5B1EEB23_1198_4135_9FDD_8690EF06AEB3" name="7. Deployment View" visibility="public">
+				<packagedElement xmi:type="uml:Node" xmi:id="EAID_E805C6F2_1BCF_4a43_886D_151201B79BF1" name="biking2 development" visibility="public"/>
+				<packagedElement xmi:type="uml:Device" xmi:id="EAID_60B46B74_E558_4af9_B2D5_6F80211638E9" name="uberspace host" visibility="public">
+					<nestedArtifact xmi:type="uml:Artifact" xmi:id="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC" name="biking2.jar" visibility="public"/>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_89A15147_7F6F_417c_8A5F_F41CA2E3C62B" visibility="public" supplier="EAID_0E2C4B42_2DD3_437c_A491_D62A527A18CA" client="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC"/>
+				<packagedElement xmi:type="uml:Class" xmi:id="EAID_0E2C4B42_2DD3_437c_A491_D62A527A18CA" visibility="public"/>
 			</packagedElement>
 			<packagedElement xmi:type="uml:Package" xmi:id="EAPK_98F51641_9F2C_4d01_8F40_7AEE60D5E790" name="8. Technical and Crosscutting Concepts" visibility="public">
 				<packagedElement xmi:type="uml:Class" xmi:id="EAID_06075BC9_FC34_4205_AA97_A24E5E3BD486" name="AssortedTripEntity" visibility="public">
@@ -746,6 +735,8 @@
 				</packagedElement>
 			</packagedElement>
 		</packagedElement>
+		<thecustomprofile:___uses_biking2__spa__ base_Dependency="EAID_F898550D_C164_4394_9BA8_FF1D5DD3A69A" __EAStereoName="&lt;&lt;uses biking2::spa&gt;&gt;"/>
+		<thecustomprofile:compiled_from base_Dependency="EAID_89A15147_7F6F_417c_8A5F_F41CA2E3C62B" __EAStereoName="compiled from"/>
 		<thecustomprofile:enum base_EnumerationLiteral="EAID_133924FF_629F_4795_873A_26B86B399B96"/>
 		<thecustomprofile:enum base_EnumerationLiteral="EAID_4C34D7F2_EF4D_4f1c_A9A6_92FBF6DAE97D"/>
 		<EAUML:table base_Class="EAID_57AE014F_A40B_4fdd_9243_004BCE2933A3"/>
@@ -866,7 +857,6 @@
 				<extendedProperties tagged="0" package_name="3. Context"/>
 				<links>
 					<InformationFlow xmi:id="EAID_0977C337_1EA6_49d6_8FDE_F405F019824C" start="EAID_E614EB24_34D7_44ef_94F1_63846D3FD4C0" end="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7"/>
-					<Association xmi:id="EAID_B7E7446A_7F7B_41b6_AFA6_2581C01D0E43" start="EAID_320B17B9_DFD6_45b9_B235_342173204222" end="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7"/>
 				</links>
 			</element>
 			<element xmi:idref="EAID_4CBEE2C7_98EF_4577_AE21_30BC00AC474F" xmi:type="uml:Node" name="Webserver" scope="public">
@@ -926,6 +916,9 @@
 				<tags/>
 				<xrefs/>
 				<extendedProperties tagged="0" package_name="3. Context"/>
+				<links>
+					<Dependency xmi:id="EAID_F898550D_C164_4394_9BA8_FF1D5DD3A69A" start="EAID_26BFD283_144D_47d7_A4B2_9A5BB6C78EAE" end="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC"/>
+				</links>
 			</element>
 			<element xmi:idref="EAID_4676BAB5_B08D_4d10_B62F_9E88EA7395BD" xmi:type="uml:Device" name="JavaFX capable device" scope="public">
 				<model package="EAPK_47BB2663_1776_4a99_BC0B_19572F184831" tpos="0" ea_localid="27" ea_eleType="element"/>
@@ -953,19 +946,17 @@
 			</element>
 			<element xmi:idref="EAID_320B17B9_DFD6_45b9_B235_342173204222" xmi:type="uml:Component" name="api" scope="public">
 				<model package="EAPK_E614EB24_34D7_44ef_94F1_63846D3FD4C0" tpos="0" ea_localid="16" ea_eleType="element"/>
-				<properties isSpecification="false" sType="Component" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
-				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-15 15:56:20" modified="2015-12-20 19:34:18" complexity="1" status="Proposed"/>
+				<properties isSpecification="false" sType="Component" nType="8" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-15 15:56:20" modified="2015-12-22 11:17:38" complexity="1" status="Proposed"/>
 				<code gentype="Java"/>
 				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
 				<tags/>
-				<xrefs/>
-				<extendedProperties tagged="0" package_name="biking2"/>
+				<xrefs value="$XREFPROP=$XID={A4E2EF33-4339-4516-8CA5-BB03F5DA49D4}$XID;$NAM=DefaultDiagram$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$CLT={320B17B9-DFD6-45b9-B235-342173204222}$CLT;$SUP={D288F660-F9F0-49ad-99D9-02A5AEDD9547}$SUP;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="biking2" diagram="EAID_D288F660_F9F0_49ad_99D9_02A5AEDD9547"/>
 				<links>
 					<Association xmi:id="EAID_62D812A5_E3C5_4c29_A9D7_963F05E65C6E" start="EAID_320B17B9_DFD6_45b9_B235_342173204222" end="EAID_0C65D32E_3428_4e14_BCB9_B10F2F0146C6"/>
-					<Association xmi:id="EAID_B7E7446A_7F7B_41b6_AFA6_2581C01D0E43" start="EAID_320B17B9_DFD6_45b9_B235_342173204222" end="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7"/>
 					<Association xmi:id="EAID_30E7E901_FC5E_446b_B02D_14D87577A47A" start="EAID_6DEB20BE_4F12_4e96_97CE_57A7FEBB107D" end="EAID_320B17B9_DFD6_45b9_B235_342173204222"/>
 					<Association xmi:id="EAID_99C42A74_8BF7_4e8b_8A44_DA7C51098146" start="EAID_88112E03_41F5_48bc_AE66_EB79C7142216" end="EAID_320B17B9_DFD6_45b9_B235_342173204222"/>
-					<Association xmi:id="EAID_AD72DCD4_8372_4e89_B49C_8C55B948A641" start="EAID_3562411B_D92E_402d_9893_4D3B12F8DDB1" end="EAID_320B17B9_DFD6_45b9_B235_342173204222"/>
 				</links>
 			</element>
 			<element xmi:idref="EAID_01FE8B51_DDCF_45c1_8878_DC531D0BECE0" xmi:type="uml:Port" name="filesystem" scope="public">
@@ -1180,9 +1171,6 @@
 				<tags/>
 				<xrefs/>
 				<extendedProperties tagged="0" package_name="biking2"/>
-				<links>
-					<Association xmi:id="EAID_AD72DCD4_8372_4e89_B49C_8C55B948A641" start="EAID_3562411B_D92E_402d_9893_4D3B12F8DDB1" end="EAID_320B17B9_DFD6_45b9_B235_342173204222"/>
-				</links>
 			</element>
 			<element xmi:idref="EAPK_966A5CD4_6065_449e_9248_1824DC8D8D0C" xmi:type="uml:Package" name="5. Building blocks" scope="public">
 				<model package2="EAID_966A5CD4_6065_449e_9248_1824DC8D8D0C" package="EAPK_E79E3211_2539_4190_B18C_F249912FFBE0" tpos="0" ea_localid="7" ea_eleType="package"/>
@@ -1799,6 +1787,67 @@
 				<tags/>
 				<xrefs/>
 				<extendedProperties tagged="0" package_name="5. Building blocks" diagram="EAID_FDF2366B_0810_49d9_BFE8_42F7F2AE70A1"/>
+			</element>
+			<element xmi:idref="EAPK_5B1EEB23_1198_4135_9FDD_8690EF06AEB3" xmi:type="uml:Package" name="7. Deployment View" scope="public">
+				<model package2="EAID_5B1EEB23_1198_4135_9FDD_8690EF06AEB3" package="EAPK_E79E3211_2539_4190_B18C_F249912FFBE0" tpos="0" ea_localid="8" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-22 11:02:49" modified="2015-12-22 11:03:01" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="biking2 architecture overview"/>
+				<packageproperties version="1.0"/>
+				<paths/>
+				<times created="2015-12-22 11:02:49" modified="2015-12-22 11:03:01"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" usedtd="FALSE" logxml="FALSE" packageFlags="isModel=1;VICON=3;"/>
+			</element>
+			<element xmi:idref="EAID_E805C6F2_1BCF_4a43_886D_151201B79BF1" xmi:type="uml:Node" name="biking2 development" scope="public">
+				<model package="EAPK_5B1EEB23_1198_4135_9FDD_8690EF06AEB3" tpos="0" ea_localid="111" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Node" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-22 11:07:56" modified="2015-12-22 11:07:58" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="7. Deployment View"/>
+			</element>
+			<element xmi:idref="EAID_60B46B74_E558_4af9_B2D5_6F80211638E9" xmi:type="uml:Device" name="uberspace host" scope="public">
+				<model package="EAPK_5B1EEB23_1198_4135_9FDD_8690EF06AEB3" tpos="0" ea_localid="113" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Device" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-22 11:18:16" modified="2015-12-22 11:18:26" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="7. Deployment View"/>
+			</element>
+			<element xmi:idref="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC" xmi:type="uml:Artifact" name="biking2.jar" scope="public">
+				<model package="EAPK_5B1EEB23_1198_4135_9FDD_8690EF06AEB3" owner="EAID_60B46B74_E558_4af9_B2D5_6F80211638E9" tpos="0" ea_localid="112" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Artifact" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-22 11:17:57" modified="2015-12-22 11:21:54" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="7. Deployment View"/>
+				<links>
+					<Dependency xmi:id="EAID_89A15147_7F6F_417c_8A5F_F41CA2E3C62B" start="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC" end="EAID_0E2C4B42_2DD3_437c_A491_D62A527A18CA"/>
+					<Dependency xmi:id="EAID_F898550D_C164_4394_9BA8_FF1D5DD3A69A" start="EAID_26BFD283_144D_47d7_A4B2_9A5BB6C78EAE" end="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_0E2C4B42_2DD3_437c_A491_D62A527A18CA" xmi:type="uml:Boundary" scope="public">
+				<model package="EAPK_5B1EEB23_1198_4135_9FDD_8690EF06AEB3" tpos="0" ea_localid="114" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Boundary" nType="0" scope="public"/>
+				<project author="michael.simons" version="1.0" phase="1.0" created="2015-12-22 11:19:36" modified="2015-12-22 11:19:36" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=3;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="7. Deployment View"/>
+				<links>
+					<Dependency xmi:id="EAID_89A15147_7F6F_417c_8A5F_F41CA2E3C62B" start="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC" end="EAID_0E2C4B42_2DD3_437c_A491_D62A527A18CA"/>
+				</links>
 			</element>
 			<element xmi:idref="EAPK_98F51641_9F2C_4d01_8F40_7AEE60D5E790" xmi:type="uml:Package" name="8. Technical and Crosscutting Concepts" scope="public">
 				<model package2="EAID_98F51641_9F2C_4d01_8F40_7AEE60D5E790" package="EAPK_E79E3211_2539_4190_B18C_F249912FFBE0" tpos="0" ea_localid="6" ea_eleType="package"/>
@@ -4051,41 +4100,6 @@
 				<xrefs/>
 				<tags/>
 			</connector>
-			<connector xmi:idref="EAID_B7E7446A_7F7B_41b6_AFA6_2581C01D0E43">
-				<source xmi:idref="EAID_320B17B9_DFD6_45b9_B235_342173204222">
-					<model ea_localid="16" type="Component" name="api"/>
-					<role visibility="Public" targetScope="instance"/>
-					<type aggregation="none" containment="Unspecified"/>
-					<constraints/>
-					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
-					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;"/>
-					<documentation/>
-					<xrefs/>
-					<tags/>
-				</source>
-				<target xmi:idref="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7">
-					<model ea_localid="6" type="Component" name="GPSBabel"/>
-					<role visibility="Public" targetScope="instance"/>
-					<type aggregation="none" containment="Unspecified"/>
-					<constraints/>
-					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
-					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;"/>
-					<documentation/>
-					<xrefs/>
-					<tags/>
-				</target>
-				<model ea_localid="16"/>
-				<properties ea_type="Association" direction="Unspecified"/>
-				<modifiers isRoot="false" isLeaf="false"/>
-				<parameterSubstitutions/>
-				<documentation/>
-				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
-				<labels mt="command line / local process"/>
-				<extendedProperties/>
-				<style/>
-				<xrefs/>
-				<tags/>
-			</connector>
 			<connector xmi:idref="EAID_547D88AC_A214_4222_8F0C_242A4565E876" name="Collects biking pictures">
 				<source xmi:idref="EAID_E614EB24_34D7_44ef_94F1_63846D3FD4C0">
 					<model ea_localid="20" type="Package" name="biking2"/>
@@ -4224,6 +4238,39 @@
 				<xrefs/>
 				<tags/>
 			</connector>
+			<connector xmi:idref="EAID_F898550D_C164_4394_9BA8_FF1D5DD3A69A">
+				<source xmi:idref="EAID_26BFD283_144D_47d7_A4B2_9A5BB6C78EAE">
+					<model ea_localid="25" type="Device" name="Browser"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC">
+					<model ea_localid="112" type="Artifact" name="biking2.jar"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="109"/>
+				<properties ea_type="Dependency" stereotype="&lt;&lt;uses biking2::spa&gt;&gt;" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels mb=" &#xA;«&lt;&lt;uses biking2::spa&gt;&gt;»"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs value="$XREFPROP=$XID={B2EE9A6C-20ED-48bb-B522-2FBA5F6C3322}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=&lt;&lt;uses biking2::spa&gt;&gt;;GUID={6C265A5F-7239-4675-9FCE-6552F3850F61};@ENDSTEREO;$DES;$CLT={F898550D-C164-4394-9BA8-FF1D5DD3A69A}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+				<tags/>
+			</connector>
 			<connector xmi:idref="EAID_99C42A74_8BF7_4e8b_8A44_DA7C51098146">
 				<source xmi:idref="EAID_88112E03_41F5_48bc_AE66_EB79C7142216">
 					<model ea_localid="28" type="Component" name="bikingFX"/>
@@ -4248,41 +4295,6 @@
 					<tags/>
 				</target>
 				<model ea_localid="20"/>
-				<properties ea_type="Association" direction="Unspecified"/>
-				<modifiers isRoot="false" isLeaf="false"/>
-				<parameterSubstitutions/>
-				<documentation/>
-				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
-				<labels mt="Internet (http)"/>
-				<extendedProperties/>
-				<style/>
-				<xrefs/>
-				<tags/>
-			</connector>
-			<connector xmi:idref="EAID_AD72DCD4_8372_4e89_B49C_8C55B948A641">
-				<source xmi:idref="EAID_3562411B_D92E_402d_9893_4D3B12F8DDB1">
-					<model ea_localid="26" type="Component" name="spa"/>
-					<role visibility="Public" targetScope="instance"/>
-					<type aggregation="none" containment="Unspecified"/>
-					<constraints/>
-					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
-					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;"/>
-					<documentation/>
-					<xrefs/>
-					<tags/>
-				</source>
-				<target xmi:idref="EAID_320B17B9_DFD6_45b9_B235_342173204222">
-					<model ea_localid="16" type="Component" name="api"/>
-					<role visibility="Public" targetScope="instance"/>
-					<type aggregation="none" containment="Unspecified"/>
-					<constraints/>
-					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
-					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;"/>
-					<documentation/>
-					<xrefs/>
-					<tags/>
-				</target>
-				<model ea_localid="19"/>
 				<properties ea_type="Association" direction="Unspecified"/>
 				<modifiers isRoot="false" isLeaf="false"/>
 				<parameterSubstitutions/>
@@ -6001,6 +6013,39 @@
 				<xrefs/>
 				<tags/>
 			</connector>
+			<connector xmi:idref="EAID_89A15147_7F6F_417c_8A5F_F41CA2E3C62B">
+				<source xmi:idref="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC">
+					<model ea_localid="112" type="Artifact" name="biking2.jar"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_0E2C4B42_2DD3_437c_A491_D62A527A18CA">
+					<model ea_localid="114" type="Boundary"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="108"/>
+				<properties ea_type="Dependency" stereotype="compiled from" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels mb=" &#xA;«compiled from»"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs value="$XREFPROP=$XID={653FFF2A-353E-4fc4-B8F5-E72E84C1594E}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=compiled from;GUID={45008CCB-50C8-4adb-A662-1AD97A3C45A8};@ENDSTEREO;$DES;$CLT={89A15147-7F6F-417c-8A5F-F41CA2E3C62B}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+				<tags/>
+			</connector>
 			<connector xmi:idref="EAID_79EC2BE5_5B2E_4522_8ECE_DF2076B527E2">
 				<source xmi:idref="EAID_A4D9F9B0_3EE7_4d44_B248_F32C87AA8A94">
 					<model ea_localid="33" type="Class" name="MilageEntity"/>
@@ -6152,6 +6197,14 @@
 				<packageImport xmi:id="mmref01">
 					<importedPackage href="http://schema.omg.org/spec/UML/2.1/"/>
 				</packageImport>
+				<packagedElement xmi:type="uml:Stereotype" xmi:id="compiled from" name="compiled from">
+					<ownedAttribute xmi:type="uml:Property" xmi:id="compiled from-base_Dependency" name="base_Dependency" association="Dependency_compiled from">
+						<type href="http://schema.omg.org/spec/UML/2.1/Dependency"/>
+					</ownedAttribute>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Extension" xmi:id="Dependency_compiled from" name="A_Dependency_compiled from" memberEnd="extension_compiled from compiled from-base_Dependency">
+					<ownedEnd xmi:id="extension_compiled from" name="extension_compiled from" type="compiled from" isComposite="true" lower="0" upper="1" memberEnd="extension_compiled from compiled from-base_Dependency"/>
+				</packagedElement>
 				<packagedElement xmi:type="uml:Stereotype" xmi:id="enum" name="enum">
 					<ownedAttribute xmi:type="uml:Property" xmi:id="enum-base_EnumerationLiteral" name="base_EnumerationLiteral" association="EnumerationLiteral_enum">
 						<type href="http://schema.omg.org/spec/UML/2.1/EnumerationLiteral"/>
@@ -6170,6 +6223,14 @@
 				</packagedElement>
 				<packagedElement xmi:type="uml:Extension" xmi:id="Operation_property" name="A_Operation_property" memberEnd="extension_property property-base_Operation">
 					<ownedEnd xmi:id="extension_property" name="extension_property" type="property" isComposite="true" lower="0" upper="1" memberEnd="extension_property property-base_Operation"/>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Stereotype" xmi:id="&lt;&lt;uses biking2::spa&gt;&gt;" name="&lt;&lt;uses biking2::spa&gt;&gt;">
+					<ownedAttribute xmi:type="uml:Property" xmi:id="&lt;&lt;uses biking2::spa&gt;&gt;-base_Dependency" name="base_Dependency" association="Dependency_&lt;&lt;uses biking2::spa&gt;&gt;">
+						<type href="http://schema.omg.org/spec/UML/2.1/Dependency"/>
+					</ownedAttribute>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Extension" xmi:id="Dependency_&lt;&lt;uses biking2::spa&gt;&gt;" name="A_Dependency_&lt;&lt;uses biking2::spa&gt;&gt;" memberEnd="extension_&lt;&lt;uses biking2::spa&gt;&gt; &lt;&lt;uses biking2::spa&gt;&gt;-base_Dependency">
+					<ownedEnd xmi:id="extension_&lt;&lt;uses biking2::spa&gt;&gt;" name="extension_&lt;&lt;uses biking2::spa&gt;&gt;" type="&lt;&lt;uses biking2::spa&gt;&gt;" isComposite="true" lower="0" upper="1" memberEnd="extension_&lt;&lt;uses biking2::spa&gt;&gt; &lt;&lt;uses biking2::spa&gt;&gt;-base_Dependency"/>
 				</packagedElement>
 				<packagedElement xmi:type="uml:Stereotype" xmi:id="Delete" name="Delete">
 					<ownedAttribute xmi:type="uml:Property" xmi:id="Delete-base_Operation" name="base_Operation" association="Operation_Delete">
@@ -6947,10 +7008,8 @@
 					<element geometry="Left=334;Top=518;Right=508;Bottom=605;" subject="EAID_320B17B9_DFD6_45b9_B235_342173204222" seqno="10" style="DUID=E5445429;"/>
 					<element geometry="Left=299;Top=336;Right=544;Bottom=626;" subject="EAID_3FF8C46B_C0EC_4bb4_90F3_CDD8D6253125" seqno="11" style="DUID=ED0641F4;"/>
 					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=CX=63:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=143:-561$;" subject="EAID_99C42A74_8BF7_4e8b_8A44_DA7C51098146" style="Mode=3;EOID=E5445429;SOID=75665871;Color=-1;LWidth=0;TREE=LH;Hidden=0;"/>
-					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=63:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=143:-561$;" subject="EAID_AD72DCD4_8372_4e89_B49C_8C55B948A641" style="Mode=3;EOID=E5445429;SOID=4DE3E6C6;Color=-1;LWidth=0;TREE=LH;Hidden=0;"/>
 					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=CX=63:CY=13:OX=44:OY=-4:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_30E7E901_FC5E_446b_B02D_14D87577A47A" style="Mode=3;EOID=E5445429;SOID=7E3606B3;Color=-1;LWidth=0;TREE=LV;Hidden=0;"/>
 					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=CX=63:CY=13:OX=41:OY=3:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_62D812A5_E3C5_4c29_A9D7_963F05E65C6E" style="Mode=3;EOID=C6303B0C;SOID=E5445429;Color=-1;LWidth=0;TREE=LV;Hidden=0;"/>
-					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=CX=53:CY=39:OX=93:OY=-5:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_B7E7446A_7F7B_41b6_AFA6_2581C01D0E43" style="Mode=3;EOID=C43899B9;SOID=E5445429;Color=-1;LWidth=0;Hidden=0;"/>
 				</elements>
 			</diagram>
 			<diagram xmi:id="EAID_83B40AF0_8FB2_4184_B611_2E81ACE548B5">
@@ -7158,6 +7217,28 @@
 					<element geometry="Left=194;Top=231;Right=447;Bottom=550;" subject="EAID_03ACC894_95E9_46f9_8AEF_78F62AB4BC41" seqno="4" style="DUID=653599E1;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
 					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_D7BF7581_3656_4912_90C5_4CBB4B21A337" style="Mode=3;EOID=2C27D60F;SOID=5151D766;Color=-1;LWidth=0;Hidden=0;"/>
 					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=393:-346$;" subject="EAID_27784E39_2FF4_46dd_8AF2_412EB42B73AD" style="Mode=3;EOID=51801931;SOID=5151D766;Color=-1;LWidth=0;TREE=LV;Hidden=0;"/>
+				</elements>
+			</diagram>
+			<diagram xmi:id="EAID_B55A58E1_F4E2_492a_8990_3BD8E36E4B3C">
+				<model package="EAPK_5B1EEB23_1198_4135_9FDD_8690EF06AEB3" localID="17" owner="EAPK_5B1EEB23_1198_4135_9FDD_8690EF06AEB3"/>
+				<properties name="Deployment" type="Deployment"/>
+				<project author="michael.simons" version="1.0" created="2015-12-22 11:06:27" modified="2015-12-22 11:23:37"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=1;PPgs.cy=1;DocSize.cx=815;DocSize.cy=1067;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=119;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;HandDraw=1;Whiteboard=1;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ProfileData=;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;HandDraw=1;Whiteboard=1;SuppressedCompartments=;SaveTag=6A669ED2;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;hl=1;cls=0;SwimlaneFont=lfh:-10,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<elements>
+					<element geometry="Left=421;Top=481;Right=617;Bottom=606;" subject="EAID_26BFD283_144D_47d7_A4B2_9A5BB6C78EAE" seqno="1" style="DUID=E433A7D7;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
+					<element geometry="Left=85;Top=220;Right=231;Bottom=399;" subject="EAID_0E2C4B42_2DD3_437c_A491_D62A527A18CA" seqno="2" style="DUID=E9B5FA1B;"/>
+					<element geometry="Left=464;Top=229;Right=574;Bottom=289;" subject="EAID_EA7E948B_3326_4922_BF69_829C5DF4C1E7" seqno="3" style="DUID=EFDA4206;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
+					<element geometry="Left=464;Top=309;Right=574;Bottom=382;" subject="EAID_B406878D_A517_421e_B38D_CDDD9FB86AAC" seqno="4" style="DUID=74BEA5BF;"/>
+					<element geometry="Left=416;Top=172;Right=622;Bottom=416;" subject="EAID_60B46B74_E558_4af9_B2D5_6F80211638E9" seqno="5" style="DUID=B39FF82D;"/>
+					<element geometry="Left=103;Top=320;Right=213;Bottom=380;" subject="EAID_3562411B_D92E_402d_9893_4D3B12F8DDB1" seqno="6" style="DUID=908C9B09;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
+					<element geometry="Left=104;Top=238;Right=214;Bottom=298;" subject="EAID_320B17B9_DFD6_45b9_B235_342173204222" seqno="7" style="DUID=F8AF5644;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
+					<element geometry="Left=53;Top=174;Right=266;Bottom=418;" subject="EAID_E805C6F2_1BCF_4a43_886D_151201B79BF1" seqno="8" style="DUID=96E893B2;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=4;$LLB=;LLT=;LMT=;LMB=CX=80:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=281:-344$281:-309$;" subject="EAID_89A15147_7F6F_417c_8A5F_F41CA2E3C62B" style="Mode=1;EOID=E9B5FA1B;SOID=74BEA5BF;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=CX=115:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_F898550D_C164_4394_9BA8_FF1D5DD3A69A" style="Mode=3;EOID=74BEA5BF;SOID=E433A7D7;Color=-1;LWidth=0;Hidden=0;"/>
 				</elements>
 			</diagram>
 			<diagram xmi:id="EAID_4B5443CE_0F87_4980_92ED_8FA1BFE0A660">
