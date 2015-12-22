@@ -63,6 +63,10 @@ include::05_building_block_view.adoc[]
 include::08_concepts.adoc[]
 
 <<<<
+// 9. Design Decisions
+include::09_design_decisions.adoc[]
+
+<<<<
 // 11. Technical Risks
 include::11_technical_risks.adoc[]
 

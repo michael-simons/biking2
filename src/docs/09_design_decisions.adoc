@@ -1,0 +1,45 @@
+[[section-design-decisions]]
+== Design Decisions
+
+=== Using GPSBabel for converting TCX into GPX format
+
+.Problem
+
+Popular JavaScript mapping frameworks provide easy ways to include geometries from GPX data on maps. Most Garmin devices however record track data in TCX format, so i needed a way to convert TCX to GPX. Both formats are relatively simple and in case of GPX good documented formats.
+
+.Constraints
+
+* Conversion should handle TCX files with single tracks, laps and additional points without problem
+* Focus for this project has been on developing a modern application backend for an AngularJS SPA, not parsing GPX data
+
+.Assumptions
+
+* Using an external, non Java based tool makes it harder for people who just want to try out this application
+* Although good documented, both file types can contain varieties for informations (routes, tracks, waypoints) which makes it hard to parse
+
+.Considered Alternatives
+
+* Writing my own converter
+* Using existing swiss army knife for GPS data: http://www.gpsbabel.org[GPSBabel]
+____
+GPSBabel converts waypoints, tracks, and routes between popular GPS receivers such as Garmin or Magellan and mapping programs like Google Earth or Basecamp. Literally hundreds of GPS receivers and programs are supported. It also has powerful manipulation tools for such data. such as filtering duplicates points or simplifying tracks. It has been downloaded and used tens of millions of times since it was first created in 2001, so it's stable and trusted
+____
+
+.Decision
+
+_biking2_ uses GPSBabel for the heavy lifting of GPS related data. The project contains a big README stating that GPSBabel must be installed. GPSBabel can be installed on Windows with an installer and on must Linux systems through the official packet manager. Under OS X it is available via MacPorts or Homebrew.
+
+=== Using local file storage for image and track data
+
+.Problem
+
+_biking2_ needs to store "large" objects: Image data (biking and gallery pictures) as well as track data.
+
+.Considered Alternatives
+
+* Using some kind of Cloud storage like S3
+* Using local file system
+
+.Decision
+
+I opted for local file system because i didn't want to put much effort into evaluating cloud services. If _biking2_ should runnable in cloud based setup, one has to create an abstraction over the local filesystem currently used. 
