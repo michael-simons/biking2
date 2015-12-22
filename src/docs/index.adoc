@@ -67,6 +67,10 @@ include::08_concepts.adoc[]
 include::09_design_decisions.adoc[]
 
 <<<<
+// 10. Quality Scenarios
+include::10_quality_scenarios.adoc[]
+
+<<<<
 // 11. Technical Risks
 include::11_technical_risks.adoc[]
 

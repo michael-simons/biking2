@@ -1,0 +1,18 @@
+[[section-quality-scenarios]]
+== Quality Scenarios
+
+=== Quality Tree
+
+image::10_quality_tree.png[align="center"]
+
+=== Evaluation Scenarios
+
+.Testability / Coverage
+
+By using _JaCoCo_ during http://info.michael-simons.eu/2014/05/22/jacoco-maven-and-netbeans-8-integration/[development and during the build process] ensure a code coverage of at least 95%.
+
+.Testability / Independent from external services
+
+The architecture should be designed in such a way that algorithms depending on external services can be tested without having the external service available. That is: All external dependencies should be mockable.
+
+Example: `FetchBikingPicturesJob` needs a resource containing a RSS feed. By delegating this to a separate class `DailyFratzeProvider` testing the job on it's own its easy.
