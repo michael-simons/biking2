@@ -1,0 +1,19 @@
+:homepage: http://arc42.org
+
+:keywords: software-architecture, documentation, template, arc42
+
+:numbered!:
+== About this template
+
+[cols="1,4" options=""]
+|===
+| image:arc42-logo.png[arc42, link={arc42-url}]
+| (C) This document uses material from the http://arc42.de[arc42 architecture
+template^], freely available at {arc42-url}[{arc42-url}^].
+
+[small]#This material is open source and provided under the Creative Commons Sharealike 4.0 license.
+It comes *without any guarantee*. Use on your own risk.
+arc42 and its structure by Dr. Peter Hruschka and Dr. Gernot Starke.
+Asciidoc version initiated by Markus Schärtel and Jürgen Krey,
+completed and maintained by Ralf Müller and Gernot Starke.#
+|===

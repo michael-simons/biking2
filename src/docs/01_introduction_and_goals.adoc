@@ -1,0 +1,73 @@
+[[section-introduction-and-goals]]
+== Introduction and Goals
+
+http://biking.michael-simons.eu[biking.michael-simons.eu] is a project for
+
+* tracking my bike activities
+* evaluating technology
+* learn stuff
+* showcasing my skills
+
+For my information see http://info.michael-simons.eu/2014/02/20/developing-a-web-application-with-spring-boot-angularjs-and-java-8/[this blog post] as a starting point.
+
+I'd like to thank all the people working at the Spring Eco System for doing their amazing work. Also a big thank you to Dr. Gernot Starke and Dr. Peter Hruschka for their inspiring workshop "Mastering Software Architecture" in Munich, December 2015. I took not only a nice _CPSA-F_ certificate home, but really valuable and practical patterns for improving "my" software.
+
+The blog post above had song lyrics from Nick Cave & The Bad Seeds as intro (from “Push The Sky Away”) and for the architecture i have this:
+
+[quote, Edsger W. Dijkstra, On the nature of Computing Science]
+____
+Simplicity is a great virtue but it requires hard work to achieve it and education to appreciate it. And to make matters worse: complexity sells better.
+____
+
+
+=== Requirements Overview
+
+.What is biking2?
+
+The main purpose of _biking2_ is keeping track of bicycles and their milages as well as converting _Garmin_ https://en.wikipedia.org/wiki/Training_Center_XML[_Training Center XML_ (tcx)] files to standard https://en.wikipedia.org/wiki/GPS_Exchange_Format[_GPS Exchange Format_ (GPX)] files and storing them in an accessible way.
+
+In addition _biking2_ is used to study and evualate technology, patterns and frameworks. The functional requirements are simple enough to leave enough room for concentration on quality goals.
+
+.Main features
+
+* Store bikes and their milages
+* Convert tcx files to GPX files and provide them in a library of tracks
+* Visualize those tracks on a map and provide a way to embed them in other webpages
+* Visualize biking activities with images
+* Optional, near real time, tracking of a biker
+
+The application must only handle exactly one user with write permissions.
+
+Most bike aficionados have problems understanding the question "why more than one bike?", the system should be able to keep track of everything between 2 and 10 bikes for one user, storing 1 total milage per bike and month. All milages per month, year and other metrics should be derived from this running total, so that the user only need to look at his odometer and enter the value.
+
+The application should store an "unlimited" number of tracks.
+
+The images should be collected from https://dailyfratze[Daily Fratze], the source are all images that are tagged with "Radtour". In addition the user should be able to provide an "unlimted" number of "gallery pictures" together with a date and a short description.
+
+
+=== Quality Goals
+
+[cols="0,1,3" options="header"]
+.Quality Goals
+|===
+| Nr. | Quality                        | Motivation
+| 1   | Understandability              | The functional requirements are simple enough to allow a simple, understandable solution that allows focus on learning about new Java 8 features, Spring Boot and AngularJS.
+| 2   | Efficiency                     | Collecting milage data should be a no brainer: Reading the milage from an odometer and entering it.
+| 3   | Interoperability               | The application should provide a simple API that allows access to new clients.
+| 4   | Attractiveness                 | Collected milages should be presented in easy to grasp charts.
+| 5   | Testability                    | The architecture should allow easy testing of all main building blocks.
+|===
+
+=== Stakeholders
+
+The following lists contains the most important personas for this application
+
+[options="header",cols="1,2"]
+.Stakeholders
+|===
+| Role/Name           | Goal/Boundaries
+| Developers          | Developers who want to learn about developing modern applications with Spring Boot and various frontends, preferable using _Java 8_ in the backend.
+| Bikers              | Bike aficionados that are looking for a non-excel, self-hosted solution to keep track of their bikes and milages.
+| Software Architects | Looking for an _arc42_ example; want to get ideas for their daily work.
+| Michael Simons      | Improving his skills; wants to blog about Spring Boot; looking for a topic he can eventually hold a talk about; needed a project to try out new _Java 8_ features.
+|===

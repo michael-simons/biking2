@@ -15,9 +15,6 @@
  */
 package ac.simons.biking2.config;
 
-import ac.simons.biking2.api.OEmbedController;
-import ac.simons.biking2.api.TracksController;
-import ac.simons.biking2.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
@@ -62,7 +59,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     
     /**
      * Enable favor of format parameter over requested content type, needed for
-     * {@link OEmbedController#getEmbeddableTrack(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, javax.servlet.http.HttpServletRequest)}
+     * {@code OEmbedController#getEmbeddableTrack(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, javax.servlet.http.HttpServletRequest)}
      *
      * @param configurer
      */
@@ -74,7 +71,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
      * This makes mapping of
-     * {@link TracksController#downloadTrack(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)} 
+     * {@code TracksController#downloadTrack(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)} 
      * and the default mapping in separate methods possible.
      * @param configurer
      */
@@ -84,7 +81,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     /**
-     * {@link OEmbedResponse} uses XmlElement annotations to be configured for
+     * {@code OEmbedResponse} uses XmlElement annotations to be configured for
      * JAXB as well as JSON so we need the {@link JaxbAnnotationModule} as well
      *
      * @return

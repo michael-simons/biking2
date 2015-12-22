@@ -1,0 +1,6 @@
+[[section-technical-risks]]
+== Technical Risks
+
+_biking2_ has been up and running for nearly 2 years now, the architecture contains no known risk for my usage scenario.
+
+There is a possibility that the H2 database can be damaged due to an unexpected shutdown of the VM (that is OS or hardware failure). The risk is mitigated through regularly backups of the serialized database file.

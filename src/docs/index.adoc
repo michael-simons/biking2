@@ -1,0 +1,97 @@
+// header file for arc42-template,
+// including all help texts
+//
+// ====================================
+
+// configuration
+include::config.adoc[]
+
+= biking2, Architecture and API
+Michael Simons;
+:toc-title: Table of Contents
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+//additional style for arc42 help callouts
+ifdef::basebackend-html[]
+++++
+<style>
+.arc42help {font-size:small; width: 14px; height: 16px; overflow: hidden; position: absolute; right: 0px; padding: 2px 0px 3px 2px;}
+.arc42help::before {content: "?";}
+.arc42help:hover {width:auto; height: auto; z-index: 100; padding: 10px;}
+.arc42help:hover::before {content: "";}
+@media print {
+	.arc42help {display:hidden;}
+}
+</style>
+++++
+endif::basebackend-html[]
+
+== Disclaimer
+I provide absolutely *no guarantee*, neither for the accuracy of this documentation nor for any property or feature of the software described here.
+
+Do not use this software in critical situations or projects.
+
+// numbering from here on
+:numbered:
+
+<<<<
+// 1. Introduction and Goals
+include::01_introduction_and_goals.adoc[]
+
+<<<<
+// 2. Architecture Constraints
+include::02_architecture_constraints.adoc[]
+
+<<<<
+// 3. System Scope and Context
+include::03_system_scope_and_context.adoc[]
+
+<<<<
+// 4. Solution Strategy
+include::04_solution_strategy.adoc[]
+
+<<<<
+// 5. Building Block View
+include::05_building_block_view.adoc[]
+
+<<<<
+// 6. Runtime View
+include::06_runtime_view.adoc[]
+
+<<<<
+// 7. Deployment View
+include::07_deployment_view.adoc[]
+
+<<<<
+// 8. Concepts
+include::08_concepts.adoc[]
+
+<<<<
+// 9. Design Decisions
+include::09_design_decisions.adoc[]
+
+<<<<
+// 10. Quality Scenarios
+include::10_quality_scenarios.adoc[]
+
+<<<<
+// 11. Technical Risks
+include::11_technical_risks.adoc[]
+
+<<<<
+// 12. Glossary
+include::12_glossary.adoc[]
+
+// appendices:
+// =====================================
+
+<<<<
+// Appendix References
+include::appendix-api.adoc[]
+
+include::about-arc42.adoc[]

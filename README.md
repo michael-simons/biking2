@@ -8,6 +8,10 @@ This is a project where i try out Java 8, Spring / Spring Boot and AngularJS. Th
 
 You may also want to have a look at the client companion of this app, [BikingFX][4]
 
+## Architecture 
+
+The projects architecture is [completely documented][6] inside the [arc42][7] structure, using the AsciiDoc format from the [arc42-template][8].
+
 ## NOTE
 
 You'll need [GPSBabel][5] to build this project without errors and to use the tracks / log database. Errors running the `TracksControllerTest` are the result of a missing `gpsbabel` binary in the path.
@@ -23,3 +27,6 @@ GPSBabel is available for all major operating systems, including windows. So ple
 [3]: http://info.michael-simons.eu/2014/02/20/developing-a-web-application-with-spring-boot-angularjs-and-java-8/
 [4]: https://github.com/michael-simons/bikingFX
 [5]: http://www.gpsbabel.org
+[6]: http://biking.michael-simons.eu/docs/index.html
+[7]: http://arc42.de
+[8]: https://github.com/arc42/arc42-template

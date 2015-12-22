@@ -1,0 +1,33 @@
+[[section-glossary]]
+== Glossary
+
+[cols="1,1,3" options="header"]
+.Glossar
+|===
+| Term                        | Synonym(s)              | Description
+| AngularJS                   |                         | https://en.wikipedia.org/wiki/AngularJS[AngularJS] is an open-source web application framework mainly maintained by Google and by a community of individual developers and corporations to address many of the challenges encountered in developing single-page applications.
+| Apache ActiveMQ             |                         | https://en.wikipedia.org/wiki/Apache_ActiveMQ[Apache ActiveMQ] is an open source message broker written in Java.
+| Apache License              |                         | The http://www.apache.org/licenses/LICENSE-2.0[Apache License] is a permissive Open Source license, especially designed for free software.
+| Bootstrap                   |                         | http://getbootstrap.com[Bootstrap] is the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web.
+| Daily Fratze                | df, DF, DailyFratze     | An online community where users can upload a daily picture of themselves (a selfie, but the site did them before they where called selfies)
+| Fat Jar                     |                         | A way of packaging Java applications into one single Jar file containing all dependencies, either repackaged or inside their original jars together with a special class loader.
+| Gallery picture             |                         | Pictures from tours provided manually by the hours in addition to the pictures collected automatically from _Daily Fratze_
+| Garmin                      |                         | https://en.wikipedia.org/wiki/Garmin[Garmin] develops consumer, aviation, outdoor, fitness, and marine technologies for the Global Positioning System.
+| GPSBabel                    |                         | http://www.gpsbabel.org[GPSBabel] is a command line utility that converts waypoints, tracks, and routes between popular GPS receivers such as Garmin or Magellan and mapping programs like Google Earth or Basecamp.
+| GPX                         | GPS Exchange Format     | GPX, or GPS Exchange Format, is an XML schema designed as a common GPS data format for software applications. It can be used to describe waypoints, tracks, and routes.
+| JaCoCo                      |                         | http://eclemma.org/jacoco/[JaCoCo] is a code coverage library which can be used very easily from within NetBeans.
+| Java 8                      | JDK 8                   | The eight installment of the https://en.wikipedia.org/wiki/Java_(programming_language)[Java programmning language] and the first one to support functional paradigmns in the form Lambda expressions.
+| MQTT                        | MQ Telemetry Transport  | https://en.wikipedia.org/wiki/MQTT[MQTT] is a publish-subscribe based "light weight" messaging protocol for use on top of the TCP/IP protocol.
+| NetBeans                    |                         | https://netbeans.org[NetBeans] is a free and open Source IDE that fits the pieces of modern development together.
+| OAuth                       |                         | https://en.wikipedia.org/wiki/OAuth[OAuth] is an open standard for authorization. OAuth provides client applications a 'secure delegated access' to server resources on behalf of a resource owner.
+| oEmbed                      |                         | The http://oembed.com[oEmbed] protocol is a simple and lightweight format for allowing an embedded representation of an URL on third party sites.
+| RSS                         | Rich Site Summary,
+                                Really Simple Syndication
+                                                        | https://en.wikipedia.org/wiki/RSS[RSS] uses a family of standard web feed formats to publish frequently updated information: blog entries, news headlines, audio, video
+| SPA                         | spa                     | Single Page Application
+| Spring Boot                 |                         | http://projects.spring.io/spring-boot/[Spring Boot] makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run".
+| Spring Data JPA             |                         | http://projects.spring.io/spring-data-jpa/[Spring Data JPA], part of the larger Spring Data family, makes it easy to easily implement JPA based repositories.
+| STOMP                       | The Simple Text Oriented Messaging Protocol
+                                                        | https://stomp.github.io[STOMP] provides an interoperable wire format so that STOMP clients can communicate with any STOMP message broker to provide easy and widespread messaging interoperability among many languages, platforms and brokers.
+| TCX                         |                         | Training Center XML (TCX) is a data exchange format introduced in 2007 as part of Garmin's Training Center product.
+|===

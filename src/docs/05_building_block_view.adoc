@@ -1,0 +1,223 @@
+[[section-building-block-view]]
+== Building Block View
+
+The application packaged as _biking2.jar_ contains two (the api and the spa) of three main parts, as shown in the <<Business Context>>:
+
+image::5.0_level0.png[align="center"]
+
+From those two we have a closer look at the api only. For details regarding the structure of an AngularJS 1.2.x application, have a look at their https://code.angularjs.org/1.2.28/docs/guide[developers guide].
+
+=== Whitebox biking2::api
+
+The following diagram shows the main building blocks of the system and their interdependencies:
+
+image::5.1_level1-biking_api.png[align="center"]
+
+I used _functional decomposition_ to separate responsibilities. The single parts of the api are all encapsulated in their own components, represented as Java packages.
+
+All components depend on a standard JPA EntityManager and some on local file storage. I won't go into detail for those blackboxes.
+
+Contained blackboxes::
+
+[cols="1,3"]
+.biking2::api building blocks
+|===
+| <<bikes (Blackbox),bikes>> | Managing bikes, adding monthly milages, computing statistics and generating charts.
+| <<tracks (Blackbox),tracks>> | Uploading tracks (TCX files), converting to GPX, providing an oEmbed interface.
+| <<trips (Blackbox), trips>> | Managing assorted trips.
+| <<locations (Blackbox), locations>> | MQTT and STOMP interface for creating new locations and providing them in real time on websockets via stomp.
+| <<bikingPictures (Blackbox), bikingPictures>> | Reading biking pictures from an RSS feed provided by _Daily Fratze_ and providing an API to them.
+| <<galleryPictures (Blackbox), galleryPictures>> | Uploading and managing arbitrary pictures
+|===
+
+Interfaces::
+[cols="1,3" options="header"]
+.biking2::Interfaces
+|===
+| Interface | Description
+| bikes Api | REST api containing methods for reading, adding and decommissioning bikes and for adding milages to single bikes.
+| charts    | Methods for retrieving statistics as fully setup chart definitions.
+| tracks Api | REST api for uploading and reading TCX files.
+| trips Api  | REST api for adding new trips.
+| oEmbed    | HTTP based oEmbed interface, generating URLs with embeddable content.
+| Real time locations | WebSocket / STOMP based interface on which new locations are published.
+| Real time location updates | MQTT interface to which MQTT compatible systems like http://owntracks.org[OwnTracks] can offer location updates.
+| RSS feed reader | Needs an _Daily Fratze_ OAuth token for accessing a RSS feed containing biking pictures which are than grabbed from _Daily Fratze_.
+| galleryPictures Api | REST api for uploading and reading arbitrary image files (pictures related to biking).
+|===
+
+==== bikes (Blackbox)
+
+Intent/Responsibility::
+
+`bikes` provides the external API for reading, creating and manipulating bikes and their milages as well as computing statistics and generating charts.
+
+Interfaces::
+
+[cols="1,3" options="header"]
+|===
+| Interface | Description
+| REST interface `/api/bikes/*` | Contains all methods for manipulating bikes and their milages
+| REST interface `/api/charts/*` | Contains all methods for generating charts
+|===
+
+Files::
+
+The `bikes` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.bikes`.
+
+==== tracks (Blackbox)
+
+Intent/Responsibility::
+
+`tracks` manages file uploads (TCX files), converts them to GPX files and computes their surrounding rectangle (envelope) using _GPSBabel_. It also provides the _oEmbed_ interface that resolves URLS to embeddable tracks.
+
+Interfaces::
+
+[cols="1,3" options="header"]
+|===
+| Interface | Description
+| REST interface `/api/tracks/*` | Contains all methods for manipulating tracks
+| `/api/oembed` | Resolve track URLs to embeddable tracks (content)
+| `/tracks/*`    | Embeddable track content
+|===
+
+Files::
+
+The `tracks` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.tracks`.
+
+==== trips (Blackbox)
+
+Intent/Responsibility::
+
+`trips` manages distances that have been covered on single days without relationships to bikes.
+
+Interfaces::
+
+[cols="1,3" options="header"]
+|===
+| Interface | Description
+| REST interface `/api/trips/*` | Contains all methods for manipulating trips
+|===
+
+Files::
+
+The `trips` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.trips`.
+
+==== locations (Blackbox)
+
+Intent/Responsibility::
+
+`locations` stores locations with timestamps in near realtime and provides access to locations for the last 30 minutes.
+
+Interfaces::
+
+[cols="1,3" options="header"]
+|===
+| Interface | Description
+| REST interface `/api/locations/*` | For retrieving all loccations in the last 30 minutes
+| WebSocket / STOMP topic `/topic/currentLocation` | Interface for getting notifcation on new locations
+| MQTT interface | Listens for new locations coming in via MQTT in http://owntracks.org/booklet/tech/json/[OwnTracks format]
+|===
+
+Files::
+
+The `locations` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.tracker`. The module is configured through `ac.simons.biking2.config.TrackerConfig`.
+
+==== bikingPictures (Blackbox)
+
+Intent/Responsibility::
+
+`bikingPictures` is used for regularly checking a RSS feed from _Daily Fratze_ collecting new images and storing them locally. It also provides an API for getting all collected images.
+
+Interfaces::
+
+[cols="1,3" options="header"]
+|===
+| Interface | Description
+| RSS Feed reader | Provides access to the _Daily Fratze_ RSS Feed
+| Image reader | Provides access to images hosted on _Daily Fratze_
+| REST interface `/api/bikingPictures/*` | Contains all methods for accessing biking pictures
+|===
+
+Files::
+
+The `bikingPictures` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.bikingPictures`.
+
+==== galleryPictures (Blackbox)
+
+Intent/Responsibility::
+
+`galleryPictures` manages file uploads (images). It stores them locally and provides an RSS interface for getting metadata and image data.
+
+Interfaces::
+
+[cols="1,3" options="header"]
+|===
+| Interface | Description
+| REST interface `/api/galleryPictures/*` | Contains all methods for adding and reading arbitrary pictures
+|===
+
+Files::
+
+The `galleryPictures` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.galleryPictures`.
+
+=== Building Blocks - Level 2
+
+==== bikes (Whitebox)
+
+image::5.2_level2-bikes.png[align="center"]
+
+The `BikeRepository` is a Spring Data JPA based repository for `BikeEntities`. The `BikeController` and the `ChartsController` access it to retrieve and store instances of `BikeEntity` and provide external interfaces.
+
+Contained blackboxes::
+
+[cols="1,3"]
+|===
+| highcharts | Contains logic for generating configurations and definitions for http://www.highcharts.com[Highcharts] on the server side.
+|===
+
+==== tracks (Whitebox)
+
+image::5.2_level2-tracks.png[align="center"]
+
+The `TrackRepository` is a Spring Data JPA based repository for `TrackEntities`. The `TracksController` and the `OembedController` access it to retrieve and store instances of `TrackEntity` and provide external interfaces.
+
+Contained blackboxes::
+
+[cols="1,3"]
+|===
+| gpx | Generated _JAXB_ classes for parsing GPX files. Used by the `TracksController` to retrieve the surrounding rectangle (envelope) for new tracks.
+|===
+
+==== trips (Whitebox)
+
+image::5.2_level2-trips.png[align="center"]
+
+The `AssortedTripRepository` is a Spring Data JPA based repository for `AssortedTripEntities`. The `TripsController` accesses it to retrieve and store instances of `TrackEntity` and provide external interfaces.
+
+==== locations (Whitebox)
+
+image::5.2_level2-locations.png[align="center"]
+
+Locations are stored and read via a Spring Data JPA based repository named `LocationRepository`. This repository is only accessed through the `LocationService`. The `LocationService` provides real time updates for connected clients through a `SimpMessagingTemplate` and the `LocationController` uses the service to provide access to all locations created within the last 30 minutes.
+
+New locations are created through the service either through a REST interface in form of the `LocationController` or via a `MessageListener` on a MQTT channel.
+
+==== bikingPictures (Whitebox)
+
+image::5.2_level2-bikingPictures.png[align="center"]
+
+A Spring Data JPA repository `BikingPicturesRepository` is used for all access to `BikingPictureEntities`, the external REST api for reading pictures is implemented with `BikingPicturesController`. The RSS feed is read from `FetchBikingPicturesJob` by using a JAXBContext "rss". The URLs to the image files which may are protected by various means are provided to the job via a `DailyFratzeProvider`.
+
+Contained blackboxes::
+
+[cols="1,3"]
+|===
+| rss | Generated _JAXB_ classes for parsing RSS feeds. Used by the `FetchBikingPicturesJob` to read the contents of an RSS feed.
+|===
+
+==== galleryPictures (Whitebox)
+
+image::5.2_level2-galleryPictures.png[align="center"]
+
+The `GalleryPictureRepository` is a Spring Data JPA based repository for `GalleryPictureEntities`. The `GalleryController` accesses it to retrieve and store instances of `GalleryPictureEntity` and provide external interfaces.

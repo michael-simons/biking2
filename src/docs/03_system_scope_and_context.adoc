@@ -1,0 +1,53 @@
+[[section-system-scope-and-context]]
+== System Scope and Context
+
+This chapter describes the environment and context of _biking2_. Who uses the system and on which other system does _biking2_ depend.
+
+
+=== Business Context
+
+image::3.1_business-context(1).png[align="center",  width="640"]
+
+.Biker
+
+A passionate biker uses _biking2_ to manage his bikes, milages, tracks and also visual memory (aka images) taken on tours etc. He also wants to embed his tracks as interactive maps on other websites.
+
+.Daily Fratze
+
+https://dailyfratze.de[Daily Fratze] provides a list of images tagged with certain topics. _biking2_ should collect all images for a given user tagged with "Theme/Radtour".
+
+.GPSBabel
+
+GPSBabel is a command line utility for manipulating GPS related files in various ways. _biking2_ uses it to convert TCX into GPX files. The heaving lifting is done by GPSBabel and the resulting file will be managed by _biking2_.
+
+.Arbitrary websites
+
+The user may want to embed (or brag with) tracks on arbitrary websites. He only wants to paste a link to a track on a website that supports embedded content to embed a map with the given track.
+
+
+=== Technical Context
+
+image::3.2_technical-context(1).png[align="center", width="640"]
+
+_biking2_ is broken into 2 main components:
+
+.Backend (biking2::api)
+
+The api runs on a supported application server, using either an embedded container or an external container. It communicates via operating system processes with GPSBabel on the same server.
+
+The connection to _Daily Fratze_ is http based RSS-feed. The feed is paginated and provides *all* images with the given tag but older images may not be available any more when the owner decided to add a digital expiry.
+
+Furthermore _biking2_ provides an http://oembed.com[oEmbed] interface for all tracks stored in the system. Arbitrary websites supporting that protocol can request embeddable content over http knowing only a link to the track without working on the track or map apis themselves.
+
+.Frontend (biking2::spa and biking2::bikingFX)
+
+The frontend is implemented with two different components, the biking2::spa (Single Page Application) is part of this package. The spa runs in any modern web browser and communicates via http with the api.
+
+[cols="1,1" options="header"]
+|===
+| Business interface | channel
+| Format conversions | System processes, command line interface
+| Collection of biking pictures | RSS feed over Internet (http)
+| Embeddable content | oEmbed format over Internet (http)
+| API for business functions | Internet (http)
+|===

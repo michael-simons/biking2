@@ -22,8 +22,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 
 /**
@@ -31,6 +31,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
  */
 @SpringBootApplication
 @EnableWebSocketMessageBroker
+@PropertySource("classpath:build.properties")
 public class Application extends SpringBootServletInitializer {
 
     @Override
@@ -40,7 +41,7 @@ public class Application extends SpringBootServletInitializer {
 
     public static void main(String... args) {
 	System.setProperty("spring.profiles.default", System.getProperty("spring.profiles.default", "dev"));
-	final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
+	SpringApplication.run(Application.class, args);
     }
     
      @Bean(destroyMethod="shutdown")

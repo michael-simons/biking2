@@ -1,0 +1,167 @@
+[[section-concepts]]
+== Concepts
+
+=== Domain Models
+
+_biking2_ is datacentric application, therefore everything is based around an Entity Relationship Diagram (ER-Diagram):
+
+image::8.1_er-diagram.png[align="center"]
+
+[cols="1,2" options="header"]
+.Tables
+|===
+| Name | Description
+| bikes | Stores the bikes. Contains dates when the bike was bought and decomissioned, an optional link, color for the charts and also an auditing column when a row was created.
+| milages | Stores milages for a bike (when and how much)
+| tracks | Stores GPS tracks recorded and uploaded with an optional description. For each day the track names must be unique. The columns _minlat_, _minlon_, _maxlat_ and _maxlon_ store the encapsulating rectangle for the track. The _type_ column is constrainted to "biking" and "running".
+| assorted_trips | Stores a date and a distance on that day. Multiple distances per day are allowed.
+| locations | Stores arbitrary locations (latitude and longitude based) for given timestamp with an optional description.
+| biking_pictures | Stores pictures collected from _Daily Fratze_ together with their original date of publication, their unique external id and a link to the page the picture originaly appeared.
+| gallery_pictures | Stores all pictures uploaded by the user with a description and the date the picture was taken. The _filename_ column contains a single, computed filename without path information.
+|===
+
+Those tables are mapped to the following domain model:
+
+image::8.1_domain-model.png[align="center"]
+
+[cols="1,2" options="header"]
+.Domain model
+|===
+| Name | Description
+| BikeEntity | A bike was bought on a given date and can be decommisioned. It has a color and an optional link to an arbitrary website. It may or may not have milages recorded. It has some important functions, see <<BikingEntityMethods,Important business methods on BikeEntity>>
+| MilageEntity | A milage is part of a bike. For each bike one milage per month can be recored. The milage is the combination of it's recording date, the amount and the bike.
+| TrackEntity | The representation of _tracks_ contents. The type is an enumeration. Notable public operations are `getPrettyId` (computes a "pretty" id based on the instances id) and `getTrackFile` (generates a reference to the GPS track file in the passed data storage directory).
+| BikingPictureEntity | For handling pictures collected from _Daily Fratze_. The BikingPictureEntity parses the image link on construction the retrieve the unique, external id.
+| GalleryPictureEntity | A bean for handling the pictures uploaded by the user. `prePersist` fills the `createdAt` attribute prior to inserting into the database.
+| AssortedTripEntity | This entity captures a distance which was covered on at a certain date and can used for keeping track on trips with bikes not stored in this application for example.
+| LocationEntity | Used in the tracker module for working with real time locations.
+|===
+
+[cols="1,2" options="header"]
+.Important business methods on BikeEntity
+[[BikingEntityMethods]]
+|===
+| Name | Description
+| `decommission` | Decommissions a bike on a given date.
+| `addMilage` | Adds a new milage for a given date and returns it. The milage will only be added if the date is after the date the last milage was added and if the amount is greater than the last milage.
+| `getPeriods` | Gets all monthly periods in which milages have been recorded.
+| `getMilage` | Gets the total milage of this bike.
+| `getLastMilage` | Gets the last milage recorded. In most cases the same as `getMilage`.
+| `getMilageInPeriod` | Gets the milage in a given period.
+| `getMilagesInYear` | Gets all milages in a year as an array (of months).
+| `getMilageInYear` | Gets the total milage in a given year.
+|===
+
+=== Persistency
+
+_biking2_ uses an http://www.h2database.com/html/main.html[H2] database for storing relational data and the file system for binary image files and large ascii files (especially all GPS files).
+
+During development and production the H2 database is retained and not in-memory based. The location of this file is configured through the `biking2.database-file` property and the default during development is `./var/dev/db/biking-dev` relative to the working directory of the VM.
+
+All access to the database goes through JPA using Hibernate as provider. See the <<Domain Models>> for all entities used in the application.
+
+The JPA Entity Manager isn't accessed directly but only through the facilities offered by Spring Data JPA, that is through repositories only.
+
+All data stored as files is stored relative to `biking2.datastore-base-directory` which defaults to `./var/dev`. Inside are 3 directories:
+
+* `bikingPictures`: Contains all pictures collected from _Daily Fratze_
+* `galleryPictures`: Contains all uploaded pictures
+* `tracks`: Contains uploaded GPS data and the result of converting TCX files into GPX files
+
+=== User Interface
+
+The default user interface for _biking2_ and packaged within the final artifact is a Single Page Application written in JavaScript using _Angular JS_ together with a very default _Bootstrap_ template.
+
+For using the realtime location update interface, choose one of the many MQTT clients outthere.
+
+There is a second user interface written in Java called http://info.michael-simons.eu/2014/10/22/getting-started-with-javafx-8-developing-a-rest-client-application-from-scratch/[bikingFX].
+
+=== Transaction Processing
+
+_biking2_ relies on Spring Boot to create all necessary beans for handling local transactions within the JPA EntityManager. _biking2_ does not support distributed transactions.
+
+=== Session Handling
+
+_biking2_ only provides a stateless public API, there is no session handling.
+
+=== Security
+
+_biking2_ offers security for its API endpoints only via https://en.wikipedia.org/wiki/Basic_access_authentication[HTTP basic access authentication] and in case of the MQTT module with MQTTs default security model. Security can be increased by running the application behind a SSL proxy or configuring SSL support in the embedded Tomcat container.
+
+For the kind of data managed here it's an agreed tradeoff to keep the application simple. See also <<Safety>>.
+
+=== Safety
+
+No part of the system has life endangering aspect.
+
+=== Communications and Integration
+
+_biking2_ uses an internal Apache ActiveMQ broker on the same VM as the application for providing STOMP channels and a MQTT transport. This broker is volatile, messages are not persisted during application restarts.
+
+=== Plausibility and Validity Checks
+
+Datatypes and ranges are checked via http://beanvalidation.org/1.0/spec/[JSR-303] annotations on classes representing the <<Domain Models>>. Those classes are directly bound to external REST interfaces.
+
+There are three important business checks:
+
+. Bikes which have been decommissioned cannot be modified (i.e. they can have no new milages): Checked in `BikesController`.
+. For each unique month only one milage can be added to a bike. Checked in the `BikeEntity`.
+. A new milage must be greater than the last one. Also checked inside `BikeEntity`.
+
+=== Exception/Error Handling
+
+Errors handling to inconsistent data (in regard to the data models constraint) as well as failures to <<Plausibility and Validity Checks,validation>> are mapped to HTTP errors. Those errors are handled by the frontends controller code. Technical errors (hardware, database etc.) are not handled and may lead to application failure or lost data.
+
+=== Logging, Tracing
+
+Spring Boot configures logging per default to standard out. The default <<Configurability, configuration>> isn't change in that regard, so all framework logging (especially Spring and Hiberate) go to standard out in standard format and can be grabbed or ignored via OS specific means.
+
+All business components use `java.util.logging` facilities which are configured through the Spring Boot runtime.
+
+=== Configurability
+
+Spring Boot offers a plethora of configuration options, those are just the main options to configure Spring Boot and available starters: https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html[Common application properties].
+
+The default configuration is available in `src/main/resources/application.properties`. During development those properties are merged with `src/main/resources/application-dev.properties`. Additional properties can be added through system environment or through an `application-*.properties` in the current JVM directory.
+
+During tests an additional `application-test.properties` can be used to add or overwrite additional properties or values.
+
+Those are the _biking2_ specific properties:
+
+[cols="1,1,2" options="header"]
+.biking2 specific configuration properties
+|===
+| Property | Default | Description
+| biking2.color-of-cumulative-graph | 000000 | Color of the cumulative line graph
+| biking2.dailyfratze-access-token | n/a | An OAuth access token for _Daily Fratze_
+| biking2.datastore-base-directory | ${user.dir}/var/dev | Directory for storing files (tracks and images)
+| biking2.fetch-biking-picture-cron | 0 0 */8 * * * | A cron expression for configuring the `FetchBikingPicturesJob`
+| biking2.home.longitude | 6.179489185520004 | Longitude of the home coordinate
+| biking2.home.latitude | 50.75144902272457 | Latitude of the home coordinate
+| biking2.connector.proxyName | n/a | The name of a proxy if _biking2_ runs behind one
+| biking2.connector.proxyPort | 80 | The port of a proxy if _biking2_ runs behind one
+| biking2.gpsBabel | /opt/local/bin/gpsbabel | Fully qualified path to the _GPSBabel_ binary
+| biking2.scheduled-thread-pool-size | 10 | Thread pool size for the job pool
+| biking2.tracker.host | localhost | The host on which the tracker (MQTT channel) should listen
+| biking2.tracker.stompPort | 2307 | STOMP port
+| biking2.tracker.mqttPort | 4711 | MQTT port
+| biking2.tracker.username | ${security.user.name} | Username for the MQTT channel
+| biking2.tracker.password | ${security.user.password} | Password for the MQTT channel
+| biking2.tracker.device | iPhone | Name of the OwnTracks device
+|===
+
+=== Internationalization
+
+Only supported language is English. There is no hook for doing internationalization in the frontend and there are no plans for creating one.
+
+=== Migration
+
+_biking2_ replaced a Ruby application based on the _Sinatra_ framework. Data was stored in a SQLite database which has been migrated by hand to the H2 database.
+
+=== Testability
+
+The project contains a JUnit tests in the standard location of a Maven project. At the time of writing those tests covers >95% of the code written. Tests must be executed during build and should not be skipped.
+
+=== Build-Management
+
+The application can be build with Maven without external dependencies outside Maven. To run all tests _gpsbabel_ must be on the path.

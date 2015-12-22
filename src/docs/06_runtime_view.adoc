@@ -1,0 +1,14 @@
+[[section-runtime-view]]
+== Runtime View
+
+User interaction with _biking2_ and error handling is pretty basic and simple.
+
+I picked up two uses cases where an actual runtime view is interesting:
+
+=== Creating new tracks
+
+image::6.1_creating-new-tracks.png[align="center"]
+
+=== Fetching biking pictures from _Daily Fratze_
+
+image::6.2_fetching-biking-pictures-from-dailyfratze.png[align="center"]
