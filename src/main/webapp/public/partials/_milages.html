@@ -69,9 +69,9 @@
 	<div data-ng-highchart id="chart-history"  config="historyConfig" ></div>					
     </div>
     <div class="col-md-4 hidden-sm hidden-xs">
-	<p ng-hide="historyConfig.userData.worstYear == null || historyConfig.userData.bestYear == null">
-	    The worst year was <strong>{{ historyConfig.userData.worstYear.key }}</strong> with <strong>{{ historyConfig.userData.worstYear.value | number:0 }}km</strong>, 
-	    the best year was <strong>{{ historyConfig.userData.bestYear.key }}</strong> with <strong>{{ historyConfig.userData.bestYear.value | number:0 }}km</strong>.
+	<p ng-hide="worstYear === null || bestYear === null">
+	    The worst year was <strong>{{ worstYear.year }}</strong> with <strong>{{ worstYear.value | number:0 }}km</strong>, 
+	    the best year was <strong>{{ bestYear.year }}</strong> with <strong>{{ bestYear.value | number:0 }}km</strong>.
 	</p>
 		
 	<p>The preferred bikes were:</p>	
