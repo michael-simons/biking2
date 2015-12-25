@@ -112,6 +112,7 @@ biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance,
 
 biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emptyChart) {
     $scope.currentYearConfig = $scope.monthlyAverageConfig = $scope.historyConfig = emptyChart;
+    $scope.worstYear = $scope.bestYear = null;
     $scope.alerts = [];
     var currentYear = new Date().getFullYear();
     $scope.historyRange = {
@@ -134,6 +135,20 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
 		{params: {start: $scope.historyRange.start, end: ($scope.historyRange.end + 1)}}
 	).success(function(data) {	    
 	    $scope.historyConfig = data;
+	    if(data.userData.worstYear !== null) {
+		var year = Object.keys(data.userData.worstYear)[0];
+		$scope.worstYear = {
+		    year: year,
+		    value: data.userData.worstYear[year]
+		};
+	    }
+	    if(data.userData.bestYear !== null) {
+		var year = Object.keys(data.userData.bestYear)[0];
+		$scope.bestYear = {
+		    year: year,
+		    value: data.userData.bestYear[year]
+		};	    
+	    }
 	});
     };
     $scope.updateHistory();
