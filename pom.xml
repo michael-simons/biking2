@@ -69,6 +69,9 @@
 	    <plugin>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-maven-plugin</artifactId>
+		<configuration>
+		    <excludeDevtools>true</excludeDevtools>
+		</configuration>
 	    </plugin>
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
@@ -156,23 +159,6 @@
 			    <goal>enforce</goal>
 			</goals>
 			<phase>validate</phase>
-		    </execution>
-		</executions>
-	    </plugin>
-	    <plugin>
-		<groupId>org.zeroturnaround</groupId>
-		<artifactId>jrebel-maven-plugin</artifactId>
-		<version>1.1.3</version>
-		<configuration>
-		    <alwaysGenerate>true</alwaysGenerate>
-		</configuration>
-		<executions>
-		    <execution>
-			<id>generate-rebel-xml</id>
-			<phase>process-resources</phase>
-			<goals>
-			    <goal>generate</goal>
-			</goals>
 		    </execution>
 		</executions>
 	    </plugin>
@@ -289,6 +275,11 @@
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-actuator</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-devtools</artifactId>
+	    <optional>true</optional>
 	</dependency>
 
 	<dependency>
