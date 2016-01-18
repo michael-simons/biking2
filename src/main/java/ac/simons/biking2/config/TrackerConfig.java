@@ -55,7 +55,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
  */
 @Configuration
 @EnableConfigurationProperties(TrackerProperties.class)
-@Profile({"dev", "prod"})
+@Profile({"default", "prod"})
 public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @ConfigurationProperties("biking2.tracker")
