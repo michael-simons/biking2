@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -31,13 +30,12 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
  * @author Michael J. Simons, 2014-02-19
  */
 @Configuration
-@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Profile({"default", "prod"})
 public class SecurityConfig {
 
     @Configuration
-    @Order(SecurityProperties.BASIC_AUTH_ORDER - 10)    
+    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
     @ConditionalOnBean(SecurityConfig.class)
     protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	@Override
