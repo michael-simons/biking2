@@ -33,7 +33,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Profile({"dev", "prod"})
+@Profile({"default", "prod"})
 public class SecurityConfig {
 
     @Configuration

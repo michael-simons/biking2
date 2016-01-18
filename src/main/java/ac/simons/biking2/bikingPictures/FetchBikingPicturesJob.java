@@ -47,7 +47,7 @@ import static java.time.ZonedDateTime.ofInstant;
  * @author Michael J. Simons, 2014-02-17
  */
 @Component
-@Profile({"dev", "prod"})
+@Profile({"default", "prod"})
 @ConditionalOnBean(DailyFratzeProvider.class)
 class FetchBikingPicturesJob {
     
