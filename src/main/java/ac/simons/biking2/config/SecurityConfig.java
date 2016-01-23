@@ -35,7 +35,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     @Configuration
-    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+    @Order(SecurityProperties.BASIC_AUTH_ORDER - 10)
     @ConditionalOnBean(SecurityConfig.class)
     protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	@Override
