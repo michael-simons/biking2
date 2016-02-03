@@ -34,8 +34,13 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Profile({"default", "prod"})
 public class SecurityConfig {
 
+    /**
+     * When using Spring Boot Dev Tools,
+     * {@code SecurityProperties.BASIC_AUTH_ORDER - 20} will already be used for
+     * the h2 web console if that hasn't been explicitly disabled.
+     */
     @Configuration
-    @Order(SecurityProperties.BASIC_AUTH_ORDER - 10)
+    @Order(SecurityProperties.BASIC_AUTH_ORDER - 20)
     @ConditionalOnBean(SecurityConfig.class)
     protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	@Override
