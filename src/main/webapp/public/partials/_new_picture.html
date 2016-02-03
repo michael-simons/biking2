@@ -2,13 +2,13 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel();">&times;</button>
     <h4 class="modal-title">New picture</h4>
 </div>
-<div class="modal-body">    	
+<div class="modal-body">
     <form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
 	<div class="form-group" data-ng-show="badRequest">
-	    <div class="col-sm-offset-2 col-sm-10">      
+	    <div class="col-sm-offset-2 col-sm-10">
 		<label class="text-danger">
 		    {{badRequest}}
-		</label>      
+		</label>
 	    </div>
 	</div>
 	<div class="form-group" data-ng-class="{'has-error': theForm.inputTakenOn.$invalid,'has-success': theForm.inputTakenOn.$valid}">

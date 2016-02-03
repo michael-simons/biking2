@@ -2,13 +2,13 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel();">&times;</button>
     <h4 class="modal-title">New bike</h4>
 </div>
-<div class="modal-body">    	
+<div class="modal-body">
     <form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
 	<div class="form-group" data-ng-show="badRequest">
-	    <div class="col-sm-offset-2 col-sm-10">      
+	    <div class="col-sm-offset-2 col-sm-10">
 		<label class="text-danger">
 		    {{badRequest}}
-		</label>      
+		</label>
 	    </div>
 	</div>
 	<div class="form-group" data-ng-class="{'has-error': theForm.inputName.$invalid,'has-success': theForm.inputName.$valid}">
@@ -16,7 +16,7 @@
 	    <div class="col-sm-10">
 		<input id="inputName" name="inputName" type="text" class="form-control" data-ng-model="bike.name" data-ng-required="true"/>
 	    </div>
-	</div>	
+	</div>
 	<div class="form-group" data-ng-class="{'has-error': theForm.inputBoughtOn.$invalid,'has-success': theForm.inputBoughtOn.$valid}">
 	    <label for="inputBoughtOn" class="col-sm-2 control-label">Date</label>
 	    <div class="col-sm-10">
@@ -27,13 +27,13 @@
 		    </span>
 		</div>
 	    </div>
-	</div>  
+	</div>
 	<div class="form-group" data-ng-class="{'has-error': theForm.inputColor.$invalid,'has-success': theForm.inputColor.$valid}">
 	    <label for="inputName" class="col-sm-2 control-label">Color</label>
 	    <div class="col-sm-10">
 		<input id="inputColor" name="inputColor" type="text" class="form-control" data-ng-model="bike.color" data-ng-required="true" data-ng-maxlength="6"/>
 	    </div>
-	</div>	
+	</div>
     </form>
 </div>
 <div class="modal-footer">
