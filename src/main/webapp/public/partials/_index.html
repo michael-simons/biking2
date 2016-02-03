@@ -5,7 +5,7 @@
 </div>
 <div class="row">
     <div class="col-sm-3 col-md-3 col-lg-2 biking_picture hidden-xs">
-	<a ng-href="{{ currentLinkToBikingPicture || '#' }}" id="a_biking_picture_link">	                                                                        
+	<a ng-href="{{ currentLinkToBikingPicture || '#' }}" id="a_biking_picture_link">
 	    <img alt="Michis biking pictures…" id="a_biking_picture" ng-src="{{ currentBikingPicture || '/img/default-biking-picture.jpg' }}" style="height:120px; border:1px solid #003366;" />
 	</a>
     </div>
@@ -22,7 +22,7 @@
 		<br />
 		The worst month was <strong>{{ summary.worstPeriod.startOfPeriod | date:'MMMM yyyy'}}</strong> with <strong>{{ summary.worstPeriod.value | number:0}}km</strong>, the best month was <strong>{{ summary.bestPeriod.startOfPeriod | date:'MMMM yyyy' }}</strong> with <strong>{{ summary.bestPeriod.value | number:0}}km</strong>.
 	    </span>
-	</p>			
+	</p>
 	<p>
 	    This little application is not only about my biking activities, but should also showcase my current skillset as Developer as well.<br />
 	    Check out the <a href="/about">about page</a> or read the full story in my blog at <a href="http://info.michael-simons.eu/2014/02/20/developing-a-web-application-with-spring-boot-angularjs-and-java-8/">info.michael-simons.eu</a>.

@@ -8,17 +8,17 @@
 
 
 <div class="row">
-    <div class="col-md-8 col-lg-7">	
-	<div data-ng-highchart id="chart-current-year" config="currentYearConfig"></div>	
-    </div>    
-    <div class="col-md-4 hidden-sm hidden-xs">		
+    <div class="col-md-8 col-lg-7">
+	<div data-ng-highchart id="chart-current-year" config="currentYearConfig"></div>
+    </div>
+    <div class="col-md-4 hidden-sm hidden-xs">
 	<p>Current milage this year is <strong>{{currentYearConfig.userData.currentYearSum}}km</strong>, this is a monthly average of <strong>{{currentYearConfig.userData.average | number:0}}km</strong>.</p>
-		
+
 	<p ng-hide="currentYearConfig.userData.worstPeriod == null || currentYearConfig.userData.bestPeriod == null">
-	    The worst month was <strong>{{ currentYearConfig.userData.worstPeriod.startOfPeriod | date:'MMMM'}}</strong> with <strong>{{ currentYearConfig.userData.worstPeriod.value | number:0}}km</strong>, 
+	    The worst month was <strong>{{ currentYearConfig.userData.worstPeriod.startOfPeriod | date:'MMMM'}}</strong> with <strong>{{ currentYearConfig.userData.worstPeriod.value | number:0}}km</strong>,
 	    the best month was <strong>{{ currentYearConfig.userData.bestPeriod.startOfPeriod | date:'MMMM' }}</strong> with <strong>{{ currentYearConfig.userData.bestPeriod.value | number:0}}km</strong>.
 	</p>
-		
+
 	<p ng-hide="currentYearConfig.userData.preferredBike == null">Preferred bike in {{currentYearConfig.userData.currentYear}} is my "{{currentYearConfig.userData.preferredBike.name}}" so far.</p>
     </div>
 </div>
@@ -31,16 +31,16 @@
 
 <div class="row">
     <div class="col-md-12">
-	<h2>Monthly average</h2>	
+	<h2>Monthly average</h2>
 	<p>This chart shows my overall monthly average together with the minimum and maximum range for each month. The red line is the overall monthly average since recording milages.</p>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-8 col-lg-7">
-	<div data-ng-highchart id="chart-monthly-average"  config="monthlyAverageConfig" ></div>				
-    </div>    
-    <div class="col-md-4 hidden-sm hidden-xs">	
+	<div data-ng-highchart id="chart-monthly-average"  config="monthlyAverageConfig" ></div>
+    </div>
+    <div class="col-md-4 hidden-sm hidden-xs">
 	<p>The graph was heavily inspired by "Temperaturkurve" at <a href="http://www.goetemp.de">Goetemp</a>, a project of my friend <a href="http://www.jan-von.de">Jan</a>.</p>
     </div>
 </div>
@@ -49,7 +49,7 @@
 <div class="row">
     <div class="col-md-12">
 	<h2>History</h2>
-	<p>Those are historical statistics available since 2009. You see a massive decline in 2011, when i exessivly programmed on <a href="http://dailyfratze.de">Daily Fratze 2</a>. I hope the trend in the last 2 months of 2012 continues… Biking tends to keep me sane ;)</p>				
+	<p>Those are historical statistics available since 2009. You see a massive decline in 2011, when i exessivly programmed on <a href="http://dailyfratze.de">Daily Fratze 2</a>. I hope the trend in the last 2 months of 2012 continues… Biking tends to keep me sane ;)</p>
 	<form class="form-inline">
 	    <div class="form-group">
 	      <label for="start">History range from</label>
@@ -58,36 +58,36 @@
 	    <div class="form-group">
 	      <label for="end">to</label>
 	      <input type="number" class="form-control input-sm" id="end" min="{{historyRange.start}}" max="{{historyRange.max}}" data-ng-model="historyRange.end" data-ng-change="updateHistory()" placeholder="End year (exclusive)">
-	    </div>  	    
-	</form>	
+	    </div>
+	</form>
 	<br />
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-8 col-lg-7">
-	<div data-ng-highchart id="chart-history"  config="historyConfig" ></div>					
+	<div data-ng-highchart id="chart-history"  config="historyConfig" ></div>
     </div>
     <div class="col-md-4 hidden-sm hidden-xs">
 	<p ng-hide="worstYear === null || bestYear === null">
-	    The worst year was <strong>{{ worstYear.year }}</strong> with <strong>{{ worstYear.value | number:0 }}km</strong>, 
+	    The worst year was <strong>{{ worstYear.year }}</strong> with <strong>{{ worstYear.value | number:0 }}km</strong>,
 	    the best year was <strong>{{ bestYear.year }}</strong> with <strong>{{ bestYear.value | number:0 }}km</strong>.
 	</p>
-		
-	<p>The preferred bikes were:</p>	
+
+	<p>The preferred bikes were:</p>
 	<table class="table table-condensed">
 	    <thead>
 		<tr>
 		    <th></th>
-		    <th>Name</th>		    
+		    <th>Name</th>
 		</tr>
 	    </thead>
 	    <tbody>
 		<tr ng-repeat="(year, bike) in historyConfig.userData.preferredBikes">
 		    <td>{{year}}</td>
-		    <td>{{bike.name}}</td>		    
+		    <td>{{bike.name}}</td>
 		</tr>
 	    </tbody>
-	</table>	
+	</table>
     </div>
 </div>

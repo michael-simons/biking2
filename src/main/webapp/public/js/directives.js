@@ -290,7 +290,8 @@ angular
 				new OpenLayers.Layer.OSM.CycleMap("CycleMap"),
 				new OpenLayers.Layer.Markers("Markers")
 			    ],
-			    zoom: 6
+			    zoom: 6,			    
+			    theme: null
 			});
 
 			scope.$watch(attrs.home, function(value) {

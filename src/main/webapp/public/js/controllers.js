@@ -26,7 +26,7 @@ var biking2Controllers = angular
 	    loading: true
 	});
 
-biking2Controllers.controller('IndexCtrl', function($scope, $http, $interval) {
+biking2Controllers.controller('IndexCtrl', ['$scope', '$http', '$interval', function($scope, $http, $interval) {
     $http.get('/api/summary').success(function(data) {
 	$scope.summary = data;
     });
@@ -44,9 +44,9 @@ biking2Controllers.controller('IndexCtrl', function($scope, $http, $interval) {
 	    $interval.cancel(timer);
 	});
     });
-});
+}]);
 
-biking2Controllers.controller('BikesCtrl', function($scope, $http, $modal) {
+biking2Controllers.controller('BikesCtrl', ['$scope', '$http', '$modal', function($scope, $http, $modal) {
     $http.get('/api/bikes?all=true').success(function(data) {
 	$scope.bikes = data;
     });
@@ -66,9 +66,9 @@ biking2Controllers.controller('BikesCtrl', function($scope, $http, $modal) {
 		}
 	);
     };
-});
+}]);
 
-biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance, $http) {
+biking2Controllers.controller('AddNewBikeCtrl', ['$scope', '$modalInstance', '$http', function($scope, $modalInstance, $http) {
     $scope.bike = {
 	name: null,
 	boughtOn: new Date(),
@@ -108,9 +108,9 @@ biking2Controllers.controller('AddNewBikeCtrl', function($scope, $modalInstance,
 		$scope.badRequest = 'The name is already used.';
 	});
     };
-});
+}]);
 
-biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emptyChart) {
+biking2Controllers.controller('MilagesCtrl', ['$scope', '$http', '$modal', 'emptyChart', function($scope, $http, $modal, emptyChart) {
     $scope.currentYearConfig = $scope.monthlyAverageConfig = $scope.historyConfig = emptyChart;
     $scope.worstYear = $scope.bestYear = null;
     $scope.alerts = [];
@@ -187,9 +187,9 @@ biking2Controllers.controller('MilagesCtrl', function($scope, $http, $modal, emp
 	    );
 	}
     };
-});
+}]);
 
-biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstance, $http) {
+biking2Controllers.controller('AddNewMilageCtrl', ['$scope', '$modalInstance', '$http', function($scope, $modalInstance, $http) {
 
     $scope.milage = {
 	bikeId: $scope.bikes[0].id,
@@ -230,9 +230,9 @@ biking2Controllers.controller('AddNewMilageCtrl', function($scope, $modalInstanc
 		$scope.badRequest = 'Please do not temper with this form.';
 	});
     };
-});
+}]);
 
-biking2Controllers.controller('GalleryCtrl', function($scope, $http, $modal) {
+biking2Controllers.controller('GalleryCtrl', ['$scope', '$http', '$modal', function($scope, $http, $modal) {
     $scope.imageInterval = 5000;
     $scope.allPictures = [];
     $scope.slides = [];
@@ -276,9 +276,9 @@ biking2Controllers.controller('GalleryCtrl', function($scope, $http, $modal) {
 		}
 	);
     };
-});
+}]);
 
-biking2Controllers.controller('AddNewPictureCtrl', function($scope, $modalInstance, $http, $upload) {
+biking2Controllers.controller('AddNewPictureCtrl', ['$scope', '$modalInstance', '$upload', function($scope, $modalInstance, $upload) {
     $scope.picture = {
 	takenOn: null,
 	description: null
@@ -328,9 +328,9 @@ biking2Controllers.controller('AddNewPictureCtrl', function($scope, $modalInstan
 	    $scope.badRequest = 'There\'s something wrong with your input, please check!';
 	});
     };
-});
+}]);
 
-biking2Controllers.controller('TracksCtrl', function($scope, $http, $modal) {
+biking2Controllers.controller('TracksCtrl', ['$scope', '$http', '$modal', function($scope, $http, $modal) {
     $http.get('/api/tracks').success(function(data) {
 	$scope.tracks = data;
     });
@@ -350,9 +350,9 @@ biking2Controllers.controller('TracksCtrl', function($scope, $http, $modal) {
 		}
 	);
     };
-});
+}]);
 
-biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance, $upload) {
+biking2Controllers.controller('AddNewTrackCtrl', ['$scope', '$modalInstance', '$upload', function($scope, $modalInstance, $upload) {
     $scope.track = {
 	name: null,
 	coveredOn: new Date(),
@@ -410,16 +410,16 @@ biking2Controllers.controller('AddNewTrackCtrl', function($scope, $modalInstance
 		$scope.badRequest = 'There\'s something wrong with your input, please check!';
 	});
     };
-});
+}]);
 
-biking2Controllers.controller('TrackCtrl', function($scope, $http, $q, $routeParams) {    
+biking2Controllers.controller('TrackCtrl', ['$scope', '$http', '$q', '$routeParams', function($scope, $http, $q, $routeParams) {    
     $q.all([$http.get('/api/tracks/' + $routeParams.id), $http.get('/api/home')]).then(function(values) {
 	$scope.track = values[0].data;	
 	$scope.home = values[1].data;	
-    });
-});
+    });   
+}]);
 
-biking2Controllers.controller('LocationCtrl', function($scope, $http) {
+biking2Controllers.controller('LocationCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.locations = [];
     $http.get('/api/locations').success(function(data) {
 	$scope.locations = data;	
@@ -437,9 +437,9 @@ biking2Controllers.controller('LocationCtrl', function($scope, $http) {
 	    });
 	});
     });
-});
+}]);
 
-biking2Controllers.controller('AboutCtrl', function($scope, $q, $http, $filter, $interval) {
+biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', '$interval', function($scope, $q, $http, $filter, $interval) {
     $scope.refreshInterval = 30;
     $scope.memoryConfig = {
 	options: {
@@ -529,4 +529,4 @@ biking2Controllers.controller('AboutCtrl', function($scope, $q, $http, $filter, 
 	$interval.cancel(timer);
     });
     $scope.refresh();
-});
+}]);

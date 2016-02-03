@@ -5,7 +5,7 @@
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
-    <version>2.0.7-SNAPSHOT</version>
+    <version>2.1.2-SNAPSHOT</version>
 
     <parent>
 	<groupId>org.springframework.boot</groupId>
@@ -51,7 +51,7 @@
 	<highcharts.version>3.0.10</highcharts.version>
 	<openlayers.version>2.13.1</openlayers.version>
 	<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
-	<angular-file-upload.version>1.2.5</angular-file-upload.version>
+	<angular-file-upload.version>1.2.8</angular-file-upload.version>
 	<momentjs.version>2.10.6</momentjs.version>	
 	<sockjs-client.version>1.0.2</sockjs-client.version>
 	<stomp-websocket.version>2.3.3</stomp-websocket.version>	
@@ -236,6 +236,7 @@
 		<filtering>true</filtering>
 		<includes>
 		    <include>build.properties</include>
+		    <include>wro.xml</include>
 		</includes>
 	    </resource>
 	    <resource>
@@ -244,8 +245,8 @@
 	    <resource>
 		<directory>src/main/webapp</directory>
 		<filtering>true</filtering>
-		<includes>
-		    <include>**/*.html</include>
+		<includes>		    
+		    <include>/public/js/OpenLayersConfig.js</include>
 		</includes>
 	    </resource>
 	</resources>
@@ -415,6 +416,11 @@
 	    <groupId>org.webjars</groupId>
 	    <artifactId>stomp-websocket</artifactId>
 	    <version>${stomp-websocket.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>eu.michael-simons</groupId>
+	    <artifactId>wro4j-spring-boot-starter</artifactId>
+	    <version>0.0.7</version>	    
 	</dependency>
     </dependencies>
 </project>

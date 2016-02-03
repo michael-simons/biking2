@@ -5,38 +5,32 @@
 	<meta content="Michael J. Simons" name="Author" />
 	<title>biking.michael-simons.eu</title>
 
-	<script type="text/javascript" src="/webjars/jquery/1.11.0/jquery.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.2.29/angular.min.js"></script>
-	<script type="text/javascript" src="/webjars/openlayers/2.13.1/OpenLayers.js"></script>
-	<script type="text/javascript" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>	 
+	<script type="text/javascript" src="/owr/biking2-embedded.js"></script>
 
-	<script type="text/javascript" src="/js/OpenLayersDeprecated.js"></script>
-	<script type="text/javascript" src="/js/directives.js"></script>
-	
 	<script type="text/javascript">
-	    var biking2 = angular.module('biking2', ['track-map-ng']);	    
+	    var biking2 = angular.module('biking2', ['track-map-ng']);
 	</script>
     </head>
-    <body style="overflow: hidden; margin: 0px; padding: 0px;">	    
-	<div id="map" 
+    <body style="overflow: hidden; margin: 0px; padding: 0px;">
+	<div id="map"
 	     data-ng-track-map="map"
 	     data-th-attr="
-		data-home  = '{' + 
-		    '\'longitude\':' + ${home.longitude} + ',' + 
-		    '\'latitude\' :' + ${home.latitude}  + 
+		data-home  = '{' +
+		    '\'longitude\':' + ${home.longitude} + ',' +
+		    '\'latitude\' :' + ${home.latitude}  +
 		'}',
 		data-track = '{' +
-		    '\'id\'    :' + '\'' + ${track.prettyId} + '\'' + ',' + 
-		    '\'name\'  :' + '\'' + ${track.name}     + '\'' + ',' + 
-		    '\'minlat\':' + ${track.minlat}   + ',' + 
-		    '\'minlon\':' + ${track.minlon}   + ',' + 
-		    '\'maxlat\':' + ${track.maxlat}   + ',' + 
+		    '\'id\'    :' + '\'' + ${track.prettyId} + '\'' + ',' +
+		    '\'name\'  :' + '\'' + ${track.name}     + '\'' + ',' +
+		    '\'minlat\':' + ${track.minlat}   + ',' +
+		    '\'minlon\':' + ${track.minlon}   + ',' +
+		    '\'maxlat\':' + ${track.maxlat}   + ',' +
 		    '\'maxlon\':' + ${track.maxlon}   +
 		'}',
 		data-width=${width-2},
 		data-height=${height-2}"
 	     style="border:1px solid black;"
-	     >	    
-	</div>	    
+	     >
+	</div>
     </body>
 </html>

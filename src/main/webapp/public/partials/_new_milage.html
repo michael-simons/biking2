@@ -2,21 +2,21 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel();">&times;</button>
     <h4 class="modal-title">New milage</h4>
 </div>
-<div class="modal-body">    	
+<div class="modal-body">
     <form class="form-horizontal" name="theForm" role="form" data-ng-submit="submit();">
 	<div class="form-group" data-ng-show="badRequest">
-	    <div class="col-sm-offset-2 col-sm-10">      
+	    <div class="col-sm-offset-2 col-sm-10">
 		<label class="text-danger">
 		    {{badRequest}}
-		</label>      
+		</label>
 	    </div>
-	</div>	
+	</div>
 	<div class="form-group" data-ng-class="{'has-error': theForm.inputBike.$invalid,'has-success': theForm.inputBike.$valid}">
 	    <label for="inputBike" class="col-sm-2 control-label">Bike</label>
 	    <div class="col-sm-10">
 		<select id="inputBike" name="inputBike" class="form-control" data-ng-model="milage.bikeId" data-ng-required="true">
-		    <option data-ng-repeat="bike in bikes" value="{{ bike.id }}">{{ bike.name }}</option>		    
-		</select>		
+		    <option data-ng-repeat="bike in bikes" value="{{ bike.id }}">{{ bike.name }}</option>
+		</select>
 	    </div>
 	</div>
 	<div class="form-group" data-ng-class="{'has-error': theForm.inputDate.$invalid,'has-success': theForm.inputDate.$valid}">
@@ -29,7 +29,7 @@
 		    </span>
 		</div>
 	    </div>
-	</div>  	
+	</div>
 	<div class="form-group" data-ng-class="{'has-error': theForm.inputMilage.$invalid,'has-success': theForm.inputMilage.$valid}">
 	    <label for="inputMilage" class="col-sm-2 control-label">Milage</label>
 	    <div class="col-sm-10">

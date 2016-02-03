@@ -10,7 +10,7 @@
 	<p>I'm using <a href="http://owntracks.org/">OwnTracks</a> to update my location when i'm on tour and the map should refresh automatically in a recent (and decent) browser.</p>
 	<p data-ng-show="locations.length > 0">Last update was on: {{locations[locations.length-1].createdAt | date: 'HH:mm:ss'}}.</p>
     </div>
-    <div class="col-md-9">	
+    <div class="col-md-9">
 	<div id="location-map" class="map-wrapper">
 	    <div data-ng-track-map="map" data-locations="locations"></div>
 	</div>

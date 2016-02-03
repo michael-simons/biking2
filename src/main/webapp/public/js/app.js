@@ -39,7 +39,7 @@ var biking2 = angular
 	    'track-map-ng',	    
 	    'biking2Controllers'
 	])
-	.directive('ngActiveTab', function($location) {
+	.directive('ngActiveTab', ['$location', function($location) {
 	    return {
 		link: function postLink(scope, element, attrs) {
 		    scope.$on("$routeChangeSuccess", function(event, current, previous) {
@@ -58,8 +58,8 @@ var biking2 = angular
 		    });
 		}
 	    };
-	})
-	.config(
+	}])
+	.config(['$routeProvider', '$locationProvider', 
 		function($routeProvider, $locationProvider) {
 		    $locationProvider.html5Mode(true);
 
@@ -100,7 +100,7 @@ var biking2 = angular
 				redirectTo: '/'
 			    });
 		}
-	)
+	])
 	.filter('bytes', function() {
 	    return function(bytes, precision) {
 		if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
@@ -121,6 +121,6 @@ var biking2 = angular
 		return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  '' + units[number];
 	    };
 	})
-	.run(function($rootScope) {
+	.run(['$rootScope', function($rootScope) {
 	    $rootScope.currentYear = new Date().getFullYear();
-	});    
+	}]);    
