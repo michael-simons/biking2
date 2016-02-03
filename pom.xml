@@ -236,6 +236,7 @@
 		<filtering>true</filtering>
 		<includes>
 		    <include>build.properties</include>
+		    <include>wro.xml</include>
 		</includes>
 	    </resource>
 	    <resource>
@@ -244,8 +245,8 @@
 	    <resource>
 		<directory>src/main/webapp</directory>
 		<filtering>true</filtering>
-		<includes>
-		    <include>**/*.html</include>
+		<includes>		    
+		    <include>/public/js/OpenLayersConfig.js</include>
 		</includes>
 	    </resource>
 	</resources>
@@ -415,6 +416,11 @@
 	    <groupId>org.webjars</groupId>
 	    <artifactId>stomp-websocket</artifactId>
 	    <version>${stomp-websocket.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>eu.michael-simons</groupId>
+	    <artifactId>wro4j-spring-boot-starter</artifactId>
+	    <version>0.0.7</version>	    
 	</dependency>
     </dependencies>
 </project>

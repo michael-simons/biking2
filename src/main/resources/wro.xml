@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2016 michael-simons.eu.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<groups xmlns="http://www.isdc.ro/wro">
+    <!-- OSM / Openlayer Dependencies -->
+    <group name="osm">
+	<css>/webjars/openlayers/@openlayers.version@/theme/default/style.css</css>
+	
+	<js minimize="false">/webjars/openlayers/@openlayers.version@/OpenLayers.js</js>	
+	<js>/js/OpenStreetMap.js</js>
+	<js>/js/OpenLayersDeprecated.js</js>
+	<js>/js/OpenLayersConfig.js</js>
+    </group>
+    
+    <!-- Stripped down dependencies for the the embedded tracks -->
+    <group name="biking2-embedded">
+	<group-ref>osm</group-ref>
+	
+	<js minimize="false">/webjars/jquery/@jquery.version@/jquery.min.js</js>
+	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular.min.js</js>	
+	<js>/js/directives.js</js>
+    </group>
+    
+    <!-- Dependencies for the full site -->
+    <group name="biking2">
+	<group-ref>osm</group-ref>
+	
+	<css minimize="false">/webjars/bootstrap/@bootstrap.version@/css/bootstrap.min.css</css>	
+	<css>/css/stylesheet.css</css>
+
+	<js minimize="false">/webjars/jquery/@jquery.version@/jquery.min.js</js>
+	<js minimize="false">/webjars/bootstrap/@bootstrap.version@/js/bootstrap.min.js</js>
+	<js minimize="false">/webjars/momentjs/@momentjs.version@/min/moment-with-locales.min.js</js>
+	<js minimize="false">/webjars/angular-file-upload/@angular-file-upload.version@/angular-file-upload-html5-shim.min.js</js>
+	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular.min.js</js>
+	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular-route.min.js</js>
+	<js minimize="false">/webjars/angular-file-upload/@angular-file-upload.version@/angular-file-upload.min.js</js>
+	<js minimize="false">/webjars/angular-ui-bootstrap/@angular-ui-bootstrap.version@/ui-bootstrap.min.js</js>
+	<js minimize="false">/webjars/angular-ui-bootstrap/@angular-ui-bootstrap.version@/ui-bootstrap-tpls.min.js</js>
+	<js minimize="false">/webjars/highcharts/@highcharts.version@/highcharts.js</js>
+	<js minimize="false">/webjars/highcharts/@highcharts.version@/highcharts-more.js</js>
+	<js minimize="false">/webjars/sockjs-client/@sockjs-client.version@/sockjs.min.js</js>
+	<js minimize="false">/webjars/stomp-websocket/@stomp-websocket.version@/stomp.min.js</js>
+		
+	<js>/js/app.js</js>
+	<js>/js/controllers.js</js>
+	<js>/js/directives.js</js>
+    </group>
+</groups>
