@@ -76,6 +76,49 @@ For using the realtime location update interface, choose one of the many MQTT cl
 
 There is a second user interface written in Java called http://info.michael-simons.eu/2014/10/22/getting-started-with-javafx-8-developing-a-rest-client-application-from-scratch/[bikingFX].
 
+=== JavaScript and CSS optimization
+
+JavaScript and CSS dependencies are managed through Maven dependencies in form of http://www.webjars.org[webjars] wherever possible without the need for brew, npm, bower and the like.
+
+Then _biking2_ uses http://alexo.github.io/wro4j/[wro4j] together with a small https://github.com/michael-simons/wro4j-spring-boot-starter[Spring Boot Starter] to optimize JavaScript and CSS web resources.
+
+wro4j provides a model like this:
+
+[source,xml]
+---------------------------------------------------------------------
+<groups xmlns="http://www.isdc.ro/wro">
+    <!-- Dependencies for the full site -->
+    <group name="biking2">
+    	<group-ref>osm</group-ref>
+	
+    	<css minimize="false">/webjars/bootstrap/@bootstrap.version@/css/bootstrap.min.css</css>	
+    	<css>/css/stylesheet.css</css>
+
+    	<js minimize="false">/webjars/jquery/@jquery.version@/jquery.min.js</js>
+    	<js minimize="false">/webjars/bootstrap/@bootstrap.version@/js/bootstrap.min.js</js>
+    	<js minimize="false">/webjars/momentjs/@momentjs.version@/min/moment-with-locales.min.js</js>
+    	<js minimize="false">/webjars/angular-file-upload/@angular-file-upload.version@/angular-file-upload-html5-shim.min.js</js>
+    	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular.min.js</js>
+    	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular-route.min.js</js>
+    	<js minimize="false">/webjars/angular-file-upload/@angular-file-upload.version@/angular-file-upload.min.js</js>
+    	<js minimize="false">/webjars/angular-ui-bootstrap/@angular-ui-bootstrap.version@/ui-bootstrap.min.js</js>
+    	<js minimize="false">/webjars/angular-ui-bootstrap/@angular-ui-bootstrap.version@/ui-bootstrap-tpls.min.js</js>
+    	<js minimize="false">/webjars/highcharts/@highcharts.version@/highcharts.js</js>
+    	<js minimize="false">/webjars/highcharts/@highcharts.version@/highcharts-more.js</js>
+    	<js minimize="false">/webjars/sockjs-client/@sockjs-client.version@/sockjs.min.js</js>
+    	<js minimize="false">/webjars/stomp-websocket/@stomp-websocket.version@/stomp.min.js</js>
+		
+    	<js>/js/app.js</js>
+    	<js>/js/controllers.js</js>
+    	<js>/js/directives.js</js>
+    </group>
+</groups>
+---------------------------------------------------------------------
+
+This model file is filtered by the Maven build, version placeholders will be replaced and all resources, in webjars as well as inside the filesystem, will be available as `biking.css` and `biking.js`.
+
+How those files are optimized, minimized or otherwise processed is up to wro4js configuration, but minification can be turned of during development.
+
 === Transaction Processing
 
 _biking2_ relies on Spring Boot to create all necessary beans for handling local transactions within the JPA EntityManager. _biking2_ does not support distributed transactions.
