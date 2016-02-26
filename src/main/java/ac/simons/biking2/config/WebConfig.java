@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -36,6 +37,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+    /**
+     * Allow cross origin requests for all api endpoints.
+     * @param registry 
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+	registry.addMapping("/api/**").allowedOrigins("*");
+    }
+    
     /**
      * Maps all AngularJS routes to index so that they work with direct linking.
      */

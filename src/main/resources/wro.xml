@@ -39,6 +39,7 @@ limitations under the License.
 	<group-ref>osm</group-ref>
 	
 	<css minimize="false">/webjars/bootstrap/@bootstrap.version@/css/bootstrap.min.css</css>	
+	<css>/css/icons.css</css>
 	<css>/css/stylesheet.css</css>
 
 	<js minimize="false">/webjars/jquery/@jquery.version@/jquery.min.js</js>
