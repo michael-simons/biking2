@@ -1,7 +1,7 @@
 [[section-system-scope-and-context]]
 == System Scope and Context
 
-This chapter describes the environment and context of _biking2_. Who uses the system and on which other system does _biking2_ depend.
+This chapter describes the environment and context of _biking2_: Who uses the system and on which other system does _biking2_ depend.
 
 
 === Business Context
@@ -10,7 +10,7 @@ image::3.1_business-context(1).png[align="center",  width="640"]
 
 .Biker
 
-A passionate biker uses _biking2_ to manage his bikes, milages, tracks and also visual memory (aka images) taken on tours etc. He also wants to embed his tracks as interactive maps on other websites.
+A passionate biker uses _biking2_ to manage his bikes, milages, tracks and also visual memories (aka images) taken on tours etc. He also wants to embed his tracks as interactive maps on other websites.
 
 .Daily Fratze
 
@@ -35,7 +35,7 @@ _biking2_ is broken into 2 main components:
 
 The api runs on a supported application server, using either an embedded container or an external container. It communicates via operating system processes with GPSBabel on the same server.
 
-The connection to _Daily Fratze_ is http based RSS-feed. The feed is paginated and provides *all* images with the given tag but older images may not be available any more when the owner decided to add a digital expiry.
+The connection to _Daily Fratze_ is http based RSS-feed. The feed is paginated and provides *all* images with a given tag but older images may not be available any more when the owner decided to add a digital expiry.
 
 Furthermore _biking2_ provides an http://oembed.com[oEmbed] interface for all tracks stored in the system. Arbitrary websites supporting that protocol can request embeddable content over http knowing only a link to the track without working on the track or map apis themselves.
 

@@ -9,7 +9,7 @@ image::10_quality_tree.png[align="center"]
 
 .Testability / Coverage
 
-By using _JaCoCo_ during http://info.michael-simons.eu/2014/05/22/jacoco-maven-and-netbeans-8-integration/[development and during the build process] ensure a code coverage of at least 95%.
+By using _JaCoCo_ during http://info.michael-simons.eu/2014/05/22/jacoco-maven-and-netbeans-8-integration/[development and the build process] ensure a code coverage of at least 95%.
 
 .Testability / Independent from external services
 

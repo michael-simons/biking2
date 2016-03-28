@@ -22,12 +22,12 @@ Popular JavaScript mapping frameworks provide easy ways to include geometries fr
 * Writing my own converter
 * Using existing swiss army knife for GPS data: http://www.gpsbabel.org[GPSBabel]
 ____
-GPSBabel converts waypoints, tracks, and routes between popular GPS receivers such as Garmin or Magellan and mapping programs like Google Earth or Basecamp. Literally hundreds of GPS receivers and programs are supported. It also has powerful manipulation tools for such data. such as filtering duplicates points or simplifying tracks. It has been downloaded and used tens of millions of times since it was first created in 2001, so it's stable and trusted
+GPSBabel converts waypoints, tracks, and routes between popular GPS receivers such as Garmin or Magellan and mapping programs like Google Earth or Basecamp. Literally hundreds of GPS receivers and programs are supported. It also has powerful manipulation tools for such data. such as filtering duplicates points or simplifying tracks. It has been downloaded and used tens of millions of times since it was first created in 2001, so it's stable and trusted.
 ____
 
 .Decision
 
-_biking2_ uses GPSBabel for the heavy lifting of GPS related data. The project contains a big README stating that GPSBabel must be installed. GPSBabel can be installed on Windows with an installer and on must Linux systems through the official packet manager. Under OS X it is available via MacPorts or Homebrew.
+_biking2_ uses GPSBabel for the heavy lifting of GPS related data. The project contains a README stating that GPSBabel must be installed. GPSBabel can be installed on Windows with an installer and on most Linux systems through the official packet manager. Under OS X it is available via MacPorts or Homebrew.
 
 === Using local file storage for image and track data
 

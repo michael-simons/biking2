@@ -7,9 +7,9 @@ Although data centric, the application resigns from using too much SQL for creat
 
 Building the application with Spring Boot is an obvious choice as one of the main <<Quality Goals,quality goals>> is learning about it. But furthermore using Spring Boot as a "framework" for Spring Framework allows concentration on the business logic. On the one hand there is no need to understand a complex XML configuration and on the other hand all building blocks are still put together using dependency injection.
 
-Regarding dependency injection and testability: All injection should be done via constructor injection, setter injection is only allowed when there's no other technical way. This way units under tests can only be correctly instantiated. Otherwise one tends to forget collaborators or even worse: 20 injected attributes may not hurt, but a constructor with 20 parameters will. This hopefully prevents centralized god classes that control pretty much every other aspect of the application.
+Regarding dependency injection and testability: All injection should be done via constructor injection, setter injection is only allowed when there's no other technical way. This way units under tests can only be correctly instantiated. Otherwise one tends to forget collaborators or even worse: 20 injected attributes may not hurt, but a constructor with 20 parameters will. This hopefully prevents centralized "god classes" that control pretty much every other aspect of the application.
 
-Spring Boot applications can be packaged as single, fat jar files. Since Spring Boot 1.3 those files contain a startup script and can be directly linked to _/etc/init.d_ on a standard Linux systems which serves <<Technical Constraints,[TC4]>>.
+Spring Boot applications can be packaged as single, "fat jar" files. Since Spring Boot 1.3 those files contain a startup script and can be directly linked to _/etc/init.d_ on a standard Linux systems which serves <<Technical Constraints,[TC4]>>.
 
 Interoperability will be achieved by using JSON over simple http protocol for the main API. Security is not the main focus of this application. It should be secure enough to prevent others from tempering with the data, confidentiality is not a main concern (read: passwords can be transmitted in plain over http).
 

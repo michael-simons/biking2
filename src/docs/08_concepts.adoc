@@ -3,7 +3,7 @@
 
 === Domain Models
 
-_biking2_ is datacentric application, therefore everything is based around an Entity Relationship Diagram (ER-Diagram):
+_biking2_ is a datacentric application, therefore everything is based around an Entity Relationship Diagram (ER-Diagram):
 
 image::8.1_er-diagram.png[align="center"]
 
@@ -12,7 +12,7 @@ image::8.1_er-diagram.png[align="center"]
 |===
 | Name | Description
 | bikes | Stores the bikes. Contains dates when the bike was bought and decomissioned, an optional link, color for the charts and also an auditing column when a row was created.
-| milages | Stores milages for a bike (when and how much)
+| milages | Stores milages for a bike (when and how much).
 | tracks | Stores GPS tracks recorded and uploaded with an optional description. For each day the track names must be unique. The columns _minlat_, _minlon_, _maxlat_ and _maxlon_ store the encapsulating rectangle for the track. The _type_ column is constrainted to "biking" and "running".
 | assorted_trips | Stores a date and a distance on that day. Multiple distances per day are allowed.
 | locations | Stores arbitrary locations (latitude and longitude based) for given timestamp with an optional description.
@@ -31,9 +31,9 @@ image::8.1_domain-model.png[align="center"]
 | BikeEntity | A bike was bought on a given date and can be decommisioned. It has a color and an optional link to an arbitrary website. It may or may not have milages recorded. It has some important functions, see <<BikingEntityMethods,Important business methods on BikeEntity>>
 | MilageEntity | A milage is part of a bike. For each bike one milage per month can be recored. The milage is the combination of it's recording date, the amount and the bike.
 | TrackEntity | The representation of _tracks_ contents. The type is an enumeration. Notable public operations are `getPrettyId` (computes a "pretty" id based on the instances id) and `getTrackFile` (generates a reference to the GPS track file in the passed data storage directory).
-| BikingPictureEntity | For handling pictures collected from _Daily Fratze_. The BikingPictureEntity parses the image link on construction the retrieve the unique, external id.
+| BikingPictureEntity | For handling pictures collected from _Daily Fratze_. The BikingPictureEntity parses the image link on construction and retrieves the unique, external id.
 | GalleryPictureEntity | A bean for handling the pictures uploaded by the user. `prePersist` fills the `createdAt` attribute prior to inserting into the database.
-| AssortedTripEntity | This entity captures a distance which was covered on at a certain date and can used for keeping track on trips with bikes not stored in this application for example.
+| AssortedTripEntity | This entity captures a distance which was covered on a certain date and can used for keeping track of trips with bikes not stored in this application for example.
 | LocationEntity | Used in the tracker module for working with real time locations.
 |===
 
@@ -56,7 +56,7 @@ image::8.1_domain-model.png[align="center"]
 
 _biking2_ uses an http://www.h2database.com/html/main.html[H2] database for storing relational data and the file system for binary image files and large ascii files (especially all GPS files).
 
-During development and production the H2 database is retained and not in-memory based. The location of this file is configured through the `biking2.database-file` property and the default during development is `./var/dev/db/biking-dev` relative to the working directory of the VM.
+During development and production the H2 database is retained and not in-memory based. The location of this file is configured through the `biking2.database-file` property and the default value during development is `./var/dev/db/biking-dev` relative to the working directory of the VM.
 
 All access to the database goes through JPA using Hibernate as provider. See the <<Domain Models>> for all entities used in the application.
 
@@ -70,9 +70,9 @@ All data stored as files is stored relative to `biking2.datastore-base-directory
 
 === User Interface
 
-The default user interface for _biking2_ and packaged within the final artifact is a Single Page Application written in JavaScript using _Angular JS_ together with a very default _Bootstrap_ template.
+The default user interface for _biking2_ which is packaged within the final artifact is a Single Page Application written in JavaScript using _Angular JS_ together with a very default _Bootstrap_ template.
 
-For using the realtime location update interface, choose one of the many MQTT clients outthere.
+For using the realtime location update interface, choose one of the many MQTT clients out there.
 
 There is a second user interface written in Java called http://info.michael-simons.eu/2014/10/22/getting-started-with-javafx-8-developing-a-rest-client-application-from-scratch/[bikingFX].
 
@@ -80,7 +80,7 @@ There is a second user interface written in Java called http://info.michael-simo
 
 JavaScript and CSS dependencies are managed through Maven dependencies in form of http://www.webjars.org[webjars] wherever possible without the need for brew, npm, bower and the like.
 
-Then _biking2_ uses http://alexo.github.io/wro4j/[wro4j] together with a small https://github.com/michael-simons/wro4j-spring-boot-starter[Spring Boot Starter] to optimize JavaScript and CSS web resources.
+Furthermore _biking2_ uses http://alexo.github.io/wro4j/[wro4j] together with a small https://github.com/michael-simons/wro4j-spring-boot-starter[Spring Boot Starter] to optimize JavaScript and CSS web resources.
 
 wro4j provides a model like this:
 
@@ -203,8 +203,8 @@ _biking2_ replaced a Ruby application based on the _Sinatra_ framework. Data was
 
 === Testability
 
-The project contains a JUnit tests in the standard location of a Maven project. At the time of writing those tests covers >95% of the code written. Tests must be executed during build and should not be skipped.
+The project contains JUnit tests in the standard location of a Maven project. At the time of writing those tests covers >95% of the code written. Tests must be executed during build and should not be skipped.
 
 === Build-Management
 
-The application can be build with Maven without external dependencies outside Maven. To run all tests _gpsbabel_ must be on the path.
+The application can be build with Maven without external dependencies outside Maven.  _gpsbabel_ must be on the path to run all tests, though.
