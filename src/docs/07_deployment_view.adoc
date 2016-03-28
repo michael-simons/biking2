@@ -8,7 +8,7 @@ image::7_deployment.png[align="center"]
 |===
 | Node / artifact | Description
 | biking2 development | Where _biking2_ development takes place, standard computer with JDK 8, Maven and GPSBabel installed.
-| uberspace host | A host on https://uberspace.de[Uberspace] where biking2.jar runs on a http://www.oracle.com/technetwork/java/javase/downloads/server-jre8-downloads-2133154.html[Server JRE] with restricted memory usage.
+| uberspace host | A host on https://uberspace.de[Uberspace] where biking2.jar runs inside a http://www.oracle.com/technetwork/java/javase/downloads/server-jre8-downloads-2133154.html[Server JRE] with restricted memory usage.
 | biking2.jar | A "fat jar" containing all Java dependencies and a loader so that the Jar is runnable either as jar file or as a service script (on Linux hosts).
 | Browser | A recent browser to access the AngularJS biking2 single page application. All major browsers (Chrome, Firefox, Safari, IE / Edge) should work.
 |===
