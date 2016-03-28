@@ -26,7 +26,7 @@ ____
 
 The main purpose of _biking2_ is keeping track of bicycles and their milages as well as converting _Garmin_ https://en.wikipedia.org/wiki/Training_Center_XML[_Training Center XML_ (tcx)] files to standard https://en.wikipedia.org/wiki/GPS_Exchange_Format[_GPS Exchange Format_ (GPX)] files and storing them in an accessible way.
 
-In addition _biking2_ is used to study and evualate technology, patterns and frameworks. The functional requirements are simple enough to leave enough room for concentration on quality goals.
+In addition _biking2_ is used to study and evaluate technology, patterns and frameworks. The functional requirements are simple enough to leave enough room for concentration on quality goals.
 
 .Main features
 
