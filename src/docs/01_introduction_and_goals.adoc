@@ -42,7 +42,7 @@ Most bike aficionados have problems understanding the question "why more than on
 
 The application should store an "unlimited" number of tracks.
 
-The images should be collected from https://dailyfratze[Daily Fratze], the source are all images that are tagged with "Radtour". In addition the user should be able to provide an "unlimted" number of "gallery pictures" together with a date and a short description.
+The images should be collected from https://dailyfratze[Daily Fratze], the source are all images that are tagged with "Radtour". In addition the user should be able to provide an "unlimited" number of "gallery pictures" together with a date and a short description.
 
 
 === Quality Goals
