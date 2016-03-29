@@ -57,8 +57,8 @@ Interfaces::
 [cols="1,3" options="header"]
 |===
 | Interface | Description
-| REST interface `/api/bikes/*` | Contains all methods for manipulating bikes and their milages
-| REST interface `/api/charts/*` | Contains all methods for generating charts
+| REST interface `/api/bikes/*` | Contains all methods for manipulating bikes and their milages.
+| REST interface `/api/charts/*` | Contains all methods for generating charts.
 |===
 
 Files::
@@ -76,9 +76,9 @@ Interfaces::
 [cols="1,3" options="header"]
 |===
 | Interface | Description
-| REST interface `/api/tracks/*` | Contains all methods for manipulating tracks
-| `/api/oembed` | Resolve track URLs to embeddable tracks (content)
-| `/tracks/*`    | Embeddable track content
+| REST interface `/api/tracks/*` | Contains all methods for manipulating tracks.
+| `/api/oembed` | Resolve track URLs to embeddable tracks (content).
+| `/tracks/*`    | Embeddable track content.
 |===
 
 Files::
@@ -96,7 +96,7 @@ Interfaces::
 [cols="1,3" options="header"]
 |===
 | Interface | Description
-| REST interface `/api/trips/*` | Contains all methods for manipulating trips
+| REST interface `/api/trips/*` | Contains all methods for manipulating trips.
 |===
 
 Files::
@@ -114,9 +114,9 @@ Interfaces::
 [cols="1,3" options="header"]
 |===
 | Interface | Description
-| REST interface `/api/locations/*` | For retrieving all loccations in the last 30 minutes
-| WebSocket / STOMP topic `/topic/currentLocation` | Interface for getting notifcation on new locations
-| MQTT interface | Listens for new locations coming in via MQTT in http://owntracks.org/booklet/tech/json/[OwnTracks format]
+| REST interface `/api/locations/*` | For retrieving all loccations in the last 30 minutes.
+| WebSocket / STOMP topic `/topic/currentLocation` | Interface for getting notifcation on new locations.
+| MQTT interface | Listens for new locations coming in via MQTT in http://owntracks.org/booklet/tech/json/[OwnTracks format].
 |===
 
 Files::
@@ -134,9 +134,9 @@ Interfaces::
 [cols="1,3" options="header"]
 |===
 | Interface | Description
-| RSS Feed reader | Provides access to the _Daily Fratze_ RSS Feed
-| Image reader | Provides access to images hosted on _Daily Fratze_
-| REST interface `/api/bikingPictures/*` | Contains all methods for accessing biking pictures
+| RSS Feed reader | Provides access to the _Daily Fratze_ RSS Feed.
+| Image reader | Provides access to images hosted on _Daily Fratze_.
+| REST interface `/api/bikingPictures/*` | Contains all methods for accessing biking pictures.
 |===
 
 Files::
@@ -154,7 +154,7 @@ Interfaces::
 [cols="1,3" options="header"]
 |===
 | Interface | Description
-| REST interface `/api/galleryPictures/*` | Contains all methods for adding and reading arbitrary pictures
+| REST interface `/api/galleryPictures/*` | Contains all methods for adding and reading arbitrary pictures.
 |===
 
 Files::
@@ -201,13 +201,13 @@ image::5.2_level2-locations.png[align="center"]
 
 Locations are stored and read via a Spring Data JPA based repository named `LocationRepository`. This repository is only accessed through the `LocationService`. The `LocationService` provides real time updates for connected clients through a `SimpMessagingTemplate` and the `LocationController` uses the service to provide access to all locations created within the last 30 minutes.
 
-New locations are created through the service either through a REST interface in form of the `LocationController` or via a `MessageListener` on a MQTT channel.
+New locations are created by the service either through a REST interface in form of the `LocationController` or via a `MessageListener` on a MQTT channel.
 
 ==== bikingPictures (Whitebox)
 
 image::5.2_level2-bikingPictures.png[align="center"]
 
-A Spring Data JPA repository `BikingPicturesRepository` is used for all access to `BikingPictureEntities`, the external REST api for reading pictures is implemented with `BikingPicturesController`. The RSS feed is read from `FetchBikingPicturesJob` by using a JAXBContext "rss". The URLs to the image files which may are protected by various means are provided to the job via a `DailyFratzeProvider`.
+A Spring Data JPA repository named `BikingPicturesRepository` is used for all access to `BikingPictureEntities`, the external REST api for reading pictures is implemented with `BikingPicturesController`. The RSS feed is read from `FetchBikingPicturesJob` by using a JAXBContext "rss". The URLs to the image files which may are protected by various means are provided to the job via a `DailyFratzeProvider`.
 
 Contained blackboxes::
 
