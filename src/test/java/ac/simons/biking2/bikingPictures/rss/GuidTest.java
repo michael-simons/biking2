@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.bikingPictures.rss;
 
-import ac.simons.biking2.bikingPictures.rss.Guid;
 import ac.simons.biking2.support.BeanTester;
 import java.util.HashMap;
 import java.util.Map;
