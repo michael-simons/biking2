@@ -15,8 +15,6 @@
  */
 package ac.simons.biking2.bikingPictures.rss;
 
-import ac.simons.biking2.bikingPictures.rss.Channel;
-import ac.simons.biking2.bikingPictures.rss.Link;
 import ac.simons.biking2.support.BeanTester;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
