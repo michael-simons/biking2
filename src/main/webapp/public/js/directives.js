@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/* global Highcharts, OpenLayers */
+
 'use strict';
 
 /* Directives */

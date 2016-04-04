@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/* global moment */
+
 'use strict';
 
 /* Controllers */
