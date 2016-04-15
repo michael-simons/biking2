@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package ac.simons.biking2.tracker;
 
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +37,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 class LocationController {
 
     private final LocationService locationService;
-
-    @Autowired
+   
     public LocationController(LocationService locationService) {
 	this.locationService = locationService;
     }

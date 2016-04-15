@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package ac.simons.biking2.tracker;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +31,7 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
     private final SimpMessagingTemplate messagingTemplate;
-
-    @Autowired
+    
     public LocationService(final LocationRepository locationRepository, final SimpMessagingTemplate messagingTemplate) {
 	this.locationRepository = locationRepository;
 	this.messagingTemplate = messagingTemplate;

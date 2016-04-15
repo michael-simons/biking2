@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.net.URLConnection;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
@@ -35,8 +34,7 @@ import org.springframework.stereotype.Component;
 class DailyFratzeProvider {    
     private final String accessToken;    
     private final String imageUrlFormat;
-    
-    @Autowired
+        
     public DailyFratzeProvider(final @Value("${biking2.dailyfratze-access-token}") String accessToken) {
 	this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
     }

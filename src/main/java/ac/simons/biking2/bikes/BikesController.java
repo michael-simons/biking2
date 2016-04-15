@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import ac.simons.biking2.bikes.BikeEntity.Link;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +42,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 class BikesController {
 
     private final BikeRepository bikeRepository;
-
-    @Autowired
+    
     public BikesController(final BikeRepository bikeRepository) {
 	this.bikeRepository = bikeRepository;
     }
