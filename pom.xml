@@ -2,6 +2,10 @@
 	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+    
+    <prerequisites>
+	<maven>3.3</maven>
+    </prerequisites>
 
     <groupId>eu.michael-simons</groupId>
     <artifactId>biking2</artifactId>
@@ -10,7 +14,8 @@
     <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>1.3.3.RELEASE</version>
+	<version>1.4.0.M2</version>
+	<relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <name>biking2</name>
@@ -43,8 +48,7 @@
 	<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 	<build-date>${maven.build.timestamp}</build-date>
 		
-	<java.version>1.8</java.version>
-	<junit.version>4.11</junit.version>
+	<java.version>1.8</java.version>	
 	<bootstrap.version>3.1.1</bootstrap.version>
 	<jquery.version>1.11.0</jquery.version>
 	<angularjs.version>1.2.29</angularjs.version>
@@ -88,7 +92,7 @@
 	    <plugin> 
 		<groupId>org.asciidoctor</groupId>
 		<artifactId>asciidoctor-maven-plugin</artifactId>
-		<version>1.5.2</version>
+		<version>1.5.3</version>
 		<executions>
 		    <execution>
 			<id>generate-docs</id>
@@ -146,7 +150,7 @@
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-enforcer-plugin</artifactId>
-		<version>1.2</version>
+		<version>1.4.1</version>
 		<executions>
 		    <execution>
 			<id>enforce</id>
@@ -165,7 +169,7 @@
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-source-plugin</artifactId>
-		<version>2.1.2</version>
+		<version>2.4</version>
 		<executions>
 		    <execution>
 			<goals>
@@ -177,7 +181,7 @@
 	    <plugin>
 		<groupId>org.jacoco</groupId>
 		<artifactId>jacoco-maven-plugin</artifactId>
-		<version>0.7.5.201505241946</version>
+		<version>0.7.6.201602180812</version>
 		<configuration>
 		    <excludes>
 			<!-- Application starter -->
@@ -253,14 +257,27 @@
     </build>
 
     <dependencies>
+	<!-- TODO See https://github.com/spring-projects/spring-boot/issues/5697 -->
+	<dependency>
+	    <groupId>com.fasterxml</groupId>
+	    <artifactId>classmate</artifactId>
+	    <version>1.3.1</version>	    	    
+	</dependency>
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-web</artifactId>
+	    <!-- TODO See above -->
+	    <exclusions>
+		<exclusion>
+		    <groupId>com.fasterxml</groupId>
+		    <artifactId>classmate</artifactId>
+		</exclusion>
+	    </exclusions>
 	</dependency>
 	<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>	
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-security</artifactId>
+	</dependency>	
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -272,6 +289,13 @@
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-data-jpa</artifactId>
+	    <!-- TODO See above -->
+	    <exclusions>
+		<exclusion>
+		    <groupId>com.fasterxml</groupId>
+		    <artifactId>classmate</artifactId>
+		</exclusion>
+	    </exclusions>
 	</dependency>
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
@@ -285,8 +309,7 @@
 
 	<dependency>
 	    <groupId>com.fasterxml.jackson.module</groupId>
-	    <artifactId>jackson-module-jaxb-annotations</artifactId>
-	    <version>${jackson.version}</version>
+	    <artifactId>jackson-module-jaxb-annotations</artifactId>	    
 	</dependency>
 	
 	<dependency>
@@ -310,7 +333,12 @@
 	    <groupId>org.fusesource.hawtbuf</groupId>
 	    <artifactId>hawtbuf</artifactId>
 	    <version>1.11</version>
-	</dependency>	
+	</dependency>		
+	<dependency>
+	    <groupId>org.fusesource.hawtdispatch</groupId>
+	    <artifactId>hawtdispatch-transport</artifactId>
+	    <version>1.22</version>
+	</dependency>		
 	<dependency>
 	    <groupId>org.apache.activemq</groupId>
 	    <artifactId>activemq-mqtt</artifactId>	    	  
@@ -319,19 +347,22 @@
 		    <groupId>org.fusesource.hawtbuf</groupId>
 		    <artifactId>hawtbuf</artifactId>
 		</exclusion>
+		<exclusion>
+		    <groupId>org.fusesource.hawtdispatch</groupId>
+		    <artifactId>hawtdispatch-transport</artifactId>
+		</exclusion>
 	    </exclusions>
 	</dependency>
-	<!-- Needed for MessageBrokerRegistry#enableStompBrokerRelay -->
+	<!-- Needed for MessageBrokerRegistry#enableStompBrokerRelay -->	
 	<dependency>
 	    <groupId>io.projectreactor</groupId>
 	    <artifactId>reactor-net</artifactId>        
-	</dependency>   
+	</dependency>   	
 	<dependency>
 	    <groupId>io.netty</groupId>
 	    <artifactId>netty-all</artifactId>
-	    <version>4.0.31.Final</version>
-	</dependency>  	
-		
+	    <version>4.0.36.Final</version>
+	</dependency>  		
 	<!-- Tests and development -->
 	<dependency>
 	    <groupId>org.springframework.boot</groupId>
@@ -423,4 +454,43 @@
 	    <version>0.0.8</version>	    
 	</dependency>
     </dependencies>
+    
+    <!-- TODO Remove after release of Spring Boot 1.4 -->
+    <repositories>
+	<repository>
+	    <id>spring-snapshots</id>
+	    <name>Spring Snapshots</name>
+	    <url>https://repo.spring.io/snapshot</url>
+	    <snapshots>
+		<enabled>true</enabled>
+	    </snapshots>
+	</repository>
+	<repository>
+	    <id>spring-milestones</id>
+	    <name>Spring Milestones</name>
+	    <url>https://repo.spring.io/milestone</url>
+	    <snapshots>
+		<enabled>false</enabled>
+	    </snapshots>
+	</repository>
+    </repositories>
+    <pluginRepositories>
+	<pluginRepository>
+	    <id>spring-snapshots</id>
+	    <name>Spring Snapshots</name>
+	    <url>https://repo.spring.io/snapshot</url>
+	    <snapshots>
+		<enabled>true</enabled>
+	    </snapshots>
+	</pluginRepository>
+	<pluginRepository>
+	    <id>spring-milestones</id>
+	    <name>Spring Milestones</name>
+	    <url>https://repo.spring.io/milestone</url>
+	    <snapshots>
+		<enabled>false</enabled>
+	    </snapshots>
+	</pluginRepository>
+    </pluginRepositories>
+
 </project>
