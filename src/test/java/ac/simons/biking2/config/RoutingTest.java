@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@
  */
 package ac.simons.biking2.config;
 
-import ac.simons.biking2.Application;
 import java.util.stream.Stream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -34,9 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Michael J. Simons, 2014-03-24
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@SpringApplicationConfiguration(classes = TestConfig.class)
+@SpringBootTest(classes = TestConfig.class)
 @WebAppConfiguration
 public class RoutingTest {
 

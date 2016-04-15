@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package ac.simons.biking2.tracks;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -38,13 +38,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Here we need the full Spring Boot context to have the same configuration for
  * JAXB, format preferences and Object Mapper available to test the correct
- * serialisation. We use {@link SpringApplicationConfiguration}.
+ * serialisation. We use {@link SpringBootTest}.
  *
  * @author Michael J. Simons
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@SpringApplicationConfiguration(classes = OEmbedControllerTestConfig.class)
+@SpringBootTest(classes = OEmbedControllerTestConfig.class)
 @DirtiesContext
 @WebAppConfiguration
 public class OEmbedControllerTest {
