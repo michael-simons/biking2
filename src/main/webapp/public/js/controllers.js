@@ -506,6 +506,7 @@ biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', 
 	 $http.get('/api/banner')
      ]).then(function(values) {
 	$scope.info = values[0].data;	
+	$scope.info.versions['spring-boot'] = values[0].data['spring-boot.version'];
 	$scope.info.env = values[1].data;	
 	$scope.banner = values[2].data;
     });
