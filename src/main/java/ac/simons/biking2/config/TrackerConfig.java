@@ -21,6 +21,8 @@ import ac.simons.biking2.tracker.NewLocationCmd;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.BytesMessage;
@@ -37,6 +39,7 @@ import org.apache.activemq.hooks.SpringContextHook;
 import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.activemq.security.AuthenticationUser;
 import org.apache.activemq.security.SimpleAuthenticationPlugin;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -47,12 +50,14 @@ import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 /**
  * @author Michael J. Simons, 2014-03-19
  */
 @Configuration
+@EnableWebSocketMessageBroker
 @EnableConfigurationProperties(TrackerProperties.class)
 @Profile({"default", "prod"})
 public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
@@ -69,15 +74,15 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	private String username;
 
 	private String password;
-	
+
 	private String device;
-	
+
 	private int inboundPoolSize = 1;
 
 	private int outboundPoolSize = 2;
 
 	private boolean useJMX = true;
-	
+
 	public String getHost() {
 	    return host;
 	}
@@ -125,7 +130,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	public void setDevice(String device) {
 	    this.device = device;
 	}
-	
+
 	public int getInboundPoolSize() {
 	    return inboundPoolSize;
 	}
@@ -150,11 +155,16 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	    this.useJMX = useJMX;
 	}
     }
-    
+
     private final TrackerProperties properties;
 
     public TrackerConfig(TrackerProperties properties) {
 	this.properties = properties;
+    }
+
+    @Bean(destroyMethod = "shutdown")
+    public Executor taskScheduler(final @Value("${biking2.scheduled-thread-pool-size:10}") int scheduledThreadPoolSize) {
+	return Executors.newScheduledThreadPool(scheduledThreadPoolSize);
     }
 
     @Bean
@@ -188,7 +198,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	    final ObjectMapper objectMapper,
 	    final ConnectionFactory connectionFactory
     ) {
-	final SimpleMessageListenerContainer rv = new SimpleMessageListenerContainer();		
+	final SimpleMessageListenerContainer rv = new SimpleMessageListenerContainer();
 	rv.setMessageListener((MessageListener) (Message message) -> {
 	    String hlp = null;
 	    try {
@@ -216,7 +226,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	});
 	rv.setConnectionFactory(connectionFactory);
 	rv.setPubSubDomain(true);
-	rv.setDestinationName(String.format("owntracks.%s.%s", properties.getUsername(), properties.getDevice()));	
+	rv.setDestinationName(String.format("owntracks.%s.%s", properties.getUsername(), properties.getDevice()));
 	return rv;
     }
 
