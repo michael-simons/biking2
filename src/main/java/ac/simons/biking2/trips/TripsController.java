@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2015-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package ac.simons.biking2.trips;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +39,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class TripsController {
 
     private final AssortedTripRepository assortedTripRepository;
-
-    @Autowired
+   
     public TripsController(AssortedTripRepository assortedTripRepository) {
 	this.assortedTripRepository = assortedTripRepository;
     }

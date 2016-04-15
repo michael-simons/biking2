@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -55,8 +54,7 @@ class FetchBikingPicturesJob {
     private final BikingPictureRepository bikingPictureRepository;
     private final File bikingPicturesStorage;
     private final JAXBContext rssContext;
-
-    @Autowired
+   
     public FetchBikingPicturesJob(
 	    final DailyFratzeProvider dailyFratzeProvider,
 	    final BikingPictureRepository bikingPictureRepository,

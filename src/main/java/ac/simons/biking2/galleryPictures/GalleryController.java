@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -73,8 +72,7 @@ class GalleryController {
 	    throw new RuntimeException(e);
 	}
     };
-
-    @Autowired
+    
     public GalleryController(GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
 	this.galleryPictureRepository = galleryPictureRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;

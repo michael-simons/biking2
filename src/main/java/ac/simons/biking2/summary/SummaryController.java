@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import ac.simons.biking2.bikes.BikeRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,8 +34,7 @@ class SummaryController {
 
     private final BikeRepository bikeRepository;
     private final AssortedTripRepository assortedTripRepository;
-    
-    @Autowired
+        
     public SummaryController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository) {
 	this.bikeRepository = bikeRepository;
 	this.assortedTripRepository = assortedTripRepository;	

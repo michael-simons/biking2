@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 msimons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,8 +51,7 @@ class ChartsController {
 
     private final BikeRepository bikeRepository;
     private final String colorOfCumulativeGraph;
-    
-    @Autowired
+      
     public ChartsController(final BikeRepository bikeRepository, final @Value("${biking2.color-of-cumulative-graph:000000}") String colorOfCumulativeGraph) {
 	this.bikeRepository = bikeRepository;	
 	this.colorOfCumulativeGraph = colorOfCumulativeGraph;
