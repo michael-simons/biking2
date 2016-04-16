@@ -18,10 +18,9 @@ package ac.simons.biking2.banner;
 import java.io.PrintStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,6 +32,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.doAnswer;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +51,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	}
 )
 @MockBean(Banner.class)
+@AutoConfigureRestDocs(
+	outputDir = "target/generated-snippets",
+	uriHost = "biking.michael-simons.eu",
+	uriPort = 80
+)
 public class BannerControllerTest {
 
     @Autowired
@@ -58,20 +66,39 @@ public class BannerControllerTest {
 
     @Test
     public void testSomeMethod() throws Exception {
-	doAnswer(new Answer<Void>() {
-	    @Override
-	    public Void answer(InvocationOnMock invocation) throws Throwable {
-		final PrintStream out = invocation.getArgumentAt(2, PrintStream.class);
-		out.write("Hallo, Welt".getBytes());
-		return null;
-	    }
+	doAnswer(invocation -> {
+	    final PrintStream out = invocation.getArgumentAt(2, PrintStream.class);
+	    out.write(bannerText.getBytes());
+	    return null;
 	}).when(banner).printBanner(anyObject(), anyObject(), anyObject());
+	
 	mockMvc
 		.perform(
-			get("http://biking.michael-simons.eu/api/banner").accept(APPLICATION_JSON)
+			get("/api/banner").accept(APPLICATION_JSON)
 		)
 		.andExpect(status().isOk())
-		.andExpect(content().string("Hallo, Welt"));
+		.andExpect(content().string(bannerText))
+		.andDo(document("api/banner",
+			preprocessRequest(prettyPrint()),
+			preprocessResponse(prettyPrint())
+		));
     }
 
+    private final String bannerText
+	    = " _____            _              ______ _____ _____ _____       _                \n"
+	    + "/  ___|          (_)             | ___ \\  ___/  ___|_   _|     | |               \n"
+	    + "\\ `--. _ __  _ __ _ _ __   __ _  | |_/ / |__ \\ `--.  | |     __| | ___   ___ ___ \n"
+	    + " `--. \\ '_ \\| '__| | '_ \\ / _` | |    /|  __| `--. \\ | |    / _` |/ _ \\ / __/ __|\n"
+	    + "/\\__/ / |_) | |  | | | | | (_| | | |\\ \\| |___/\\__/ / | |   | (_| | (_) | (__\\__ \\\n"
+	    + "\\____/| .__/|_|  |_|_| |_|\\__, | \\_| \\_\\____/\\____/  \\_/    \\__,_|\\___/ \\___|___/\n"
+	    + "      | |                  __/ |                                                 \n"
+	    + "      |_|                 |___/                                                  \n"
+	    + "          _ _   _        ___   _____ _____ _____ _____              _            \n"
+	    + "         (_) | | |      / _ \\ /  ___/  __ \\_   _|_   _|            | |           \n"
+	    + "__      ___| |_| |__   / /_\\ \\\\ `--.| /  \\/ | |   | |     __ _ _ __| |_          \n"
+	    + "\\ \\ /\\ / / | __| '_ \\  |  _  | `--. \\ |     | |   | |    / _` | '__| __|         \n"
+	    + " \\ V  V /| | |_| | | | | | | |/\\__/ / \\__/\\_| |_ _| |_  | (_| | |  | |_          \n"
+	    + "  \\_/\\_/ |_|\\__|_| |_| \\_| |_/\\____/ \\____/\\___/ \\___/   \\__,_|_|   \\__|         \n"
+	    + "                                                                                 \n"
+	    + "                                                                                 ";
 }
