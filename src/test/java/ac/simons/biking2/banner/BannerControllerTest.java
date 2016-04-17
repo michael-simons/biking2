@@ -50,7 +50,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	    @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
 	}
 )
-@MockBean(Banner.class)
 @AutoConfigureRestDocs(
 	outputDir = "target/generated-snippets",
 	uriHost = "biking.michael-simons.eu",
@@ -58,7 +57,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 public class BannerControllerTest {
 
-    @Autowired
+    @MockBean
     private Banner banner;
 
     @Autowired
