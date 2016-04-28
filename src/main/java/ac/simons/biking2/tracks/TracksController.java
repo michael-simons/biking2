@@ -47,6 +47,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -166,8 +167,8 @@ class TracksController {
 
 	return track;
     }
-    
-    @RequestMapping("/api/tracks/{id:\\w+}")
+
+    @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.GET)
     public ResponseEntity<TrackEntity> getTrack(final @PathVariable String id) {
 	final Integer _id = TrackEntity.getId(id);
 
@@ -183,6 +184,30 @@ class TracksController {
 
 	return rv;
     }    
+
+    @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> deleteTrack(final @PathVariable String id) {
+	final Integer _id = TrackEntity.getId(id);
+
+	TrackEntity track;
+	ResponseEntity<Void> rv;
+	if (_id == null) {
+	    rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+	} else if ((track = this.trackRepository.findOne(_id)) == null) {
+	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	} else {
+	    final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
+	    final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
+	    if (tcxFile.delete() && gpxFile.delete()) {
+		this.trackRepository.delete(track);
+		rv = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    } else {
+		rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+	return rv;
+    }
 
     @RequestMapping({"/tracks/{id:\\w+}.{format}"})
     public void downloadTrack(
