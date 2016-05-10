@@ -430,10 +430,10 @@ biking2Controllers.controller('LocationCtrl', ['$scope', '$http', '$q', function
 	$scope.locationCount = values[1].data;
 	var stompClient = Stomp.over(new SockJS('/api/ws'));
 	stompClient.connect({}, function() {	
-	    stompClient.subscribe('/topic/currentLocation', function(greeting) {
+	    stompClient.subscribe('/topic/currentLocation', function(newLocation) {
 		$scope.$apply(function() {
 		    ++$scope.locationCount;
-		    $scope.locations.push(JSON.parse(greeting.body));
+		    $scope.locations.push(JSON.parse(newLocation.body));
 		});
 	    });
 	});
