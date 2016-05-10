@@ -46,6 +46,11 @@ class LocationController {
     public List<LocationEntity> getLocations() {
 	return this.locationService.getLocationsForTheLastNHours(1);
     }
+    
+    @RequestMapping(value = "/locations/count", method = GET)
+    public long getLocationCount() {
+	return this.locationService.getLocationCount();
+    }
 
     @RequestMapping(value = "/locations", method = POST)
     @PreAuthorize("isAuthenticated()")

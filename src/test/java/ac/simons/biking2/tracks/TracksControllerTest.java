@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,10 +53,15 @@ import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.rules.ExpectedException.none;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -228,6 +233,58 @@ public class TracksControllerTest {
 	response = tracksController.getTrack("1");
 	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
 	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_FOUND)));
+    }
+    
+    @Test
+    public void testDeleteTrack() throws IOException {
+	final int validId = 23;
+	
+	final TrackRepository trackRepository = mock(TrackRepository.class);
+	
+	TrackEntity t;
+	t = mock(TrackEntity.class);
+	when(t.getId()).thenReturn(validId);	
+	when(t.getTrackFile(any(File.class), same("gpx"))).thenReturn(new File("fump"));
+	when(t.getTrackFile(any(File.class), same("tcx"))).thenReturn(new File("zack"));
+	
+	stub(trackRepository.findOne(validId)).toReturn(t);
+	
+	t = mock(TrackEntity.class);
+	when(t.getId()).thenReturn(validId + 1);	
+	final File gpx = File.createTempFile("pppp-", ".gpx");
+	when(t.getTrackFile(any(File.class), same("gpx"))).thenReturn(gpx);
+	final File tcx = File.createTempFile("pppp-", ".tcx");
+	when(t.getTrackFile(any(File.class), same("tcx"))).thenReturn(tcx);
+	stub(trackRepository.findOne(validId + 1)).toReturn(t);
+	
+	final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
+	ResponseEntity<Void> response;
+		
+	response = tracksController.deleteTrack(null);
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
+	
+	response = tracksController.deleteTrack("");
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
+	
+	response = tracksController.deleteTrack("öäü");
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
+	
+	response = tracksController.deleteTrack("1");
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_FOUND)));
+	
+	response = tracksController.deleteTrack(Integer.toString(validId, 36));
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.INTERNAL_SERVER_ERROR)));
+	
+	assertTrue(gpx.exists() && gpx.exists());
+	response = tracksController.deleteTrack(Integer.toString(validId +1, 36));		
+	assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+	assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NO_CONTENT)));
+	assertFalse(gpx.exists() && gpx.exists());
     }
     
     @Test
