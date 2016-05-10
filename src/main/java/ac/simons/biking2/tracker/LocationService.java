@@ -48,4 +48,11 @@ public class LocationService {
     public List<LocationEntity> getLocationsForTheLastNHours(int hours) {
 	return locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(GregorianCalendar.from(ZonedDateTime.now(systemDefault()).minusHours(hours)));
     }
+
+    /**
+     * @return The total number of locations tracked
+     */
+    public long getLocationCount() {
+	return locationRepository.count();
+    }
 }

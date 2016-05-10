@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,28 +26,35 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.AdditionalAnswers;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Michael J. Simons, 2014-05-20
  */
+@RunWith(MockitoJUnitRunner.class)
 public class LocationServiceTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     
+    @Mock
+    private LocationRepository locationRepository;
+    
+    @Mock
+    private SimpMessagingTemplate simpMessagingTemplate;
+    
     @Test
     public void shouldGetLocationsForTheLastNHours() {
-	final LocationRepository locationRepository = Mockito.mock(LocationRepository.class);	
-	stub(locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(Mockito.any(Calendar.class))).toReturn(new ArrayList<>());	
-	final SimpMessagingTemplate simpMessagingTemplate = mock(SimpMessagingTemplate.class);
+	when(locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(Mockito.any(Calendar.class))).thenReturn(new ArrayList<>());	
 	
 	final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
 	
@@ -63,9 +70,7 @@ public class LocationServiceTest {
     
     @Test
     public void shouldCreateAndSendNewLocation() throws IOException {
-	final LocationRepository locationRepository = Mockito.mock(LocationRepository.class);	
-	stub(locationRepository.save(any(LocationEntity.class))).toAnswer(AdditionalAnswers.returnsFirstArg());
-	final SimpMessagingTemplate simpMessagingTemplate = mock(SimpMessagingTemplate.class);
+	when(locationRepository.save(any(LocationEntity.class))).then(returnsFirstArg());
 	
 	final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
 	
@@ -81,5 +86,13 @@ public class LocationServiceTest {
 	
 	Assert.assertEquals("/topic/currentLocation", destinationNameArg.getValue());
 	Assert.assertEquals(location, locationArg.getValue());
+    }
+    
+    @Test
+    public void getLocationCountShouldWork() {
+	when(locationRepository.count()).thenReturn(4711l);
+	
+	final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
+	Assert.assertEquals(4711l, locationService.getLocationCount());	
     }
 }
