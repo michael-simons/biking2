@@ -14,7 +14,7 @@
     <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>1.3.4.RELEASE</version>
+	<version>1.3.5.RELEASE</version>
     </parent>
 
     <name>biking2</name>
@@ -424,7 +424,7 @@
 	<dependency>
 	    <groupId>eu.michael-simons</groupId>
 	    <artifactId>wro4j-spring-boot-starter</artifactId>
-	    <version>0.0.9</version>	    
+	    <version>0.0.10</version>	    
 	</dependency>
     </dependencies>
 </project>
