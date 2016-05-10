@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* global moment */
+/* global moment, Stomp */
 
 'use strict';
 
