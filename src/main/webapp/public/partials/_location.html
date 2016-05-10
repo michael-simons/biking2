@@ -8,6 +8,7 @@
     <div class="col-md-3">
 	<p>This map shows my current location (represented by the biker) and the locations of the last hour (or more, if you keep this window open).</p>
 	<p>I'm using <a href="http://owntracks.org/">OwnTracks</a> to update my location when i'm on tour and the map should refresh automatically in a recent (and decent) browser.</p>
+	<p>The application has tracked <strong>{{ locationCount | number:0}}</strong> locations so far.</p>
 	<p data-ng-show="locations.length > 0">Last update was on: {{locations[locations.length-1].createdAt | date: 'HH:mm:ss'}}.</p>
     </div>
     <div class="col-md-9">

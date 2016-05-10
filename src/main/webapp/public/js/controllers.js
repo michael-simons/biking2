@@ -421,14 +421,18 @@ biking2Controllers.controller('TrackCtrl', ['$scope', '$http', '$q', '$routePara
     });   
 }]);
 
-biking2Controllers.controller('LocationCtrl', ['$scope', '$http', function($scope, $http) {
+biking2Controllers.controller('LocationCtrl', ['$scope', '$http', '$q', function($scope, $http, $q) {
     $scope.locations = [];
-    $http.get('/api/locations').success(function(data) {
-	$scope.locations = data;	
+    $scope.locationCount = null;
+    
+    $q.all([$http.get('/api/locations'), $http.get('/api/locations/count')]).then(function(values) {
+	$scope.locations = values[0].data;	    
+	$scope.locationCount = values[1].data;
 	var stompClient = Stomp.over(new SockJS('/api/ws'));
 	stompClient.connect({}, function() {	
 	    stompClient.subscribe('/topic/currentLocation', function(greeting) {
 		$scope.$apply(function() {
+		    ++$scope.locationCount;
 		    $scope.locations.push(JSON.parse(greeting.body));
 		});
 	    });
