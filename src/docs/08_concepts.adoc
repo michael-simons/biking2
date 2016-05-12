@@ -117,7 +117,7 @@ wro4j provides a model like this:
 
 This model file is filtered by the Maven build, version placeholders will be replaced and all resources, in webjars as well as inside the filesystem, will be available as `biking.css` and `biking.js`.
 
-How those files are optimized, minimized or otherwise processed is up to wro4js configuration, but minification can be turned of during development.
+How those files are optimized, minimized or otherwise processed is up to wro4js configuration, but minification can be turned off during development.
 
 === Transaction Processing
 

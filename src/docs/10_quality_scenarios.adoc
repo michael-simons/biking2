@@ -15,4 +15,4 @@ By using _JaCoCo_ during http://info.michael-simons.eu/2014/05/22/jacoco-maven-a
 
 The architecture should be designed in such a way that algorithms depending on external services can be tested without having the external service available. That is: All external dependencies should be mockable.
 
-Example: `FetchBikingPicturesJob` needs a resource containing a RSS feed. By delegating this to a separate class `DailyFratzeProvider` testing the job on it's own its easy.
+Example: `FetchBikingPicturesJob` needs a resource containing a RSS feed. Retrieving the resource and parsing it are at least two different tasks. Fetching the resource through a separate class `DailyFratzeProvider` makes testing the actual parsing independent from a HTTP connection and thus relatively simple.

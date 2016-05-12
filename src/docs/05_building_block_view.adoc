@@ -114,7 +114,7 @@ Interfaces::
 [cols="1,3" options="header"]
 |===
 | Interface | Description
-| REST interface `/api/locations/*` | For retrieving all loccations in the last 30 minutes.
+| REST interface `/api/locations/*` | For retrieving all locations in the last 30 minutes.
 | WebSocket / STOMP topic `/topic/currentLocation` | Interface for getting notifcation on new locations.
 | MQTT interface | Listens for new locations coming in via MQTT in http://owntracks.org/booklet/tech/json/[OwnTracks format].
 |===

@@ -5,7 +5,7 @@
 
 .Problem
 
-Popular JavaScript mapping frameworks provide easy ways to include geometries from GPX data on maps. Most Garmin devices however record track data in TCX format, so i needed a way to convert TCX to GPX. Both formats are relatively simple and in case of GPX good documented formats.
+Popular JavaScript mapping frameworks provide easy ways to include geometries from GPX data on maps. Most Garmin devices however record track data in TCX format, so I needed a way to convert TCX to GPX. Both formats are relatively simple and in case of GPX good documented formats.
 
 .Constraints
 
@@ -42,4 +42,4 @@ _biking2_ needs to store "large" objects: Image data (biking and gallery picture
 
 .Decision
 
-I opted for local file system because i didn't want to put much effort into evaluating cloud services. If _biking2_ should runnable in cloud based setup, one has to create an abstraction over the local filesystem currently used. 
+I opted for local file system because I didn't want to put much effort into evaluating cloud services. If _biking2_ should runnable in cloud based setup, one has to create an abstraction over the local filesystem currently used. 
