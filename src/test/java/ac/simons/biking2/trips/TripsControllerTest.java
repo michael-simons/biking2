@@ -62,7 +62,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	controllers = TripsController.class,
 	excludeFilters = {
 	    @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
-	}
+	},
+	secure = false
 )
 @AutoConfigureRestDocs(
 	outputDir = "target/generated-snippets",
