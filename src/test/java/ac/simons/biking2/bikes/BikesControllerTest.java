@@ -76,7 +76,8 @@ import static java.time.LocalDate.now;
 	controllers = BikesController.class,
 	excludeFilters = {
 	    @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
-	}
+	},
+	secure = false
 )
 @AutoConfigureRestDocs(
 	outputDir = "target/generated-snippets",
