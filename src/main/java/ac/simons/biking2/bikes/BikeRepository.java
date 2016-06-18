@@ -19,16 +19,25 @@ import java.util.Calendar;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
 public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
+
+    @Query(value
+	    = "Select b from BikeEntity b "
+	    + " where b.decommissionedOn is null "
+	    + "    or b.decommissionedOn >= :cutoffDate "
+	    + " order by b.name asc "
+    )
     List<BikeEntity> findActive(final Calendar cutoffDate);
-    
+
     BikeEntity findByName(final String name);
- 
+
     List<BikeEntity> findByDecommissionedOnIsNull(final Sort sort);
-    
+
+    @Query("Select coalesce(min(m.recordedOn), current_date()) from MilageEntity m")
     Calendar getDateOfFirstRecord();
 }

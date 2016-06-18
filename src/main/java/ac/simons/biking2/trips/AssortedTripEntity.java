@@ -24,8 +24,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,13 +34,6 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "assorted_trips")
-@NamedQueries({
-    @NamedQuery(
-	    name = "AssortedTripEntity.getTotalDistance",
-	    query
-	    = "Select coalesce(sum(t.distance), 0) from AssortedTripEntity t"
-    )
-})
 public class AssortedTripEntity implements Serializable {
 
     private static final long serialVersionUID = 3222189732938547117L;

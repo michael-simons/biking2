@@ -27,8 +27,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,13 +39,6 @@ import org.hibernate.validator.constraints.URL;
  */
 @Entity
 @Table(name = "biking_pictures")
-@NamedQueries({
-     @NamedQuery(
-	    name = "BikingPictureEntity.getMaxPubDate",
-	    query
-	    = "Select coalesce(max(bp.pubDate), '2005-08-07 18:30:42') from BikingPictureEntity bp"
-    )
-})
 class BikingPictureEntity implements Serializable {
 
     private static final long serialVersionUID = -7050582813676065697L;
