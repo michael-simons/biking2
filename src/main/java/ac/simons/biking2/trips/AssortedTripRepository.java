@@ -24,6 +24,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface AssortedTripRepository extends JpaRepository<AssortedTripEntity, Integer> {
 
-    @Query("Select coalesce(sum(t.distance), 0) from AssortedTripEntity t")
+    @Query("Select coalesce(sum(t.distance), 0) as totalDistance from AssortedTripEntity t")
     BigDecimal getTotalDistance();
 }

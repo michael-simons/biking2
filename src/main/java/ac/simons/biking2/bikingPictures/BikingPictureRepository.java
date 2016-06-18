@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.Query;
  */
 interface BikingPictureRepository extends JpaRepository<BikingPictureEntity, Integer> {
 
-    @Query("Select coalesce(max(bp.pubDate), '2005-08-07 18:30:42') from BikingPictureEntity bp")
+    @Query("Select coalesce(max(bp.pubDate), '2005-08-07 18:30:42') as maxPubDate from BikingPictureEntity bp")
     Calendar getMaxPubDate();
 
     BikingPictureEntity findByExternalId(final Integer externalId);
