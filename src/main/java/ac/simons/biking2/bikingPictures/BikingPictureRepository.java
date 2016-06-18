@@ -17,12 +17,15 @@ package ac.simons.biking2.bikingPictures;
 
 import java.util.Calendar;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
 interface BikingPictureRepository extends JpaRepository<BikingPictureEntity, Integer> {
+
+    @Query("Select coalesce(max(bp.pubDate), '2005-08-07 18:30:42') from BikingPictureEntity bp")
     Calendar getMaxPubDate();
-    
+
     BikingPictureEntity findByExternalId(final Integer externalId);
 }

@@ -45,8 +45,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
@@ -66,21 +64,6 @@ import static java.util.stream.Collectors.reducing;
  */
 @Entity
 @Table(name = "bikes")
-@NamedQueries({
-    @NamedQuery(
-	    name = "BikeEntity.findActive",
-	    query
-	    = "Select b from BikeEntity b "
-	    + " where b.decommissionedOn is null "
-	    + "    or b.decommissionedOn >= :cutoffDate "
-	    + " order by b.name asc "
-    ),
-    @NamedQuery(
-	    name = "BikeEntity.getDateOfFirstRecord",
-	    query
-	    = "Select coalesce(min(m.recordedOn), current_date()) from MilageEntity m"
-    )
-})
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public class BikeEntity implements Serializable {
 

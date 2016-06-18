@@ -17,11 +17,13 @@ package ac.simons.biking2.trips;
 
 import java.math.BigDecimal;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
 public interface AssortedTripRepository extends JpaRepository<AssortedTripEntity, Integer> {
 
+    @Query("Select coalesce(sum(t.distance), 0) from AssortedTripEntity t")
     BigDecimal getTotalDistance();
 }
