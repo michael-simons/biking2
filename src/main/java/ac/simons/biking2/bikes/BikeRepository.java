@@ -38,6 +38,6 @@ public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
 
     List<BikeEntity> findByDecommissionedOnIsNull(final Sort sort);
 
-    @Query("Select coalesce(min(m.recordedOn), current_date()) from MilageEntity m")
+    @Query("Select coalesce(min(m.recordedOn), current_date()) as dateOfFirstRecord from MilageEntity m")
     Calendar getDateOfFirstRecord();
 }
