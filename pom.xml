@@ -66,6 +66,9 @@
 	<start-class>ac.simons.biking2.Application</start-class>	
 	
 	<snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
+	
+	<!-- TODO Remove when Boot uses >= HOPPER SR2 -->
+	<spring-data-releasetrain.version>Hopper-SR2</spring-data-releasetrain.version>
     </properties>
 
     <build>
