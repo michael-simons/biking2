@@ -15,11 +15,9 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.tracks.OEmbedController;
-import ac.simons.biking2.tracks.TrackRepository;
 import java.math.BigDecimal;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.orm.jpa.EntityScan;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
