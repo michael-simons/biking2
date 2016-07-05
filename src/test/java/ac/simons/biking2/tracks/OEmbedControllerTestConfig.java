@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @ComponentScan("ac.simons.biking2.config")
 @EnableAutoConfiguration
-@EntityScan("ac.simons.biking2.persistence.entities")
+@EntityScan("ac.simons.biking2")
 @EnableJpaRepositories("ac.simons.biking2.persistence.repositories")
 @EnableTransactionManagement
 public class OEmbedControllerTestConfig {
