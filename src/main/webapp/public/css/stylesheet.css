@@ -110,3 +110,7 @@ table.track_table a {
 .giant {
     width:64px;
 }
+
+blockquote {
+    font-size: 90%;
+}
