@@ -70,7 +70,7 @@ class TrackEntity implements Serializable {
 	return rv;
     }
 
-    public static enum Type {
+    public enum Type {
 
 	biking, running
     }
