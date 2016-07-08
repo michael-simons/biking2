@@ -31,8 +31,8 @@ class Coordinate {
 
     @Autowired
     public Coordinate(
-	    final @Value("${biking2.home.longitude}") String longitude,
-	    final @Value("${biking2.home.latitude}") String latitude
+	    @Value("${biking2.home.longitude}") final String longitude,
+	    @Value("${biking2.home.latitude}") final String latitude
     ) {
 	this(new BigDecimal(longitude), new BigDecimal(latitude));
     }

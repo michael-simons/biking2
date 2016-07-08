@@ -49,14 +49,14 @@ class BikingPicturesController {
     }
 
     @RequestMapping("/api/bikingPictures")
-    public @ResponseBody
-    List<BikingPictureEntity> getBikingPictures() {
+    @ResponseBody
+    public List<BikingPictureEntity> getBikingPictures() {
 	return bikingPictureRepository.findAll(new Sort(Sort.Direction.ASC, "pubDate"));
     }
 
     @RequestMapping({"/api/bikingPictures/{id:\\d+}.jpg"})
     public void getBikingPicture(
-	    final @PathVariable Integer id,
+	    @PathVariable final Integer id,
 	    final HttpServletRequest request,
 	    final HttpServletResponse response
     ) throws IOException {
@@ -80,7 +80,7 @@ class BikingPicturesController {
 	    } else {
 		long l = imageFile.length();
 		request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
-		request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
+		request.setAttribute("org.apache.tomcat.sendfile.start", 0L);
 		request.setAttribute("org.apache.tomcat.sendfile.end", l);
 		response.setHeader("Content-Length", Long.toString(l));
 	    }

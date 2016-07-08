@@ -79,8 +79,8 @@ class GalleryController {
     }
 
     @RequestMapping("/api/galleryPictures")
-    public @ResponseBody
-    List<GalleryPictureEntity> getGalleryPictures() {
+    @ResponseBody
+    public List<GalleryPictureEntity> getGalleryPictures() {
 	return galleryPictureRepository.findAll(new Sort(Sort.Direction.ASC, "takenOn"));
     }
 
@@ -122,7 +122,7 @@ class GalleryController {
     
     @RequestMapping({"/api/galleryPictures/{id:\\d+}.jpg"})
     public void getGalleryPicture(
-	    final @PathVariable Integer id,
+	    @PathVariable final Integer id,
 	    final HttpServletRequest request,
 	    final HttpServletResponse response
     ) throws IOException {

@@ -38,8 +38,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 class OEmbedController {
-    private final static Pattern EMBEDDABLE_TRACK_URL_PATTERN = Pattern.compile(".*?\\/tracks\\/(\\w+)(\\/|\\.(\\w+))?$");
-    private final static Map<String, String> acceptableFormats;
+    private static final Pattern EMBEDDABLE_TRACK_URL_PATTERN = Pattern.compile(".*?\\/tracks\\/(\\w+)(\\/|\\.(\\w+))?$");
+    private static final Map<String, String> acceptableFormats;
     static {
 	final Map<String, String> hlp = new HashMap<>();
 	hlp.put("json", "application/json");
@@ -57,10 +57,10 @@ class OEmbedController {
     
     @RequestMapping(value = "/oembed", produces = {"application/json", "application/xml"})
     public ResponseEntity<OEmbedResponse> getEmbeddableTrack(
-	    final @RequestParam(required = true) @URL String url, 
-	    final @RequestParam(required = false, defaultValue = "json") String format,
-	    final @RequestParam(required = false, defaultValue = "1024") Integer maxwidth,
-	    final @RequestParam(required = false, defaultValue = "576") Integer maxheight,
+	    @RequestParam(required = true) @URL final String url, 
+	    @RequestParam(required = false, defaultValue = "json") final String format,
+	    @RequestParam(required = false, defaultValue = "1024") final Integer maxwidth,
+	    @RequestParam(required = false, defaultValue = "576") final Integer maxheight,
 	    final HttpServletRequest request
     ) {
 	ResponseEntity<OEmbedResponse> rv = null;
@@ -109,9 +109,9 @@ class OEmbedController {
 
     @RequestMapping(value = "/tracks/{id:\\w+}/embed")
     public String embedTrack(
-	    final @PathVariable String id,
-	    final @RequestParam(required = false, defaultValue = "1024") Integer width,
-	    final @RequestParam(required = false, defaultValue = "576") Integer height,
+	    @PathVariable final String id,
+	    @RequestParam(required = false, defaultValue = "1024") final Integer width,
+	    @RequestParam(required = false, defaultValue = "576") final Integer height,
 	    final Model model,
 	    final HttpServletResponse response
     ) {	

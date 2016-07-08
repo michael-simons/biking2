@@ -54,7 +54,7 @@ class LocationController {
 
     @RequestMapping(value = "/locations", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<LocationEntity> createLocation(final @RequestBody @Valid NewLocationCmd newLocationCmd, final BindingResult bindingResult) {
+    public ResponseEntity<LocationEntity> createLocation(@RequestBody @Valid final NewLocationCmd newLocationCmd, final BindingResult bindingResult) {
 	if (bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}

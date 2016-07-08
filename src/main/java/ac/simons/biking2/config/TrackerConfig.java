@@ -163,7 +163,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
     @Bean(destroyMethod = "shutdown")
-    public Executor taskScheduler(final @Value("${biking2.scheduled-thread-pool-size:10}") int scheduledThreadPoolSize) {
+    public Executor taskScheduler(@Value("${biking2.scheduled-thread-pool-size:10}") final int scheduledThreadPoolSize) {
 	return Executors.newScheduledThreadPool(scheduledThreadPoolSize);
     }
 

@@ -60,7 +60,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 class TracksController {
 
-    private final static Map<String, String> acceptableFormats;
+    private static final Map<String, String> acceptableFormats;
 
     static {
 	final Map<String, String> hlp = new HashMap<>();
@@ -75,7 +75,7 @@ class TracksController {
     private final Coordinate home;
     private final JAXBContext gpxContext;
     
-    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") String gpsBabel, final Coordinate home) {
+    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") final String gpsBabel, final Coordinate home) {
 	this.trackRepository = trackRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
 	this.gpsBabel = gpsBabel;

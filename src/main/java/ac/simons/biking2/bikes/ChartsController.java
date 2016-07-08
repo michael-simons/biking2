@@ -52,7 +52,7 @@ class ChartsController {
     private final BikeRepository bikeRepository;
     private final String colorOfCumulativeGraph;
       
-    public ChartsController(final BikeRepository bikeRepository, final @Value("${biking2.color-of-cumulative-graph:000000}") String colorOfCumulativeGraph) {
+    public ChartsController(final BikeRepository bikeRepository, @Value("${biking2.color-of-cumulative-graph:000000}") final String colorOfCumulativeGraph) {
 	this.bikeRepository = bikeRepository;	
 	this.colorOfCumulativeGraph = colorOfCumulativeGraph;
     }
@@ -182,11 +182,7 @@ class ChartsController {
 			year[period.getKey().getMonthValue()-1] += period.getValue();
 		    }, 
 		    // Merge the array (necessary if the stream runs in parallel)
-		    (map1, map2) -> {			    
-			map2.forEach((k, v) -> {
-			    map1.merge(k, v, ChartsController::addArrays);
-			});
-		    }
+		    (map1, map2) -> map2.forEach((k, v) -> map1.merge(k, v, ChartsController::addArrays))		    
 	    );
 	// Create series in builder
 	data.forEach((k,v) -> builder.series().withName(Integer.toString(k)).withData(v).build());

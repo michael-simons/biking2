@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,8 +105,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean    
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
-	    final @Value("${biking2.connector.proxyName:}") String proxyName,
-	    final @Value("${biking2.connector.proxyPort:80}") int proxyPort
+	    @Value("${biking2.connector.proxyName:}") final String proxyName,
+	    @Value("${biking2.connector.proxyPort:80}") final int proxyPort
     ) {
 	return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
 	    if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {

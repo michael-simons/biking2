@@ -97,7 +97,7 @@ class BikesController {
     @RequestMapping(value = "/bikes/{id:\\d+}", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
-    public BikeEntity updateBike(final @PathVariable Integer id, final @RequestBody @Valid BikeCmd updatedBike, final BindingResult bindingResult) {
+    public BikeEntity updateBike(@PathVariable final Integer id, @RequestBody @Valid final BikeCmd updatedBike, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
@@ -118,7 +118,7 @@ class BikesController {
     @RequestMapping(value = "/bikes/{id:\\d+}/story", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
-    public BikeEntity updateBikeStory(final @PathVariable Integer id, final @RequestBody(required = false) @Valid StoryCmd newStory, final BindingResult bindingResult) {
+    public BikeEntity updateBikeStory(@PathVariable final Integer id, @RequestBody(required = false) @Valid final StoryCmd newStory, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
