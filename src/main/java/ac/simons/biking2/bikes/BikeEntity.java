@@ -70,7 +70,10 @@ public class BikeEntity implements Serializable {
     private static final long serialVersionUID = 1249824815158908981L;
     
     @Embeddable
-    public static class Link {
+    public static class Link implements Serializable {
+        
+        private static final long serialVersionUID = 4086706843689307842L;
+        
 	@Column(name = "url", length = 512)
 	@NotBlank
 	@URL
