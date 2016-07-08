@@ -414,7 +414,9 @@ public class TracksControllerTest {
 	this.expectedException.expectMessage(new RegexMatcher(".*\\(Is a directory\\)$"));
 	controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 	
-	Mockito.verify(track);
+	Mockito.verify(track).getId();
+        Mockito.verify(track).getPrettyId();
+        Mockito.verify(track).getTrackFile(this.tmpDir, "tcx");
 	Mockito.verifyNoMoreInteractions(track);
     }
     
@@ -431,7 +433,8 @@ public class TracksControllerTest {
 	this.expectedException.expectMessage("java.io.IOException: Cannot run program \"/iam/not/gpsBabel\": error=2, No such file or directory");
 	controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 	
-	Mockito.verify(track);
+	Mockito.verify(track).getTrackFile(this.tmpDir, "tcx");
+	Mockito.verify(track).getTrackFile(this.tmpDir, "gpx");
 	Mockito.verifyNoMoreInteractions(track);
     }
     
@@ -448,7 +451,8 @@ public class TracksControllerTest {
 	this.expectedException.expectMessage("GPSBabel could not convert the input file!");
 	controller.storeFile(track, this.getClass().getResourceAsStream("/test-invalid.tcx"));
 	
-	Mockito.verify(track);
+        Mockito.verify(track).getTrackFile(this.tmpDir, "tcx");
+	Mockito.verify(track).getTrackFile(this.tmpDir, "gpx");
 	Mockito.verifyNoMoreInteractions(track);
     }
     
