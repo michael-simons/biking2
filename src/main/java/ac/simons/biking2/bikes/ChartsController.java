@@ -300,6 +300,7 @@ class ChartsController {
 	
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);	
 	final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);
+        final String labelColor = "#7CB5EB";
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define()		
 		.options()
 		    .chart()
@@ -347,12 +348,12 @@ class ChartsController {
 		    .build()
 		.<Number>series()
 		    .withName("Average")
-		    .withColor("#7CB5EB")
+		    .withColor(labelColor)
 		    .withZIndex(1)		
 		    .marker()
 			.withLineWidth(2.0)
 			.withFillColor("#FFFFFF")
-			.withLineColor("#7CB5EB")
+			.withLineColor(labelColor)
 			.build()
 		    .withData(averages)	
 		    .build()
@@ -361,7 +362,7 @@ class ChartsController {
 		    .withType("arearange")		    
 		    .withLineWidth(0.0)		    
 		    .withFillOpacity(0.3)
-		    .withColor("#7CB5EB")
+		    .withColor(labelColor)
 		    .withZIndex(0)
 		    .linkTo("previous")
 		    .withData(ranges)

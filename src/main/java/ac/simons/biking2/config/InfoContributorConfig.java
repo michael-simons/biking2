@@ -29,8 +29,6 @@ import org.springframework.context.annotation.Configuration;
 public class InfoContributorConfig {
     @Bean
     public InfoContributor buildInfoContributor() {
-	return builder -> {	    
-	    builder.withDetail("spring-boot.version", SpringBootVersion.getVersion());
-	};
+	return builder -> builder.withDetail("spring-boot.version", SpringBootVersion.getVersion());	
     }
 }

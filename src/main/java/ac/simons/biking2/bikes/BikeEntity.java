@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -216,7 +216,7 @@ public class BikeEntity implements Serializable {
     }
   
     public synchronized MilageEntity addMilage(final LocalDate recordedOn, final double amount) {
-	if(this.milages.size() > 0) {
+	if(!this.milages.isEmpty()) {
 	    final MilageEntity lastMilage = this.milages.get(this.milages.size() - 1);
 	    LocalDate nextValidDate = lastMilage.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusMonths(1);
 	    if(!recordedOn.equals(nextValidDate))
@@ -305,7 +305,7 @@ public class BikeEntity implements Serializable {
     }
 
     public boolean hasMilages() {
-	return this.milages != null && this.milages.size() > 0;
+	return !(this.milages == null || this.milages.isEmpty());
     }
 
     public Link getStory() {
