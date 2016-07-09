@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class PlotOptions {
 
         private SeriesOptions series;
 
-        Builder(Sink<PB, PlotOptions> sink) {
+        Builder(final Sink<PB, PlotOptions> sink) {
             this.sink = sink;
         }
 
@@ -69,8 +69,8 @@ public class PlotOptions {
 
     @JsonCreator
     PlotOptions(
-            @JsonProperty("categories") Column column,
-            @JsonProperty("categories") SeriesOptions series
+            @JsonProperty("categories") final Column column,
+            @JsonProperty("categories") final SeriesOptions series
     ) {
         this.column = column;
         this.series = series;

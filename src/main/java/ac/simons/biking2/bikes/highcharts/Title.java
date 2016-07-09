@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class Title {
 
         private String text;
 
-        Builder(Sink<PB, Title> sink) {
+        Builder(final Sink<PB, Title> sink) {
             this.sink = sink;
         }
 
@@ -58,7 +58,7 @@ public class Title {
     private final String text;
 
     @JsonCreator
-    Title(@JsonProperty("text") String text) {
+    Title(@JsonProperty("text") final String text) {
         this.text = text;
     }
 

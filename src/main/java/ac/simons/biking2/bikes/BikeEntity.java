@@ -86,7 +86,7 @@ public class BikeEntity implements Serializable {
         protected Link() {
         }
 
-        public Link(String url, String label) {
+        public Link(final String url, final String label) {
             this.url = url;
             this.label = label;
         }
@@ -99,7 +99,7 @@ public class BikeEntity implements Serializable {
             return label;
         }
 
-        public void setLabel(String label) {
+        public void setLabel(final String label) {
             this.label = label;
         }
 
@@ -111,7 +111,7 @@ public class BikeEntity implements Serializable {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (obj == null) {
                 return false;
             }
@@ -170,7 +170,7 @@ public class BikeEntity implements Serializable {
     protected BikeEntity() {
     }
 
-    public BikeEntity(String name, final LocalDate boughtOn) {
+    public BikeEntity(final String name, final LocalDate boughtOn) {
         this.name = name;
         this.boughtOn = GregorianCalendar.from(boughtOn.atStartOfDay(ZoneId.systemDefault()));
     }
@@ -194,7 +194,7 @@ public class BikeEntity implements Serializable {
         return this.color;
     }
 
-    public void setColor(String color) {
+    public void setColor(final String color) {
         this.color = color;
     }
 
@@ -286,7 +286,7 @@ public class BikeEntity implements Serializable {
      * @param year The year in which the milages should be computed
      * @return 12 values of milages for the month of the given year
      */
-    public int[] getMilagesInYear(int year) {
+    public int[] getMilagesInYear(final int year) {
         final LocalDate january1st = LocalDate.of(year, Month.JANUARY, 1);
         // The limit is necessary because the range contains 13 elements for
         // computing the correct periods, the last element is January 1st of year +1
@@ -299,7 +299,7 @@ public class BikeEntity implements Serializable {
      * @param year The year for which the sum of milages should be computed
      * @return  The sum of all milages in the given year
      */
-    public int getMilageInYear(int year) {
+    public int getMilageInYear(final int year) {
         return Arrays.stream(getMilagesInYear(year)).sum();
     }
 
@@ -315,7 +315,7 @@ public class BikeEntity implements Serializable {
         return story;
     }
 
-    public void setStory(Link story) {
+    public void setStory(final Link story) {
         this.story = story;
     }
 
@@ -327,7 +327,7 @@ public class BikeEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
@@ -341,19 +341,19 @@ public class BikeEntity implements Serializable {
         return true;
     }
 
-    public static int comparePeriodsByValue(Map.Entry<LocalDate, Integer> period1, Map.Entry<LocalDate, Integer> period2) {
+    public static int comparePeriodsByValue(final Map.Entry<LocalDate, Integer> period1, final Map.Entry<LocalDate, Integer> period2) {
         return Integer.compare(period1.getValue(), period2.getValue());
     }
 
     public static class BikeByMilageInYearComparator implements Comparator<BikeEntity> {
         private final int year;
 
-        public BikeByMilageInYearComparator(int year) {
+        public BikeByMilageInYearComparator(final int year) {
             this.year = year;
         }
 
         @Override
-        public int compare(BikeEntity o1, BikeEntity o2) {
+        public int compare(final BikeEntity o1, final BikeEntity o2) {
             return Integer.compare(o1.getMilageInYear(year), o2.getMilageInYear(year));
         }
     }

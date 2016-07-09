@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class AssortedTripEntity implements Serializable {
     protected AssortedTripEntity() {
     }
 
-    public AssortedTripEntity(Calendar coveredOn, BigDecimal distance) {
+    public AssortedTripEntity(final Calendar coveredOn, final BigDecimal distance) {
         this.coveredOn = coveredOn;
         this.distance = distance;
     }
@@ -81,7 +81,7 @@ public class AssortedTripEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

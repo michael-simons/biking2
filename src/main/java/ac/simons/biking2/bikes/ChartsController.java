@@ -149,8 +149,8 @@ class ChartsController {
 
     @RequestMapping("/charts/history")
     public HighchartsNgConfig getHistory(
-            @RequestParam(value = "start") Optional<Integer> yearStart,
-            @RequestParam(value = "end") Optional<Integer> yearEnd
+            @RequestParam(value = "start") final Optional<Integer> yearStart,
+            @RequestParam(value = "end") final Optional<Integer> yearEnd
     ) {
         final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 

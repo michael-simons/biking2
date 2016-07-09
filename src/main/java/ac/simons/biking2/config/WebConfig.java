@@ -42,7 +42,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * @param registry
      */
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/api/**").allowedOrigins("*");
     }
 
@@ -74,7 +74,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * @param configurer
      */
     @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+    public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
         super.configureContentNegotiation(configurer);
         configurer.favorParameter(true);
     }

@@ -36,7 +36,7 @@ public class SeriesOptions {
 
         private Boolean animation;
 
-        Builder(Sink<PB, SeriesOptions> sink) {
+        Builder(final Sink<PB, SeriesOptions> sink) {
             this.sink = sink;
         }
 
@@ -66,7 +66,7 @@ public class SeriesOptions {
 
     @JsonCreator
     SeriesOptions(
-            @JsonProperty("animation") Boolean animation
+            @JsonProperty("animation") final Boolean animation
     ) {
         this.animation = animation;
     }

@@ -70,7 +70,7 @@ class BikingPictureEntity implements Serializable {
     protected BikingPictureEntity() {
     }
 
-    public BikingPictureEntity(final String guid, final ZonedDateTime pubDate, String link) {
+    public BikingPictureEntity(final String guid, final ZonedDateTime pubDate, final String link) {
         final Matcher matcher = GUID_PATTERN.matcher(guid);
         if(!matcher.matches())
             throw new RuntimeException("Invalid GUID");
@@ -103,7 +103,7 @@ class BikingPictureEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

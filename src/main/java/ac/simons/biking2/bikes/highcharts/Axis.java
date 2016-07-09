@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,13 +126,13 @@ public class Axis {
 
     @JsonCreator
     Axis(
-            @JsonProperty("categories") Collection<String> categories,
-            @JsonProperty("endOnTick") Boolean endOnTick,
-            @JsonProperty("max") Number max,
-            @JsonProperty("min") Number min,
-            @JsonProperty("tickInterval") Number tickInterval,
-            @JsonProperty("title") Title title,
-            @JsonProperty("plotLines") Collection<PlotLine> plotLines
+            @JsonProperty("categories") final Collection<String> categories,
+            @JsonProperty("endOnTick") final Boolean endOnTick,
+            @JsonProperty("max") final Number max,
+            @JsonProperty("min") final Number min,
+            @JsonProperty("tickInterval") final Number tickInterval,
+            @JsonProperty("title") final Title title,
+            @JsonProperty("plotLines") final Collection<PlotLine> plotLines
     ) {
         this.categories = categories;
         this.endOnTick = endOnTick;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class Guid {
         return isPermaLink;
     }
 
-    public void setIsPermaLink(Boolean isPermaLink) {
+    public void setIsPermaLink(final Boolean isPermaLink) {
         this.isPermaLink = isPermaLink;
     }
 
@@ -44,7 +44,7 @@ public class Guid {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 

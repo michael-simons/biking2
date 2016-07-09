@@ -30,12 +30,12 @@ public class SchedulingConfig implements SchedulingConfigurer {
 
     private final Executor taskScheduler;
 
-    public SchedulingConfig(Executor taskScheduler) {
+    public SchedulingConfig(final Executor taskScheduler) {
         this.taskScheduler = taskScheduler;
     }
 
     @Override
-    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+    public void configureTasks(final ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setScheduler(taskScheduler);
     }
 }

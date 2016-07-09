@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public class HighchartsNgConfig {
 
         private final Collection<Series<?>> series = new ArrayList<>();
 
-        Builder(Sink<HighchartsNgConfig, HighchartsNgConfig> sink) {
+        Builder(final Sink<HighchartsNgConfig, HighchartsNgConfig> sink) {
             this.sink = sink;
         }
 
@@ -97,13 +97,13 @@ public class HighchartsNgConfig {
 
     @JsonCreator
     public HighchartsNgConfig(
-            @JsonProperty("options") Options options,
-            @JsonProperty("series") Collection<Series<?>> series)
+            @JsonProperty("options") final Options options,
+            @JsonProperty("series") final Collection<Series<?>> series)
     {
         this(options, series, null);
     }
 
-    public HighchartsNgConfig(Options options, Collection<Series<?>> series, Object userData) {
+    public HighchartsNgConfig(final Options options, final Collection<Series<?>> series, final Object userData) {
         this.options = options;
         this.series = series;
         this.userData = userData;

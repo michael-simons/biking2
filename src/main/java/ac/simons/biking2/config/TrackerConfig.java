@@ -87,7 +87,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return host;
         }
 
-        public void setHost(String host) {
+        public void setHost(final String host) {
             this.host = host;
         }
 
@@ -95,7 +95,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return mqttPort;
         }
 
-        public void setMqttPort(int mqttPort) {
+        public void setMqttPort(final int mqttPort) {
             this.mqttPort = mqttPort;
         }
 
@@ -103,7 +103,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return stompPort;
         }
 
-        public void setStompPort(int stompPort) {
+        public void setStompPort(final int stompPort) {
             this.stompPort = stompPort;
         }
 
@@ -111,7 +111,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return username;
         }
 
-        public void setUsername(String username) {
+        public void setUsername(final String username) {
             this.username = username;
         }
 
@@ -119,7 +119,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return password;
         }
 
-        public void setPassword(String password) {
+        public void setPassword(final String password) {
             this.password = password;
         }
 
@@ -127,7 +127,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return device;
         }
 
-        public void setDevice(String device) {
+        public void setDevice(final String device) {
             this.device = device;
         }
 
@@ -135,7 +135,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return inboundPoolSize;
         }
 
-        public void setInboundPoolSize(int inboundPoolSize) {
+        public void setInboundPoolSize(final int inboundPoolSize) {
             this.inboundPoolSize = inboundPoolSize;
         }
 
@@ -143,7 +143,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return outboundPoolSize;
         }
 
-        public void setOutboundPoolSize(int outboundPoolSize) {
+        public void setOutboundPoolSize(final int outboundPoolSize) {
             this.outboundPoolSize = outboundPoolSize;
         }
 
@@ -151,14 +151,14 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             return useJMX;
         }
 
-        public void setUseJMX(boolean useJMX) {
+        public void setUseJMX(final boolean useJMX) {
             this.useJMX = useJMX;
         }
     }
 
     private final TrackerProperties properties;
 
-    public TrackerConfig(TrackerProperties properties) {
+    public TrackerConfig(final TrackerProperties properties) {
         this.properties = properties;
     }
 
@@ -240,7 +240,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
+    public void configureMessageBroker(final MessageBrokerRegistry registry) {
         registry.enableStompBrokerRelay("/topic/currentLocation")
                 .setRelayPort(properties.getStompPort())
                 .setClientLogin(properties.getUsername())
@@ -251,17 +251,17 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
+    public void registerStompEndpoints(final StompEndpointRegistry registry) {
         registry.addEndpoint("/api/ws").withSockJS();
     }
 
     @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
+    public void configureClientInboundChannel(final ChannelRegistration registration) {
         registration.taskExecutor().corePoolSize(this.properties.getInboundPoolSize());
     }
 
     @Override
-    public void configureClientOutboundChannel(ChannelRegistration registration) {
+    public void configureClientOutboundChannel(final ChannelRegistration registration) {
         registration.taskExecutor().corePoolSize(this.properties.getOutboundPoolSize());
     }
 }

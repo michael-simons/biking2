@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class Marker {
 
         private String fillColor;
 
-        public Builder(Sink<PB, Marker> sink) {
+        public Builder(final Sink<PB, Marker> sink) {
             this.sink = sink;
         }
 
@@ -70,7 +70,7 @@ public class Marker {
 
     private final String fillColor;
 
-    public Marker(Double lineWidth, String lineColor, String fillColor) {
+    public Marker(final Double lineWidth, final String lineColor, final String fillColor) {
         this.lineWidth = lineWidth;
         this.lineColor = lineColor;
         this.fillColor = fillColor;

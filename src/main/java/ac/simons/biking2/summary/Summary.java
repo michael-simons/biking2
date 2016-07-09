@@ -37,7 +37,7 @@ class Summary {
         return dateOfFirstRecord;
     }
 
-    public void setDateOfFirstRecord(Calendar dateOfFirstRecord) {
+    public void setDateOfFirstRecord(final Calendar dateOfFirstRecord) {
         this.dateOfFirstRecord = dateOfFirstRecord;
     }
 
@@ -45,7 +45,7 @@ class Summary {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(final Double total) {
         this.total = total;
     }
 
@@ -53,7 +53,7 @@ class Summary {
         return worstPeriod;
     }
 
-    public void setWorstPeriod(AccumulatedPeriod worstPeriod) {
+    public void setWorstPeriod(final AccumulatedPeriod worstPeriod) {
         this.worstPeriod = worstPeriod;
     }
 
@@ -61,7 +61,7 @@ class Summary {
         return bestPeriod;
     }
 
-    public void setBestPeriod(AccumulatedPeriod bestPeriod) {
+    public void setBestPeriod(final AccumulatedPeriod bestPeriod) {
         this.bestPeriod = bestPeriod;
     }
 
@@ -69,7 +69,7 @@ class Summary {
         return average;
     }
 
-    public void setAverage(Double average) {
+    public void setAverage(final Double average) {
         this.average = average;
     }
 }

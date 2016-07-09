@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class Options {
 
         private Axis yAxis;
 
-        Builder(Sink<PB, Options> sink) {
+        Builder(final Sink<PB, Options> sink) {
             this.sink = sink;
         }
 
@@ -124,13 +124,13 @@ public class Options {
 
     @JsonCreator
     Options(
-            @JsonProperty("chart") Chart chart,
-            @JsonProperty("credits") Credits credits,
-            @JsonProperty("plotOptions") PlotOptions plotOptions,
-            @JsonProperty("title") Title title,
-            @JsonProperty("tooltip") Tooltip tooltip,
-            @JsonProperty("xAxis") Axis xAxis,
-            @JsonProperty("yAxis") Axis yAxis
+            @JsonProperty("chart") final Chart chart,
+            @JsonProperty("credits") final Credits credits,
+            @JsonProperty("plotOptions") final PlotOptions plotOptions,
+            @JsonProperty("title") final Title title,
+            @JsonProperty("tooltip") final Tooltip tooltip,
+            @JsonProperty("xAxis") final Axis xAxis,
+            @JsonProperty("yAxis") final Axis yAxis
     ) {
         this.chart = chart;
         this.credits = credits;

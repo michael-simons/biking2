@@ -62,7 +62,7 @@ public class LocationEntity implements Serializable {
     protected LocationEntity() {
     }
 
-    public LocationEntity(BigDecimal latitude, BigDecimal longitude, Calendar createdAt) {
+    public LocationEntity(final BigDecimal latitude, final BigDecimal longitude, final Calendar createdAt) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.createdAt = createdAt;
@@ -88,7 +88,7 @@ public class LocationEntity implements Serializable {
         return this.description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -102,7 +102,7 @@ public class LocationEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

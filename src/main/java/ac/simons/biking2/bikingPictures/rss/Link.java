@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class Link {
         return rel;
     }
 
-    public void setRel(String rel) {
+    public void setRel(final String rel) {
         this.rel = rel;
     }
 
@@ -46,7 +46,7 @@ public class Link {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -54,7 +54,7 @@ public class Link {
         return href;
     }
 
-    public void setHref(String href) {
+    public void setHref(final String href) {
         this.href = href;
     }
 }

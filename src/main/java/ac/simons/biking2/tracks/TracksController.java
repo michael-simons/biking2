@@ -75,7 +75,7 @@ class TracksController {
     private final Coordinate home;
     private final JAXBContext gpxContext;
 
-    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") final String gpsBabel, final Coordinate home) {
+    public TracksController(final TrackRepository trackRepository, final File datastoreBaseDirectory, @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") final String gpsBabel, final Coordinate home) {
         this.trackRepository = trackRepository;
         this.datastoreBaseDirectory = datastoreBaseDirectory;
         this.gpsBabel = gpsBabel;

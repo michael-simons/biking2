@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ class BikeCmd {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -55,7 +55,7 @@ class BikeCmd {
         return boughtOn;
     }
 
-    public void setBoughtOn(Date boughtOn) {
+    public void setBoughtOn(final Date boughtOn) {
         this.boughtOn = boughtOn;
     }
 
@@ -63,7 +63,7 @@ class BikeCmd {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(final String color) {
         this.color = color;
     }
 
@@ -71,7 +71,7 @@ class BikeCmd {
         return decommissionedOn;
     }
 
-    public void setDecommissionedOn(Date decommissionedOn) {
+    public void setDecommissionedOn(final Date decommissionedOn) {
         this.decommissionedOn = decommissionedOn;
     }
 

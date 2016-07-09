@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2015-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class NewTripCmd implements Serializable {
         return coveredOn;
     }
 
-    public void setCoveredOn(Date coveredOn) {
+    public void setCoveredOn(final Date coveredOn) {
         this.coveredOn = coveredOn;
     }
 
@@ -47,7 +47,7 @@ public class NewTripCmd implements Serializable {
         return distance;
     }
 
-    public void setDistance(Double distance) {
+    public void setDistance(final Double distance) {
         this.distance = distance;
     }
 }

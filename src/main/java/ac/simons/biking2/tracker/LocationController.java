@@ -38,7 +38,7 @@ class LocationController {
 
     private final LocationService locationService;
 
-    public LocationController(LocationService locationService) {
+    public LocationController(final LocationService locationService) {
         this.locationService = locationService;
     }
 

@@ -43,7 +43,7 @@ public class LocationService {
         return location;
     }
 
-    public List<LocationEntity> getLocationsForTheLastNHours(int hours) {
+    public List<LocationEntity> getLocationsForTheLastNHours(final int hours) {
         return locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(GregorianCalendar.from(ZonedDateTime.now(systemDefault()).minusHours(hours)));
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ class GalleryPictureEntity implements Serializable {
     protected GalleryPictureEntity() {
     }
 
-    public GalleryPictureEntity(Calendar takenOn, String filename) {
+    public GalleryPictureEntity(final Calendar takenOn, final String filename) {
         this.takenOn = takenOn;
         this.filename = filename;
     }
@@ -98,7 +98,7 @@ class GalleryPictureEntity implements Serializable {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -115,7 +115,7 @@ class GalleryPictureEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

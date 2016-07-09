@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 msimons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * @author msimons, 2014-02-12
+ * @author Michael J. Simons., 2014-02-12
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
@@ -105,7 +105,7 @@ public class Series<T> {
             });
         }
 
-        Builder(Sink<PB, Series> sink) {
+        Builder(final Sink<PB, Series> sink) {
             this.sink = sink;
         }
 
@@ -132,7 +132,17 @@ public class Series<T> {
 
     private final Marker marker;
 
-    public Series(final String color, Collection<T> data, String name, String type, Integer zIndex, Double fillOpacity, Double lineWidth, String linkedTo, Marker marker) {
+    public Series(
+            final String color, 
+            final Collection<T> data, 
+            final String name, 
+            final String type, 
+            final Integer zIndex, 
+            final Double fillOpacity, 
+            final Double lineWidth, 
+            final String linkedTo, 
+            final Marker marker
+    ) {
         this.color = color;
         this.data = data;
         this.name = name;

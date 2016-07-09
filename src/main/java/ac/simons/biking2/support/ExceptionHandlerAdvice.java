@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2015-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+    public ResponseEntity<String> handleIllegalArgumentException(final IllegalArgumentException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+    public ResponseEntity<String> handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }

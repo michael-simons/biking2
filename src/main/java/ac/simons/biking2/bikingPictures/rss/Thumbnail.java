@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class Thumbnail {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -46,7 +46,7 @@ public class Thumbnail {
         return width;
     }
 
-    public void setWidth(Integer width) {
+    public void setWidth(final Integer width) {
         this.width = width;
     }
 
@@ -54,7 +54,7 @@ public class Thumbnail {
         return height;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(final Integer height) {
         this.height = height;
     }
 }

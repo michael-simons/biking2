@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class Tooltip {
 
         private String valueSuffix;
 
-        public Builder(Sink<PB, Tooltip> sink) {
+        public Builder(final Sink<PB, Tooltip> sink) {
             this.sink = sink;
         }
 
@@ -142,13 +142,13 @@ public class Tooltip {
 
     @JsonCreator
     Tooltip(
-            @JsonProperty("footerFormat") String footerFormat,
-            @JsonProperty("headerFormat") String headerFormat,
-            @JsonProperty("pointFormat") String pointFormat,
-            @JsonProperty("shared") Boolean shared,
-            @JsonProperty("useHTML") Boolean useHTML,
-            @JsonProperty("crosshairs") Boolean crosshairs,
-            @JsonProperty("valueSuffix") String valueSuffix
+            @JsonProperty("footerFormat") final String footerFormat,
+            @JsonProperty("headerFormat") final String headerFormat,
+            @JsonProperty("pointFormat") final String pointFormat,
+            @JsonProperty("shared") final Boolean shared,
+            @JsonProperty("useHTML") final Boolean useHTML,
+            @JsonProperty("crosshairs") final Boolean crosshairs,
+            @JsonProperty("valueSuffix") final String valueSuffix
     ) {
         this.footerFormat = footerFormat;
         this.headerFormat = headerFormat;

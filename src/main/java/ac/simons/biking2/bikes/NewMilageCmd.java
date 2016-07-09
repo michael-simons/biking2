@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class NewMilageCmd {
         return recordedOn;
     }
 
-    public void setRecordedOn(Date recordedOn) {
+    public void setRecordedOn(final Date recordedOn) {
         this.recordedOn = recordedOn;
     }
 
@@ -44,7 +44,7 @@ class NewMilageCmd {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(final Double amount) {
         this.amount = amount;
     }
 

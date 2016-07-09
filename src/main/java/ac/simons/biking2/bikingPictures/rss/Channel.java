@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public class Channel {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -65,7 +65,7 @@ public class Channel {
         return link;
     }
 
-    public void setLink(String link) {
+    public void setLink(final String link) {
         this.link = link;
     }
 
@@ -73,7 +73,7 @@ public class Channel {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -81,7 +81,7 @@ public class Channel {
         return pubDate;
     }
 
-    public void setPubDate(ZonedDateTime pubDate) {
+    public void setPubDate(final ZonedDateTime pubDate) {
         this.pubDate = pubDate;
     }
 
@@ -89,7 +89,7 @@ public class Channel {
         return links;
     }
 
-    public void setLinks(List<Link> links) {
+    public void setLinks(final List<Link> links) {
         this.links = links;
     }
 
@@ -97,7 +97,7 @@ public class Channel {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(final List<Item> items) {
         this.items = items;
     }
 }

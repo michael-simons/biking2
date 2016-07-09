@@ -49,7 +49,7 @@ public class Item {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -57,7 +57,7 @@ public class Item {
         return link;
     }
 
-    public void setLink(String link) {
+    public void setLink(final String link) {
         this.link = link;
     }
 
@@ -65,7 +65,7 @@ public class Item {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -73,7 +73,7 @@ public class Item {
         return pubDate;
     }
 
-    public void setPubDate(ZonedDateTime pubDate) {
+    public void setPubDate(final ZonedDateTime pubDate) {
         this.pubDate = pubDate;
     }
 
@@ -81,7 +81,7 @@ public class Item {
         return guid;
     }
 
-    public void setGuid(Guid guid) {
+    public void setGuid(final Guid guid) {
         this.guid = guid;
     }
 
@@ -89,7 +89,7 @@ public class Item {
         return thumbnail;
     }
 
-    public void setThumbnail(Thumbnail thumbnail) {
+    public void setThumbnail(final Thumbnail thumbnail) {
         this.thumbnail = thumbnail;
     }
 
@@ -97,7 +97,7 @@ public class Item {
         return content;
     }
 
-    public void setContent(List<Content> content) {
+    public void setContent(final List<Content> content) {
         this.content = content;
     }
 }

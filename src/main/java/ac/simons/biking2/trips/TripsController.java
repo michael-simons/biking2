@@ -40,7 +40,7 @@ public class TripsController {
 
     private final AssortedTripRepository assortedTripRepository;
 
-    public TripsController(AssortedTripRepository assortedTripRepository) {
+    public TripsController(final AssortedTripRepository assortedTripRepository) {
         this.assortedTripRepository = assortedTripRepository;
     }
 

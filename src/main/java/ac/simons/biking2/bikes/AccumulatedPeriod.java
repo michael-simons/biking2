@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,11 @@ public class AccumulatedPeriod {
 
     private final int value;
 
-    public AccumulatedPeriod(LocalDate startOfPeriod, int value) {
+    public AccumulatedPeriod(final LocalDate startOfPeriod, final int value) {
         this(GregorianCalendar.from(startOfPeriod.atStartOfDay(ZoneId.systemDefault())), value);
     }
 
-    public AccumulatedPeriod(Calendar startOfPeriod, int value) {
+    public AccumulatedPeriod(final Calendar startOfPeriod, final int value) {
         this.startOfPeriod = startOfPeriod;
         this.value = value;
     }

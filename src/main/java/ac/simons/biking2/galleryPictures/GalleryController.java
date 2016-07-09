@@ -73,7 +73,7 @@ class GalleryController {
         }
     };
 
-    public GalleryController(GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
+    public GalleryController(final GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
         this.galleryPictureRepository = galleryPictureRepository;
         this.datastoreBaseDirectory = datastoreBaseDirectory;
     }

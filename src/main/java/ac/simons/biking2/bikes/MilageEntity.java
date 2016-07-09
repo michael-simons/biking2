@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,7 +116,7 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
@@ -134,7 +134,7 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     }
 
     @Override
-    public int compareTo(MilageEntity o) {
+    public int compareTo(final MilageEntity o) {
         return this.recordedOn.compareTo(o.recordedOn);
     }
 }

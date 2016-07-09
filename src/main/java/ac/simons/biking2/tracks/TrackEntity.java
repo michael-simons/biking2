@@ -113,7 +113,7 @@ class TrackEntity implements Serializable {
     protected TrackEntity() {
     }
 
-    public TrackEntity(String name, Calendar coveredOn) {
+    public TrackEntity(final String name, final Calendar coveredOn) {
         this.name = name;
         this.coveredOn = coveredOn;
     }
@@ -134,7 +134,7 @@ class TrackEntity implements Serializable {
         return this.description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -142,7 +142,7 @@ class TrackEntity implements Serializable {
         return this.minlat;
     }
 
-    public void setMinlat(BigDecimal minlat) {
+    public void setMinlat(final BigDecimal minlat) {
         this.minlat = minlat;
     }
 
@@ -150,7 +150,7 @@ class TrackEntity implements Serializable {
         return this.minlon;
     }
 
-    public void setMinlon(BigDecimal minlon) {
+    public void setMinlon(final BigDecimal minlon) {
         this.minlon = minlon;
     }
 
@@ -158,7 +158,7 @@ class TrackEntity implements Serializable {
         return this.maxlat;
     }
 
-    public void setMaxlat(BigDecimal maxlat) {
+    public void setMaxlat(final BigDecimal maxlat) {
         this.maxlat = maxlat;
     }
 
@@ -166,7 +166,7 @@ class TrackEntity implements Serializable {
         return this.maxlon;
     }
 
-    public void setMaxlon(BigDecimal maxlon) {
+    public void setMaxlon(final BigDecimal maxlon) {
         this.maxlon = maxlon;
     }
 
@@ -174,7 +174,7 @@ class TrackEntity implements Serializable {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(final Type type) {
         this.type = type;
     }
 
@@ -196,7 +196,7 @@ class TrackEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2015-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class StoryCmd implements Serializable {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -45,7 +45,7 @@ class StoryCmd implements Serializable {
         return label;
     }
 
-    public void setLabel(String label) {
+    public void setLabel(final String label) {
         this.label = label;
     }
 }

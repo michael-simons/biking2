@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class PlotLine {
 
         private String color;
 
-        public Builder(Sink<PB, PlotLine> sink) {
+        public Builder(final Sink<PB, PlotLine> sink) {
             this.sink = sink;
         }
 
@@ -70,7 +70,7 @@ public class PlotLine {
 
     private final String color;
 
-    public PlotLine(Number value, Double width, String color) {
+    public PlotLine(final Number value, final Double width, final String color) {
         this.value = value;
         this.width = width;
         this.color = color;

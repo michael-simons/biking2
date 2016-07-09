@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class Credits {
 
         private Boolean enabled = Boolean.TRUE;
 
-        Builder(Sink<PB, Credits> sink) {
+        Builder(final Sink<PB, Credits> sink) {
             this.sink = sink;
         }
 
@@ -59,7 +59,7 @@ public class Credits {
     private final Boolean enabled;
 
     @JsonCreator
-    Credits(@JsonProperty("enabled") Boolean enabled) {
+    Credits(@JsonProperty("enabled") final Boolean enabled) {
         this.enabled = enabled;
     }
 

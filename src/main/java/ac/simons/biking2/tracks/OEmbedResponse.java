@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ class OEmbedResponse implements Serializable {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -83,7 +83,7 @@ class OEmbedResponse implements Serializable {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(final String version) {
         this.version = version;
     }
 
@@ -91,7 +91,7 @@ class OEmbedResponse implements Serializable {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -99,7 +99,7 @@ class OEmbedResponse implements Serializable {
         return authorName;
     }
 
-    public void setAuthorName(String authorName) {
+    public void setAuthorName(final String authorName) {
         this.authorName = authorName;
     }
 
@@ -107,7 +107,7 @@ class OEmbedResponse implements Serializable {
         return authorUrl;
     }
 
-    public void setAuthorUrl(String authorUrl) {
+    public void setAuthorUrl(final String authorUrl) {
         this.authorUrl = authorUrl;
     }
 
@@ -115,7 +115,7 @@ class OEmbedResponse implements Serializable {
         return providerName;
     }
 
-    public void setProviderName(String providerName) {
+    public void setProviderName(final String providerName) {
         this.providerName = providerName;
     }
 
@@ -123,7 +123,7 @@ class OEmbedResponse implements Serializable {
         return providerUrl;
     }
 
-    public void setProviderUrl(String providerUrl) {
+    public void setProviderUrl(final String providerUrl) {
         this.providerUrl = providerUrl;
     }
 
@@ -131,7 +131,7 @@ class OEmbedResponse implements Serializable {
         return cacheAge;
     }
 
-    public void setCacheAge(Long cacheAge) {
+    public void setCacheAge(final Long cacheAge) {
         this.cacheAge = cacheAge;
     }
 
@@ -139,7 +139,7 @@ class OEmbedResponse implements Serializable {
         return thumbnailUrl;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
+    public void setThumbnailUrl(final String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
     }
 
@@ -147,7 +147,7 @@ class OEmbedResponse implements Serializable {
         return thumbnailWidth;
     }
 
-    public void setThumbnailWidth(Integer thumbnailWidth) {
+    public void setThumbnailWidth(final Integer thumbnailWidth) {
         this.thumbnailWidth = thumbnailWidth;
     }
 
@@ -155,7 +155,7 @@ class OEmbedResponse implements Serializable {
         return thumbnailHeight;
     }
 
-    public void setThumbnailHeight(Integer thumbnailHeight) {
+    public void setThumbnailHeight(final Integer thumbnailHeight) {
         this.thumbnailHeight = thumbnailHeight;
     }
 
@@ -163,7 +163,7 @@ class OEmbedResponse implements Serializable {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -171,7 +171,7 @@ class OEmbedResponse implements Serializable {
         return html;
     }
 
-    public void setHtml(String html) {
+    public void setHtml(final String html) {
         this.html = html;
     }
 
@@ -179,7 +179,7 @@ class OEmbedResponse implements Serializable {
         return width;
     }
 
-    public void setWidth(Integer width) {
+    public void setWidth(final Integer width) {
         this.width = width;
     }
 
@@ -187,7 +187,7 @@ class OEmbedResponse implements Serializable {
         return height;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(final Integer height) {
         this.height = height;
     }
 }
