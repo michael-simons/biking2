@@ -48,7 +48,7 @@ class BikesController {
     }
 
     @RequestMapping(value = "/bikes", method = GET)
-    public List<BikeEntity> getBikes(final @RequestParam(required = false, defaultValue = "false") boolean all) {
+    public List<BikeEntity> getBikes(@RequestParam(required = false, defaultValue = "false") final boolean all) {
         List<BikeEntity> rv;
         if (all) {
             rv = bikeRepository.findAll(new Sort(Sort.Direction.ASC, "boughtOn", "decommissionedOn", "name"));
@@ -60,7 +60,7 @@ class BikesController {
 
     @RequestMapping(value = "/bikes/{id:\\d+}/milages", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public MilageEntity createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {
+    public MilageEntity createMilage(@PathVariable final Integer id, @RequestBody @Valid final NewMilageCmd cmd, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("Invalid arguments.");
         }
@@ -82,7 +82,7 @@ class BikesController {
 
     @RequestMapping(value = "/bikes", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public BikeEntity createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
+    public BikeEntity createBike(@RequestBody @Valid final BikeCmd newBike, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("Invalid arguments.");
         }

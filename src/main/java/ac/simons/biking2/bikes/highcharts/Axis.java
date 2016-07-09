@@ -88,8 +88,8 @@ public final class Axis {
         }
 
         public Title.Builder<Builder<PB>> title() {
-            return new Title.Builder<>(title -> {
-                Builder.this.title = title;
+            return new Title.Builder<>(t -> {
+                Builder.this.title = t;
                 return Builder.this;
             });
         }
