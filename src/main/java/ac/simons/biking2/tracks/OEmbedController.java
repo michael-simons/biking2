@@ -39,12 +39,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 class OEmbedController {
     private static final Pattern EMBEDDABLE_TRACK_URL_PATTERN = Pattern.compile(".*?\\/tracks\\/(\\w+)(\\/|\\.(\\w+))?$");
-    private static final Map<String, String> acceptableFormats;
+    private static final Map<String, String> ACCEPTABLE_FORMATS;
     static {
         final Map<String, String> hlp = new HashMap<>();
         hlp.put("json", "application/json");
         hlp.put("xml", "application/xml");
-        acceptableFormats = Collections.unmodifiableMap(hlp);
+        ACCEPTABLE_FORMATS = Collections.unmodifiableMap(hlp);
     }
 
     private final TrackRepository trackRepository;
@@ -68,7 +68,7 @@ class OEmbedController {
         final Integer id = m.matches() ? TrackEntity.getId(m.group(1)) : null;
         final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
         TrackEntity track;
-        if(id == null || !acceptableFormats.containsKey(requestedFormat))
+        if(id == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat))
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         else if((track = this.trackRepository.findOne(id)) == null)
             rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);

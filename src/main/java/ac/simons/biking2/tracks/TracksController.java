@@ -60,13 +60,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 class TracksController {
 
-    private static final Map<String, String> acceptableFormats;
+    private static final Map<String, String> ACCEPTABLE_FORMATS;
 
     static {
         final Map<String, String> hlp = new HashMap<>();
         hlp.put("gpx", "application/gpx+xml");
         hlp.put("tcx", "application/xml");
-        acceptableFormats = Collections.unmodifiableMap(hlp);
+        ACCEPTABLE_FORMATS = Collections.unmodifiableMap(hlp);
     }
 
     private final TrackRepository trackRepository;
@@ -217,13 +217,13 @@ class TracksController {
         final Integer requestedId = TrackEntity.getId(id);
         final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
         TrackEntity track;
-        if (requestedId == null || !acceptableFormats.containsKey(requestedFormat)) {
+        if (requestedId == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
         } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
             final File trackFile = track.getTrackFile(datastoreBaseDirectory, requestedFormat);
-            response.setHeader("Content-Type", acceptableFormats.get(requestedFormat));
+            response.setHeader("Content-Type", ACCEPTABLE_FORMATS.get(requestedFormat));
             response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, requestedFormat));
 
             // Attribute maybe null
