@@ -74,13 +74,13 @@ class TracksController {
     private final String gpsBabel;
     private final Coordinate home;
     private final JAXBContext gpxContext;
-    
+
     public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") final String gpsBabel, final Coordinate home) {
 	this.trackRepository = trackRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
 	this.gpsBabel = gpsBabel;
 	this.home = home;
-	this.gpxContext = JAXBContextFactory.createContext(GPX.class);	
+	this.gpxContext = JAXBContextFactory.createContext(GPX.class);
     }
 
     @RequestMapping("/api/tracks")
@@ -88,14 +88,14 @@ class TracksController {
     List<TrackEntity> getTracks() {
 	return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
     }
-    
+
     @RequestMapping(value = "/api/tracks", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<TrackEntity> createTrack(	    
+    public ResponseEntity<TrackEntity> createTrack(
 	    @RequestParam(value = "name", required = true)
-	    final String name,	    
+	    final String name,
 	    @RequestParam(value = "coveredOn", required = true)
-	    @DateTimeFormat(iso = DATE_TIME) 
+	    @DateTimeFormat(iso = DATE_TIME)
 	    final ZonedDateTime coveredOn,
 	    @RequestParam(value = "description", required = false)
 	    final String description,
@@ -112,32 +112,32 @@ class TracksController {
 		TrackEntity track = new TrackEntity(name, GregorianCalendar.from(coveredOn));
 		track.setDescription(description);
 		track.setType(type);
-		
-		track = this.trackRepository.save(track);	   
-		
+
+		track = this.trackRepository.save(track);
+
 		try {
-		    this.storeFile(track, trackData.getInputStream());		    
-		    
+		    this.storeFile(track, trackData.getInputStream());
+
 		    track = this.trackRepository.save(track);
-		    rv = new ResponseEntity<>(track, HttpStatus.OK);		    
+		    rv = new ResponseEntity<>(track, HttpStatus.OK);
 		} catch(Exception e) {
 		    this.trackRepository.delete(track);
 		    track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
 		    track.getTrackFile(datastoreBaseDirectory, "gpx").delete();
-		    
+
 		    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}		
-	    } catch(DataIntegrityViolationException e) {	    
+		}
+	    } catch(DataIntegrityViolationException e) {
 		rv = new ResponseEntity<>(HttpStatus.CONFLICT);
 	    }
 	}
 
 	return rv;
     }
-    
+
     TrackEntity storeFile(final TrackEntity track, final InputStream tcxData) {
 	final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
-	final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");	
+	final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
 
 	try (FileOutputStream out = new FileOutputStream(tcxFile);) {
 	    out.getChannel().transferFrom(Channels.newChannel(tcxData), 0, Integer.MAX_VALUE);
@@ -150,7 +150,7 @@ class TracksController {
 	    final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
 	    process.waitFor();
 	    int exitValue = process.exitValue();
-	    
+
 	    if(exitValue != 0)
 		throw new RuntimeException("GPSBabel could not convert the input file!");
 	    final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
@@ -181,7 +181,7 @@ class TracksController {
 	}
 
 	return rv;
-    }    
+    }
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
     @PreAuthorize("isAuthenticated()")
@@ -241,7 +241,7 @@ class TracksController {
 
 	response.flushBuffer();
     }
-    
+
     @RequestMapping("/api/home")
     public @ResponseBody Coordinate getHome() {
 	return this.home;

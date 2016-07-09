@@ -71,13 +71,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	uriPort = 80
 )
 public class TripsControllerTest {
-   
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private AssortedTripRepository repository;
-    
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -87,21 +87,21 @@ public class TripsControllerTest {
 		.on(new AssortedTripEntity(Calendar.getInstance(), BigDecimal.valueOf(23.42)))
 		.set("id", 42)
 		.get();
-	
+
 	final NewTripCmd newTripCmd1 = new NewTripCmd();
 	newTripCmd1.setCoveredOn(trip.getCoveredOn().getTime());
-	newTripCmd1.setDistance(23.42);	
+	newTripCmd1.setDistance(23.42);
 	final NewTripCmd newTripCmd2 = new NewTripCmd();
 	newTripCmd2.setCoveredOn(trip.getCoveredOn().getTime());
-	newTripCmd2.setDistance(666.0);	
-		 	
+	newTripCmd2.setDistance(666.0);
+
 	when(repository.save(any(AssortedTripEntity.class))).then(invocation -> {
 	    final AssortedTripEntity arg = invocation.getArgumentAt(0, AssortedTripEntity.class);
 	    return arg == null ? arg : Reflect.on(invocation.getArgumentAt(0, AssortedTripEntity.class)).set("id", 42).get();
-	});	
+	});
 	// Using hamcrest to check for properties of the passed object
 	when(repository.save(argThat(Matchers.<AssortedTripEntity>hasProperty("distance", is(BigDecimal.valueOf(666.0)))))).thenThrow(new DataIntegrityViolationException(""));
-	
+
 	// Empty content
 	mockMvc
 		.perform(post("/api/trips").contentType(APPLICATION_JSON))
@@ -120,7 +120,7 @@ public class TripsControllerTest {
 
 	final FieldDescriptor coveredOnDescriptor = fieldWithPath("coveredOn").description("The date of the trip");
 	final FieldDescriptor distanceDescriptor = fieldWithPath("distance").description("Distance covered on the trip");
-			
+
 	// Valid request
 	mockMvc
 		.perform(
@@ -134,15 +134,15 @@ public class TripsControllerTest {
 		)
 		.andDo(document("api/trips/post",
 				preprocessRequest(prettyPrint()),
-				preprocessResponse(prettyPrint()),	
+				preprocessResponse(prettyPrint()),
 				requestFields(coveredOnDescriptor, distanceDescriptor),
-				responseFields(					
+				responseFields(
 					fieldWithPath("id").description("The unique Id of the trip"),
 					coveredOnDescriptor, distanceDescriptor
 				)
 			)
 		);
-	
+
 	// Valid request, duplicate content
 	mockMvc
 		.perform(

@@ -34,10 +34,10 @@ class SummaryController {
 
     private final BikeRepository bikeRepository;
     private final AssortedTripRepository assortedTripRepository;
-        
+
     public SummaryController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository) {
 	this.bikeRepository = bikeRepository;
-	this.assortedTripRepository = assortedTripRepository;	
+	this.assortedTripRepository = assortedTripRepository;
     }
 
     @RequestMapping("/summary")
@@ -48,14 +48,14 @@ class SummaryController {
 	summary.setDateOfFirstRecord(this.bikeRepository.getDateOfFirstRecord());
 	summary.setTotal(allBikes.stream().mapToInt(BikeEntity::getMilage).sum()
 		+ this.assortedTripRepository.getTotalDistance().doubleValue()
-	);	
-	
+	);
+
 	final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(allBikes, null);
-		
-	summary.setWorstPeriod(BikeEntity.getWorstPeriod(summarizedPeriods));	
+
+	summary.setWorstPeriod(BikeEntity.getWorstPeriod(summarizedPeriods));
 	summary.setBestPeriod(BikeEntity.getBestPeriod(summarizedPeriods));
 	summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
-		
+
 	return summary;
     }
 }

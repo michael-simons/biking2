@@ -94,7 +94,7 @@ public class BikesControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-    
+
     @Test
     public void shouldGetBikes() throws Exception {
 	final List<BikeEntity> allbikes = Arrays.asList(Reflect.on(BikeEntity.class).create()
@@ -124,7 +124,7 @@ public class BikesControllerTest {
 
 	when(repository.findAll(any(Sort.class))).thenReturn(allbikes);
 	when(repository.findByDecommissionedOnIsNull(any(Sort.class))).thenReturn(activeBikes);
-	
+
 	mockMvc
 		.perform(
 			get("http://biking.michael-simons.eu/api/bikes")
@@ -179,7 +179,7 @@ public class BikesControllerTest {
 	final NewMilageCmd newMilageCmd = new NewMilageCmd();
 	newMilageCmd.setAmount(23.0);
 	newMilageCmd.setRecordedOn(new Date());
-	
+
 	// Empty content
 	mockMvc
 		.perform(post("/api/bikes/1/milages").contentType(APPLICATION_JSON))
@@ -343,7 +343,7 @@ public class BikesControllerTest {
 	bike.setColor("000000");
 	Calendar boughtOn = bike.getBoughtOn();
 	when(repository.findOne(2)).thenReturn(bike);
-	
+
 	final BikeCmd updatedBikeCmd = new BikeCmd();
 	updatedBikeCmd.setBoughtOn(new Date());
 	updatedBikeCmd.setDecommissionedOn(new Date());

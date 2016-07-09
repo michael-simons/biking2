@@ -37,16 +37,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 class LocationController {
 
     private final LocationService locationService;
-   
+
     public LocationController(LocationService locationService) {
 	this.locationService = locationService;
     }
-    
+
     @RequestMapping(value = "/locations", method = GET)
     public List<LocationEntity> getLocations() {
 	return this.locationService.getLocationsForTheLastNHours(1);
     }
-    
+
     @RequestMapping(value = "/locations/count", method = GET)
     public long getLocationCount() {
 	return this.locationService.getLocationCount();

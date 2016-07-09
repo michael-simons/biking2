@@ -65,7 +65,7 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "bike_id", referencedColumnName = "id")
     private BikeEntity bike;
-    
+
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
@@ -76,10 +76,10 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
 
     protected MilageEntity(final BikeEntity bike, final LocalDate recordedOn, final double amount) {
 	this.bike = bike;
-	this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));	
+	this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));
 	this.amount = BigDecimal.valueOf(amount);
     }
-    
+
     @PrePersist
     public void prePersist() {
 	if (this.createdAt == null) {
@@ -94,14 +94,14 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     public Calendar getRecordedOn() {
 	return recordedOn;
     }
-  
+
     public BigDecimal getAmount() {
 	return amount;
-    }    
+    }
 
     public Calendar getCreatedAt() {
 	return createdAt;
-    }  
+    }
 
     public BikeEntity getBike() {
 	return bike;

@@ -60,7 +60,7 @@ class GalleryPictureEntity implements Serializable {
     @NotBlank
     @Size(max = 2048)
     private String description;
-    
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
@@ -74,7 +74,7 @@ class GalleryPictureEntity implements Serializable {
 	this.takenOn = takenOn;
 	this.filename = filename;
     }
-    
+
     @PrePersist
     public void prePersist() {
 	if (this.createdAt == null) {

@@ -47,7 +47,7 @@ public class RSSTest {
 	assertThat(rss.getChannel().getDescription(), is(equalTo("DailyFratze.de: \"A daily picture - everyday.\".")));
 	assertThat(rss.getChannel().getLinks().get(0).getHref(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=1")));
 	assertThat(rss.getChannel().getLinks().get(1).getHref(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2")));
-	
+
 	final Item item = rss.getChannel().getItems().get(0);
 	assertThat(item.getTitle(), is(equalTo("michael - January 12, 2014")));
 	assertThat(item.getLink(), is(equalTo("http://dailyfratze.de/michael/2014/1/12")));
@@ -61,8 +61,8 @@ public class RSSTest {
 	assertThat(item.getContent().size(), is(equalTo(2)));
 	assertThat(item.getContent().get(0).getUrl(), is(equalTo("http://dailyfratze.de/fratzen/m/45644.jpg")));
 	assertThat(item.getContent().get(1).getUrl(), is(equalTo("http://dailyfratze.de/fratzen/l/45644.jpg")));
-	
+
 	rss.setChannel(null);
 	assertThat(rss.getChannel(), is(nullValue()));
-    }    
+    }
 }

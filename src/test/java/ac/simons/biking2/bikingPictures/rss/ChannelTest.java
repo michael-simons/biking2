@@ -45,30 +45,30 @@ public class ChannelTest {
     public void previousAndNextShouldWorkAsExpected() {
 	final Channel channel = new Channel();
 	channel.setLinks(new ArrayList<>());
-	
+
 	Link link;
-	
+
 	link = new Link();
 	link.setRel("previous");
 	link.setHref("p1");
 	channel.getLinks().add(link);
-	
+
 	link = new Link();
 	link.setRel("next");
 	link.setHref("n1");
 	channel.getLinks().add(link);
-	
+
 	link = new Link();
 	link.setRel("previous");
 	link.setHref("p2");
 	channel.getLinks().add(link);
-	
+
 	link = new Link();
 	link.setRel("next");
 	link.setHref("n2");
 	channel.getLinks().add(link);
-	
+
 	Assert.assertEquals("p1", channel.getPrevious());
-	Assert.assertEquals("n1", channel.getNext());	
+	Assert.assertEquals("n1", channel.getNext());
     }
 }

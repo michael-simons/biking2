@@ -43,50 +43,50 @@ public class Tooltip {
 	private Boolean shared;
 
 	private Boolean useHTML;
-	
+
 	private Boolean crosshairs;
-	
+
 	private String valueSuffix;
 
 	public Builder(Sink<PB, Tooltip> sink) {
 	    this.sink = sink;
 	}
-	
+
 	public Builder<PB> withFooterFormat(final String footerFormat) {
 	    this.footerFormat = footerFormat;
 	    return this;
 	}
-	
+
 	public Builder<PB> withHeaderFormat(final String headerFormat) {
 	    this.headerFormat = headerFormat;
 	    return this;
 	}
-	
+
 	public Builder<PB> withPointFormat(final String pointFormat) {
 	    this.pointFormat = pointFormat;
 	    return this;
 	}
-	
+
 	public Builder<PB> withValueSuffix(final String valueSuffix) {
 	    this.valueSuffix = valueSuffix;
 	    return this;
 	}
-	
+
 	public Builder<PB> share() {
 	    this.shared = true;
 	    return this;
 	}
-			
+
 	public Builder<PB> useHTML() {
 	    this.useHTML = true;
 	    return this;
 	}
-	
+
 	public Builder<PB> enableCrosshairs() {
 	    this.crosshairs = true;
 	    return this;
 	}
-		
+
 	public PB build() {
 	    return this.sink.setObject(
 		    new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML, crosshairs, valueSuffix)
@@ -135,27 +135,27 @@ public class Tooltip {
      * Firefox. Defaults to false.
      */
     private final Boolean useHTML;
-    
+
     private final Boolean crosshairs;
-    
+
     private final String valueSuffix;
 
     @JsonCreator
     Tooltip(
-	    @JsonProperty("footerFormat") String footerFormat, 
-	    @JsonProperty("headerFormat") String headerFormat, 
-	    @JsonProperty("pointFormat") String pointFormat, 
-	    @JsonProperty("shared") Boolean shared, 
+	    @JsonProperty("footerFormat") String footerFormat,
+	    @JsonProperty("headerFormat") String headerFormat,
+	    @JsonProperty("pointFormat") String pointFormat,
+	    @JsonProperty("shared") Boolean shared,
 	    @JsonProperty("useHTML") Boolean useHTML,
 	    @JsonProperty("crosshairs") Boolean crosshairs,
-	    @JsonProperty("valueSuffix") String valueSuffix 
+	    @JsonProperty("valueSuffix") String valueSuffix
     ) {
 	this.footerFormat = footerFormat;
 	this.headerFormat = headerFormat;
 	this.pointFormat = pointFormat;
 	this.shared = shared;
 	this.useHTML = useHTML;
-	this.crosshairs = crosshairs;		
+	this.crosshairs = crosshairs;
 	this.valueSuffix = valueSuffix;
     }
 

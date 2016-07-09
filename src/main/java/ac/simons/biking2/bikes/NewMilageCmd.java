@@ -47,7 +47,7 @@ class NewMilageCmd {
     public void setAmount(Double amount) {
 	this.amount = amount;
     }
-    
+
     public LocalDate recordedOnAsLocalDate() {
 	return LocalDateTime.ofInstant(this.getRecordedOn().toInstant(), ZoneId.systemDefault()).toLocalDate();
     }

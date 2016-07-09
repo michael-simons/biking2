@@ -66,7 +66,7 @@ class BikingPicturesController {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {
 	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%d.jpg", DatastoreConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId()));
-	    
+
 	    final int cacheForDays = 365;
 	    response.setHeader("Content-Type", "image/jpeg");
 	    response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));

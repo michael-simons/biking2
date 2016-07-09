@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Options {
-    
+
     public static class Builder<PB> {
 
 	private final Sink<PB, Options> sink;
@@ -51,49 +51,49 @@ public class Options {
 	Builder(Sink<PB, Options> sink) {
 	    this.sink = sink;
 	}
-	
+
 	public Chart.Builder<Builder<PB>> chart() {
 	    return new Chart.Builder<>(chart -> {
 		Builder.this.chart = chart;
 		return Builder.this;
 	    });
 	}
-	
+
 	public Credits.Builder<Builder<PB>> credits() {
 	    return new Credits.Builder<>(credits -> {
 		Builder.this.credits = credits;
 		return Builder.this;
 	    });
 	}
-	
+
 	public PlotOptions.Builder<Builder<PB>> plotOptions() {
 	    return new PlotOptions.Builder<>(plotOptions -> {
 		Builder.this.plotOptions = plotOptions;
 		return Builder.this;
 	    });
 	}
-	
+
 	public Title.Builder<Builder<PB>> title() {
 	    return new Title.Builder<>(title -> {
 		Builder.this.title = title;
 		return Builder.this;
 	    });
 	}
-	
+
 	public Tooltip.Builder<Builder<PB>> tooltip() {
 	    return new Tooltip.Builder<>(tooltip -> {
 		Builder.this.tooltip = tooltip;
 		return Builder.this;
 	    });
 	}
-	
+
 	public Axis.Builder<Builder<PB>> xAxis() {
 	    return new Axis.Builder<>(xAxis -> {
 		Builder.this.xAxis = xAxis;
 		return Builder.this;
 	    });
 	}
-	
+
 	public Axis.Builder<Builder<PB>> yAxis() {
 	    return new Axis.Builder<>(yAxis -> {
 		Builder.this.yAxis = yAxis;
@@ -107,13 +107,13 @@ public class Options {
 	    );
 	}
     }
- 
+
     private final Chart chart;
 
     private final Credits credits;
 
     private final PlotOptions plotOptions;
-   
+
     private final Title title;
 
     private final Tooltip tooltip;
@@ -152,7 +152,7 @@ public class Options {
     public PlotOptions getPlotOptions() {
 	return plotOptions;
     }
-    
+
     public Title getTitle() {
 	return title;
     }

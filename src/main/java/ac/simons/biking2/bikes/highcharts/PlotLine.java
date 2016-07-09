@@ -46,7 +46,7 @@ public class PlotLine {
 	    this.value = value;
 	    return this;
 	}
-	
+
 	public Builder<PB> withWidth(final Double lineWidth) {
 	    this.width = lineWidth;
 	    return this;

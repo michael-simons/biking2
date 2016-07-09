@@ -49,12 +49,12 @@ import static java.time.ZonedDateTime.ofInstant;
 @Profile({"default", "prod"})
 @ConditionalOnBean(DailyFratzeProvider.class)
 class FetchBikingPicturesJob {
-    
+
     private final DailyFratzeProvider dailyFratzeProvider;
     private final BikingPictureRepository bikingPictureRepository;
     private final File bikingPicturesStorage;
     private final JAXBContext rssContext;
-   
+
     public FetchBikingPicturesJob(
 	    final DailyFratzeProvider dailyFratzeProvider,
 	    final BikingPictureRepository bikingPictureRepository,
@@ -68,7 +68,7 @@ class FetchBikingPicturesJob {
 	    throw new RuntimeException("Could not create bikingPicturesStorage!");
 	}
 
-	this.rssContext = JAXBContextFactory.createContext(RSS.class);	
+	this.rssContext = JAXBContextFactory.createContext(RSS.class);
     }
 
     @PostConstruct

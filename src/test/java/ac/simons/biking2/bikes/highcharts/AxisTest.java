@@ -58,12 +58,12 @@ public class AxisTest {
 	assertThat(axis.getPlotLines().size(), is(equalTo(2)));
 	assertThat(axis.getPlotLines().toArray(new PlotLine[2])[0].getValue(), is(equalTo(23)));
 	assertThat(axis.getPlotLines().toArray(new PlotLine[2])[1].getValue(), is(equalTo(42)));
-	
-	axis = new Axis.Builder<>(object -> object)	
+
+	axis = new Axis.Builder<>(object -> object)
 		.enableEndOnTick()
-		.disableEndOnTick()	
+		.disableEndOnTick()
 	.build();
-	assertThat(axis.isEndOnTick(), is(false));	
+	assertThat(axis.isEndOnTick(), is(false));
 	assertThat(axis.getPlotLines(), is(nullValue()));
     }
 

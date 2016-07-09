@@ -33,12 +33,12 @@ public class ChartTest {
 	Chart chart = new Chart.Builder<>(object -> object).build();
 	assertThat(chart.getBorderWidth(), is(nullValue()));
 	assertThat(chart.getType(), is(nullValue()));
-	
+
 	chart = new Chart.Builder<>(object -> object)
 	    .withBorderWidth(1)
 	    .withType("line")
 	.build();
-	
+
 	assertThat(chart.getBorderWidth(), is(equalTo(1)));
 	assertThat(chart.getType(), is(equalTo("line")));
     }

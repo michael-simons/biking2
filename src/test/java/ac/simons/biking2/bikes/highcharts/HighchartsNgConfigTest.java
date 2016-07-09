@@ -32,13 +32,13 @@ import static org.junit.Assert.assertThat;
  * @author Michael J. Simons, 2014-02-11
  */
 public class HighchartsNgConfigTest {
-    
+
     @Test
     public void testBuilder() {
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
-	
+
 	assertThat(builder.computeCurrentMaxYValue(), is(equalTo(0)));
-	
+
 	final Collection<Series<?>> series = builder
 	    .series()
    		.withData(1.0, 2)
@@ -47,7 +47,7 @@ public class HighchartsNgConfigTest {
    		.withData(3.0, 4)
    		.build()
 	.build().getSeries();
-	
+
 	assertThat(builder.computeCurrentMaxYValue(), is(equalTo(4)));
 
 	assertThat(series.size(), is(equalTo(2)));
@@ -55,7 +55,7 @@ public class HighchartsNgConfigTest {
 	assertThat(hlp.get(0).getData(), is(equalTo(Arrays.asList(1.0, 2))));
 	assertThat(hlp.get(1).getData(), is(equalTo(Arrays.asList(3.0, 4))));
     }
-    
+
     @Test
     public void testJsonCreator() {
 	final HighchartsNgConfig config = new HighchartsNgConfig(null, null);

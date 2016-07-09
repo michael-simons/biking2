@@ -51,9 +51,9 @@ class ChartsController {
 
     private final BikeRepository bikeRepository;
     private final String colorOfCumulativeGraph;
-      
+
     public ChartsController(final BikeRepository bikeRepository, @Value("${biking2.color-of-cumulative-graph:000000}") final String colorOfCumulativeGraph) {
-	this.bikeRepository = bikeRepository;	
+	this.bikeRepository = bikeRepository;
 	this.colorOfCumulativeGraph = colorOfCumulativeGraph;
     }
 
@@ -65,17 +65,17 @@ class ChartsController {
 	// All active bikes
 	final List<BikeEntity> bikes = this.bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())));
 	final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(bikes, entry -> !entry.getKey().isBefore(january1st));
-	
+
 	final Map<String, Object> userData = new HashMap<>();
 	userData.put("worstPeriod", BikeEntity.getWorstPeriod(summarizedPeriods));
 	userData.put("bestPeriod", BikeEntity.getBestPeriod(summarizedPeriods));
 	userData.put("average", summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
 	userData.put("preferredBike", bikes.stream().max(new BikeEntity.BikeByMilageInYearComparator(january1st.getYear())).orElse(null));
 	userData.put("currentYear", january1st.getYear());
-	
+
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
 	builder.withUserData(userData);
-	
+
 	// Add the bike charts as columns
 	final int[] sums = bikes.stream().sequential().map(bike -> {
 	    final int[] milagesInYear = bike.getMilagesInYear(january1st.getYear());
@@ -84,24 +84,24 @@ class ChartsController {
 		    .withColor("#" + bike.getColor())
 		    .withType("column")
 		    .withData(milagesInYear)
-		    .build();	
+		    .build();
 	    return milagesInYear;
 	}).reduce(ChartsController::addArrays).orElse(generate(() -> 0).limit(12).toArray());
-	
+
 	userData.put("currentYearSum", Arrays.stream(sums).sum());
-	
+
 	// Add sum as spline and compute maximum y value
-	final int currentMaxYValue  = 
+	final int currentMaxYValue  =
 		builder.series()
 		    .withName("Sum")
 		    .withColor("#" + colorOfCumulativeGraph)
 		    .withType("spline")
-		    .withData(sums)		    
+		    .withData(sums)
 		    .build()
 		.computeCurrentMaxYValue().intValue();
-	
+
 	final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);
-	return builder		
+	return builder
 		.options()
 		    .chart()
 			.withBorderWidth(1)
@@ -133,7 +133,7 @@ class ChartsController {
 			.enableCrosshairs()
 			.share()
 			.useHTML()
-			.build()	
+			.build()
 		    .plotOptions()
 			.column()
 			    .withPointPadding(0.2)
@@ -141,48 +141,48 @@ class ChartsController {
 			    .build()
 			.series()
 			    .disableAnimation()
-			    .build()				    
+			    .build()
 			.build()
 		    .build()
-		.build();	
+		.build();
     }
-    
+
     @RequestMapping("/charts/history")
     public HighchartsNgConfig getHistory(
-	    @RequestParam(value = "start") Optional<Integer> yearStart, 
+	    @RequestParam(value = "start") Optional<Integer> yearStart,
 	    @RequestParam(value = "end") Optional<Integer> yearEnd
     ) {
 	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
-	
-	final List<BikeEntity> bikes = this.bikeRepository.findAll();	
-	
-	final Map<String, Object> userData = new HashMap<>();	
+
+	final List<BikeEntity> bikes = this.bikeRepository.findAll();
+
+	final Map<String, Object> userData = new HashMap<>();
 	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
-	
+
 	final Map<Integer, int[]> data = bikes
-	    // Stream the bikes 
+	    // Stream the bikes
 	    .stream()
 	    // and flatMap (concat) their periods into a new stream
 	    .flatMap(bike -> bike.getPeriods().entrySet().stream())
 	    // we're only interested in periods before 1.1 of the current year
 	    .filter(entry -> entry.getKey().isBefore(january1st))
 	    .filter(entry -> {
-		final int year = entry.getKey().getYear();	    		
+		final int year = entry.getKey().getYear();
 		return yearStart.map(v -> v <= year).orElse(true) && yearEnd.map(v -> year < v).orElse(true);
 	    })
 	    // Collect those periods in
 	    .collect(
-		    // a tree map 
-		    TreeMap::new, 
+		    // a tree map
+		    TreeMap::new,
 		    // map each period into an array
 		    (map, period) -> {
-			// create the array if necessary			    
+			// create the array if necessary
 			int[] year = map.computeIfAbsent(period.getKey().getYear(), key -> generate(() -> 0).limit(12).toArray());
 			// add to the array
 			year[period.getKey().getMonthValue()-1] += period.getValue();
-		    }, 
+		    },
 		    // Merge the array (necessary if the stream runs in parallel)
-		    (map1, map2) -> map2.forEach((k, v) -> map1.merge(k, v, ChartsController::addArrays))		    
+		    (map1, map2) -> map2.forEach((k, v) -> map1.merge(k, v, ChartsController::addArrays))
 	    );
 	// Create series in builder
 	data.forEach((k,v) -> builder.series().withName(Integer.toString(k)).withData(v).build());
@@ -194,7 +194,7 @@ class ChartsController {
 	    // Compute summed years
 	    final Map<Integer, Integer> summedYears = data.entrySet().stream()
 		    .collect(Collectors.toMap(Map.Entry::getKey, entry -> Arrays.stream(entry.getValue()).sum()));
-	    
+
 	    // Computed worst and best year from summed years
 	    final Optional<Map.Entry<Integer, Integer>> worstYear = summedYears.entrySet().stream().min(Map.Entry.comparingByValue());
 	    final Optional<Map.Entry<Integer, Integer>> bestYear = summedYears.entrySet().stream().max(Map.Entry.comparingByValue());
@@ -203,22 +203,22 @@ class ChartsController {
 		userData.put("worstYear", worstYear.orElse(null));
 		userData.put("bestYear", bestYear.orElse(null));
 	    }
-	   
+
 	    // Preferred bikes...
 	    userData.put("preferredBikes",
 		data.keySet().stream().collect(
-			TreeMap::new, 
-			(map, year) -> map.put(year, bikes.stream().max(Comparator.comparingInt(bike -> bike.getMilageInYear(year))).get()), 
+			TreeMap::new,
+			(map, year) -> map.put(year, bikes.stream().max(Comparator.comparingInt(bike -> bike.getMilageInYear(year))).get()),
 			TreeMap::putAll
 		)
 	    );
-	    
+
 	    title.append("Milage ")
 		    .append(data.keySet().stream().min(Integer::compare).get())
 		    .append("-")
 		    .append(data.keySet().stream().max(Integer::compare).get());
 	}
-	
+
 	final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);
 	return builder
 		.withUserData(userData)
@@ -239,7 +239,7 @@ class ChartsController {
 			)
 			.build()
 		    .yAxis()
-			.withMin(0)			
+			.withMin(0)
 			.withTickInterval(100)
 			.enableEndOnTick()
 			.title()
@@ -266,42 +266,42 @@ class ChartsController {
 		    .build()
 		.build();
     }
-    
+
     @RequestMapping("/charts/monthlyAverage")
     public HighchartsNgConfig getMonthlyAverage() {
 	// Get all bikes
-	final List<BikeEntity> bikes = this.bikeRepository.findAll();		
+	final List<BikeEntity> bikes = this.bikeRepository.findAll();
 
 	// Compute Integer Statistics by grouping periods by month
 	final Map<Integer, IntSummaryStatistics> statistics = bikes.stream()
-		.flatMap(bike -> bike.getPeriods().entrySet().stream())		
+		.flatMap(bike -> bike.getPeriods().entrySet().stream())
 		// Sum all bikes periods per year/month together
 		.collect(groupingBy(e -> e.getKey(), summingInt(Entry::getValue)))
 		.entrySet().stream()
 		// create monthly statistics
-		.collect(groupingBy(e -> e.getKey().getMonthValue(), summarizingInt(Entry::getValue)));	
-	
+		.collect(groupingBy(e -> e.getKey().getMonthValue(), summarizingInt(Entry::getValue)));
+
 	// Create stupid arrays from statistics...
 	final Double[] averages = new Double[12];
-	final Integer[][] ranges = new Integer[12][];	
+	final Integer[][] ranges = new Integer[12][];
 	for(int i=0; i<12; ++i) {
 	    final IntSummaryStatistics s = statistics.get(i+1);
 	    if(s == null) {
 		averages[i] = 0.0;
-		ranges[i] = new Integer[]{0,0};	
+		ranges[i] = new Integer[]{0,0};
 	    } else {
 		averages[i] = s.getAverage();
 		ranges[i] = new Integer[]{s.getMin(), s.getMax()};
 	    }
 	}
-	
+
 	// Total average as plotline
 	final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(bikes, null);
-	
-	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);	
+
+	final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 	final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);
         final String labelColor = "#7CB5EB";
-	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define()		
+	final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define()
 		.options()
 		    .chart()
 			.withBorderWidth(1)
@@ -317,9 +317,9 @@ class ChartsController {
 			.withCategories(
 			    rangeClosed(1, 12).mapToObj(i -> january1st.withMonth(i).format(dateTimeFormat)).toArray(size -> new String[size])
 			)
-			.build()				    
+			.build()
 		    .yAxis()
-			.withMin(0)			
+			.withMin(0)
 			.withTickInterval(100)
 			.withPlotLine()
 			    .at(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0))
@@ -349,28 +349,28 @@ class ChartsController {
 		.<Number>series()
 		    .withName("Average")
 		    .withColor(labelColor)
-		    .withZIndex(1)		
+		    .withZIndex(1)
 		    .marker()
 			.withLineWidth(2.0)
 			.withFillColor("#FFFFFF")
 			.withLineColor(labelColor)
 			.build()
-		    .withData(averages)	
+		    .withData(averages)
 		    .build()
 		.<Number[]>series()
 		    .withName("Range")
-		    .withType("arearange")		    
-		    .withLineWidth(0.0)		    
+		    .withType("arearange")
+		    .withLineWidth(0.0)
 		    .withFillOpacity(0.3)
 		    .withColor(labelColor)
 		    .withZIndex(0)
 		    .linkTo("previous")
 		    .withData(ranges)
 		    .build();
-	
+
 	return builder.build();
     }
-    
+
     private static int[] addArrays(final int[] a, final int[] b) {
 	int[] result = Arrays.copyOf(a, a.length);
 	for (int i = 0; i < result.length; ++i) {

@@ -71,7 +71,7 @@ public class BannerControllerTest {
 	    out.write(bannerText.getBytes());
 	    return null;
 	}).when(banner).printBanner(anyObject(), anyObject(), anyObject());
-	
+
 	mockMvc
 		.perform(
 			get("/api/banner").accept(APPLICATION_JSON)

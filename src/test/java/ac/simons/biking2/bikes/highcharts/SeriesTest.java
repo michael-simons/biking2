@@ -39,7 +39,7 @@ public class SeriesTest {
 		.withType("testType")
 		.withColor("AABBCC")
 		.withLineWidth(1.2)
-		.withFillOpacity(0.666)		
+		.withFillOpacity(0.666)
 		.withZIndex(1)
 		.linkTo("fump")
 		.marker()
@@ -54,7 +54,7 @@ public class SeriesTest {
 	assertThat(series.getzIndex(), is(equalTo(1)));
 	assertThat(series.getLinkedTo(), is(equalTo("fump")));
 	assertThat(series.getMarker(), is(not(nullValue())));
-		
+
 	series = new Series.Builder<>(object -> object)
 		.withData(1.0, 2, 3)
 		.withName("testName")

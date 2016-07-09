@@ -30,7 +30,7 @@ public class OptionsTest {
 
     @Test
     public void testBuilder() {
-	final Options options = new Options.Builder<>(object -> object)	
+	final Options options = new Options.Builder<>(object -> object)
 	    .chart()
 		.withBorderWidth(1)
 		.build()
@@ -43,7 +43,7 @@ public class OptionsTest {
 	    .xAxis()
 		.withCategories("test1", "test2")
 		.build()
-	    .yAxis()		    
+	    .yAxis()
 		.withMin(0)
 		.withMax(2109)
 		.withTickInterval(100)
@@ -69,7 +69,7 @@ public class OptionsTest {
 		    .build()
 		.build()
 	.build();
-			
+
 	assertThat(options.getChart().getBorderWidth(), is(equalTo(1)));
 	assertThat(options.getCredits().isEnabled(), is(false));
 	assertThat(options.getTitle().getText(), is(equalTo("Michis milage")));
@@ -86,6 +86,6 @@ public class OptionsTest {
 	assertThat(options.getTooltip().isUseHTML(), is(true));
 	assertThat(options.getPlotOptions().getColumn().getPointPadding(), is(equalTo(0.2)));
 	assertThat(options.getPlotOptions().getColumn().getBorderWidth(), is(equalTo(0)));
-	assertThat(options.getPlotOptions().getSeries().isAnimation(), is(false));	
+	assertThat(options.getPlotOptions().getSeries().isAnimation(), is(false));
     }
 }

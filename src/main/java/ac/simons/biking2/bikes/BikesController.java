@@ -42,7 +42,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 class BikesController {
 
     private final BikeRepository bikeRepository;
-    
+
     public BikesController(final BikeRepository bikeRepository) {
 	this.bikeRepository = bikeRepository;
     }
@@ -57,43 +57,43 @@ class BikesController {
 	}
 	return rv;
     }
-    
+
     @RequestMapping(value = "/bikes/{id:\\d+}/milages", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public MilageEntity createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {	
+    public MilageEntity createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
-	
+
 	final BikeEntity bike = bikeRepository.findOne(id);
-	
-	MilageEntity rv;	
+
+	MilageEntity rv;
 	if(bike == null) {
 	    throw new ResourceNotFoundException();
-	} else if(bike.getDecommissionedOn() != null) { 
+	} else if(bike.getDecommissionedOn() != null) {
 	    throw new IllegalArgumentException("Bike has already been decommissioned.");
 	} else {
 	    rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
 	    this.bikeRepository.save(bike);
 	}
-	
+
 	return rv;
     }
-    
-    @RequestMapping(value = "/bikes", method = POST) 
+
+    @RequestMapping(value = "/bikes", method = POST)
     @PreAuthorize("isAuthenticated()")
     public BikeEntity createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
-	
+
 	final BikeEntity bike = new BikeEntity(newBike.getName(), newBike.boughtOnAsLocalDate());
 	bike.setColor(newBike.getColor());
 	bike.addMilage(newBike.boughtOnAsLocalDate().withDayOfMonth(1), 0);
-	
-	return this.bikeRepository.save(bike);	
+
+	return this.bikeRepository.save(bike);
     }
-    
+
     @RequestMapping(value = "/bikes/{id:\\d+}", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
@@ -101,20 +101,20 @@ class BikesController {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
-	
+
 	final BikeEntity bike = bikeRepository.findOne(id);
-		
+
 	if(bike == null) {
 	    throw new ResourceNotFoundException();
-	} else if(bike.getDecommissionedOn() != null) { 
+	} else if(bike.getDecommissionedOn() != null) {
 	    throw new IllegalArgumentException("Bike has already been decommissioned.");
 	} else {
 	    bike.setColor(updatedBike.getColor());
-	    bike.decommission(updatedBike.decommissionedOnAsLocalDate());	  	    
-	}	
+	    bike.decommission(updatedBike.decommissionedOnAsLocalDate());
+	}
 	return bike;
     }
-    
+
     @RequestMapping(value = "/bikes/{id:\\d+}/story", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
@@ -122,16 +122,16 @@ class BikesController {
 	if(bindingResult.hasErrors()) {
 	    throw new IllegalArgumentException("Invalid arguments.");
 	}
-	
+
 	final BikeEntity bike = bikeRepository.findOne(id);
-		
+
 	if(bike == null) {
 	    throw new ResourceNotFoundException();
-	} else if(bike.getDecommissionedOn() != null) { 
+	} else if(bike.getDecommissionedOn() != null) {
 	    throw new IllegalArgumentException("Bike has already been decommissioned.");
 	} else {
-	    bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));	    
+	    bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));
 	}
 	return bike;
-    }     
+    }
 }

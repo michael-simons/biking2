@@ -33,7 +33,7 @@ public class SchedulingConfig implements SchedulingConfigurer {
     public SchedulingConfig(Executor taskScheduler) {
 	this.taskScheduler = taskScheduler;
     }
-    
+
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 	taskRegistrar.setScheduler(taskScheduler);

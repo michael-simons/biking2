@@ -28,7 +28,7 @@ public class Guid {
 
     @XmlAttribute
     private Boolean isPermaLink;
-    
+
     @XmlValue
     private String value;
 
@@ -39,7 +39,7 @@ public class Guid {
     public void setIsPermaLink(Boolean isPermaLink) {
 	this.isPermaLink = isPermaLink;
     }
-    
+
     public String getValue() {
 	return value;
     }

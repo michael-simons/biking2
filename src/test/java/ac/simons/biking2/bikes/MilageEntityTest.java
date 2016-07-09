@@ -31,21 +31,21 @@ public class MilageEntityTest {
 	MilageEntity milage = bike.addMilage(LocalDate.now().withDayOfMonth(1).plusMonths(1), 23);
 	milage.prePersist();
 	MilageEntity otherMilage = bike.addMilage(LocalDate.now().withDayOfMonth(1).plusMonths(2), 50);
-	otherMilage.prePersist();		
-	
+	otherMilage.prePersist();
+
 	// Its overwritten...
 	final BikeEntity poef = bike;
-	
+
 	// need two differend objects here...
 	bike = new BikeEntity("poef", LocalDate.now().withDayOfMonth(1));
 	MilageEntity milage2 = bike.addMilage(LocalDate.now().plusMonths(1), 23);
-	
+
 	bike = new BikeEntity("bike2", LocalDate.now().withDayOfMonth(1));
 	MilageEntity otherMilage2 = bike.addMilage(LocalDate.now().plusMonths(1), 23);
-	
+
 	bike = new BikeEntity("bike3", LocalDate.now().withDayOfMonth(1));
 	MilageEntity otherMilage3 = bike.addMilage(LocalDate.now().plusMonths(1), 22);
-	
+
 	Assert.assertNull(milage.getId());
 	Assert.assertEquals(BigDecimal.valueOf(23d), milage.getAmount());
 	Assert.assertNotNull(milage.getCreatedAt());

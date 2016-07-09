@@ -45,13 +45,13 @@ public class TooltipTest {
 	assertThat(tooltip.getValueSuffix(), is(equalTo("km")));
 	assertThat(tooltip.isCrosshairs(), is(true));
 	assertThat(tooltip.isShared(), is(true));
-	assertThat(tooltip.isUseHTML(), is(true));	
-	
+	assertThat(tooltip.isUseHTML(), is(true));
+
 	tooltip = new Tooltip.Builder<>(object -> object).build();
-	
+
 	assertThat(tooltip.isCrosshairs(), is(nullValue()));
 	assertThat(tooltip.isShared(), is(nullValue()));
-	assertThat(tooltip.isUseHTML(), is(nullValue()));	
-	assertThat(tooltip.getValueSuffix(), is(nullValue()));	
+	assertThat(tooltip.isUseHTML(), is(nullValue()));
+	assertThat(tooltip.getValueSuffix(), is(nullValue()));
     }
 }

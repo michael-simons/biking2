@@ -52,14 +52,14 @@ public class AssortedTripEntity implements Serializable {
     @NotNull
     private BigDecimal distance;
 
-    protected AssortedTripEntity() {	
+    protected AssortedTripEntity() {
     }
-    
+
     public AssortedTripEntity(Calendar coveredOn, BigDecimal distance) {
 	this.coveredOn = coveredOn;
 	this.distance = distance;
     }
-    
+
     public Integer getId() {
 	return id;
     }
@@ -93,5 +93,5 @@ public class AssortedTripEntity implements Serializable {
 	    return false;
 	}
 	return Objects.equals(this.distance, other.distance);
-    }   
+    }
 }

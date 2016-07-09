@@ -74,7 +74,7 @@ public class LocationEntity implements Serializable {
 
     public Calendar getCreatedAt() {
 	return this.createdAt;
-    }  
+    }
 
     public BigDecimal getLatitude() {
 	return this.latitude;

@@ -63,16 +63,16 @@ public class BikeRepositoryTest {
 
     @Rule
     public final ExpectedException expectedException = none();
-    
-    @Test    
+
+    @Test
     @Transactional
     @Rollback
     public void nameShouldBeUnique() {
 	// There's a bike1 in the test data
 	this.expectedException.expect(DataIntegrityViolationException.class);
-	this.bikeRepository.save(new BikeEntity("bike1", LocalDate.now()));		
+	this.bikeRepository.save(new BikeEntity("bike1", LocalDate.now()));
     }
-    
+
     @Test
     public void testFindActive() {
 	final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);

@@ -32,7 +32,7 @@ public class LocationEntityTest {
     public void beanShouldWorkAsExpected() {
 	final Calendar now = Calendar.getInstance();
 
-	final Map<String, Object> values = new HashMap<>();	
+	final Map<String, Object> values = new HashMap<>();
 	values.put("description", "description");
 
 	values.forEach(new BeanTester(LocationEntity.class));

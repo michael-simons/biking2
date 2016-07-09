@@ -25,7 +25,7 @@ import org.junit.Test;
  * @author Michael J. Simons, 2014-05-23
  */
 public class OEmbedResponseTest {
-    
+
     @Test
     public void beanShouldWorkAsExpected() {
 	final Map<String, Object> values = new HashMap<>();
@@ -45,6 +45,6 @@ public class OEmbedResponseTest {
 	values.put("width", 42);
 	values.put("height", 42);
 
-	values.forEach(new BeanTester(OEmbedResponse.class));	
-    }   
+	values.forEach(new BeanTester(OEmbedResponse.class));
+    }
 }

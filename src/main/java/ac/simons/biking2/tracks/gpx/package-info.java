@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 @XmlSchema(
-	namespace = "http://www.topografix.com/GPX/1/0", 
+	namespace = "http://www.topografix.com/GPX/1/0",
 	elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
 )
 package ac.simons.biking2.tracks.gpx;

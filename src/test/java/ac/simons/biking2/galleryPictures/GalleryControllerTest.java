@@ -64,7 +64,7 @@ public class GalleryControllerTest {
 	this.tmpDir = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
 	this.tmpDir.deleteOnExit();
 	this.galleryPictures = new File(this.tmpDir, DatastoreConfig.GALLERY_PICTURES_DIRECTORY);
-	this.galleryPictures.mkdirs();	
+	this.galleryPictures.mkdirs();
     }
 
     @Test
@@ -92,11 +92,11 @@ public class GalleryControllerTest {
 			.file(multipartFile)
 			.param("takenOn", "2014-03-24T23:00:00.000Z")
 			.param("description", "description")
-		)		
+		)
 		.andExpect(status().isOk())
 		.andExpect(content().string(objectMapper.writeValueAsString(galleryPicture)));
     }
-    
+
     @Test
     public void shouldHandleIOExceptionsGracefully() throws Exception {
 	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
@@ -123,17 +123,17 @@ public class GalleryControllerTest {
 			.file(multipartFile)
 			.param("takenOn", "2014-03-24T23:00:00.000Z")
 			.param("description", "description")
-		)		
+		)
 		.andExpect(status().isInternalServerError());
     }
-    
+
     @Test
     public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
-	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);	
+	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
 	stub(repository.save(Mockito.any(GalleryPictureEntity.class))).toThrow(new DataIntegrityViolationException("fud"));
 
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
-	
+
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 	final MockMultipartFile multipartFile = new MockMultipartFile("imageData", this.getClass().getResourceAsStream("/IMG_0041.JPG"));
 
@@ -143,19 +143,19 @@ public class GalleryControllerTest {
 			.file(multipartFile)
 			.param("takenOn", "2014-03-24T23:00:00.000Z")
 			.param("description", "description")
-		)		
+		)
 		.andExpect(status().isBadRequest());
     }
-    
+
     @Test
     public void shouldNotCreateInvalidGalleryPicture() throws Exception {
-	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);	
+	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-	
+
 	// Empty data
-	final MockMultipartFile multipartFile = new MockMultipartFile("imageData", new byte[0]);		
+	final MockMultipartFile multipartFile = new MockMultipartFile("imageData", new byte[0]);
 	mockMvc
 		.perform(
 			fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
@@ -165,40 +165,40 @@ public class GalleryControllerTest {
 		)
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isBadRequest());
-	
+
 	// No data
 	mockMvc
 	    .perform(
-		    fileUpload("http://biking.michael-simons.eu/api/galleryPictures")		
+		    fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
 			.param("takenOn", "2014-03-24T23:00:00.000Z")
 			.param("description", "description")
 	    )
 	    .andDo(MockMvcResultHandlers.print())
 	    .andExpect(status().isBadRequest());
     }
-    
+
     @Test
     public void shouldNotFindNonExistingPicture() throws Exception {
-	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);	
+	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 	mockMvc
 	    .perform(
-		    MockMvcRequestBuilders.get("http://biking.michael-simons.eu/api/galleryPictures/23.jpg")		
+		    MockMvcRequestBuilders.get("http://biking.michael-simons.eu/api/galleryPictures/23.jpg")
 
 	    )
 	    .andDo(MockMvcResultHandlers.print())
-	    .andExpect(status().isNotFound());	
-	
+	    .andExpect(status().isNotFound());
+
 	Mockito.verify(repository).findOne(23);
 	Mockito.verifyNoMoreInteractions(repository);
     }
-    
+
     @Test
     public void shouldFindPicture() throws Exception {
 	// Read an image resource into memory...
-	final File imageFile = new File(this.galleryPictures, System.currentTimeMillis() + ".jpg");		
+	final File imageFile = new File(this.galleryPictures, System.currentTimeMillis() + ".jpg");
 	final byte[] imageData;
 	try (
 	    final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -209,65 +209,65 @@ public class GalleryControllerTest {
 	    while ((len = in.read(buffer, 0, buffer.length)) > 0) {
 		bytes.write(buffer, 0, len);
 	    }
-	    in.close();		
+	    in.close();
 	    bytes.flush();
 	    imageData = bytes.toByteArray();
 	}
 	// Copy data to a file
 	Files.copy(new ByteArrayInputStream(imageData), imageFile.toPath());
-	
-	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);		
+
+	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
 	Mockito.stub(repository.findOne(42)).toReturn(new GalleryPictureEntity(Calendar.getInstance(), imageFile.getName()));
-	
+
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
 	// Test copying of resources
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 	// Explicit false property
-	final MvcResult result = 
+	final MvcResult result =
 	    mockMvc
 		.perform(
 			MockMvcRequestBuilders
-			    .get("http://biking.michael-simons.eu/api/galleryPictures/42.jpg")							    
+			    .get("http://biking.michael-simons.eu/api/galleryPictures/42.jpg")
 			    .requestAttr("org.apache.tomcat.sendfile.support", false)
-		)	    
+		)
 		.andExpect(status().isOk())
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.filename", CoreMatchers.nullValue()))
 		.andReturn();
-	Assert.assertTrue(Arrays.equals(imageData, result.getResponse().getContentAsByteArray()));	
+	Assert.assertTrue(Arrays.equals(imageData, result.getResponse().getContentAsByteArray()));
 	// Null request (Don't know how to make the request null using MockMvcBuilders)
 	MockHttpServletResponse response = new MockHttpServletResponse();
 	controller.getGalleryPicture(42, null, response);
 	Assert.assertTrue(Arrays.equals(imageData, response.getContentAsByteArray()));
-	
+
 	// Test streaming of resources
 	mockMvc
 	    .perform(
 		    MockMvcRequestBuilders
-			.get("http://biking.michael-simons.eu/api/galleryPictures/42.jpg")							    
+			.get("http://biking.michael-simons.eu/api/galleryPictures/42.jpg")
 			.requestAttr("org.apache.tomcat.sendfile.support", true)
-	    )	    
+	    )
 	    .andExpect(status().isOk())
 	    .andExpect(request().attribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath()))
 	    .andExpect(request().attribute("org.apache.tomcat.sendfile.start", 0l))
 	    .andExpect(request().attribute("org.apache.tomcat.sendfile.end", imageFile.length()))
 	    .andExpect(header().longValue("Content-Length", imageFile.length()))
-	    .andReturn();	
-	
+	    .andReturn();
+
 	Mockito.verify(repository, times(3)).findOne(42);
 	Mockito.verifyNoMoreInteractions(repository);
     }
-    
+
     @Test
     public void shouldGetGalleryPictures() {
-	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);	
+	final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
 	Mockito.stub(repository.findAll(Mockito.any(Sort.class))).toReturn(new ArrayList<>());
 	final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
 	final List<GalleryPictureEntity> galleryPictures = controller.getGalleryPictures();
 	Assert.assertNotNull(galleryPictures);
 	Assert.assertEquals(0, galleryPictures.size());
-	
+
 	Mockito.verify(repository).findAll(Mockito.any(Sort.class));
 	Mockito.verifyNoMoreInteractions(repository);
     }

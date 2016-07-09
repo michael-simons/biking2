@@ -59,7 +59,7 @@ class TrackEntity implements Serializable {
     /**
      * Converts a string to the real numeric id
      * @param fromPrettyId
-     * @return 
+     * @return
      */
     public static Integer getId(final String fromPrettyId) {
 	Integer rv = null;
@@ -110,9 +110,9 @@ class TrackEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private Type type = Type.biking;
 
-    protected TrackEntity() {	
+    protected TrackEntity() {
     }
-    
+
     public TrackEntity(String name, Calendar coveredOn) {
 	this.name = name;
 	this.coveredOn = coveredOn;
@@ -211,5 +211,5 @@ class TrackEntity implements Serializable {
 	    return false;
 	}
 	return true;
-    }    
+    }
 }

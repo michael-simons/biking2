@@ -32,7 +32,7 @@ public class RSSDateTimeAdapterTest {
 	final RSSDateTimeAdapter rSSDateTimeAdapter = new RSSDateTimeAdapter();
 	Assert.assertEquals("Thu, 22 May 2014 12:59:23 GMT", rSSDateTimeAdapter.marshal(ZonedDateTime.of(2014, 5, 22, 12, 59, 23, 0, ZoneId.of("GMT"))));
     }
-    
+
     @Test
     public void shouldUnmarshallStuff() throws Exception {
 	final RSSDateTimeAdapter rSSDateTimeAdapter = new RSSDateTimeAdapter();

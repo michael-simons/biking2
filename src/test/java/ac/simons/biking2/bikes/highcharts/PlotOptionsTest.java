@@ -26,21 +26,21 @@ import static org.junit.Assert.assertThat;
  * @author Michael J. Simons, 2014-02-11
  */
 public class PlotOptionsTest {
-    
+
     @Test
     public void testBuilder() {
 	PlotOptions plotOptions = new PlotOptions.Builder<>(object -> object)
-		.column()		    
+		.column()
 		    .withPointPadding(0.2)
 		    .withBorderWidth(0)
 		.build()
 		.series()
 		    .disableAnimation()
-		.build()	
+		.build()
 	.build();
 	assertThat(plotOptions.getColumn().getPointPadding(), is(equalTo(0.2)));
 	assertThat(plotOptions.getColumn().getBorderWidth(), is(equalTo(0)));
 	assertThat(plotOptions.getSeries().isAnimation(), is(false));
     }
-    
+
 }

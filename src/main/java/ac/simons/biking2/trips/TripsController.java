@@ -39,7 +39,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class TripsController {
 
     private final AssortedTripRepository assortedTripRepository;
-   
+
     public TripsController(AssortedTripRepository assortedTripRepository) {
 	this.assortedTripRepository = assortedTripRepository;
     }

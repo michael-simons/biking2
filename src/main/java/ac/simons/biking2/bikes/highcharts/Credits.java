@@ -44,7 +44,7 @@ public class Credits {
 	    this.enabled = true;
 	    return this;
 	}
-	
+
 	public Builder<PB> disable() {
 	    this.enabled = false;
 	    return this;
@@ -54,7 +54,7 @@ public class Credits {
 	    return this.sink.setObject(new Credits(enabled));
 	}
     }
-    
+
     /** Whether to show the credits text. Defaults to true. */
     private final Boolean enabled;
 

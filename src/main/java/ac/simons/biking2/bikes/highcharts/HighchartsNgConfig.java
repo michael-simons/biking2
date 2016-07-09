@@ -37,7 +37,7 @@ public class HighchartsNgConfig {
 	private final Sink<HighchartsNgConfig, HighchartsNgConfig> sink;
 
 	private Options options;
-	
+
 	private Object userData;
 
 	private final Collection<Series<?>> series = new ArrayList<>();
@@ -54,7 +54,7 @@ public class HighchartsNgConfig {
 	 * @return
 	 */
 	public Number computeCurrentMaxYValue() {
-	    return series.stream()		    
+	    return series.stream()
 		    .flatMap(series -> series.getData().stream())
 		    .filter(val -> val instanceof Number)
 		    .map(val -> (Number)val)
@@ -74,7 +74,7 @@ public class HighchartsNgConfig {
 		return Builder.this;
 	    });
 	}
-	
+
 	public Builder withUserData(final Object userData) {
 	    this.userData = userData;
 	    return this;
@@ -92,13 +92,13 @@ public class HighchartsNgConfig {
     private final Options options;
 
     private final Collection<Series<?>> series;
-    
+
     private final Object userData;
 
     @JsonCreator
     public HighchartsNgConfig(
-	    @JsonProperty("options") Options options, 
-	    @JsonProperty("series") Collection<Series<?>> series)	    
+	    @JsonProperty("options") Options options,
+	    @JsonProperty("series") Collection<Series<?>> series)
     {
 	this(options, series, null);
     }
@@ -108,7 +108,7 @@ public class HighchartsNgConfig {
 	this.series = series;
 	this.userData = userData;
     }
-    
+
     public Options getOptions() {
 	return options;
     }

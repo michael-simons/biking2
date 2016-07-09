@@ -46,18 +46,18 @@ class OEmbedController {
 	hlp.put("xml", "application/xml");
 	acceptableFormats = Collections.unmodifiableMap(hlp);
     }
-    
+
     private final TrackRepository trackRepository;
     private final Coordinate home;
-        
+
     public OEmbedController(TrackRepository TrackRepository, final Coordinate home) {
 	this.trackRepository = TrackRepository;
 	this.home = home;
     }
-    
+
     @RequestMapping(value = "/oembed", produces = {"application/json", "application/xml"})
     public ResponseEntity<OEmbedResponse> getEmbeddableTrack(
-	    @RequestParam(required = true) @URL final String url, 
+	    @RequestParam(required = true) @URL final String url,
 	    @RequestParam(required = false, defaultValue = "json") final String format,
 	    @RequestParam(required = false, defaultValue = "1024") final Integer maxwidth,
 	    @RequestParam(required = false, defaultValue = "576") final Integer maxheight,
@@ -74,7 +74,7 @@ class OEmbedController {
 	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	else {
 	    final OEmbedResponse response = new OEmbedResponse();
-	    
+
 	    response.setType("rich");
 	    response.setVersion("1.0");
 	    response.setTitle(track.getName());
@@ -94,16 +94,16 @@ class OEmbedController {
 			    .append(request.getContextPath())
 			    .append("/tracks/").append(m.group(1)).append("/embed?")
 				.append("width=").append(maxwidth).append("&")
-				.append("height=").append(maxheight)		    
+				.append("height=").append(maxheight)
 			.append("' ")
 			.append("class='bikingTrack'>")
-		    .append("</iframe>")		    
+		    .append("</iframe>")
 		    .toString()
 	    );
-	    
+
 	    rv = new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 	return rv;
     }
 
@@ -114,8 +114,8 @@ class OEmbedController {
 	    @RequestParam(required = false, defaultValue = "576") final Integer height,
 	    final Model model,
 	    final HttpServletResponse response
-    ) {	
-	final Integer _id = TrackEntity.getId(id);	
+    ) {
+	final Integer _id = TrackEntity.getId(id);
 	TrackEntity track;
 	String rv = null;
 	if (_id == null) {
@@ -129,7 +129,7 @@ class OEmbedController {
 		    .addAttribute("width", width)
 		    .addAttribute("height", height);
 	    rv = "oEmbed/embeddedTrack";
-	}	
+	}
 	return rv;
     }
 }

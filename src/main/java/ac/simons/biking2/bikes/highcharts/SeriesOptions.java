@@ -44,7 +44,7 @@ public class SeriesOptions {
 	    this.animation = Boolean.TRUE;
 	    return this;
 	}
-	
+
 	public Builder<PB> disableAnimation() {
 	    this.animation = Boolean.FALSE;
 	    return this;

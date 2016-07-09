@@ -72,7 +72,7 @@ class GalleryController {
 	    throw new RuntimeException(e);
 	}
     };
-    
+
     public GalleryController(GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
 	this.galleryPictureRepository = galleryPictureRepository;
 	this.datastoreBaseDirectory = datastoreBaseDirectory;
@@ -119,7 +119,7 @@ class GalleryController {
 	}
 	return rv;
     }
-    
+
     @RequestMapping({"/api/galleryPictures/{id:\\d+}.jpg"})
     public void getGalleryPicture(
 	    @PathVariable final Integer id,
@@ -132,13 +132,13 @@ class GalleryController {
 	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	} else {
 	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
-	    
+
 	    final int cacheForDays = 365;
 	    response.setHeader("Content-Type", "image/jpeg");
 	    response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
 	    response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME));
 	    response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
-	    
+
 	    // Attribute maybe null
 	    if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
 		Files.copy(imageFile.toPath(), response.getOutputStream());

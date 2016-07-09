@@ -65,7 +65,7 @@ public class Chart {
 
     @JsonCreator
     Chart(
-	    @JsonProperty("borderWidth") Integer borderWidth, 
+	    @JsonProperty("borderWidth") Integer borderWidth,
 	    @JsonProperty("type") String type
     ) {
 	this.borderWidth = borderWidth;

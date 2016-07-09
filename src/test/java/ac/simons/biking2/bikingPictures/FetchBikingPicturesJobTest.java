@@ -91,15 +91,15 @@ public class FetchBikingPicturesJobTest {
 	verify(dailyFratzeProvider).getRSSConnection(null);
 	verify(dailyFratzeProvider).getRSSConnection(page2);
     }
-    
+
     @Test
     public void jobShouldHandleExceptionsGracefully() throws MalformedURLException, IOException, Exception {
 	final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
 	stub(dailyFratzeProvider.getRSSConnection(null)).toReturn(new File("/i/dont/exists").toURI().toURL().openConnection());
-	
+
 	final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-	stub(bikingPictureRepository.getMaxPubDate()).toReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));	
-	
+	stub(bikingPictureRepository.getMaxPubDate()).toReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));
+
 	final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 	final List<BikingPictureEntity> toDownload = job.createDownloadList();
 	assertThat(toDownload.size(), is(equalTo(0)));
@@ -107,18 +107,18 @@ public class FetchBikingPicturesJobTest {
 
     @Test
     public void jobShouldThrowExceptionOnInvalidStorageDir() throws IOException {
-	final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);	
+	final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
 	final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-	
+
 	final File someFile = new File(System.getProperty("java.io.tmpdir"), "deleteMeReally");
 	someFile.deleteOnExit();
 	Assert.assertTrue(someFile.createNewFile());
-	
+
 	expectedException.expect(RuntimeException.class);
 	expectedException.expectMessage("Could not create bikingPicturesStorage!");
 	new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, someFile);
     }
-    
+
     @Test
     public void jobShouldAbortWhenNoMorePagesAreAvailable() throws Exception {
 	final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
@@ -174,22 +174,22 @@ public class FetchBikingPicturesJobTest {
 	// Verify number of calls with arbitrary ints
 	verify(dailyFratzeProvider, times(3)).getImageConnection(anyInt());
     }
-    
+
     @Test
     public void runMethodShouldWorkAsExpected() throws IOException {
 	final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
 	stub(dailyFratzeProvider.getRSSConnection(null)).toReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
-	
-	final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);	
-	stub(bikingPictureRepository.getMaxPubDate()).toReturn(getInstance());	
-	
+
+	final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
+	stub(bikingPictureRepository.getMaxPubDate()).toReturn(getInstance());
+
 	final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 	job.run();
-	
+
 	verify(dailyFratzeProvider).getRSSConnection(null);
 	verify(bikingPictureRepository).getMaxPubDate();
-	
+
 	Mockito.verifyNoMoreInteractions(dailyFratzeProvider, bikingPictureRepository);
-	
+
     }
 }

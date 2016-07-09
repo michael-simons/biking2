@@ -31,28 +31,28 @@ import static java.util.Optional.ofNullable;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Channel {
     private String title;
-    
+
     private String link;
-    
+
     private String description;
-    
+
     @XmlJavaTypeAdapter(RSSDateTimeAdapter.class)
     private ZonedDateTime pubDate;
-   
+
     @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
     private List<Link> links;
 
     @XmlElement(name = "item")
     private List<Item> items;
-    
+
     public String getPrevious() {
 	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
     }
-    
+
     public String getNext() {
-	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();	
+	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
     }
-    
+
     public String getTitle() {
 	return title;
     }

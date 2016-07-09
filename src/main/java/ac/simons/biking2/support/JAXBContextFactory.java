@@ -22,8 +22,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 /**
- * I don't want to deal with the checked {@link JAXBException} in the calling 
- * class so this is a wrapper that handles those for me. I don't expect any 
+ * I don't want to deal with the checked {@link JAXBException} in the calling
+ * class so this is a wrapper that handles those for me. I don't expect any
  * exception to be thrown
  * @author Michael J. Simons, 2014-05-23
  */
@@ -32,7 +32,7 @@ public class JAXBContextFactory {
 	try {
 	    return JAXBContext.newInstance(baseClass);
 	} catch (JAXBException ex) {
-	    Logger.getLogger(JAXBContextFactory.class.getName()).log(Level.SEVERE, null, ex);	    
+	    Logger.getLogger(JAXBContextFactory.class.getName()).log(Level.SEVERE, null, ex);
 	    throw new RuntimeException(ex);
 	}
     }

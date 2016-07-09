@@ -44,22 +44,22 @@ class BikingPictureEntity implements Serializable {
     private static final long serialVersionUID = -7050582813676065697L;
 
     private static final Pattern GUID_PATTERN = Pattern.compile("https?://dailyfratze.de/fratzen/m/(\\d+).jpg");
-    
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** The url of the image itself */
-    @Column(name = "external_id", nullable = false, unique = true)    
-    @NotNull    
+    @Column(name = "external_id", nullable = false, unique = true)
+    @NotNull
     private Integer externalId;
-    
+
     @Column(name = "pub_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Calendar pubDate;
-    
+
     /** A link to the webpage */
     @Column(name = "link", nullable = false, length = 512)
     @URL
@@ -73,7 +73,7 @@ class BikingPictureEntity implements Serializable {
     public BikingPictureEntity(final String guid, final ZonedDateTime pubDate, String link) {
 	final Matcher matcher = GUID_PATTERN.matcher(guid);
 	if(!matcher.matches())
-	    throw new RuntimeException("Invalid GUID");	
+	    throw new RuntimeException("Invalid GUID");
 	this.externalId = Integer.parseInt(matcher.group(1));
 	this.pubDate = GregorianCalendar.from(pubDate);
 	this.link = link;
@@ -85,12 +85,12 @@ class BikingPictureEntity implements Serializable {
 
     public Integer getExternalId() {
 	return externalId;
-    }    
+    }
 
     public String getLink() {
 	return this.link;
     }
-   
+
     public Calendar getPubDate() {
 	return pubDate;
     }

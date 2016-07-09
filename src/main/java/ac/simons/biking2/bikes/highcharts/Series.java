@@ -44,25 +44,25 @@ public class Series<T> {
 	private String color;
 
 	private Double fillOpacity;
-	
+
 	private Double lineWidth;
-	
-	private String linkedTo;	
-	
+
+	private String linkedTo;
+
 	private Integer zIndex;
-	
+
 	private Marker marker;
-	
+
 	public Builder<PB, T> withData(final T... data) {
 	    this.data = Arrays.asList(data);
 	    return this;
 	}
-	
+
 	public Builder<PB, T> withData(final int... data) {
 	    this.data = (Collection<T>)Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	    return this;
 	}
-	
+
 	public Builder<PB, T> withName(final String name) {
 	    this.name = name;
 	    return this;
@@ -77,27 +77,27 @@ public class Series<T> {
 	    this.color = color;
 	    return this;
 	}
-		
+
 	public Builder<PB, T> withLineWidth(final Double lineWidth) {
 	    this.lineWidth = lineWidth;
 	    return this;
-	}	
-	
+	}
+
 	public Builder<PB, T> withFillOpacity(final Double fillOpacity) {
 	    this.fillOpacity = fillOpacity;
 	    return this;
 	}
-	
+
 	public Builder<PB, T> withZIndex(final Integer zIndex) {
 	    this.zIndex = zIndex;
 	    return this;
 	}
-	
+
 	public Builder<PB, T> linkTo(final String linkTo) {
 	    this.linkedTo = linkTo;
 	    return this;
 	}
-	
+
 	public Marker.Builder<Builder<PB, T>> marker() {
 	    return new Marker.Builder<>(marker -> {
 		Builder.this.marker = marker;
@@ -121,15 +121,15 @@ public class Series<T> {
     private final String name;
 
     private final String type;
-    
+
     private final Integer zIndex;
-    
+
     private final Double fillOpacity;
-	
+
     private final Double lineWidth;
-	
-    private final String linkedTo;	
-    
+
+    private final String linkedTo;
+
     private final Marker marker;
 
     public Series(final String color, Collection<T> data, String name, String type, Integer zIndex, Double fillOpacity, Double lineWidth, String linkedTo, Marker marker) {
@@ -178,5 +178,5 @@ public class Series<T> {
 
     public Marker getMarker() {
 	return marker;
-    }    
+    }
 }

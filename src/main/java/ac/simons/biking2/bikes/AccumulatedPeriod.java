@@ -23,15 +23,15 @@ import java.util.GregorianCalendar;
 
 /**
  * Represents a accumulated period value
- * 
+ *
  * @author Michael J. Simons, 2014-05-05
  */
 public class AccumulatedPeriod {
     private final Calendar startOfPeriod;
-    
+
     private final int value;
-    
-    public AccumulatedPeriod(LocalDate startOfPeriod, int value) {	
+
+    public AccumulatedPeriod(LocalDate startOfPeriod, int value) {
 	this(GregorianCalendar.from(startOfPeriod.atStartOfDay(ZoneId.systemDefault())), value);
     }
 

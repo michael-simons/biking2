@@ -40,9 +40,9 @@ class BikeCmd {
     @NotBlank
     @Size(max = 6)
     private String color;
-    
+
     private Date decommissionedOn;
-    
+
     public String getName() {
 	return name;
     }
@@ -74,11 +74,11 @@ class BikeCmd {
     public void setDecommissionedOn(Date decommissionedOn) {
 	this.decommissionedOn = decommissionedOn;
     }
-    
+
     public LocalDate boughtOnAsLocalDate() {
 	return LocalDateTime.ofInstant(this.boughtOn.toInstant(), ZoneId.systemDefault()).toLocalDate();
     }
-    
+
     public LocalDate decommissionedOnAsLocalDate() {
 	return this.decommissionedOn == null ? null : LocalDateTime.ofInstant(this.decommissionedOn.toInstant(), ZoneId.systemDefault()).toLocalDate();
     }

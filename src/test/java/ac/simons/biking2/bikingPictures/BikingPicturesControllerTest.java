@@ -91,7 +91,7 @@ public class BikingPicturesControllerTest {
 
 	final BikingPicturesController controller = new BikingPicturesController(repository, tmpDir);
 	final ZonedDateTime expiresIn = ZonedDateTime.now(ZoneId.of("UTC")).plusDays(365);
-	
+
 	final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
 	mockMvc
@@ -106,7 +106,7 @@ public class BikingPicturesControllerTest {
 		.andExpect(header().string("Cache-Control", String.format("max-age=%d, %s", 365 * 24 * 60 * 60, "public")))
 		.andExpect(header().string("Expires", matches(expiresIn.format(DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:'\\d{2}' 'GMT'").withLocale(Locale.US)))))
 		.andExpect(content().bytes(testData));
-	
+
 	mockMvc
 		.perform(get("http://biking.michael-simons.eu/api/bikingPictures/1.jpg").requestAttr("org.apache.tomcat.sendfile.support", true))
 		.andExpect(status().isOk())
@@ -116,7 +116,7 @@ public class BikingPicturesControllerTest {
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.start", 0l))
 		.andExpect(request().attribute("org.apache.tomcat.sendfile.end", (long) this.testData.length));
     }
-    
+
     @Test
     public void shouldGetGalleryPictures() {
 	final BikingPictureRepository repository = mock(BikingPictureRepository.class);
@@ -126,11 +126,11 @@ public class BikingPicturesControllerTest {
 	final List<BikingPictureEntity> pictures = controller.getBikingPictures();
 	Assert.assertNotNull(pictures);
 	Assert.assertEquals(0, pictures.size());
-	
+
 	Mockito.verify(repository).findAll(Mockito.any(Sort.class));
 	Mockito.verifyNoMoreInteractions(repository);
     }
-    
+
     public static class RegexMatcher extends BaseMatcher {
 
 	private final String regex;

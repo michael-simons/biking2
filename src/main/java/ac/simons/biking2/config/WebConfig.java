@@ -39,13 +39,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
      * Allow cross origin requests for all api endpoints.
-     * @param registry 
+     * @param registry
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 	registry.addMapping("/api/**").allowedOrigins("*");
     }
-    
+
     /**
      * Maps all AngularJS routes to index so that they work with direct linking.
      */
@@ -66,7 +66,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    return "forward:/index.html";
 	}
     }
-    
+
     /**
      * Enable favor of format parameter over requested content type, needed for
      * {@code OEmbedController#getEmbeddableTrack(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, javax.servlet.http.HttpServletRequest)}
@@ -81,7 +81,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
      * This makes mapping of
-     * {@code TracksController#downloadTrack(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)} 
+     * {@code TracksController#downloadTrack(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
      * and the default mapping in separate methods possible.
      * @param configurer
      */
@@ -103,7 +103,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	);
     }
 
-    @Bean    
+    @Bean
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
 	    @Value("${biking2.connector.proxyName:}") final String proxyName,
 	    @Value("${biking2.connector.proxyPort:80}") final int proxyPort

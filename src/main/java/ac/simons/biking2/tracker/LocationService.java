@@ -31,7 +31,7 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
     private final SimpMessagingTemplate messagingTemplate;
-    
+
     public LocationService(final LocationRepository locationRepository, final SimpMessagingTemplate messagingTemplate) {
 	this.locationRepository = locationRepository;
 	this.messagingTemplate = messagingTemplate;

@@ -36,7 +36,7 @@ public class Axis {
 
     public static class Builder<PB> {
 	private final Sink<PB, Axis> sink;
-	
+
 	private Collection<String> categories;
 
 	private Number min;
@@ -47,44 +47,44 @@ public class Axis {
 
 	private Boolean endOnTick;
 
-	private Title title;	
-	
+	private Title title;
+
 	private List<PlotLine> plotLines;
-	
+
 	Builder(final Sink<PB, Axis> sink) {
 	    this.sink = sink;
 	}
-	
+
 	public Builder<PB> withCategories(final String... categories) {
 	    this.categories = Arrays.asList(categories);
 	    return this;
 	}
-	
+
 	public Builder<PB> withMin(final Number min) {
 	    this.min = min;
 	    return this;
 	}
-	
+
 	public Builder<PB> withMax(final Number max) {
 	    this.max = max;
 	    return this;
 	}
-	
+
 	public Builder<PB> withTickInterval(final Number tickInterval) {
 	    this.tickInterval = tickInterval;
 	    return this;
 	}
-	
+
 	public Builder<PB> enableEndOnTick() {
 	    this.endOnTick = true;
 	    return this;
 	}
-	
+
 	public Builder<PB> disableEndOnTick() {
 	    this.endOnTick = false;
 	    return this;
 	}
-	
+
 	public Title.Builder<Builder<PB>> title() {
 	    return new Title.Builder<>(title -> {
 		Builder.this.title = title;
@@ -102,7 +102,7 @@ public class Axis {
 	    });
 	}
 
-	
+
 	public PB build() {
 	    return this.sink.setObject(
 		    new Axis(categories, endOnTick, max, min, tickInterval, title, plotLines)
@@ -121,7 +121,7 @@ public class Axis {
     private final Number tickInterval;
 
     private final Title title;
-    
+
     private final Collection<PlotLine> plotLines;
 
     @JsonCreator
