@@ -168,13 +168,13 @@ class TracksController {
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.GET)
     public ResponseEntity<TrackEntity> getTrack(final @PathVariable String id) {
-        final Integer _id = TrackEntity.getId(id);
+        final Integer requestedId = TrackEntity.getId(id);
 
         TrackEntity track;
         ResponseEntity<TrackEntity> rv;
-        if (_id == null) {
+        if (requestedId == null) {
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else if ((track = this.trackRepository.findOne(_id)) == null) {
+        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
             rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             rv = new ResponseEntity<>(track, HttpStatus.OK);
@@ -186,13 +186,13 @@ class TracksController {
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> deleteTrack(final @PathVariable String id) {
-        final Integer _id = TrackEntity.getId(id);
+        final Integer requestedId = TrackEntity.getId(id);
 
         TrackEntity track;
         ResponseEntity<Void> rv;
-        if (_id == null) {
+        if (requestedId == null) {
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else if ((track = this.trackRepository.findOne(_id)) == null) {
+        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
             rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
@@ -214,17 +214,17 @@ class TracksController {
             final HttpServletRequest request,
             final HttpServletResponse response
     ) throws IOException {
-        final Integer _id = TrackEntity.getId(id);
-        final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
+        final Integer requestedId = TrackEntity.getId(id);
+        final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
         TrackEntity track;
-        if (_id == null || !acceptableFormats.containsKey(_format)) {
+        if (requestedId == null || !acceptableFormats.containsKey(requestedFormat)) {
             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-        } else if ((track = this.trackRepository.findOne(_id)) == null) {
+        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            final File trackFile = track.getTrackFile(datastoreBaseDirectory, _format);
-            response.setHeader("Content-Type", acceptableFormats.get(_format));
-            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, _format));
+            final File trackFile = track.getTrackFile(datastoreBaseDirectory, requestedFormat);
+            response.setHeader("Content-Type", acceptableFormats.get(requestedFormat));
+            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, requestedFormat));
 
             // Attribute maybe null
             if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {

@@ -66,9 +66,9 @@ class OEmbedController {
         ResponseEntity<OEmbedResponse> rv = null;
         final Matcher m = EMBEDDABLE_TRACK_URL_PATTERN.matcher(url);
         final Integer id = m.matches() ? TrackEntity.getId(m.group(1)) : null;
-        final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
+        final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
         TrackEntity track;
-        if(id == null || !acceptableFormats.containsKey(_format))
+        if(id == null || !acceptableFormats.containsKey(requestedFormat))
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         else if((track = this.trackRepository.findOne(id)) == null)
             rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -115,12 +115,12 @@ class OEmbedController {
             final Model model,
             final HttpServletResponse response
     ) {
-        final Integer _id = TrackEntity.getId(id);
+        final Integer requestedId = TrackEntity.getId(id);
         TrackEntity track;
         String rv = null;
-        if (_id == null) {
+        if (requestedId == null) {
             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-        } else if ((track = this.trackRepository.findOne(_id)) == null) {
+        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
             model
