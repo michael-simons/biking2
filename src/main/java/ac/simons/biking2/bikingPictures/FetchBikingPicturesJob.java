@@ -55,7 +55,7 @@ class FetchBikingPicturesJob {
     private final File bikingPicturesStorage;
     private final JAXBContext rssContext;
 
-    public FetchBikingPicturesJob(
+    FetchBikingPicturesJob(
             final DailyFratzeProvider dailyFratzeProvider,
             final BikingPictureRepository bikingPictureRepository,
             final File datastoreBaseDirectory

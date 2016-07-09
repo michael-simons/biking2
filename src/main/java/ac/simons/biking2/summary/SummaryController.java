@@ -35,7 +35,7 @@ class SummaryController {
     private final BikeRepository bikeRepository;
     private final AssortedTripRepository assortedTripRepository;
 
-    public SummaryController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository) {
+    SummaryController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository) {
         this.bikeRepository = bikeRepository;
         this.assortedTripRepository = assortedTripRepository;
     }

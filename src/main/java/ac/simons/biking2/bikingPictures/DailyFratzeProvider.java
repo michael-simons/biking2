@@ -35,7 +35,7 @@ class DailyFratzeProvider {
     private final String accessToken;
     private final String imageUrlFormat;
 
-    public DailyFratzeProvider(@Value("${biking2.dailyfratze-access-token}") final String accessToken) {
+    DailyFratzeProvider(@Value("${biking2.dailyfratze-access-token}") final String accessToken) {
         this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
     }
 

@@ -59,7 +59,7 @@ class GalleryController {
     @FunctionalInterface
     public interface FilenameGenerator {
 
-        public String generateFile(final String originalFilename);
+        String generateFile(final String originalFilename);
     }
 
     private final GalleryPictureRepository galleryPictureRepository;
@@ -73,7 +73,7 @@ class GalleryController {
         }
     };
 
-    public GalleryController(final GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
+    GalleryController(final GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
         this.galleryPictureRepository = galleryPictureRepository;
         this.datastoreBaseDirectory = datastoreBaseDirectory;
     }

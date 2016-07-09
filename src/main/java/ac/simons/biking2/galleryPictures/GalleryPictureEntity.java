@@ -70,7 +70,7 @@ class GalleryPictureEntity implements Serializable {
     protected GalleryPictureEntity() {
     }
 
-    public GalleryPictureEntity(final Calendar takenOn, final String filename) {
+    GalleryPictureEntity(final Calendar takenOn, final String filename) {
         this.takenOn = takenOn;
         this.filename = filename;
     }

@@ -52,7 +52,7 @@ class ChartsController {
     private final BikeRepository bikeRepository;
     private final String colorOfCumulativeGraph;
 
-    public ChartsController(final BikeRepository bikeRepository, @Value("${biking2.color-of-cumulative-graph:000000}") final String colorOfCumulativeGraph) {
+    ChartsController(final BikeRepository bikeRepository, @Value("${biking2.color-of-cumulative-graph:000000}") final String colorOfCumulativeGraph) {
         this.bikeRepository = bikeRepository;
         this.colorOfCumulativeGraph = colorOfCumulativeGraph;
     }

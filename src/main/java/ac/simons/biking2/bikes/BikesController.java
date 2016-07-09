@@ -43,7 +43,7 @@ class BikesController {
 
     private final BikeRepository bikeRepository;
 
-    public BikesController(final BikeRepository bikeRepository) {
+    BikesController(final BikeRepository bikeRepository) {
         this.bikeRepository = bikeRepository;
     }
 

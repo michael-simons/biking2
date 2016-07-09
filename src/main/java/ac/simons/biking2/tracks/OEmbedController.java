@@ -50,7 +50,7 @@ class OEmbedController {
     private final TrackRepository trackRepository;
     private final Coordinate home;
 
-    public OEmbedController(final TrackRepository TrackRepository, final Coordinate home) {
+    OEmbedController(final TrackRepository TrackRepository, final Coordinate home) {
         this.trackRepository = TrackRepository;
         this.home = home;
     }

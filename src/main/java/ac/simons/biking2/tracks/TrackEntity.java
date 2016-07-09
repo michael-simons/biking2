@@ -113,7 +113,7 @@ class TrackEntity implements Serializable {
     protected TrackEntity() {
     }
 
-    public TrackEntity(final String name, final Calendar coveredOn) {
+    TrackEntity(final String name, final Calendar coveredOn) {
         this.name = name;
         this.coveredOn = coveredOn;
     }

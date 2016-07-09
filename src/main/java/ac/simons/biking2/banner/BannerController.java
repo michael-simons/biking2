@@ -35,7 +35,7 @@ class BannerController {
 
     private final Environment environment;
 
-    public BannerController(final Banner banner, final Environment environment) {
+    BannerController(final Banner banner, final Environment environment) {
         this.banner = banner;
         this.environment = environment;
     }

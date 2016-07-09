@@ -70,7 +70,7 @@ class BikingPictureEntity implements Serializable {
     protected BikingPictureEntity() {
     }
 
-    public BikingPictureEntity(final String guid, final ZonedDateTime pubDate, final String link) {
+    BikingPictureEntity(final String guid, final ZonedDateTime pubDate, final String link) {
         final Matcher matcher = GUID_PATTERN.matcher(guid);
         if(!matcher.matches())
             throw new RuntimeException("Invalid GUID");

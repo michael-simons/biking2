@@ -43,7 +43,7 @@ class BikingPicturesController {
     private final BikingPictureRepository bikingPictureRepository;
     private final File datastoreBaseDirectory;
 
-    public BikingPicturesController(final BikingPictureRepository bikingPictureRepository, final File datastoreBaseDirectory) {
+    BikingPicturesController(final BikingPictureRepository bikingPictureRepository, final File datastoreBaseDirectory) {
         this.bikingPictureRepository = bikingPictureRepository;
         this.datastoreBaseDirectory = datastoreBaseDirectory;
     }
