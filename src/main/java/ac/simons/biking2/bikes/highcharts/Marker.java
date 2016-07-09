@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class Marker {
 
+    @SuppressWarnings({"checkstyle:hiddenfield"})
     public static final class Builder<PB> {
 
         private final Sink<PB, Marker> sink;

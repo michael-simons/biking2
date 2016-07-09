@@ -206,12 +206,12 @@ public class BikeEntity implements Serializable {
      * Use a verb instead of a setter to show that the time part is explicitly
      * stripped of
      *
-     * @param decommissionedOn Date of decommission. If null nothing changes
+     * @param decommissionDate Date of decommission. If null nothing changes
      * @return true if the bike was decommissioned
      */
-    public boolean decommission(final LocalDate decommissionedOn) {
-        if (decommissionedOn != null) {
-            this.decommissionedOn = GregorianCalendar.from(decommissionedOn.atStartOfDay(ZoneId.systemDefault()));
+    public boolean decommission(final LocalDate decommissionDate) {
+        if (decommissionDate != null) {
+            this.decommissionedOn = GregorianCalendar.from(decommissionDate.atStartOfDay(ZoneId.systemDefault()));
         }
         return this.decommissionedOn != null;
     }

@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class Title {
 
+    @SuppressWarnings({"checkstyle:hiddenfield"})
     public static final class Builder<PB> {
 
         private final Sink<PB, Title> sink;

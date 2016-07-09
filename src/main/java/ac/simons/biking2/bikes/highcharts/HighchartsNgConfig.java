@@ -32,6 +32,7 @@ import java.util.Collection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HighchartsNgConfig {
 
+    @SuppressWarnings({"checkstyle:hiddenfield"})
     public static class Builder {
 
         private final Sink<HighchartsNgConfig, HighchartsNgConfig> sink;

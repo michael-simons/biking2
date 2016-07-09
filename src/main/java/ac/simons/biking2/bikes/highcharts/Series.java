@@ -31,6 +31,7 @@ import java.util.Collection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class Series<T> {
 
+    @SuppressWarnings({"checkstyle:hiddenfield"})
     public static final class Builder<PB, T> {
 
         private final Sink<PB, Series> sink;

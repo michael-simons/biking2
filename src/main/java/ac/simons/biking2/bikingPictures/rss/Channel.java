@@ -46,11 +46,11 @@ public final class Channel {
     private List<Item> items;
 
     public String getPrevious() {
-        return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
+        return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(l -> "previous".equalsIgnoreCase(l.getRel())).findFirst().orElse(new Link()).getHref();
     }
 
     public String getNext() {
-        return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
+        return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(l -> "next".equalsIgnoreCase(l.getRel())).findFirst().orElse(new Link()).getHref();
     }
 
     public String getTitle() {

@@ -34,6 +34,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class Axis {
 
+    @SuppressWarnings({"checkstyle:hiddenfield"})
     public static final class Builder<PB> {
 
         private final Sink<PB, Axis> sink;
