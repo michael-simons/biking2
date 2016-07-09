@@ -58,6 +58,7 @@ class OEmbedController {
     }
 
     @RequestMapping(value = "/oembed", produces = {"application/json", "application/xml"})
+    @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<OEmbedResponse> getEmbeddableTrack(
             @RequestParam(required = true) @URL final String url,
             @RequestParam(required = false, defaultValue = "json") final String format,
@@ -110,6 +111,7 @@ class OEmbedController {
     }
 
     @RequestMapping(value = "/tracks/{id:\\w+}/embed")
+    @SuppressWarnings({"checkstyle:innerassignment"})
     public String embedTrack(
             @PathVariable final String id,
             @RequestParam(required = false, defaultValue = "1024") final Integer width,

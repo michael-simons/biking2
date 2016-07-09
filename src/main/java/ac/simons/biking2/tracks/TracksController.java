@@ -168,6 +168,7 @@ class TracksController {
     }
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.GET)
+    @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<TrackEntity> getTrack(final @PathVariable String id) {
         final Integer requestedId = TrackEntity.getId(id);
 
@@ -186,6 +187,7 @@ class TracksController {
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
     @PreAuthorize("isAuthenticated()")
+    @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<Void> deleteTrack(final @PathVariable String id) {
         final Integer requestedId = TrackEntity.getId(id);
 
@@ -209,6 +211,7 @@ class TracksController {
     }
 
     @RequestMapping({"/tracks/{id:\\w+}.{format}"})
+    @SuppressWarnings({"checkstyle:innerassignment"})
     public void downloadTrack(
             final @PathVariable String id,
             final @PathVariable String format,

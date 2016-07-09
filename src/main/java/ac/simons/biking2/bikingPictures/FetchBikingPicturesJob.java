@@ -103,7 +103,8 @@ class FetchBikingPicturesJob {
                 rv.addAll(intermediateResult);
                 foundOlderThanMaxPubDate = intermediateResult.size() < rss.getChannel().getItems().size();
             }
-        } while (!foundOlderThanMaxPubDate && (url = getNextUrl(rss)) != null);
+            url = getNextUrl(rss);
+        } while (!(foundOlderThanMaxPubDate || url == null));
 
         return rv;
     }

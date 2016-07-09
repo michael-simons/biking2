@@ -127,8 +127,8 @@ class GalleryController {
             final HttpServletResponse response
     ) throws IOException {
 
-        GalleryPictureEntity galleryPicture;
-        if ((galleryPicture = this.galleryPictureRepository.findOne(id)) == null) {
+        final GalleryPictureEntity galleryPicture = this.galleryPictureRepository.findOne(id);
+        if (galleryPicture == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
             final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));

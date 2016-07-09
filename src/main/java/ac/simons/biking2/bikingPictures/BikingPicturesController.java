@@ -61,8 +61,8 @@ class BikingPicturesController {
             final HttpServletResponse response
     ) throws IOException {
 
-        BikingPictureEntity bikingPicture;
-        if ((bikingPicture = this.bikingPictureRepository.findOne(id)) == null) {
+        final BikingPictureEntity bikingPicture = this.bikingPictureRepository.findOne(id);
+        if (bikingPicture == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
             final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%d.jpg", DatastoreConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId()));
