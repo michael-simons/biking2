@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "bike_id", referencedColumnName = "id")
     private BikeEntity bike;
-    
+
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
@@ -75,66 +75,66 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     }
 
     protected MilageEntity(final BikeEntity bike, final LocalDate recordedOn, final double amount) {
-	this.bike = bike;
-	this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));	
-	this.amount = BigDecimal.valueOf(amount);
+        this.bike = bike;
+        this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));
+        this.amount = BigDecimal.valueOf(amount);
     }
-    
+
     @PrePersist
     public void prePersist() {
-	if (this.createdAt == null) {
-	    this.createdAt = Calendar.getInstance();
-	}
+        if (this.createdAt == null) {
+            this.createdAt = Calendar.getInstance();
+        }
     }
 
     public Integer getId() {
-	return id;
+        return id;
     }
 
     public Calendar getRecordedOn() {
-	return recordedOn;
+        return recordedOn;
     }
-  
+
     public BigDecimal getAmount() {
-	return amount;
-    }    
+        return amount;
+    }
 
     public Calendar getCreatedAt() {
-	return createdAt;
-    }  
+        return createdAt;
+    }
 
     public BikeEntity getBike() {
-	return bike;
+        return bike;
     }
 
     @Override
     public int hashCode() {
-	int hash = 7;
-	hash = 31 * hash + Objects.hashCode(this.recordedOn);
-	hash = 31 * hash + Objects.hashCode(this.bike);
-	return hash;
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.recordedOn);
+        hash = 31 * hash + Objects.hashCode(this.bike);
+        return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final MilageEntity other = (MilageEntity) obj;
-	if (!Objects.equals(this.recordedOn, other.recordedOn)) {
-	    return false;
-	}
-	if (!Objects.equals(this.amount, other.amount)) {
-	    return false;
-	}
-	return Objects.equals(this.bike, other.bike);
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MilageEntity other = (MilageEntity) obj;
+        if (!Objects.equals(this.recordedOn, other.recordedOn)) {
+            return false;
+        }
+        if (!Objects.equals(this.amount, other.amount)) {
+            return false;
+        }
+        return Objects.equals(this.bike, other.bike);
     }
 
     @Override
-    public int compareTo(MilageEntity o) {
-	return this.recordedOn.compareTo(o.recordedOn);
+    public int compareTo(final MilageEntity o) {
+        return this.recordedOn.compareTo(o.recordedOn);
     }
 }

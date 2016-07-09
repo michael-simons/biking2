@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Item {
+public final class Item {
 
     private String title;
 
@@ -46,58 +46,58 @@ public class Item {
     private List<Content> content;
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
-    public void setTitle(String title) {
-	this.title = title;
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
     public String getLink() {
-	return link;
+        return link;
     }
 
-    public void setLink(String link) {
-	this.link = link;
+    public void setLink(final String link) {
+        this.link = link;
     }
 
     public String getDescription() {
-	return description;
+        return description;
     }
 
-    public void setDescription(String description) {
-	this.description = description;
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
     public ZonedDateTime getPubDate() {
-	return pubDate;
+        return pubDate;
     }
 
-    public void setPubDate(ZonedDateTime pubDate) {
-	this.pubDate = pubDate;
+    public void setPubDate(final ZonedDateTime pubDate) {
+        this.pubDate = pubDate;
     }
 
     public Guid getGuid() {
-	return guid;
+        return guid;
     }
 
-    public void setGuid(Guid guid) {
-	this.guid = guid;
+    public void setGuid(final Guid guid) {
+        this.guid = guid;
     }
 
     public Thumbnail getThumbnail() {
-	return thumbnail;
+        return thumbnail;
     }
 
-    public void setThumbnail(Thumbnail thumbnail) {
-	this.thumbnail = thumbnail;
+    public void setThumbnail(final Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public List<Content> getContent() {
-	return content;
+        return content;
     }
 
-    public void setContent(List<Content> content) {
-	this.content = content;
+    public void setContent(final List<Content> content) {
+        this.content = content;
     }
 }

@@ -25,11 +25,11 @@ public class StoryCmdTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final StoryCmd bean = new StoryCmd();
+        final StoryCmd bean = new StoryCmd();
 
-	bean.setLabel("foobar");
-	bean.setUrl("http://heise.de");
-	Assert.assertEquals("foobar", bean.getLabel());
-	Assert.assertEquals("http://heise.de", bean.getUrl());
+        bean.setLabel("foobar");
+        bean.setUrl("http://heise.de");
+        Assert.assertEquals("foobar", bean.getLabel());
+        Assert.assertEquals("http://heise.de", bean.getUrl());
     }
 }

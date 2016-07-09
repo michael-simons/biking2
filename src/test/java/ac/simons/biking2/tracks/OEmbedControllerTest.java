@@ -63,88 +63,88 @@ public class OEmbedControllerTest {
 
     @Test
     public void getEmbeddableTrack_shouldBeValidJson() throws Exception {
-	final MockMvc mockMvc = MockMvcBuilders
-		.webAppContextSetup(applicationContext)
-		.build();
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/n&format=json"))
-		.andExpect(content().string(expectedJsonResult));
+        final MockMvc mockMvc = MockMvcBuilders
+                .webAppContextSetup(applicationContext)
+                .build();
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/n&format=json"))
+                .andExpect(content().string(expectedJsonResult));
     }
 
     @Test
     public void getEmbeddableTrack_shouldBeValidXml() throws Exception {
-	final MockMvc mockMvc = MockMvcBuilders
-		.webAppContextSetup(applicationContext)
-		.build();
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/n&format=xml"))
-		.andExpect(content().string(expectedXmlResult));
+        final MockMvc mockMvc = MockMvcBuilders
+                .webAppContextSetup(applicationContext)
+                .build();
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/n&format=xml"))
+                .andExpect(content().string(expectedXmlResult));
     }
 
     @Test
     public void getEmbeddableTrack_shouldHandleUnacceptableRequests() throws Exception {
-	final MockMvc mockMvc = MockMvcBuilders
-		.webAppContextSetup(applicationContext)
-		.build();
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/n&format=poef"))
-		.andExpect(status().isNotAcceptable());
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/_&format=json"))
-		.andExpect(status().isNotAcceptable());
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/123&format=json"))
-		.andExpect(status().isNotAcceptable());
+        final MockMvc mockMvc = MockMvcBuilders
+                .webAppContextSetup(applicationContext)
+                .build();
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/n&format=poef"))
+                .andExpect(status().isNotAcceptable());
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/_&format=json"))
+                .andExpect(status().isNotAcceptable());
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/123&format=json"))
+                .andExpect(status().isNotAcceptable());
     }
 
     @Test
     public void getEmbeddableTrack_shouldHandleInvalidTracks() throws Exception {
-	final MockMvc mockMvc = MockMvcBuilders
-		.webAppContextSetup(applicationContext)
-		.build();
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/1&format=json"))
-		.andExpect(status().isNotFound());
+        final MockMvc mockMvc = MockMvcBuilders
+                .webAppContextSetup(applicationContext)
+                .build();
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/oembed?url=http://biking.michael-simons.eu/tracks/1&format=json"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     public void embedTrack_shouldHandleUnacceptableRequests() throws Exception {
-	final MockMvc mockMvc = MockMvcBuilders
-		.webAppContextSetup(applicationContext)
-		.build();
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/tracks/_/embed"))
-		.andExpect(status().isNotAcceptable());
+        final MockMvc mockMvc = MockMvcBuilders
+                .webAppContextSetup(applicationContext)
+                .build();
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/tracks/_/embed"))
+                .andExpect(status().isNotAcceptable());
     }
 
     @Test
     public void embedTrack_shouldHandleInvalidTracks() throws Exception {
-	final MockMvc mockMvc = MockMvcBuilders
-		.webAppContextSetup(applicationContext)
-		.build();
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/tracks/1/embed"))
-		.andExpect(status().isNotFound());
+        final MockMvc mockMvc = MockMvcBuilders
+                .webAppContextSetup(applicationContext)
+                .build();
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/tracks/1/embed"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     public void embedTrack() throws Exception {
-	final MockMvc mockMvc = MockMvcBuilders
-		.webAppContextSetup(applicationContext)
-		.build();
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/tracks/n/embed?width=23&height=42"))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("track", is(equalTo(this.trackRepository.findOne(23)))))
-		.andExpect(model().attribute("home", is(equalTo(home))))
-		.andExpect(model().attribute("width", is(equalTo(23))))
-		.andExpect(model().attribute("height", is(equalTo(42))))
-		.andExpect(view().name("oEmbed/embeddedTrack"));
-	
-	mockMvc
-		.perform(get("http://biking.michael-simons.eu/tracks/n/embed"))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("width", is(equalTo(1024))))
-		.andExpect(model().attribute("height", is(equalTo(576))));
+        final MockMvc mockMvc = MockMvcBuilders
+                .webAppContextSetup(applicationContext)
+                .build();
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/tracks/n/embed?width=23&height=42"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("track", is(equalTo(this.trackRepository.findOne(23)))))
+                .andExpect(model().attribute("home", is(equalTo(home))))
+                .andExpect(model().attribute("width", is(equalTo(23))))
+                .andExpect(model().attribute("height", is(equalTo(42))))
+                .andExpect(view().name("oEmbed/embeddedTrack"));
+
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/tracks/n/embed"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("width", is(equalTo(1024))))
+                .andExpect(model().attribute("height", is(equalTo(576))));
     }
 }

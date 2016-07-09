@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,23 +44,27 @@ class BikingPictureEntity implements Serializable {
     private static final long serialVersionUID = -7050582813676065697L;
 
     private static final Pattern GUID_PATTERN = Pattern.compile("https?://dailyfratze.de/fratzen/m/(\\d+).jpg");
-    
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /** The url of the image itself */
-    @Column(name = "external_id", nullable = false, unique = true)    
-    @NotNull    
+    /**
+     * The url of the image itself
+     */
+    @Column(name = "external_id", nullable = false, unique = true)
+    @NotNull
     private Integer externalId;
-    
+
     @Column(name = "pub_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Calendar pubDate;
-    
-    /** A link to the webpage */
+
+    /**
+     * A link to the webpage
+     */
     @Column(name = "link", nullable = false, length = 512)
     @URL
     @NotNull
@@ -70,47 +74,48 @@ class BikingPictureEntity implements Serializable {
     protected BikingPictureEntity() {
     }
 
-    public BikingPictureEntity(final String guid, final ZonedDateTime pubDate, String link) {
-	final Matcher matcher = GUID_PATTERN.matcher(guid);
-	if(!matcher.matches())
-	    throw new RuntimeException("Invalid GUID");	
-	this.externalId = Integer.parseInt(matcher.group(1));
-	this.pubDate = GregorianCalendar.from(pubDate);
-	this.link = link;
+    BikingPictureEntity(final String guid, final ZonedDateTime pubDate, final String link) {
+        final Matcher matcher = GUID_PATTERN.matcher(guid);
+        if (!matcher.matches()) {
+            throw new RuntimeException("Invalid GUID");
+        }
+        this.externalId = Integer.parseInt(matcher.group(1));
+        this.pubDate = GregorianCalendar.from(pubDate);
+        this.link = link;
     }
 
     public Integer getId() {
-	return this.id;
+        return this.id;
     }
 
     public Integer getExternalId() {
-	return externalId;
-    }    
+        return externalId;
+    }
 
     public String getLink() {
-	return this.link;
+        return this.link;
     }
-   
+
     public Calendar getPubDate() {
-	return pubDate;
+        return pubDate;
     }
 
     @Override
     public int hashCode() {
-	int hash = 5;
-	hash = 67 * hash + Objects.hashCode(this.externalId);
-	return hash;
+        int hash = 5;
+        hash = 67 * hash + Objects.hashCode(this.externalId);
+        return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final BikingPictureEntity other = (BikingPictureEntity) obj;
-	return Objects.equals(this.externalId, other.externalId);
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BikingPictureEntity other = (BikingPictureEntity) obj;
+        return Objects.equals(this.externalId, other.externalId);
     }
 }

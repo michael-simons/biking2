@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 msimons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,94 +24,95 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * @author msimons, 2014-02-12
+ * @author Michael J. Simons., 2014-02-12
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Series<T> {
+public final class Series<T> {
 
-    public static class Builder<PB, T> {
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB, T> {
 
-	private final Sink<PB, Series> sink;
+        private final Sink<PB, Series> sink;
 
-	private Collection<T> data;
+        private Collection<T> data;
 
-	private String name;
+        private String name;
 
-	private String type;
+        private String type;
 
-	private String color;
+        private String color;
 
-	private Double fillOpacity;
-	
-	private Double lineWidth;
-	
-	private String linkedTo;	
-	
-	private Integer zIndex;
-	
-	private Marker marker;
-	
-	public Builder<PB, T> withData(final T... data) {
-	    this.data = Arrays.asList(data);
-	    return this;
-	}
-	
-	public Builder<PB, T> withData(final int... data) {
-	    this.data = (Collection<T>)Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-	    return this;
-	}
-	
-	public Builder<PB, T> withName(final String name) {
-	    this.name = name;
-	    return this;
-	}
+        private Double fillOpacity;
 
-	public Builder<PB, T> withType(final String type) {
-	    this.type = type;
-	    return this;
-	}
+        private Double lineWidth;
 
-	public Builder<PB, T> withColor(final String color) {
-	    this.color = color;
-	    return this;
-	}
-		
-	public Builder<PB, T> withLineWidth(final Double lineWidth) {
-	    this.lineWidth = lineWidth;
-	    return this;
-	}	
-	
-	public Builder<PB, T> withFillOpacity(final Double fillOpacity) {
-	    this.fillOpacity = fillOpacity;
-	    return this;
-	}
-	
-	public Builder<PB, T> withZIndex(final Integer zIndex) {
-	    this.zIndex = zIndex;
-	    return this;
-	}
-	
-	public Builder<PB, T> linkTo(final String linkTo) {
-	    this.linkedTo = linkTo;
-	    return this;
-	}
-	
-	public Marker.Builder<Builder<PB, T>> marker() {
-	    return new Marker.Builder<>(marker -> {
-		Builder.this.marker = marker;
-		return Builder.this;
-	    });
-	}
+        private String linkedTo;
 
-	Builder(Sink<PB, Series> sink) {
-	    this.sink = sink;
-	}
+        private Integer zIndex;
 
-	public PB build() {
-	    return this.sink.setObject(new Series(color, data, name, type, zIndex, fillOpacity, lineWidth, linkedTo, marker));
-	}
+        private Marker marker;
+
+        public Builder<PB, T> withData(final T... data) {
+            this.data = Arrays.asList(data);
+            return this;
+        }
+
+        public Builder<PB, T> withData(final int... data) {
+            this.data = (Collection<T>) Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            return this;
+        }
+
+        public Builder<PB, T> withName(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder<PB, T> withType(final String type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder<PB, T> withColor(final String color) {
+            this.color = color;
+            return this;
+        }
+
+        public Builder<PB, T> withLineWidth(final Double lineWidth) {
+            this.lineWidth = lineWidth;
+            return this;
+        }
+
+        public Builder<PB, T> withFillOpacity(final Double fillOpacity) {
+            this.fillOpacity = fillOpacity;
+            return this;
+        }
+
+        public Builder<PB, T> withZIndex(final Integer zIndex) {
+            this.zIndex = zIndex;
+            return this;
+        }
+
+        public Builder<PB, T> linkTo(final String linkTo) {
+            this.linkedTo = linkTo;
+            return this;
+        }
+
+        public Marker.Builder<Builder<PB, T>> marker() {
+            return new Marker.Builder<>(marker -> {
+                Builder.this.marker = marker;
+                return Builder.this;
+            });
+        }
+
+        Builder(final Sink<PB, Series> sink) {
+            this.sink = sink;
+        }
+
+        public PB build() {
+            return this.sink.setObject(new Series(color, data, name, type, zIndex, fillOpacity, lineWidth, linkedTo, marker));
+        }
     }
 
     private final String color;
@@ -121,62 +122,72 @@ public class Series<T> {
     private final String name;
 
     private final String type;
-    
+
     private final Integer zIndex;
-    
+
     private final Double fillOpacity;
-	
+
     private final Double lineWidth;
-	
-    private final String linkedTo;	
-    
+
+    private final String linkedTo;
+
     private final Marker marker;
 
-    public Series(final String color, Collection<T> data, String name, String type, Integer zIndex, Double fillOpacity, Double lineWidth, String linkedTo, Marker marker) {
-	this.color = color;
-	this.data = data;
-	this.name = name;
-	this.type = type;
-	this.zIndex = zIndex;
-	this.fillOpacity = fillOpacity;
-	this.lineWidth = lineWidth;
-	this.linkedTo = linkedTo;
-	this.marker = marker;
+    public Series(
+            final String color,
+            final Collection<T> data,
+            final String name,
+            final String type,
+            final Integer zIndex,
+            final Double fillOpacity,
+            final Double lineWidth,
+            final String linkedTo,
+            final Marker marker
+    ) {
+        this.color = color;
+        this.data = data;
+        this.name = name;
+        this.type = type;
+        this.zIndex = zIndex;
+        this.fillOpacity = fillOpacity;
+        this.lineWidth = lineWidth;
+        this.linkedTo = linkedTo;
+        this.marker = marker;
     }
 
     public Collection<T> getData() {
-	return data;
+        return data;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public String getType() {
-	return type;
+        return type;
     }
 
     public Integer getzIndex() {
-	return zIndex;
+        return zIndex;
     }
 
     public String getColor() {
-	return color;
+        return color;
     }
 
     public Double getFillOpacity() {
-	return fillOpacity;
+        return fillOpacity;
     }
 
     public Double getLineWidth() {
-	return lineWidth;
+        return lineWidth;
     }
 
     public String getLinkedTo() {
-	return linkedTo;
+        return linkedTo;
     }
 
     public Marker getMarker() {
-	return marker;
-    }    
+        return marker;
+    }
 }

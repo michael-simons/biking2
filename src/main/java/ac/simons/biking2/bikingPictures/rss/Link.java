@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Link {
+public final class Link {
 
     @XmlAttribute
     private String rel;
@@ -35,26 +35,26 @@ public class Link {
     private String href;
 
     public String getRel() {
-	return rel;
+        return rel;
     }
 
-    public void setRel(String rel) {
-	this.rel = rel;
+    public void setRel(final String rel) {
+        this.rel = rel;
     }
 
     public String getType() {
-	return type;
+        return type;
     }
 
-    public void setType(String type) {
-	this.type = type;
+    public void setType(final String type) {
+        this.type = type;
     }
 
     public String getHref() {
-	return href;
+        return href;
     }
 
-    public void setHref(String href) {
-	this.href = href;
+    public void setHref(final String href) {
+        this.href = href;
     }
 }

@@ -30,12 +30,12 @@ public class TitleTest {
 
     @Test
     public void testBuilder() {
-	Title title = new Title.Builder<>(object -> object).build();
-	assertThat(title.getText(), is(nullValue()));
+        Title title = new Title.Builder<>(object -> object).build();
+        assertThat(title.getText(), is(nullValue()));
 
-	title = new Title.Builder<>(object -> object)
-	    .withText("test 123")
-	.build();
-	assertThat(title.getText(), is(equalTo("test 123")));
+        title = new Title.Builder<>(object -> object)
+            .withText("test 123")
+        .build();
+        assertThat(title.getText(), is(equalTo("test 123")));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Michael J. Simons, 2014-02-21
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Bounds {
+public final class Bounds {
 
     @XmlAttribute
     private BigDecimal minlat;
@@ -39,18 +39,18 @@ public class Bounds {
     private BigDecimal maxlon;
 
     public BigDecimal getMinlat() {
-	return minlat;
+        return minlat;
     }
 
     public BigDecimal getMinlon() {
-	return minlon;
+        return minlon;
     }
 
     public BigDecimal getMaxlat() {
-	return maxlat;
+        return maxlat;
     }
 
     public BigDecimal getMaxlon() {
-	return maxlon;
+        return maxlon;
     }
 }

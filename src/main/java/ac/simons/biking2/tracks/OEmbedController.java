@@ -38,98 +38,102 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 class OEmbedController {
-    private final static Pattern EMBEDDABLE_TRACK_URL_PATTERN = Pattern.compile(".*?\\/tracks\\/(\\w+)(\\/|\\.(\\w+))?$");
-    private final static Map<String, String> acceptableFormats;
+
+    private static final Pattern EMBEDDABLE_TRACK_URL_PATTERN = Pattern.compile(".*?\\/tracks\\/(\\w+)(\\/|\\.(\\w+))?$");
+    private static final Map<String, String> ACCEPTABLE_FORMATS;
+
     static {
-	final Map<String, String> hlp = new HashMap<>();
-	hlp.put("json", "application/json");
-	hlp.put("xml", "application/xml");
-	acceptableFormats = Collections.unmodifiableMap(hlp);
+        final Map<String, String> hlp = new HashMap<>();
+        hlp.put("json", "application/json");
+        hlp.put("xml", "application/xml");
+        ACCEPTABLE_FORMATS = Collections.unmodifiableMap(hlp);
     }
-    
+
     private final TrackRepository trackRepository;
     private final Coordinate home;
-        
-    public OEmbedController(TrackRepository TrackRepository, final Coordinate home) {
-	this.trackRepository = TrackRepository;
-	this.home = home;
+
+    OEmbedController(final TrackRepository trackRepository, final Coordinate home) {
+        this.trackRepository = trackRepository;
+        this.home = home;
     }
-    
+
     @RequestMapping(value = "/oembed", produces = {"application/json", "application/xml"})
+    @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<OEmbedResponse> getEmbeddableTrack(
-	    final @RequestParam(required = true) @URL String url, 
-	    final @RequestParam(required = false, defaultValue = "json") String format,
-	    final @RequestParam(required = false, defaultValue = "1024") Integer maxwidth,
-	    final @RequestParam(required = false, defaultValue = "576") Integer maxheight,
-	    final HttpServletRequest request
+            @RequestParam(required = true) @URL final String url,
+            @RequestParam(required = false, defaultValue = "json") final String format,
+            @RequestParam(required = false, defaultValue = "1024") final Integer maxwidth,
+            @RequestParam(required = false, defaultValue = "576") final Integer maxheight,
+            final HttpServletRequest request
     ) {
-	ResponseEntity<OEmbedResponse> rv = null;
-	final Matcher m = EMBEDDABLE_TRACK_URL_PATTERN.matcher(url);
-	final Integer id = m.matches() ? TrackEntity.getId(m.group(1)) : null;
-	final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
-	TrackEntity track;
-	if(id == null || !acceptableFormats.containsKey(_format))
-	    rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	else if((track = this.trackRepository.findOne(id)) == null)
-	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	else {
-	    final OEmbedResponse response = new OEmbedResponse();
-	    
-	    response.setType("rich");
-	    response.setVersion("1.0");
-	    response.setTitle(track.getName());
-	    response.setAuthorName("Michael J. Simons");
-	    response.setAuthorUrl("http://michael-simons.eu");
-	    response.setProviderName("biking2");
-	    response.setProviderUrl("http://biking.michael-simons.eu");
-	    response.setCacheAge((long)(24 * 60 * 60));
-	    response.setHtml(new StringBuilder()
-		    .append("<iframe ")
-			.append("width='").append(maxwidth).append("' ")
-			.append("height='").append(maxheight).append("' ")
-			.append("src='")
-			    .append(request.getScheme()).append("://")
-			    .append(request.getServerName())
-			    .append(Arrays.asList(80, 443).contains(request.getServerPort()) ? "" : (":" + request.getServerPort()))
-			    .append(request.getContextPath())
-			    .append("/tracks/").append(m.group(1)).append("/embed?")
-				.append("width=").append(maxwidth).append("&")
-				.append("height=").append(maxheight)		    
-			.append("' ")
-			.append("class='bikingTrack'>")
-		    .append("</iframe>")		    
-		    .toString()
-	    );
-	    
-	    rv = new ResponseEntity<>(response, HttpStatus.OK);
-	}
-	
-	return rv;
+        ResponseEntity<OEmbedResponse> rv = null;
+        final Matcher m = EMBEDDABLE_TRACK_URL_PATTERN.matcher(url);
+        final Integer id = m.matches() ? TrackEntity.getId(m.group(1)) : null;
+        final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
+        TrackEntity track;
+        if (id == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
+            rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else if ((track = this.trackRepository.findOne(id)) == null) {
+            rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            final OEmbedResponse response = new OEmbedResponse();
+
+            response.setType("rich");
+            response.setVersion("1.0");
+            response.setTitle(track.getName());
+            response.setAuthorName("Michael J. Simons");
+            response.setAuthorUrl("http://michael-simons.eu");
+            response.setProviderName("biking2");
+            response.setProviderUrl("http://biking.michael-simons.eu");
+            response.setCacheAge((long) (24 * 60 * 60));
+            response.setHtml(new StringBuilder()
+                    .append("<iframe ")
+                    .append("width='").append(maxwidth).append("' ")
+                    .append("height='").append(maxheight).append("' ")
+                    .append("src='")
+                    .append(request.getScheme()).append("://")
+                    .append(request.getServerName())
+                    .append(Arrays.asList(80, 443).contains(request.getServerPort()) ? "" : (":" + request.getServerPort()))
+                    .append(request.getContextPath())
+                    .append("/tracks/").append(m.group(1)).append("/embed?")
+                    .append("width=").append(maxwidth).append("&")
+                    .append("height=").append(maxheight)
+                    .append("' ")
+                    .append("class='bikingTrack'>")
+                    .append("</iframe>")
+                    .toString()
+            );
+
+            rv = new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        return rv;
     }
 
     @RequestMapping(value = "/tracks/{id:\\w+}/embed")
+    @SuppressWarnings({"checkstyle:innerassignment"})
     public String embedTrack(
-	    final @PathVariable String id,
-	    final @RequestParam(required = false, defaultValue = "1024") Integer width,
-	    final @RequestParam(required = false, defaultValue = "576") Integer height,
-	    final Model model,
-	    final HttpServletResponse response
-    ) {	
-	final Integer _id = TrackEntity.getId(id);	
-	TrackEntity track;
-	String rv = null;
-	if (_id == null) {
-	    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-	} else if ((track = this.trackRepository.findOne(_id)) == null) {
-	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	} else {
-	    model
-		    .addAttribute("track", track)
-		    .addAttribute("home", home)
-		    .addAttribute("width", width)
-		    .addAttribute("height", height);
-	    rv = "oEmbed/embeddedTrack";
-	}	
-	return rv;
+            @PathVariable final String id,
+            @RequestParam(required = false, defaultValue = "1024") final Integer width,
+            @RequestParam(required = false, defaultValue = "576") final Integer height,
+            final Model model,
+            final HttpServletResponse response
+    ) {
+        final Integer requestedId = TrackEntity.getId(id);
+        TrackEntity track;
+        String rv = null;
+        if (requestedId == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            model
+                    .addAttribute("track", track)
+                    .addAttribute("home", home)
+                    .addAttribute("width", width)
+                    .addAttribute("height", height);
+            rv = "oEmbed/embeddedTrack";
+        }
+        return rv;
     }
 }

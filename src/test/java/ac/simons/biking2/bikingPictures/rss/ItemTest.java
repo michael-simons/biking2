@@ -29,15 +29,15 @@ import org.junit.Test;
 public class ItemTest {
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("title", "title");	
-	values.put("link", "link");	
-	values.put("description", "description");	
-	values.put("pubDate", ZonedDateTime.now());	
-	values.put("guid", new Guid());	
-	values.put("thumbnail", new Thumbnail());	
-	values.put("content", new ArrayList<>());	
-	
-	values.forEach(new BeanTester(Item.class));
-    }   
+        final Map<String, Object> values = new HashMap<>();
+        values.put("title", "title");
+        values.put("link", "link");
+        values.put("description", "description");
+        values.put("pubDate", ZonedDateTime.now());
+        values.put("guid", new Guid());
+        values.put("thumbnail", new Thumbnail());
+        values.put("content", new ArrayList<>());
+
+        values.forEach(new BeanTester(Item.class));
+    }
 }

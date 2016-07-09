@@ -44,18 +44,18 @@ public class RoutingTest {
 
     @Test
     public void testStaticRoutes() {
-	final MockMvc mockMvc = MockMvcBuilders
-		.webAppContextSetup(applicationContext)
-		.build();
+        final MockMvc mockMvc = MockMvcBuilders
+                .webAppContextSetup(applicationContext)
+                .build();
 
-	Stream.of("/", "/bikes", "/milages", "/gallery", "/tracks", "/tracks/23", "/location", "/about").forEach(path -> {
-	    try {
-		mockMvc
-			.perform(get(path))
-			.andExpect(forwardedUrl("/index.html"));
-	    } catch (Exception e) {
-		throw new RuntimeException(e);
-	    }
-	});
+        Stream.of("/", "/bikes", "/milages", "/gallery", "/tracks", "/tracks/23", "/location", "/about").forEach(path -> {
+            try {
+                mockMvc
+                        .perform(get(path))
+                        .andExpect(forwardedUrl("/index.html"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

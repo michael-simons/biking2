@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +24,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class GPX {
+public final class GPX {
 
     private Bounds bounds;
 
     public Bounds getBounds() {
-	return bounds;
+        return bounds;
     }
 
-    public void setBounds(Bounds bounds) {
-	this.bounds = bounds;
+    public void setBounds(final Bounds bounds) {
+        this.bounds = bounds;
     }
 }

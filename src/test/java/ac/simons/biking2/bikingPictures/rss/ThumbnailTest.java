@@ -27,11 +27,11 @@ public class ThumbnailTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("url", "https://dailyfratze.de/attachments/michael/2012/11/13535048936935471334.jpg");
-	values.put("width", 23);
-	values.put("height", 42);
+        final Map<String, Object> values = new HashMap<>();
+        values.put("url", "https://dailyfratze.de/attachments/michael/2012/11/13535048936935471334.jpg");
+        values.put("width", 23);
+        values.put("height", 42);
 
-	values.forEach(new BeanTester(Thumbnail.class));
+        values.forEach(new BeanTester(Thumbnail.class));
     }
 }

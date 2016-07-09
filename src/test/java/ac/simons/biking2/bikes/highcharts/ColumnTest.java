@@ -29,11 +29,11 @@ public class ColumnTest {
 
     @Test
     public void testBuilder() {
-	Column column = new Column.Builder<>(object -> object)
-		.withPointPadding(0.2)
-		.withBorderWidth(0)
-	.build();
-	assertThat(column.getPointPadding(), is(equalTo(0.2)));
-	assertThat(column.getBorderWidth(), is(equalTo(0)));
+        Column column = new Column.Builder<>(object -> object)
+                .withPointPadding(0.2)
+                .withBorderWidth(0)
+        .build();
+        assertThat(column.getPointPadding(), is(equalTo(0.2)));
+        assertThat(column.getBorderWidth(), is(equalTo(0)));
     }
 }

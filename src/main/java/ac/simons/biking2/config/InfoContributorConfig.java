@@ -22,15 +22,13 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Configures additional info contributors.
- * 
+ *
  * @author Michael J. Simons, 2016-04-15
  */
 @Configuration
 public class InfoContributorConfig {
     @Bean
     public InfoContributor buildInfoContributor() {
-	return builder -> {	    
-	    builder.withDetail("spring-boot.version", SpringBootVersion.getVersion());
-	};
+        return builder -> builder.withDetail("spring-boot.version", SpringBootVersion.getVersion());
     }
 }

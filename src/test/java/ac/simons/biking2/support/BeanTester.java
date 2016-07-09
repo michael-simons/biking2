@@ -28,19 +28,19 @@ public class BeanTester implements BiConsumer<String, Object> {
     private final Reflect r;
 
     public BeanTester(Class<?> clazz) {
-	this.r = Reflect.on(clazz).create();
+        this.r = Reflect.on(clazz).create();
     }
 
     @Override
     public void accept(String p, Object v) {
-	final String property = p.substring(0, 1).toUpperCase(Locale.ENGLISH) + p.substring(1);
-	final String verbSet = "set";
-	final String verbGet = v instanceof Boolean ? "is" : "get";
-	try {
-	    Assert.assertEquals(v, r.call(verbSet + property, v).call(verbGet + property).get());
-	} catch(Exception e) {
-	    e.printStackTrace();
-	    Assert.fail(e.getMessage());
-	}
+        final String property = p.substring(0, 1).toUpperCase(Locale.ENGLISH) + p.substring(1);
+        final String verbSet = "set";
+        final String verbGet = v instanceof Boolean ? "is" : "get";
+        try {
+            Assert.assertEquals(v, r.call(verbSet + property, v).call(verbGet + property).get());
+        } catch(Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
     }
 }

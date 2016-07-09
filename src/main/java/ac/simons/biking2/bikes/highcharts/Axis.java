@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,82 +32,83 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Axis {
+public final class Axis {
 
-    public static class Builder<PB> {
-	private final Sink<PB, Axis> sink;
-	
-	private Collection<String> categories;
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private Number min;
+        private final Sink<PB, Axis> sink;
 
-	private Number max;
+        private Collection<String> categories;
 
-	private Number tickInterval;
+        private Number min;
 
-	private Boolean endOnTick;
+        private Number max;
 
-	private Title title;	
-	
-	private List<PlotLine> plotLines;
-	
-	Builder(final Sink<PB, Axis> sink) {
-	    this.sink = sink;
-	}
-	
-	public Builder<PB> withCategories(final String... categories) {
-	    this.categories = Arrays.asList(categories);
-	    return this;
-	}
-	
-	public Builder<PB> withMin(final Number min) {
-	    this.min = min;
-	    return this;
-	}
-	
-	public Builder<PB> withMax(final Number max) {
-	    this.max = max;
-	    return this;
-	}
-	
-	public Builder<PB> withTickInterval(final Number tickInterval) {
-	    this.tickInterval = tickInterval;
-	    return this;
-	}
-	
-	public Builder<PB> enableEndOnTick() {
-	    this.endOnTick = true;
-	    return this;
-	}
-	
-	public Builder<PB> disableEndOnTick() {
-	    this.endOnTick = false;
-	    return this;
-	}
-	
-	public Title.Builder<Builder<PB>> title() {
-	    return new Title.Builder<>(title -> {
-		Builder.this.title = title;
-		return Builder.this;
-	    });
-	}
+        private Number tickInterval;
 
-	public PlotLine.Builder<Builder<PB>> withPlotLine() {
-	    return new PlotLine.Builder<>(plotLine -> {
-		if(Builder.this.plotLines == null) {
-		    Builder.this.plotLines = new ArrayList<>();
-		}
-		Builder.this.plotLines.add(plotLine);
-		return Builder.this;
-	    });
-	}
+        private Boolean endOnTick;
 
-	
-	public PB build() {
-	    return this.sink.setObject(
-		    new Axis(categories, endOnTick, max, min, tickInterval, title, plotLines)
-	    );
-	}
+        private Title title;
+
+        private List<PlotLine> plotLines;
+
+        Builder(final Sink<PB, Axis> sink) {
+            this.sink = sink;
+        }
+
+        public Builder<PB> withCategories(final String... categories) {
+            this.categories = Arrays.asList(categories);
+            return this;
+        }
+
+        public Builder<PB> withMin(final Number min) {
+            this.min = min;
+            return this;
+        }
+
+        public Builder<PB> withMax(final Number max) {
+            this.max = max;
+            return this;
+        }
+
+        public Builder<PB> withTickInterval(final Number tickInterval) {
+            this.tickInterval = tickInterval;
+            return this;
+        }
+
+        public Builder<PB> enableEndOnTick() {
+            this.endOnTick = true;
+            return this;
+        }
+
+        public Builder<PB> disableEndOnTick() {
+            this.endOnTick = false;
+            return this;
+        }
+
+        public Title.Builder<Builder<PB>> title() {
+            return new Title.Builder<>(t -> {
+                Builder.this.title = t;
+                return Builder.this;
+            });
+        }
+
+        public PlotLine.Builder<Builder<PB>> withPlotLine() {
+            return new PlotLine.Builder<>(plotLine -> {
+                if (Builder.this.plotLines == null) {
+                    Builder.this.plotLines = new ArrayList<>();
+                }
+                Builder.this.plotLines.add(plotLine);
+                return Builder.this;
+            });
+        }
+
+        public PB build() {
+            return this.sink.setObject(
+                    new Axis(categories, endOnTick, max, min, tickInterval, title, plotLines)
+            );
+        }
     }
 
     private final Collection<String> categories;
@@ -121,53 +122,53 @@ public class Axis {
     private final Number tickInterval;
 
     private final Title title;
-    
+
     private final Collection<PlotLine> plotLines;
 
     @JsonCreator
     Axis(
-	    @JsonProperty("categories") Collection<String> categories,
-	    @JsonProperty("endOnTick") Boolean endOnTick,
-	    @JsonProperty("max") Number max,
-	    @JsonProperty("min") Number min,
-	    @JsonProperty("tickInterval") Number tickInterval,
-	    @JsonProperty("title") Title title,
-	    @JsonProperty("plotLines") Collection<PlotLine> plotLines
+            @JsonProperty("categories") final Collection<String> categories,
+            @JsonProperty("endOnTick") final Boolean endOnTick,
+            @JsonProperty("max") final Number max,
+            @JsonProperty("min") final Number min,
+            @JsonProperty("tickInterval") final Number tickInterval,
+            @JsonProperty("title") final Title title,
+            @JsonProperty("plotLines") final Collection<PlotLine> plotLines
     ) {
-	this.categories = categories;
-	this.endOnTick = endOnTick;
-	this.max = max;
-	this.min = min;
-	this.tickInterval = tickInterval;
-	this.title = title;
-	this.plotLines = plotLines;
+        this.categories = categories;
+        this.endOnTick = endOnTick;
+        this.max = max;
+        this.min = min;
+        this.tickInterval = tickInterval;
+        this.title = title;
+        this.plotLines = plotLines;
     }
 
     public Collection<String> getCategories() {
-	return categories;
+        return categories;
     }
 
     public Number getMin() {
-	return min;
+        return min;
     }
 
     public Number getMax() {
-	return max;
+        return max;
     }
 
     public Number getTickInterval() {
-	return tickInterval;
+        return tickInterval;
     }
 
     public Boolean isEndOnTick() {
-	return endOnTick;
+        return endOnTick;
     }
 
     public Title getTitle() {
-	return title;
+        return title;
     }
 
     public Collection<PlotLine> getPlotLines() {
-	return plotLines;
+        return plotLines;
     }
 }

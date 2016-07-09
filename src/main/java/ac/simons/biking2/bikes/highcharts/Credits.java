@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,42 +28,43 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Credits {
+public final class Credits {
 
-    public static class Builder<PB> {
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private final Sink<PB, Credits> sink;
+        private final Sink<PB, Credits> sink;
 
-	private Boolean enabled = Boolean.TRUE;
+        private Boolean enabled = Boolean.TRUE;
 
-	Builder(Sink<PB, Credits> sink) {
-	    this.sink = sink;
-	}
+        Builder(final Sink<PB, Credits> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> enable() {
-	    this.enabled = true;
-	    return this;
-	}
-	
-	public Builder<PB> disable() {
-	    this.enabled = false;
-	    return this;
-	}
+        public Builder<PB> enable() {
+            this.enabled = true;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(new Credits(enabled));
-	}
+        public Builder<PB> disable() {
+            this.enabled = false;
+            return this;
+        }
+
+        public PB build() {
+            return this.sink.setObject(new Credits(enabled));
+        }
     }
-    
+
     /** Whether to show the credits text. Defaults to true. */
     private final Boolean enabled;
 
     @JsonCreator
-    Credits(@JsonProperty("enabled") Boolean enabled) {
-	this.enabled = enabled;
+    Credits(@JsonProperty("enabled") final Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Boolean isEnabled() {
-	return enabled;
+        return enabled;
     }
 }

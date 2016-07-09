@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,75 +29,75 @@ import static java.util.Optional.ofNullable;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Channel {
+public final class Channel {
     private String title;
-    
+
     private String link;
-    
+
     private String description;
-    
+
     @XmlJavaTypeAdapter(RSSDateTimeAdapter.class)
     private ZonedDateTime pubDate;
-   
+
     @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
     private List<Link> links;
 
     @XmlElement(name = "item")
     private List<Item> items;
-    
+
     public String getPrevious() {
-	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
-    }
-    
-    public String getNext() {
-	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();	
-    }
-    
-    public String getTitle() {
-	return title;
+        return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(l -> "previous".equalsIgnoreCase(l.getRel())).findFirst().orElse(new Link()).getHref();
     }
 
-    public void setTitle(String title) {
-	this.title = title;
+    public String getNext() {
+        return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(l -> "next".equalsIgnoreCase(l.getRel())).findFirst().orElse(new Link()).getHref();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
     public String getLink() {
-	return link;
+        return link;
     }
 
-    public void setLink(String link) {
-	this.link = link;
+    public void setLink(final String link) {
+        this.link = link;
     }
 
     public String getDescription() {
-	return description;
+        return description;
     }
 
-    public void setDescription(String description) {
-	this.description = description;
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
     public ZonedDateTime getPubDate() {
-	return pubDate;
+        return pubDate;
     }
 
-    public void setPubDate(ZonedDateTime pubDate) {
-	this.pubDate = pubDate;
+    public void setPubDate(final ZonedDateTime pubDate) {
+        this.pubDate = pubDate;
     }
 
     public List<Link> getLinks() {
-	return links;
+        return links;
     }
 
-    public void setLinks(List<Link> links) {
-	this.links = links;
+    public void setLinks(final List<Link> links) {
+        this.links = links;
     }
 
     public List<Item> getItems() {
-	return items;
+        return items;
     }
 
-    public void setItems(List<Item> items) {
-	this.items = items;
+    public void setItems(final List<Item> items) {
+        this.items = items;
     }
 }

@@ -59,100 +59,100 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(
-	controllers = TripsController.class,
-	excludeFilters = {
-	    @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
-	},
-	secure = false
+        controllers = TripsController.class,
+        excludeFilters = {
+            @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
+        },
+        secure = false
 )
 @AutoConfigureRestDocs(
-	outputDir = "target/generated-snippets",
-	uriHost = "biking.michael-simons.eu",
-	uriPort = 80
+        outputDir = "target/generated-snippets",
+        uriHost = "biking.michael-simons.eu",
+        uriPort = 80
 )
 public class TripsControllerTest {
-   
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private AssortedTripRepository repository;
-    
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
     public void testCreateTrip() throws Exception {
-	final AssortedTripEntity trip = Reflect
-		.on(new AssortedTripEntity(Calendar.getInstance(), BigDecimal.valueOf(23.42)))
-		.set("id", 42)
-		.get();
-	
-	final NewTripCmd newTripCmd1 = new NewTripCmd();
-	newTripCmd1.setCoveredOn(trip.getCoveredOn().getTime());
-	newTripCmd1.setDistance(23.42);	
-	final NewTripCmd newTripCmd2 = new NewTripCmd();
-	newTripCmd2.setCoveredOn(trip.getCoveredOn().getTime());
-	newTripCmd2.setDistance(666.0);	
-		 	
-	when(repository.save(any(AssortedTripEntity.class))).then(invocation -> {
-	    final AssortedTripEntity arg = invocation.getArgumentAt(0, AssortedTripEntity.class);
-	    return arg == null ? arg : Reflect.on(invocation.getArgumentAt(0, AssortedTripEntity.class)).set("id", 42).get();
-	});	
-	// Using hamcrest to check for properties of the passed object
-	when(repository.save(argThat(Matchers.<AssortedTripEntity>hasProperty("distance", is(BigDecimal.valueOf(666.0)))))).thenThrow(new DataIntegrityViolationException(""));
-	
-	// Empty content
-	mockMvc
-		.perform(post("/api/trips").contentType(APPLICATION_JSON))
-		.andExpect(status().isBadRequest())
-		.andExpect(MockMvcResultMatchers.content().string(""));
+        final AssortedTripEntity trip = Reflect
+                .on(new AssortedTripEntity(Calendar.getInstance(), BigDecimal.valueOf(23.42)))
+                .set("id", 42)
+                .get();
 
-	// Invalid content
-	mockMvc
-		.perform(
-			post("/api/trips")
-			.contentType(APPLICATION_JSON)
-			.content("{}")
-		)
-		.andExpect(status().isBadRequest())
-		.andExpect(MockMvcResultMatchers.content().string("Invalid arguments."));
+        final NewTripCmd newTripCmd1 = new NewTripCmd();
+        newTripCmd1.setCoveredOn(trip.getCoveredOn().getTime());
+        newTripCmd1.setDistance(23.42);
+        final NewTripCmd newTripCmd2 = new NewTripCmd();
+        newTripCmd2.setCoveredOn(trip.getCoveredOn().getTime());
+        newTripCmd2.setDistance(666.0);
 
-	final FieldDescriptor coveredOnDescriptor = fieldWithPath("coveredOn").description("The date of the trip");
-	final FieldDescriptor distanceDescriptor = fieldWithPath("distance").description("Distance covered on the trip");
-			
-	// Valid request
-	mockMvc
-		.perform(
-			post("/api/trips")
-			.contentType(APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(newTripCmd1))
-		)
-		.andExpect(status().isOk())
-		.andExpect(content().string(
-				objectMapper.writeValueAsString(trip))
-		)
-		.andDo(document("api/trips/post",
-				preprocessRequest(prettyPrint()),
-				preprocessResponse(prettyPrint()),	
-				requestFields(coveredOnDescriptor, distanceDescriptor),
-				responseFields(					
-					fieldWithPath("id").description("The unique Id of the trip"),
-					coveredOnDescriptor, distanceDescriptor
-				)
-			)
-		);
-	
-	// Valid request, duplicate content
-	mockMvc
-		.perform(
-			post("/api/trips")
-			.contentType(APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(newTripCmd2))
-		)
-		.andExpect(status().isConflict())
-		.andExpect(MockMvcResultMatchers.content().string(""));
+        when(repository.save(any(AssortedTripEntity.class))).then(invocation -> {
+            final AssortedTripEntity arg = invocation.getArgumentAt(0, AssortedTripEntity.class);
+            return arg == null ? arg : Reflect.on(invocation.getArgumentAt(0, AssortedTripEntity.class)).set("id", 42).get();
+        });
+        // Using hamcrest to check for properties of the passed object
+        when(repository.save(argThat(Matchers.<AssortedTripEntity>hasProperty("distance", is(BigDecimal.valueOf(666.0)))))).thenThrow(new DataIntegrityViolationException(""));
 
-	verify(repository, times(2)).save(any(AssortedTripEntity.class));
+        // Empty content
+        mockMvc
+                .perform(post("/api/trips").contentType(APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+
+        // Invalid content
+        mockMvc
+                .perform(
+                        post("/api/trips")
+                        .contentType(APPLICATION_JSON)
+                        .content("{}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string("Invalid arguments."));
+
+        final FieldDescriptor coveredOnDescriptor = fieldWithPath("coveredOn").description("The date of the trip");
+        final FieldDescriptor distanceDescriptor = fieldWithPath("distance").description("Distance covered on the trip");
+
+        // Valid request
+        mockMvc
+                .perform(
+                        post("/api/trips")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newTripCmd1))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                                objectMapper.writeValueAsString(trip))
+                )
+                .andDo(document("api/trips/post",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(coveredOnDescriptor, distanceDescriptor),
+                                responseFields(
+                                        fieldWithPath("id").description("The unique Id of the trip"),
+                                        coveredOnDescriptor, distanceDescriptor
+                                )
+                        )
+                );
+
+        // Valid request, duplicate content
+        mockMvc
+                .perform(
+                        post("/api/trips")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newTripCmd2))
+                )
+                .andExpect(status().isConflict())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+
+        verify(repository, times(2)).save(any(AssortedTripEntity.class));
     }
 }

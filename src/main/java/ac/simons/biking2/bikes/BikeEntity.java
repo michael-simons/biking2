@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,56 +68,59 @@ import static java.util.stream.Collectors.reducing;
 public class BikeEntity implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
-    
+
     @Embeddable
-    public static class Link {
-	@Column(name = "url", length = 512)
-	@NotBlank
-	@URL
-	private String url;
-	
-	@Column(name = "label", length = 255)
-	@NotBlank
-	private String label;
-	
-	protected Link() {	    
-	}
+    public static class Link implements Serializable {
 
-	public Link(String url, String label) {
-	    this.url = url;
-	    this.label = label;
-	}
+        private static final long serialVersionUID = 4086706843689307842L;
 
-	public String getUrl() {
-	    return url;
-	}
+        @Column(name = "url", length = 512)
+        @NotBlank
+        @URL
+        private String url;
 
-	public String getLabel() {
-	    return label;
-	}
+        @Column(name = "label", length = 255)
+        @NotBlank
+        private String label;
 
-	public void setLabel(String label) {
-	    this.label = label;
-	}
+        protected Link() {
+        }
 
-	@Override
-	public int hashCode() {
-	    int hash = 7;
-	    hash = 97 * hash + Objects.hashCode(this.url);
-	    return hash;
-	}
+        public Link(final String url, final String label) {
+            this.url = url;
+            this.label = label;
+        }
 
-	@Override
-	public boolean equals(Object obj) {
-	    if (obj == null) {
-		return false;
-	    }
-	    if (getClass() != obj.getClass()) {
-		return false;
-	    }
-	    final Link other = (Link) obj;
-	    return Objects.equals(this.url, other.url);
-	}
+        public String getUrl() {
+            return url;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(final String label) {
+            this.label = label;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 97 * hash + Objects.hashCode(this.url);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Link other = (Link) obj;
+            return Objects.equals(this.url, other.url);
+        }
     }
 
     @Id
@@ -139,7 +142,7 @@ public class BikeEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     @NotNull
     private Calendar boughtOn;
-    
+
     @Column(name = "decommissioned_on")
     @Temporal(TemporalType.DATE)
     private Calendar decommissionedOn;
@@ -154,7 +157,7 @@ public class BikeEntity implements Serializable {
     @NotNull
     @JsonIgnore
     private Calendar createdAt;
-    
+
     @Embedded
     private Link story;
 
@@ -167,67 +170,71 @@ public class BikeEntity implements Serializable {
     protected BikeEntity() {
     }
 
-    public BikeEntity(String name, final LocalDate boughtOn) {
-	this.name = name;
-	this.boughtOn = GregorianCalendar.from(boughtOn.atStartOfDay(ZoneId.systemDefault()));	
+    public BikeEntity(final String name, final LocalDate boughtOn) {
+        this.name = name;
+        this.boughtOn = GregorianCalendar.from(boughtOn.atStartOfDay(ZoneId.systemDefault()));
     }
 
     @PrePersist
     public void prePersist() {
-	if (this.createdAt == null) {
-	    this.createdAt = Calendar.getInstance();
-	}
+        if (this.createdAt == null) {
+            this.createdAt = Calendar.getInstance();
+        }
     }
 
     public Integer getId() {
-	return this.id;
+        return this.id;
     }
 
     public String getName() {
-	return this.name;
+        return this.name;
     }
 
     public String getColor() {
-	return this.color;
+        return this.color;
     }
 
-    public void setColor(String color) {
-	this.color = color;
+    public void setColor(final String color) {
+        this.color = color;
     }
 
     public Calendar getDecommissionedOn() {
-	return this.decommissionedOn;
+        return this.decommissionedOn;
     }
 
     /**
-     * Use a verb instead of a setter to show that the time part is explicitly stripped of
-     * @param decommissionedOn Date of decommission. If null nothing changes
+     * Use a verb instead of a setter to show that the time part is explicitly
+     * stripped of
+     *
+     * @param decommissionDate Date of decommission. If null nothing changes
      * @return true if the bike was decommissioned
      */
-    public boolean decommission(final LocalDate decommissionedOn) {
-	if(decommissionedOn != null) {
-	    this.decommissionedOn = GregorianCalendar.from(decommissionedOn.atStartOfDay(ZoneId.systemDefault()));	
-	}
-	return this.decommissionedOn != null;
+    public boolean decommission(final LocalDate decommissionDate) {
+        if (decommissionDate != null) {
+            this.decommissionedOn = GregorianCalendar.from(decommissionDate.atStartOfDay(ZoneId.systemDefault()));
+        }
+        return this.decommissionedOn != null;
     }
-    
+
     public Calendar getCreatedAt() {
-	return this.createdAt;
+        return this.createdAt;
     }
-  
+
     public synchronized MilageEntity addMilage(final LocalDate recordedOn, final double amount) {
-	if(this.milages.size() > 0) {
-	    final MilageEntity lastMilage = this.milages.get(this.milages.size() - 1);
-	    LocalDate nextValidDate = lastMilage.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusMonths(1);
-	    if(!recordedOn.equals(nextValidDate))
-		throw new IllegalArgumentException("Next valid date for milage is " + nextValidDate);
-	    if(lastMilage.getAmount().doubleValue() > amount)
-		throw new IllegalArgumentException("New amount must be greater than or equal " + lastMilage.getAmount().toPlainString());
-	}
-	final MilageEntity milage = new MilageEntity(this, recordedOn.withDayOfMonth(1), amount);
-	this.milages.add(milage);	
-	this.periods = null;	
-	return milage;
+        if (!this.milages.isEmpty()) {
+            final MilageEntity lastMilage = this.milages.get(this.milages.size() - 1);
+            LocalDate nextValidDate = lastMilage.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusMonths(1);
+            if (!recordedOn.equals(nextValidDate)) {
+                throw new IllegalArgumentException("Next valid date for milage is " + nextValidDate);
+            }
+            if (lastMilage.getAmount().doubleValue() > amount) {
+                throw new IllegalArgumentException("New amount must be greater than or equal " + lastMilage.getAmount().toPlainString());
+            }
+        }
+        final MilageEntity milage = new MilageEntity(this, recordedOn.withDayOfMonth(1), amount);
+        this.milages.add(milage);
+        this.periods = null;
+        return milage;
     }
 
     /**
@@ -238,19 +245,19 @@ public class BikeEntity implements Serializable {
      * @return
      */
     public synchronized Map<LocalDate, Integer> getPeriods() {
-	if (this.periods == null) {
-	    this.periods = IntStream.range(1, this.milages.size()).collect(TreeMap::new, (map, i) -> {
-		final MilageEntity left = milages.get(i - 1);
-		map.put(
-			left.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-			milages.get(i).getAmount().subtract(left.getAmount()).intValue()
-		);
-	    }, TreeMap::putAll);
-	}
+        if (this.periods == null) {
+            this.periods = IntStream.range(1, this.milages.size()).collect(TreeMap::new, (map, i) -> {
+                final MilageEntity left = milages.get(i - 1);
+                map.put(
+                        left.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                        milages.get(i).getAmount().subtract(left.getAmount()).intValue()
+                );
+            }, TreeMap::putAll);
+        }
 
-	return this.periods;
+        return this.periods;
     }
-        
+
     /**
      * Example of reducing a stream to a skalar value
      *
@@ -258,14 +265,14 @@ public class BikeEntity implements Serializable {
      */
     @JsonProperty
     public int getMilage() {
-	return this.getPeriods().values().parallelStream().collect(reducing(Integer::sum)).orElse(0);
+        return this.getPeriods().values().parallelStream().collect(reducing(Integer::sum)).orElse(0);
     }
-    
+
     @JsonProperty
-    public int getLastMilage() {	
-	return this.milages == null || this.milages.isEmpty() ? 0 : this.milages.get(this.milages.size()-1).getAmount().intValue();
+    public int getLastMilage() {
+        return this.milages == null || this.milages.isEmpty() ? 0 : this.milages.get(this.milages.size() - 1).getAmount().intValue();
     }
-    
+
     /**
      * An example of a nullable Optional
      *
@@ -273,136 +280,140 @@ public class BikeEntity implements Serializable {
      * @return
      */
     public int getMilageInPeriod(final LocalDate period) {
-	return Optional.ofNullable(this.getPeriods().get(period)).orElse(0);
+        return Optional.ofNullable(this.getPeriods().get(period)).orElse(0);
     }
-    
+
     /**
      * Returns an array with 12 elements, containing the milages for each month
      * of the given year
-     * 
+     *
      * @param year The year in which the milages should be computed
      * @return 12 values of milages for the month of the given year
      */
-    public int[] getMilagesInYear(int year) {	
-	final LocalDate january1st = LocalDate.of(year, Month.JANUARY, 1);
-	// The limit is necessary because the range contains 13 elements for 
-	// computing the correct periods, the last element is January 1st of year +1
-	return rangeClosed(0, 12).map(i -> getMilageInPeriod(january1st.plusMonths(i))).limit(12).toArray();
+    public int[] getMilagesInYear(final int year) {
+        final LocalDate january1st = LocalDate.of(year, Month.JANUARY, 1);
+        // The limit is necessary because the range contains 13 elements for
+        // computing the correct periods, the last element is January 1st of year +1
+        return rangeClosed(0, 12).map(i -> getMilageInPeriod(january1st.plusMonths(i))).limit(12).toArray();
     }
-    
+
     /**
      * Returns the sum of all milages in the given year
-     * 
+     *
      * @param year The year for which the sum of milages should be computed
-     * @return  The sum of all milages in the given year
+     * @return The sum of all milages in the given year
      */
-    public int getMilageInYear(int year) {	
-	return Arrays.stream(getMilagesInYear(year)).sum();
+    public int getMilageInYear(final int year) {
+        return Arrays.stream(getMilagesInYear(year)).sum();
     }
 
     public Calendar getBoughtOn() {
-	return boughtOn;
+        return boughtOn;
     }
 
     public boolean hasMilages() {
-	return this.milages != null && this.milages.size() > 0;
+        return !(this.milages == null || this.milages.isEmpty());
     }
 
     public Link getStory() {
-	return story;
+        return story;
     }
 
-    public void setStory(Link story) {
-	this.story = story;
+    public void setStory(final Link story) {
+        this.story = story;
     }
-    
+
     @Override
     public int hashCode() {
-	int hash = 7;
-	hash = 97 * hash + Objects.hashCode(this.name);
-	return hash;
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final BikeEntity other = (BikeEntity) obj;
-	if (!Objects.equals(this.name, other.name)) {
-	    return false;
-	}
-	return true;
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BikeEntity other = (BikeEntity) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
     }
-    
-    public static int comparePeriodsByValue(Map.Entry<LocalDate, Integer> period1, Map.Entry<LocalDate, Integer> period2) {
-	return Integer.compare(period1.getValue(), period2.getValue());
-    }
-    
-    public static class BikeByMilageInYearComparator implements Comparator<BikeEntity> {
-	private final int year;
 
-	public BikeByMilageInYearComparator(int year) {
-	    this.year = year;
-	}
-	
-	@Override
-	public int compare(BikeEntity o1, BikeEntity o2) {
-	    return Integer.compare(o1.getMilageInYear(year), o2.getMilageInYear(year));
-	}
+    public static int comparePeriodsByValue(final Map.Entry<LocalDate, Integer> period1, final Map.Entry<LocalDate, Integer> period2) {
+        return Integer.compare(period1.getValue(), period2.getValue());
     }
-    
+
+    public static class BikeByMilageInYearComparator implements Comparator<BikeEntity> {
+
+        private final int year;
+
+        public BikeByMilageInYearComparator(final int year) {
+            this.year = year;
+        }
+
+        @Override
+        public int compare(final BikeEntity o1, final BikeEntity o2) {
+            return Integer.compare(o1.getMilageInYear(year), o2.getMilageInYear(year));
+        }
+    }
+
     /**
-     * This method groups all periods of the given bikes by their period start and
-     * summarizes the value
-     * 
-     * @param bikes A likst of bikes whose milage periods should be grouped together
+     * This method groups all periods of the given bikes by their period start
+     * and summarizes the value
+     *
+     * @param bikes A likst of bikes whose milage periods should be grouped
+     * together
      * @param entryFilter An optional filter for the entries
      * @return A map of grouped periods
      */
-    public static Map<LocalDate, Integer> summarizePeriods(final List<BikeEntity> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {	
-	return bikes.stream()
-	    .filter(BikeEntity::hasMilages)
-	    .flatMap(bike -> bike.getPeriods().entrySet().stream())			
-	    .filter(Optional.ofNullable(entryFilter).orElse(entry -> true))
-	    .collect(
-		Collectors.groupingBy(
-		    Map.Entry::getKey,
-		    Collectors.reducing(0, Map.Entry::getValue, Integer::sum)
-		)
-	    );
-    }    
-    
+    public static Map<LocalDate, Integer> summarizePeriods(final List<BikeEntity> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {
+        return bikes.stream()
+                .filter(BikeEntity::hasMilages)
+                .flatMap(bike -> bike.getPeriods().entrySet().stream())
+                .filter(Optional.ofNullable(entryFilter).orElse(entry -> true))
+                .collect(
+                        Collectors.groupingBy(
+                                Map.Entry::getKey,
+                                Collectors.reducing(0, Map.Entry::getValue, Integer::sum)
+                        )
+                );
+    }
+
     /**
-     * Returns the worst performing period in the list of summarized (grouped) periods
-     * 
+     * Returns the worst performing period in the list of summarized (grouped)
+     * periods
+     *
      * @param summarizedPeriods A list of grouped periods
      * @return The worst (with the lowest value) period
      */
     public static AccumulatedPeriod getWorstPeriod(final Map<LocalDate, Integer> summarizedPeriods) {
-	 return summarizedPeriods
-			.entrySet()
-			.stream()
-			.min(BikeEntity::comparePeriodsByValue)
-			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
-			.orElse(null);
+        return summarizedPeriods
+                .entrySet()
+                .stream()
+                .min(BikeEntity::comparePeriodsByValue)
+                .map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+                .orElse(null);
     }
-    
+
     /**
-     * Returns the best performing period in the list of summarized (grouped) periods
-     * 
+     * Returns the best performing period in the list of summarized (grouped)
+     * periods
+     *
      * @param summarizedPeriods A list of grouped periods
      * @return The best (with the highest value) period
      */
     public static AccumulatedPeriod getBestPeriod(final Map<LocalDate, Integer> summarizedPeriods) {
-	 return summarizedPeriods
-			.entrySet()
-			.stream()
-			.max(BikeEntity::comparePeriodsByValue)
-			.map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
-			.orElse(null);
+        return summarizedPeriods
+                .entrySet()
+                .stream()
+                .max(BikeEntity::comparePeriodsByValue)
+                .map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+                .orElse(null);
     }
 }

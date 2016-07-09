@@ -27,10 +27,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
 
     @Query(value
-	    = "Select b from BikeEntity b "
-	    + " where b.decommissionedOn is null "
-	    + "    or b.decommissionedOn >= :cutoffDate "
-	    + " order by b.name asc "
+            = "Select b from BikeEntity b "
+            + " where b.decommissionedOn is null "
+            + "    or b.decommissionedOn >= :cutoffDate "
+            + " order by b.name asc "
     )
     List<BikeEntity> findActive(final Calendar cutoffDate);
 

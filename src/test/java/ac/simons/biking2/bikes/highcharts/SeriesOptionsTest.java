@@ -29,17 +29,17 @@ public class SeriesOptionsTest {
 
     @Test
     public void testBuilder() {
-	SeriesOptions seriesOptions = new SeriesOptions.Builder<>(object -> object).build();
-	assertThat(seriesOptions.isAnimation(), is(nullValue()));
+        SeriesOptions seriesOptions = new SeriesOptions.Builder<>(object -> object).build();
+        assertThat(seriesOptions.isAnimation(), is(nullValue()));
 
-	seriesOptions = new SeriesOptions.Builder<>(object -> object)
-		.enableAnimation()
-		.build();
-	assertThat(seriesOptions.isAnimation(), is(true));
+        seriesOptions = new SeriesOptions.Builder<>(object -> object)
+                .enableAnimation()
+                .build();
+        assertThat(seriesOptions.isAnimation(), is(true));
 
-	seriesOptions = new SeriesOptions.Builder<>(object -> object)
-		.disableAnimation()
-		.build();
-	assertThat(seriesOptions.isAnimation(), is(false));
+        seriesOptions = new SeriesOptions.Builder<>(object -> object)
+                .disableAnimation()
+                .build();
+        assertThat(seriesOptions.isAnimation(), is(false));
     }
 }

@@ -50,7 +50,7 @@ Interfaces::
 
 Intent/Responsibility::
 
-`bikes` provides the external API for reading, creating and manipulating bikes and their milages as well as computing statistics and generating charts.
+include::../main/java/ac/simons/biking2/bikes/package-info.java[tags=intent]
 
 Interfaces::
 
@@ -69,7 +69,7 @@ The `bikes` module and all of its dependencies are contained inside the Java pac
 
 Intent/Responsibility::
 
-`tracks` manages file uploads (TCX files), converts them to GPX files and computes their surrounding rectangle (envelope) using _GPSBabel_. It also provides the _oEmbed_ interface that resolves URLS to embeddable tracks.
+include::../main/java/ac/simons/biking2/tracks/package-info.java[tags=intent]
 
 Interfaces::
 
@@ -89,7 +89,7 @@ The `tracks` module and all of its dependencies are contained inside the Java pa
 
 Intent/Responsibility::
 
-`trips` manages distances that have been covered on single days without relationships to bikes.
+include::../main/java/ac/simons/biking2/trips/package-info.java[tags=intent]
 
 Interfaces::
 
@@ -127,7 +127,7 @@ The `locations` module and all of its dependencies are contained inside the Java
 
 Intent/Responsibility::
 
-`bikingPictures` is used for regularly checking a RSS feed from _Daily Fratze_ collecting new images and storing them locally. It also provides an API for getting all collected images.
+include::../main/java/ac/simons/biking2/bikingPictures/package-info.java[tags=intent]
 
 Interfaces::
 
@@ -147,7 +147,7 @@ The `bikingPictures` module and all of its dependencies are contained inside the
 
 Intent/Responsibility::
 
-`galleryPictures` manages file uploads (images). It stores them locally and provides an RSS interface for getting metadata and image data.
+include::../main/java/ac/simons/biking2/galleryPictures/package-info.java[tags=intent]
 
 Interfaces::
 

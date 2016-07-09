@@ -48,14 +48,14 @@ public class BikingPictureRepositoryTest {
     @Test
     @Rollback(true)
     public void getMaxPubDate_shouldWork() {
-	ZonedDateTime value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
-	ZonedDateTime expected = of(2003, 9, 21, 14, 13, 00, 00, value.getZone());
-	Assert.assertThat(value, is(equalTo(expected)));
+        ZonedDateTime value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
+        ZonedDateTime expected = of(2003, 9, 21, 14, 13, 00, 00, value.getZone());
+        Assert.assertThat(value, is(equalTo(expected)));
 
-	bikingPictureRepository.deleteAll();
+        bikingPictureRepository.deleteAll();
 
-	value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
-	expected = of(2005, 8, 7, 18, 30, 42, 00, value.getZone());
-	Assert.assertThat(value, is(equalTo(expected)));
+        value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
+        expected = of(2005, 8, 7, 18, 30, 42, 00, value.getZone());
+        Assert.assertThat(value, is(equalTo(expected)));
     }
 }

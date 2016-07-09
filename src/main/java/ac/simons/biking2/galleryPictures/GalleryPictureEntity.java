@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ class GalleryPictureEntity implements Serializable {
     @NotBlank
     @Size(max = 2048)
     private String description;
-    
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
@@ -70,65 +70,65 @@ class GalleryPictureEntity implements Serializable {
     protected GalleryPictureEntity() {
     }
 
-    public GalleryPictureEntity(Calendar takenOn, String filename) {
-	this.takenOn = takenOn;
-	this.filename = filename;
+    GalleryPictureEntity(final Calendar takenOn, final String filename) {
+        this.takenOn = takenOn;
+        this.filename = filename;
     }
-    
+
     @PrePersist
     public void prePersist() {
-	if (this.createdAt == null) {
-	    this.createdAt = Calendar.getInstance();
-	}
+        if (this.createdAt == null) {
+            this.createdAt = Calendar.getInstance();
+        }
     }
 
     public Integer getId() {
-	return id;
+        return id;
     }
 
     public Calendar getTakenOn() {
-	return takenOn;
+        return takenOn;
     }
 
     public String getFilename() {
-	return filename;
+        return filename;
     }
 
     public String getDescription() {
-	return description;
+        return description;
     }
 
-    public void setDescription(String description) {
-	this.description = description;
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
     public Calendar getCreatedAt() {
-	return createdAt;
+        return createdAt;
     }
 
     @Override
     public int hashCode() {
-	int hash = 3;
-	hash = 23 * hash + Objects.hashCode(this.takenOn);
-	hash = 23 * hash + Objects.hashCode(this.filename);
-	return hash;
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.takenOn);
+        hash = 23 * hash + Objects.hashCode(this.filename);
+        return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final GalleryPictureEntity other = (GalleryPictureEntity) obj;
-	if (!Objects.equals(this.takenOn, other.takenOn)) {
-	    return false;
-	}
-	if (!Objects.equals(this.filename, other.filename)) {
-	    return false;
-	}
-	return true;
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GalleryPictureEntity other = (GalleryPictureEntity) obj;
+        if (!Objects.equals(this.takenOn, other.takenOn)) {
+            return false;
+        }
+        if (!Objects.equals(this.filename, other.filename)) {
+            return false;
+        }
+        return true;
     }
 }

@@ -42,78 +42,78 @@ import static org.mockito.Mockito.stub;
  */
 public class SummaryControllerTest {
     private final AssortedTripRepository assortedTripRepository;
-    
+
     public SummaryControllerTest() {
-	this.assortedTripRepository = mock(AssortedTripRepository.class);
-	stub(this.assortedTripRepository.getTotalDistance()).toReturn(BigDecimal.TEN);
+        this.assortedTripRepository = mock(AssortedTripRepository.class);
+        stub(this.assortedTripRepository.getTotalDistance()).toReturn(BigDecimal.TEN);
     }
-    
+
     @Test
     public void testGetSummary() {
-	final Calendar now = Calendar.getInstance();
+        final Calendar now = Calendar.getInstance();
 
-	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findAll()).toReturn(ChartsControllerTest.generateTestData());
-	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+        final BikeRepository bikeRepository = mock(BikeRepository.class);
+        stub(bikeRepository.findAll()).toReturn(ChartsControllerTest.generateTestData());
+        stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
 
-	final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
+        final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
 
-	final Summary summary = controller.getSummary();
+        final Summary summary = controller.getSummary();
 
-	assertThat(summary.getDateOfFirstRecord(), is(equalTo(now)));
-	assertThat(summary.getTotal(), is(equalTo(345.0)));
+        assertThat(summary.getDateOfFirstRecord(), is(equalTo(now)));
+        assertThat(summary.getTotal(), is(equalTo(345.0)));
     }
-    
+
     @Test
     public void testGetSummaryMinMaxPeriods() {
-	final Calendar now = Calendar.getInstance();	
-	final List<BikeEntity> bikes = new ArrayList<>();	
-	// A bike with no milage should not lead to an error
-	bikes.add(new BikeEntity("no-milage", now()));
-	bikes.add(new BikeEntity("some-milage", now())
-		    .addMilage(LocalDate.of(2009,1,1), 10).getBike()
-		    .addMilage(LocalDate.of(2009,2,1), 30).getBike()		
-		    .addMilage(LocalDate.of(2009,3,1), 33).getBike()		
-	);
-	bikes.add(new BikeEntity("more-milage", now())
-		    .addMilage(LocalDate.of(2009,1,1),  0).getBike()
-		    .addMilage(LocalDate.of(2009,2,1), 30).getBike()		
-		    .addMilage(LocalDate.of(2009,3,1), 70).getBike()						    	
-	);
-	
-	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findAll()).toReturn(bikes);
-	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+        final Calendar now = Calendar.getInstance();
+        final List<BikeEntity> bikes = new ArrayList<>();
+        // A bike with no milage should not lead to an error
+        bikes.add(new BikeEntity("no-milage", now()));
+        bikes.add(new BikeEntity("some-milage", now())
+                    .addMilage(LocalDate.of(2009,1,1), 10).getBike()
+                    .addMilage(LocalDate.of(2009,2,1), 30).getBike()
+                    .addMilage(LocalDate.of(2009,3,1), 33).getBike()
+        );
+        bikes.add(new BikeEntity("more-milage", now())
+                    .addMilage(LocalDate.of(2009,1,1),  0).getBike()
+                    .addMilage(LocalDate.of(2009,2,1), 30).getBike()
+                    .addMilage(LocalDate.of(2009,3,1), 70).getBike()
+        );
 
-	final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
-	final Summary summary = controller.getSummary();
-	assertNotNull(summary.getWorstPeriod());	
-	assertThat(summary.getWorstPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,2,1).atStartOfDay(ZoneId.systemDefault())))));
-	assertThat(summary.getWorstPeriod().getValue(), is(equalTo(43)));
-	
-	assertNotNull(summary.getBestPeriod());	
-	assertThat(summary.getBestPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,1,1).atStartOfDay(ZoneId.systemDefault())))));
-	assertThat(summary.getBestPeriod().getValue(), is(equalTo(50)));
-	
-	assertThat(summary.getAverage(), is(equalTo(93.0/2)));
+        final BikeRepository bikeRepository = mock(BikeRepository.class);
+        stub(bikeRepository.findAll()).toReturn(bikes);
+        stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+
+        final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
+        final Summary summary = controller.getSummary();
+        assertNotNull(summary.getWorstPeriod());
+        assertThat(summary.getWorstPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,2,1).atStartOfDay(ZoneId.systemDefault())))));
+        assertThat(summary.getWorstPeriod().getValue(), is(equalTo(43)));
+
+        assertNotNull(summary.getBestPeriod());
+        assertThat(summary.getBestPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,1,1).atStartOfDay(ZoneId.systemDefault())))));
+        assertThat(summary.getBestPeriod().getValue(), is(equalTo(50)));
+
+        assertThat(summary.getAverage(), is(equalTo(93.0/2)));
     }
-    
+
     @Test
     public void testGetSummaryMinMaxPeriodsWithoutPeriods() {
-	final Calendar now = Calendar.getInstance();	
-	final List<BikeEntity> bikes = new ArrayList<>();	
-	bikes.add(new BikeEntity("no-milage", now()));
-	
-	final BikeRepository bikeRepository = mock(BikeRepository.class);
-	stub(bikeRepository.findAll()).toReturn(bikes);
-	stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
-	
-	final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
-	final Summary summary = controller.getSummary();
-	assertNull(summary.getWorstPeriod());	
-	assertNull(summary.getBestPeriod());	
-	
-	assertThat(summary.getAverage(), is(equalTo(0.0)));
+        final Calendar now = Calendar.getInstance();
+        final List<BikeEntity> bikes = new ArrayList<>();
+        bikes.add(new BikeEntity("no-milage", now()));
+
+        final BikeRepository bikeRepository = mock(BikeRepository.class);
+        stub(bikeRepository.findAll()).toReturn(bikes);
+        stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+
+        final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
+        final Summary summary = controller.getSummary();
+        assertNull(summary.getWorstPeriod());
+        assertNull(summary.getBestPeriod());
+
+        assertThat(summary.getAverage(), is(equalTo(0.0)));
     }
 
 }

@@ -42,6 +42,6 @@ The few constraints on this project are reflected in the final solution. This se
 |===
 |     | Conventions                                     | Background and / or motivation
 | C1  | Architecture documentation                      | Structure based on the english arc42-Template in version 6.5
-| C2  | Coding conventions                              | Standard Oracle Java Coding Conventions, tabs instead of spaces. Not enforced / checked but semi-automatic enforced using NetBeans formatting templates.
+| C2  | Coding conventions                              | The project uses the http://www.oracle.com/technetwork/java/codeconvtoc-136057.html[Code Conventions for the Java TM Programming Language]. The conventions are enforced through Checkstyle.
 | C3  | Language                                        | English. The project and the corresponding blog targets an international audience, so English should be used throughout the whole project.
 |===

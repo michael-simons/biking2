@@ -63,30 +63,30 @@ public class BikeRepositoryTest {
 
     @Rule
     public final ExpectedException expectedException = none();
-    
-    @Test    
+
+    @Test
     @Transactional
     @Rollback
     public void nameShouldBeUnique() {
-	// There's a bike1 in the test data
-	this.expectedException.expect(DataIntegrityViolationException.class);
-	this.bikeRepository.save(new BikeEntity("bike1", LocalDate.now()));		
+        // There's a bike1 in the test data
+        this.expectedException.expect(DataIntegrityViolationException.class);
+        this.bikeRepository.save(new BikeEntity("bike1", LocalDate.now()));
     }
-    
+
     @Test
     public void testFindActive() {
-	final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);
-	final List<BikeEntity> activeBikes = this.bikeRepository.findActive(GregorianCalendar.from(cutOffDate.atStartOfDay(ZoneId.systemDefault())));
+        final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);
+        final List<BikeEntity> activeBikes = this.bikeRepository.findActive(GregorianCalendar.from(cutOffDate.atStartOfDay(ZoneId.systemDefault())));
 
-	assertThat(activeBikes.size(), is(equalTo(3)));
-	assertThat(activeBikes.get(0).getName(), is(equalTo("bike1")));
-	assertThat(activeBikes.get(1).getName(), is(equalTo("bike3")));
+        assertThat(activeBikes.size(), is(equalTo(3)));
+        assertThat(activeBikes.get(0).getName(), is(equalTo("bike1")));
+        assertThat(activeBikes.get(1).getName(), is(equalTo("bike3")));
     }
 
     @Test
     public void testFindByName() {
-	final BikeEntity bike = this.bikeRepository.findByName("bike1");
-	assertThat(bike, is(notNullValue()));
+        final BikeEntity bike = this.bikeRepository.findByName("bike1");
+        assertThat(bike, is(notNullValue()));
     }
 
     /**
@@ -98,24 +98,24 @@ public class BikeRepositoryTest {
      */
     @Test
     public void testAddMilage() throws SQLException {
-	final BikeEntity bike = this.bikeRepository.findByName("testAddMilageBike");
+        final BikeEntity bike = this.bikeRepository.findByName("testAddMilageBike");
 
-	bike.addMilage(LocalDate.now(), 23).getBike()
-		.addMilage(LocalDate.now().plusMonths(1).withDayOfMonth(1), 42);
-	this.bikeRepository.save(bike);
+        bike.addMilage(LocalDate.now(), 23).getBike()
+                .addMilage(LocalDate.now().plusMonths(1).withDayOfMonth(1), 42);
+        this.bikeRepository.save(bike);
 
-	try (
-		final Connection connection = this.dataSource.getConnection();
-		final PreparedStatement statement = connection.prepareStatement("Select count(*) as cnt from milages where bike_id = " + bike.getId());
-		final ResultSet resultSet = statement.executeQuery();) {
-	    resultSet.next();
-	    assertThat(resultSet.getInt(1), is(equalTo(2)));
-	}
+        try (
+                final Connection connection = this.dataSource.getConnection();
+                final PreparedStatement statement = connection.prepareStatement("Select count(*) as cnt from milages where bike_id = " + bike.getId());
+                final ResultSet resultSet = statement.executeQuery();) {
+            resultSet.next();
+            assertThat(resultSet.getInt(1), is(equalTo(2)));
+        }
     }
 
     @Test
     public void testGetDateOfFirstRecord() {
-	final Calendar dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();
-	assertThat(LocalDate.from(dateOfFirstRecord.toInstant().atZone(ZoneId.systemDefault())), is(equalTo(LocalDate.of(2012, Month.JANUARY, 1))));
+        final Calendar dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();
+        assertThat(LocalDate.from(dateOfFirstRecord.toInstant().atZone(ZoneId.systemDefault())), is(equalTo(LocalDate.of(2012, Month.JANUARY, 1))));
     }
 }

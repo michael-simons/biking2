@@ -28,14 +28,14 @@ public class BikeCmdTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	BikeCmd bean = new BikeCmd();
+        BikeCmd bean = new BikeCmd();
 
-	bean.setBoughtOn(new Date());
-	Assert.assertEquals(LocalDate.now(), bean.boughtOnAsLocalDate());
-	Assert.assertNull(bean.decommissionedOnAsLocalDate());
-	Calendar hlp = Calendar.getInstance();
-	hlp.add(Calendar.DAY_OF_MONTH, 1);
-	bean.setDecommissionedOn(hlp.getTime());
-	Assert.assertEquals(LocalDate.now().plusDays(1), bean.decommissionedOnAsLocalDate());
+        bean.setBoughtOn(new Date());
+        Assert.assertEquals(LocalDate.now(), bean.boughtOnAsLocalDate());
+        Assert.assertNull(bean.decommissionedOnAsLocalDate());
+        Calendar hlp = Calendar.getInstance();
+        hlp.add(Calendar.DAY_OF_MONTH, 1);
+        bean.setDecommissionedOn(hlp.getTime());
+        Assert.assertEquals(LocalDate.now().plusDays(1), bean.decommissionedOnAsLocalDate());
     }
 }

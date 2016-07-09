@@ -62,60 +62,60 @@ public class LocationEntity implements Serializable {
     protected LocationEntity() {
     }
 
-    public LocationEntity(BigDecimal latitude, BigDecimal longitude, Calendar createdAt) {
-	this.latitude = latitude;
-	this.longitude = longitude;
-	this.createdAt = createdAt;
+    public LocationEntity(final BigDecimal latitude, final BigDecimal longitude, final Calendar createdAt) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.createdAt = createdAt;
     }
 
     public Integer getId() {
-	return this.id;
+        return this.id;
     }
 
     public Calendar getCreatedAt() {
-	return this.createdAt;
-    }  
+        return this.createdAt;
+    }
 
     public BigDecimal getLatitude() {
-	return this.latitude;
+        return this.latitude;
     }
 
     public BigDecimal getLongitude() {
-	return this.longitude;
+        return this.longitude;
     }
 
     public String getDescription() {
-	return this.description;
+        return this.description;
     }
 
-    public void setDescription(String description) {
-	this.description = description;
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
     @Override
     public int hashCode() {
-	int hash = 7;
-	hash = 79 * hash + Objects.hashCode(this.latitude);
-	hash = 79 * hash + Objects.hashCode(this.longitude);
-	hash = 79 * hash + Objects.hashCode(this.createdAt);
-	return hash;
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.latitude);
+        hash = 79 * hash + Objects.hashCode(this.longitude);
+        hash = 79 * hash + Objects.hashCode(this.createdAt);
+        return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final LocationEntity other = (LocationEntity) obj;
-	if (!Objects.equals(this.latitude, other.latitude)) {
-	    return false;
-	}
-	if (!Objects.equals(this.longitude, other.longitude)) {
-	    return false;
-	}
-	return Objects.equals(this.createdAt, other.createdAt);
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LocationEntity other = (LocationEntity) obj;
+        if (!Objects.equals(this.latitude, other.latitude)) {
+            return false;
+        }
+        if (!Objects.equals(this.longitude, other.longitude)) {
+            return false;
+        }
+        return Objects.equals(this.createdAt, other.createdAt);
     }
 }

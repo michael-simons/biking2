@@ -28,39 +28,39 @@ public class TrackEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Calendar now = Calendar.getInstance();
-	
-	final TrackEntity bean = new TrackEntity("name", now);
-	Assert.assertNull(bean.getId());
-	Assert.assertEquals("name", bean.getName());
-	Assert.assertEquals(now, bean.getCoveredOn());
-	bean.setDescription("description");
-	Assert.assertEquals("description", bean.getDescription());
-	bean.setMinlat( BigDecimal.ZERO);
-	Assert.assertEquals( BigDecimal.ZERO, bean.getMinlat());
-	bean.setMinlon(BigDecimal.ONE);
-	Assert.assertEquals(BigDecimal.ONE, bean.getMinlon());
-	bean.setMaxlat(BigDecimal.ZERO.add(BigDecimal.ZERO));
-	Assert.assertEquals(BigDecimal.ZERO.add(BigDecimal.ZERO), bean.getMaxlat());
-	bean.setMaxlon(BigDecimal.ZERO.add(BigDecimal.ZERO).add(BigDecimal.ZERO));
-	Assert.assertEquals(BigDecimal.ZERO.add(BigDecimal.ZERO).add(BigDecimal.ZERO), bean.getMaxlon());
-	bean.setType(Type.running);
-	Assert.assertEquals(Type.running, bean.getType());
-	Assert.assertEquals("", bean.getPrettyId());
-	
-	final TrackEntity t1 = new TrackEntity("t1", now);
-	final TrackEntity otherT1 = new TrackEntity("t1", now);
-	Assert.assertEquals(t1, otherT1);
-	Assert.assertEquals(t1.hashCode(), otherT1.hashCode());
-	Assert.assertNotEquals(t1, "something else");
-	Assert.assertNotEquals(t1, null);
-	
-	final TrackEntity t2 = new TrackEntity("t2", now);
-	Assert.assertNotEquals(t1, t2);
-	
-	final Calendar then = Calendar.getInstance();
-	then.add(Calendar.YEAR, 1);
-	final TrackEntity t3 = new TrackEntity("t1", then);
-	Assert.assertNotEquals(t1, t3);
+        final Calendar now = Calendar.getInstance();
+
+        final TrackEntity bean = new TrackEntity("name", now);
+        Assert.assertNull(bean.getId());
+        Assert.assertEquals("name", bean.getName());
+        Assert.assertEquals(now, bean.getCoveredOn());
+        bean.setDescription("description");
+        Assert.assertEquals("description", bean.getDescription());
+        bean.setMinlat( BigDecimal.ZERO);
+        Assert.assertEquals( BigDecimal.ZERO, bean.getMinlat());
+        bean.setMinlon(BigDecimal.ONE);
+        Assert.assertEquals(BigDecimal.ONE, bean.getMinlon());
+        bean.setMaxlat(BigDecimal.ZERO.add(BigDecimal.ZERO));
+        Assert.assertEquals(BigDecimal.ZERO.add(BigDecimal.ZERO), bean.getMaxlat());
+        bean.setMaxlon(BigDecimal.ZERO.add(BigDecimal.ZERO).add(BigDecimal.ZERO));
+        Assert.assertEquals(BigDecimal.ZERO.add(BigDecimal.ZERO).add(BigDecimal.ZERO), bean.getMaxlon());
+        bean.setType(Type.running);
+        Assert.assertEquals(Type.running, bean.getType());
+        Assert.assertEquals("", bean.getPrettyId());
+
+        final TrackEntity t1 = new TrackEntity("t1", now);
+        final TrackEntity otherT1 = new TrackEntity("t1", now);
+        Assert.assertEquals(t1, otherT1);
+        Assert.assertEquals(t1.hashCode(), otherT1.hashCode());
+        Assert.assertNotEquals(t1, "something else");
+        Assert.assertNotEquals(t1, null);
+
+        final TrackEntity t2 = new TrackEntity("t2", now);
+        Assert.assertNotEquals(t1, t2);
+
+        final Calendar then = Calendar.getInstance();
+        then.add(Calendar.YEAR, 1);
+        final TrackEntity t3 = new TrackEntity("t1", then);
+        Assert.assertNotEquals(t1, t3);
     }
 }

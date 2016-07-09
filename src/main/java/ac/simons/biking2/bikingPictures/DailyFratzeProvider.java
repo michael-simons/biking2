@@ -31,37 +31,37 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConditionalOnExpression(value = "environment['biking2.dailyfratze-access-token'] != null && !environment['biking2.dailyfratze-access-token'].isEmpty()")
-class DailyFratzeProvider {    
-    private final String accessToken;    
+class DailyFratzeProvider {
+    private final String accessToken;
     private final String imageUrlFormat;
-        
-    public DailyFratzeProvider(final @Value("${biking2.dailyfratze-access-token}") String accessToken) {
-	this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
+
+    DailyFratzeProvider(@Value("${biking2.dailyfratze-access-token}") final String accessToken) {
+        this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
     }
-    
+
     DailyFratzeProvider(final String accessToken, final String imageUrlFormat) {
-	this.accessToken = accessToken;
-	this.imageUrlFormat = imageUrlFormat;
+        this.accessToken = accessToken;
+        this.imageUrlFormat = imageUrlFormat;
     }
-    
+
     public URLConnection getRSSConnection(final String url) {
-	URLConnection rv = null;
-	try {
-	    rv = new URL(Optional.ofNullable(url).orElse("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d")).openConnection();	    
-	} catch (IOException ex) {	    
-	    Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return rv;
+        URLConnection rv = null;
+        try {
+            rv = new URL(Optional.ofNullable(url).orElse("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d")).openConnection();
+        } catch (IOException ex) {
+            Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rv;
     }
-    
+
     public URLConnection getImageConnection(final Integer id) {
-	URLConnection rv = null;
-	try {	    		
-	    rv = new URL(String.format(imageUrlFormat, "s", id)).openConnection();	    
-	    rv.setRequestProperty ("Authorization", String.format("Bearer %s", accessToken));
-	} catch (IOException ex) {	    
-	    Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return rv;
+        URLConnection rv = null;
+        try {
+            rv = new URL(String.format(imageUrlFormat, "s", id)).openConnection();
+            rv.setRequestProperty("Authorization", String.format("Bearer %s", accessToken));
+        } catch (IOException ex) {
+            Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rv;
     }
 }
