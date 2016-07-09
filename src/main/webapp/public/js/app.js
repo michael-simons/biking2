@@ -34,6 +34,7 @@ Array.prototype.randomize = function() {
 var biking2 = angular
 	.module('biking2', [
 	    'ngRoute', 
+            'ngSanitize',
 	    'angularFileUpload', 
 	    'ui.bootstrap', 
 	    'track-map-ng',	    
