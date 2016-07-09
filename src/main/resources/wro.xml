@@ -55,7 +55,8 @@ limitations under the License.
 	<js minimize="false">/webjars/highcharts/@highcharts.version@/highcharts-more.js</js>
 	<js minimize="false">/webjars/sockjs-client/@sockjs-client.version@/sockjs.min.js</js>
 	<js minimize="false">/webjars/stomp-websocket/@stomp-websocket.version@/stomp.min.js</js>
-		
+	
+        <js>/js/ansi_up.js</js>	
 	<js>/js/app.js</js>
 	<js>/js/controllers.js</js>
 	<js>/js/directives.js</js>
