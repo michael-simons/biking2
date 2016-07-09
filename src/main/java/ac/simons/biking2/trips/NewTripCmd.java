@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  * @author Michael J. Simons, 2015-06-09
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NewTripCmd implements Serializable {
+public final class NewTripCmd implements Serializable {
 
     private static final long serialVersionUID = 2711961034108614560L;
 

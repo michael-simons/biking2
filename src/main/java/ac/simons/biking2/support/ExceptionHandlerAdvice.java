@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * @author Michael J. Simons, 2015-11-16
  */
 @ControllerAdvice
-public class ExceptionHandlerAdvice {
+public final class ExceptionHandlerAdvice {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(final IllegalArgumentException e) {

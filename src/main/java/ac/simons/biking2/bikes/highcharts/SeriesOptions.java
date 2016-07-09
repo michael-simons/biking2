@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SeriesOptions {
+public final class SeriesOptions {
 
-    public static class Builder<PB> {
+    public static final class Builder<PB> {
 
         private final Sink<PB, SeriesOptions> sink;
 

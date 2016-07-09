@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Link {
+public final class Link {
 
     @XmlAttribute
     private String rel;

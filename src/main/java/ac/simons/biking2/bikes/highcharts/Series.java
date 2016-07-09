@@ -29,9 +29,9 @@ import java.util.Collection;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Series<T> {
+public final class Series<T> {
 
-    public static class Builder<PB, T> {
+    public static final class Builder<PB, T> {
 
         private final Sink<PB, Series> sink;
 
@@ -133,14 +133,14 @@ public class Series<T> {
     private final Marker marker;
 
     public Series(
-            final String color, 
-            final Collection<T> data, 
-            final String name, 
-            final String type, 
-            final Integer zIndex, 
-            final Double fillOpacity, 
-            final Double lineWidth, 
-            final String linkedTo, 
+            final String color,
+            final Collection<T> data,
+            final String name,
+            final String type,
+            final Integer zIndex,
+            final Double fillOpacity,
+            final Double lineWidth,
+            final String linkedTo,
             final Marker marker
     ) {
         this.color = color;

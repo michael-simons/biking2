@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 /**
  * @author Michael J. Simons, 2014-02-17
  */
-public class RSSDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
+public final class RSSDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
 

@@ -26,7 +26,7 @@ import java.util.GregorianCalendar;
  *
  * @author Michael J. Simons, 2014-05-05
  */
-public class AccumulatedPeriod {
+public final class AccumulatedPeriod {
     private final Calendar startOfPeriod;
 
     private final int value;

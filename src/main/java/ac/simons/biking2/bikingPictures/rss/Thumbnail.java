@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Thumbnail {
+public final class Thumbnail {
 
     @XmlAttribute
     private String url;

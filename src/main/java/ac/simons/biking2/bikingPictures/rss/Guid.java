@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Guid {
+public final class Guid {
 
     @XmlAttribute
     private Boolean isPermaLink;

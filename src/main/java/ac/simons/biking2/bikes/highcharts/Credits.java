@@ -28,9 +28,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Credits {
+public final class Credits {
 
-    public static class Builder<PB> {
+    public static final class Builder<PB> {
 
         private final Sink<PB, Credits> sink;
 

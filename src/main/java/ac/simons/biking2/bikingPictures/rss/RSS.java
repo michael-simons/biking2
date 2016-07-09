@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RSS {
+public final class RSS {
     @XmlAttribute
     private final String version = "2.0";
 

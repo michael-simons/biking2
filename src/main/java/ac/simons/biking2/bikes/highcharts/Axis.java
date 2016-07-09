@@ -32,9 +32,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Axis {
+public final class Axis {
 
-    public static class Builder<PB> {
+    public static final class Builder<PB> {
         private final Sink<PB, Axis> sink;
 
         private Collection<String> categories;

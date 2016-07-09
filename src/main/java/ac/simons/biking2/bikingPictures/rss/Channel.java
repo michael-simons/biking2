@@ -29,7 +29,7 @@ import static java.util.Optional.ofNullable;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Channel {
+public final class Channel {
     private String title;
 
     private String link;

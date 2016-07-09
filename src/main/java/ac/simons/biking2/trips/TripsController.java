@@ -36,11 +36,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @RestController
 @RequestMapping("/api/trips")
-public class TripsController {
+class TripsController {
 
     private final AssortedTripRepository assortedTripRepository;
 
-    public TripsController(final AssortedTripRepository assortedTripRepository) {
+    TripsController(final AssortedTripRepository assortedTripRepository) {
         this.assortedTripRepository = assortedTripRepository;
     }
 
