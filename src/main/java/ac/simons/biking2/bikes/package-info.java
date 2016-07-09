@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * `bikes` provides the external API for reading, creating and manipulating
- * bikes and their milages as well as computing statistics and generating charts.
+/** 
+ <!-- tag::intent[] -->
+   `bikes` provides the external API for reading, creating and manipulating
+   bikes and their milages as well as computing statistics and generating charts.
+ <!-- end::intent[] -->
  */
 package ac.simons.biking2.bikes;

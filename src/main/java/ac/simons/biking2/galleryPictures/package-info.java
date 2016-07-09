@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 /**
- * `galleryPictures` manages file uploads (images). It stores them locally and 
- * provides an RSS interface for getting metadata and image data.
+ <!-- tag::intent[] -->
+   `galleryPictures` manages file uploads (images). It stores them locally and 
+   provides an RSS interface for getting metadata and image data.
+ <!-- end::intent[] -->
  */
 package ac.simons.biking2.galleryPictures;

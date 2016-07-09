@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 /**
- * `bikingPictures` is used for regularly checking a RSS feed from Daily Fratze 
- * collecting new images and storing them locally. 
- * It also provides an API for getting all collected images.
+ <!-- tag::intent[] -->
+   `bikingPictures` is used for regularly checking a RSS feed from Daily Fratze 
+   collecting new images and storing them locally. 
+   It also provides an API for getting all collected images.
+ <!-- end::intent[] -->
  */
 package ac.simons.biking2.bikingPictures;

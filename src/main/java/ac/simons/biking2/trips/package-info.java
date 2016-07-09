@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 /**
- * `trips` manages distances that have been covered on single days without 
- * relationships to bikes.
+ <!-- tag::intent[] -->
+   `trips` manages distances that have been covered on single days without 
+   relationships to bikes.
+ <!-- end::intent[] -->
  */
 package ac.simons.biking2.trips;
