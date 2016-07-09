@@ -35,26 +35,26 @@ public class Thumbnail {
     private Integer height;
 
     public String getUrl() {
-	return url;
+        return url;
     }
 
     public void setUrl(String url) {
-	this.url = url;
+        this.url = url;
     }
 
     public Integer getWidth() {
-	return width;
+        return width;
     }
 
     public void setWidth(Integer width) {
-	this.width = width;
+        this.width = width;
     }
 
     public Integer getHeight() {
-	return height;
+        return height;
     }
 
     public void setHeight(Integer height) {
-	this.height = height;
+        this.height = height;
     }
 }

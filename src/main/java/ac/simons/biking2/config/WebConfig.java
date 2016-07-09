@@ -43,7 +43,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-	registry.addMapping("/api/**").allowedOrigins("*");
+        registry.addMapping("/api/**").allowedOrigins("*");
     }
 
     /**
@@ -52,19 +52,19 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Controller
     static class Routes {
 
-	@RequestMapping({
-	    "/",
-	    "/bikes",
-	    "/milages",
-	    "/gallery",
-	    "/tracks",
-	    "/tracks/{id:\\w+}",
-	    "/location",
-	    "/about"
-	})
-	public String index() {
-	    return "forward:/index.html";
-	}
+        @RequestMapping({
+            "/",
+            "/bikes",
+            "/milages",
+            "/gallery",
+            "/tracks",
+            "/tracks/{id:\\w+}",
+            "/location",
+            "/about"
+        })
+        public String index() {
+            return "forward:/index.html";
+        }
     }
 
     /**
@@ -75,8 +75,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-	super.configureContentNegotiation(configurer);
-	configurer.favorParameter(true);
+        super.configureContentNegotiation(configurer);
+        configurer.favorParameter(true);
     }
 
     /**
@@ -87,7 +87,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void configurePathMatch(final PathMatchConfigurer configurer) {
-	configurer.setUseRegisteredSuffixPatternMatch(true);
+        configurer.setUseRegisteredSuffixPatternMatch(true);
     }
 
     /**
@@ -98,27 +98,27 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      */
     @Bean
     public ObjectMapper jacksonObjectMapper() {
-	return new ObjectMapper().registerModules(
-		new JaxbAnnotationModule().setPriority(Priority.SECONDARY)
-	);
+        return new ObjectMapper().registerModules(
+                new JaxbAnnotationModule().setPriority(Priority.SECONDARY)
+        );
     }
 
     @Bean
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
-	    @Value("${biking2.connector.proxyName:}") final String proxyName,
-	    @Value("${biking2.connector.proxyPort:80}") final int proxyPort
+            @Value("${biking2.connector.proxyName:}") final String proxyName,
+            @Value("${biking2.connector.proxyPort:80}") final int proxyPort
     ) {
-	return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
-	    if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
-		final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
-		containerFactory.setTldSkip("*.jar");
-		if(!proxyName.isEmpty()) {
-		    containerFactory.addConnectorCustomizers(connector -> {
-			connector.setProxyName(proxyName);
-			connector.setProxyPort(proxyPort);
-		    });
-		}
-	    }
-	};
+        return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
+            if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
+                final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
+                containerFactory.setTldSkip("*.jar");
+                if(!proxyName.isEmpty()) {
+                    containerFactory.addConnectorCustomizers(connector -> {
+                        connector.setProxyName(proxyName);
+                        connector.setProxyPort(proxyPort);
+                    });
+                }
+            }
+        };
     }
 }

@@ -33,19 +33,19 @@ public class Guid {
     private String value;
 
     public Boolean isIsPermaLink() {
-	return isPermaLink;
+        return isPermaLink;
     }
 
     public void setIsPermaLink(Boolean isPermaLink) {
-	this.isPermaLink = isPermaLink;
+        this.isPermaLink = isPermaLink;
     }
 
     public String getValue() {
-	return value;
+        return value;
     }
 
     public void setValue(String value) {
-	this.value = value;
+        this.value = value;
     }
 
 }

@@ -33,24 +33,24 @@ public class LocationService {
     private final SimpMessagingTemplate messagingTemplate;
 
     public LocationService(final LocationRepository locationRepository, final SimpMessagingTemplate messagingTemplate) {
-	this.locationRepository = locationRepository;
-	this.messagingTemplate = messagingTemplate;
+        this.locationRepository = locationRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public LocationEntity createAndSendNewLocation(final NewLocationCmd newLocation) {
-	final LocationEntity location = this.locationRepository.save(new LocationEntity(newLocation.getLatitude(), newLocation.getLongitude(), newLocation.getCreatedAt()));
-	this.messagingTemplate.convertAndSend("/topic/currentLocation", location);
-	return location;
+        final LocationEntity location = this.locationRepository.save(new LocationEntity(newLocation.getLatitude(), newLocation.getLongitude(), newLocation.getCreatedAt()));
+        this.messagingTemplate.convertAndSend("/topic/currentLocation", location);
+        return location;
     }
 
     public List<LocationEntity> getLocationsForTheLastNHours(int hours) {
-	return locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(GregorianCalendar.from(ZonedDateTime.now(systemDefault()).minusHours(hours)));
+        return locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(GregorianCalendar.from(ZonedDateTime.now(systemDefault()).minusHours(hours)));
     }
 
     /**
      * @return The total number of locations tracked
      */
     public long getLocationCount() {
-	return locationRepository.count();
+        return locationRepository.count();
     }
 }

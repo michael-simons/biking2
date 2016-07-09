@@ -54,45 +54,45 @@ public class LocationServiceTest {
 
     @Test
     public void shouldGetLocationsForTheLastNHours() {
-	when(locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(Mockito.any(Calendar.class))).thenReturn(new ArrayList<>());
+        when(locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(Mockito.any(Calendar.class))).thenReturn(new ArrayList<>());
 
-	final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
+        final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
 
-	final List<LocationEntity> locations = locationService.getLocationsForTheLastNHours(3);
-	Assert.assertNotNull(locations);
-	Assert.assertEquals(0, locations.size());
+        final List<LocationEntity> locations = locationService.getLocationsForTheLastNHours(3);
+        Assert.assertNotNull(locations);
+        Assert.assertEquals(0, locations.size());
 
-	ArgumentCaptor<GregorianCalendar> argument = ArgumentCaptor.forClass(GregorianCalendar.class);
-	Mockito.verify(locationRepository).findByCreatedAtGreaterThanOrderByCreatedAtAsc(argument.capture());
+        ArgumentCaptor<GregorianCalendar> argument = ArgumentCaptor.forClass(GregorianCalendar.class);
+        Mockito.verify(locationRepository).findByCreatedAtGreaterThanOrderByCreatedAtAsc(argument.capture());
 
-	Assert.assertThat(ChronoUnit.HOURS.between(argument.getValue().toInstant(), Instant.now()), is(equalTo(3l)));
+        Assert.assertThat(ChronoUnit.HOURS.between(argument.getValue().toInstant(), Instant.now()), is(equalTo(3l)));
     }
 
     @Test
     public void shouldCreateAndSendNewLocation() throws IOException {
-	when(locationRepository.save(any(LocationEntity.class))).then(returnsFirstArg());
+        when(locationRepository.save(any(LocationEntity.class))).then(returnsFirstArg());
 
-	final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
+        final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
 
-	final LocationEntity location = locationService.createAndSendNewLocation(objectMapper.readValue("{\"lon\":\"5\", \"lat\":\"50\"}", NewLocationCmd.class));
-	Assert.assertEquals(new BigDecimal(50), location.getLatitude());
-	Assert.assertEquals(new BigDecimal(5), location.getLongitude());
+        final LocationEntity location = locationService.createAndSendNewLocation(objectMapper.readValue("{\"lon\":\"5\", \"lat\":\"50\"}", NewLocationCmd.class));
+        Assert.assertEquals(new BigDecimal(50), location.getLatitude());
+        Assert.assertEquals(new BigDecimal(5), location.getLongitude());
 
-	Mockito.verify(locationRepository).save(any(LocationEntity.class));
-	final ArgumentCaptor<String> destinationNameArg = ArgumentCaptor.forClass(String.class);
-	final ArgumentCaptor<LocationEntity> locationArg = ArgumentCaptor.forClass(LocationEntity.class);
-	Mockito.verify(simpMessagingTemplate).convertAndSend(destinationNameArg.capture(), locationArg.capture());
-	Mockito.verifyNoMoreInteractions(locationRepository, simpMessagingTemplate);
+        Mockito.verify(locationRepository).save(any(LocationEntity.class));
+        final ArgumentCaptor<String> destinationNameArg = ArgumentCaptor.forClass(String.class);
+        final ArgumentCaptor<LocationEntity> locationArg = ArgumentCaptor.forClass(LocationEntity.class);
+        Mockito.verify(simpMessagingTemplate).convertAndSend(destinationNameArg.capture(), locationArg.capture());
+        Mockito.verifyNoMoreInteractions(locationRepository, simpMessagingTemplate);
 
-	Assert.assertEquals("/topic/currentLocation", destinationNameArg.getValue());
-	Assert.assertEquals(location, locationArg.getValue());
+        Assert.assertEquals("/topic/currentLocation", destinationNameArg.getValue());
+        Assert.assertEquals(location, locationArg.getValue());
     }
 
     @Test
     public void getLocationCountShouldWork() {
-	when(locationRepository.count()).thenReturn(4711l);
+        when(locationRepository.count()).thenReturn(4711l);
 
-	final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
-	Assert.assertEquals(4711l, locationService.getLocationCount());
+        final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
+        Assert.assertEquals(4711l, locationService.getLocationCount());
     }
 }

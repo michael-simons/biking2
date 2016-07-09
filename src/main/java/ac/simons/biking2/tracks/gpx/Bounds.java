@@ -39,18 +39,18 @@ public class Bounds {
     private BigDecimal maxlon;
 
     public BigDecimal getMinlat() {
-	return minlat;
+        return minlat;
     }
 
     public BigDecimal getMinlon() {
-	return minlon;
+        return minlon;
     }
 
     public BigDecimal getMaxlat() {
-	return maxlat;
+        return maxlat;
     }
 
     public BigDecimal getMaxlon() {
-	return maxlon;
+        return maxlon;
     }
 }

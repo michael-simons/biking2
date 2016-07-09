@@ -45,16 +45,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(
-	controllers = BannerController.class,
-	excludeFilters = {
-	    @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
-	},
-	secure = false
+        controllers = BannerController.class,
+        excludeFilters = {
+            @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
+        },
+        secure = false
 )
 @AutoConfigureRestDocs(
-	outputDir = "target/generated-snippets",
-	uriHost = "biking.michael-simons.eu",
-	uriPort = 80
+        outputDir = "target/generated-snippets",
+        uriHost = "biking.michael-simons.eu",
+        uriPort = 80
 )
 public class BannerControllerTest {
 
@@ -66,39 +66,39 @@ public class BannerControllerTest {
 
     @Test
     public void testSomeMethod() throws Exception {
-	doAnswer(invocation -> {
-	    final PrintStream out = invocation.getArgumentAt(2, PrintStream.class);
-	    out.write(bannerText.getBytes());
-	    return null;
-	}).when(banner).printBanner(anyObject(), anyObject(), anyObject());
+        doAnswer(invocation -> {
+            final PrintStream out = invocation.getArgumentAt(2, PrintStream.class);
+            out.write(bannerText.getBytes());
+            return null;
+        }).when(banner).printBanner(anyObject(), anyObject(), anyObject());
 
-	mockMvc
-		.perform(
-			get("/api/banner").accept(APPLICATION_JSON)
-		)
-		.andExpect(status().isOk())
-		.andExpect(content().string(bannerText))
-		.andDo(document("api/banner",
-			preprocessRequest(prettyPrint()),
-			preprocessResponse(prettyPrint())
-		));
+        mockMvc
+                .perform(
+                        get("/api/banner").accept(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string(bannerText))
+                .andDo(document("api/banner",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
     private final String bannerText
-	    = " _____            _              ______ _____ _____ _____       _                \n"
-	    + "/  ___|          (_)             | ___ \\  ___/  ___|_   _|     | |               \n"
-	    + "\\ `--. _ __  _ __ _ _ __   __ _  | |_/ / |__ \\ `--.  | |     __| | ___   ___ ___ \n"
-	    + " `--. \\ '_ \\| '__| | '_ \\ / _` | |    /|  __| `--. \\ | |    / _` |/ _ \\ / __/ __|\n"
-	    + "/\\__/ / |_) | |  | | | | | (_| | | |\\ \\| |___/\\__/ / | |   | (_| | (_) | (__\\__ \\\n"
-	    + "\\____/| .__/|_|  |_|_| |_|\\__, | \\_| \\_\\____/\\____/  \\_/    \\__,_|\\___/ \\___|___/\n"
-	    + "      | |                  __/ |                                                 \n"
-	    + "      |_|                 |___/                                                  \n"
-	    + "          _ _   _        ___   _____ _____ _____ _____              _            \n"
-	    + "         (_) | | |      / _ \\ /  ___/  __ \\_   _|_   _|            | |           \n"
-	    + "__      ___| |_| |__   / /_\\ \\\\ `--.| /  \\/ | |   | |     __ _ _ __| |_          \n"
-	    + "\\ \\ /\\ / / | __| '_ \\  |  _  | `--. \\ |     | |   | |    / _` | '__| __|         \n"
-	    + " \\ V  V /| | |_| | | | | | | |/\\__/ / \\__/\\_| |_ _| |_  | (_| | |  | |_          \n"
-	    + "  \\_/\\_/ |_|\\__|_| |_| \\_| |_/\\____/ \\____/\\___/ \\___/   \\__,_|_|   \\__|         \n"
-	    + "                                                                                 \n"
-	    + "                                                                                 ";
+            = " _____            _              ______ _____ _____ _____       _                \n"
+            + "/  ___|          (_)             | ___ \\  ___/  ___|_   _|     | |               \n"
+            + "\\ `--. _ __  _ __ _ _ __   __ _  | |_/ / |__ \\ `--.  | |     __| | ___   ___ ___ \n"
+            + " `--. \\ '_ \\| '__| | '_ \\ / _` | |    /|  __| `--. \\ | |    / _` |/ _ \\ / __/ __|\n"
+            + "/\\__/ / |_) | |  | | | | | (_| | | |\\ \\| |___/\\__/ / | |   | (_| | (_) | (__\\__ \\\n"
+            + "\\____/| .__/|_|  |_|_| |_|\\__, | \\_| \\_\\____/\\____/  \\_/    \\__,_|\\___/ \\___|___/\n"
+            + "      | |                  __/ |                                                 \n"
+            + "      |_|                 |___/                                                  \n"
+            + "          _ _   _        ___   _____ _____ _____ _____              _            \n"
+            + "         (_) | | |      / _ \\ /  ___/  __ \\_   _|_   _|            | |           \n"
+            + "__      ___| |_| |__   / /_\\ \\\\ `--.| /  \\/ | |   | |     __ _ _ __| |_          \n"
+            + "\\ \\ /\\ / / | __| '_ \\  |  _  | `--. \\ |     | |   | |    / _` | '__| __|         \n"
+            + " \\ V  V /| | |_| | | | | | | |/\\__/ / \\__/\\_| |_ _| |_  | (_| | |  | |_          \n"
+            + "  \\_/\\_/ |_|\\__|_| |_| \\_| |_/\\____/ \\____/\\___/ \\___/   \\__,_|_|   \\__|         \n"
+            + "                                                                                 \n"
+            + "                                                                                 ";
 }

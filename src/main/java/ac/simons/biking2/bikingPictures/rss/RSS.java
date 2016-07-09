@@ -32,14 +32,14 @@ public class RSS {
     private Channel channel;
 
     public String getVersion() {
-	return version;
+        return version;
     }
 
     public Channel getChannel() {
-	return channel;
+        return channel;
     }
 
     public void setChannel(Channel channel) {
-	this.channel = channel;
+        this.channel = channel;
     }
 }

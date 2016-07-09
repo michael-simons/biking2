@@ -29,13 +29,13 @@ public class CreditsTest {
 
     @Test
     public void testBuilder() {
-	Credits credits = new Credits.Builder<>(object -> object).build();
-	assertThat(credits.isEnabled(), is(true));
+        Credits credits = new Credits.Builder<>(object -> object).build();
+        assertThat(credits.isEnabled(), is(true));
 
-	credits = new Credits.Builder<>(object -> object).disable().build();
-	assertThat(credits.isEnabled(), is(false));
+        credits = new Credits.Builder<>(object -> object).disable().build();
+        assertThat(credits.isEnabled(), is(false));
 
-	credits = new Credits.Builder<>(object -> object).enable().build();
-	assertThat(credits.isEnabled(), is(true));
+        credits = new Credits.Builder<>(object -> object).enable().build();
+        assertThat(credits.isEnabled(), is(true));
     }
 }

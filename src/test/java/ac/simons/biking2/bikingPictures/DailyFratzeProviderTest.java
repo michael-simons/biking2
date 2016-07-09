@@ -26,38 +26,38 @@ import org.junit.Test;
 public class DailyFratzeProviderTest {
     @Test
     public void shouldGetRSSConnection() throws Exception {
-	final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
+        final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
 
-	URLConnection connection = dailyFratzeProvider.getRSSConnection(null);
-	Assert.assertNotNull(connection);
-	Assert.assertEquals("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d", connection.getURL().toExternalForm());
+        URLConnection connection = dailyFratzeProvider.getRSSConnection(null);
+        Assert.assertNotNull(connection);
+        Assert.assertEquals("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d", connection.getURL().toExternalForm());
 
-	String customRss = "https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=a";
-	connection = dailyFratzeProvider.getRSSConnection(customRss);
-	Assert.assertNotNull(connection);
-	Assert.assertEquals(customRss, connection.getURL().toExternalForm());
+        String customRss = "https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=a";
+        connection = dailyFratzeProvider.getRSSConnection(customRss);
+        Assert.assertNotNull(connection);
+        Assert.assertEquals(customRss, connection.getURL().toExternalForm());
     }
 
     @Test
     public void shouldOpenConnectionAndAddAuthHeader() throws Exception {
-	final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
+        final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
 
-	final URLConnection connection = dailyFratzeProvider.getImageConnection(1);
-	Assert.assertNotNull(connection);
-	Assert.assertEquals("https://dailyfratze.de/api/images/s/1.jpg", connection.getURL().toExternalForm());
+        final URLConnection connection = dailyFratzeProvider.getImageConnection(1);
+        Assert.assertNotNull(connection);
+        Assert.assertEquals("https://dailyfratze.de/api/images/s/1.jpg", connection.getURL().toExternalForm());
     }
 
     @Test
     public void shouldHandleInvalidURLsGracefully() {
-	final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
-	URLConnection connection = dailyFratzeProvider.getRSSConnection("asd");
-	Assert.assertNull(connection);
+        final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
+        URLConnection connection = dailyFratzeProvider.getRSSConnection("asd");
+        Assert.assertNull(connection);
     }
 
     @Test
     public void shouldHandleImageUrlExceptionsGracefully() {
-	final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef", "size/%s/id/%d.jpg");
-	URLConnection connection = dailyFratzeProvider.getImageConnection(23);
-	Assert.assertNull(connection);
+        final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef", "size/%s/id/%d.jpg");
+        URLConnection connection = dailyFratzeProvider.getImageConnection(23);
+        Assert.assertNull(connection);
     }
 }

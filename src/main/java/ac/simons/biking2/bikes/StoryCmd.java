@@ -34,18 +34,18 @@ class StoryCmd implements Serializable {
     private String label;
 
     public String getUrl() {
-	return url;
+        return url;
     }
 
     public void setUrl(String url) {
-	this.url = url;
+        this.url = url;
     }
 
     public String getLabel() {
-	return label;
+        return label;
     }
 
     public void setLabel(String label) {
-	this.label = label;
+        this.label = label;
     }
 }

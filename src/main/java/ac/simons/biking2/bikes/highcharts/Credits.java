@@ -32,27 +32,27 @@ public class Credits {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Credits> sink;
+        private final Sink<PB, Credits> sink;
 
-	private Boolean enabled = Boolean.TRUE;
+        private Boolean enabled = Boolean.TRUE;
 
-	Builder(Sink<PB, Credits> sink) {
-	    this.sink = sink;
-	}
+        Builder(Sink<PB, Credits> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> enable() {
-	    this.enabled = true;
-	    return this;
-	}
+        public Builder<PB> enable() {
+            this.enabled = true;
+            return this;
+        }
 
-	public Builder<PB> disable() {
-	    this.enabled = false;
-	    return this;
-	}
+        public Builder<PB> disable() {
+            this.enabled = false;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(new Credits(enabled));
-	}
+        public PB build() {
+            return this.sink.setObject(new Credits(enabled));
+        }
     }
 
     /** Whether to show the credits text. Defaults to true. */
@@ -60,10 +60,10 @@ public class Credits {
 
     @JsonCreator
     Credits(@JsonProperty("enabled") Boolean enabled) {
-	this.enabled = enabled;
+        this.enabled = enabled;
     }
 
     public Boolean isEnabled() {
-	return enabled;
+        return enabled;
     }
 }

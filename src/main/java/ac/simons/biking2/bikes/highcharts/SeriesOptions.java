@@ -32,27 +32,27 @@ public class SeriesOptions {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, SeriesOptions> sink;
+        private final Sink<PB, SeriesOptions> sink;
 
-	private Boolean animation;
+        private Boolean animation;
 
-	Builder(Sink<PB, SeriesOptions> sink) {
-	    this.sink = sink;
-	}
+        Builder(Sink<PB, SeriesOptions> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> enableAnimation() {
-	    this.animation = Boolean.TRUE;
-	    return this;
-	}
+        public Builder<PB> enableAnimation() {
+            this.animation = Boolean.TRUE;
+            return this;
+        }
 
-	public Builder<PB> disableAnimation() {
-	    this.animation = Boolean.FALSE;
-	    return this;
-	}
+        public Builder<PB> disableAnimation() {
+            this.animation = Boolean.FALSE;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(new SeriesOptions(animation));
-	}
+        public PB build() {
+            return this.sink.setObject(new SeriesOptions(animation));
+        }
     }
 
     /**
@@ -60,18 +60,18 @@ public class SeriesOptions {
      * animation can also be set as a configuration object. Please note that
      * this option only applies to the initial animation of the series itself.
      * For other animations, see chart.animation and the animation parameter
-     * under the API methods.	The following properties are supported:
+     * under the API methods.   The following properties are supported:
      */
     private final Boolean animation;
 
     @JsonCreator
     SeriesOptions(
-	    @JsonProperty("animation") Boolean animation
+            @JsonProperty("animation") Boolean animation
     ) {
-	this.animation = animation;
+        this.animation = animation;
     }
 
     public Boolean isAnimation() {
-	return animation;
+        return animation;
     }
 }

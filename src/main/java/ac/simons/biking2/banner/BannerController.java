@@ -36,15 +36,15 @@ class BannerController {
     private final Environment environment;
 
     public BannerController(final Banner banner, final Environment environment) {
-	this.banner = banner;
-	this.environment = environment;
+        this.banner = banner;
+        this.environment = environment;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public void get(final HttpServletResponse response) throws IOException {
-	try(PrintStream printStream = new PrintStream(response.getOutputStream())) {
-	    banner.printBanner(environment, BannerController.class, printStream);
-	}
+        try(PrintStream printStream = new PrintStream(response.getOutputStream())) {
+            banner.printBanner(environment, BannerController.class, printStream);
+        }
     }
 }
 

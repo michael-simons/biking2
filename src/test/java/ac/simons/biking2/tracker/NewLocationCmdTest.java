@@ -44,24 +44,24 @@ public class NewLocationCmdTest {
      */
     @Test
     public void beanShouldWorkAsExpected() throws IOException {
-	NewLocationCmd newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\"}");
-	Assert.assertEquals(BigDecimal.valueOf(5l), newLocationCmd.getLongitude());
-	Assert.assertEquals(BigDecimal.valueOf(50l), newLocationCmd.getLatitude());
-	Assert.assertNull(newLocationCmd.getCreatedAt());
+        NewLocationCmd newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\"}");
+        Assert.assertEquals(BigDecimal.valueOf(5l), newLocationCmd.getLongitude());
+        Assert.assertEquals(BigDecimal.valueOf(50l), newLocationCmd.getLatitude());
+        Assert.assertNull(newLocationCmd.getCreatedAt());
 
-	newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\"}");
-	Calendar hlp = Calendar.getInstance();
-	hlp.setTime(Date.from(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, ZoneId.systemDefault()).toInstant()));
-	Assert.assertEquals(hlp, newLocationCmd.getCreatedAt());
+        newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\"}");
+        Calendar hlp = Calendar.getInstance();
+        hlp.setTime(Date.from(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, ZoneId.systemDefault()).toInstant()));
+        Assert.assertEquals(hlp, newLocationCmd.getCreatedAt());
 
-	newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tstMillis\": \"1400578694000\"}");
-	hlp = Calendar.getInstance();
-	hlp.setTime(Date.from(ZonedDateTime.of(2014, 5, 20, 11, 38, 14, 0, ZoneId.systemDefault()).toInstant()));
-	Assert.assertEquals(hlp, newLocationCmd.getCreatedAt());
+        newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tstMillis\": \"1400578694000\"}");
+        hlp = Calendar.getInstance();
+        hlp.setTime(Date.from(ZonedDateTime.of(2014, 5, 20, 11, 38, 14, 0, ZoneId.systemDefault()).toInstant()));
+        Assert.assertEquals(hlp, newLocationCmd.getCreatedAt());
 
-	newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\", \"tstMillis\": \"1400578694000\"}");
-	hlp = Calendar.getInstance();
-	hlp.setTime(Date.from(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, ZoneId.systemDefault()).toInstant()));
-	Assert.assertEquals(hlp, newLocationCmd.getCreatedAt());
+        newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\", \"tstMillis\": \"1400578694000\"}");
+        hlp = Calendar.getInstance();
+        hlp.setTime(Date.from(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, ZoneId.systemDefault()).toInstant()));
+        Assert.assertEquals(hlp, newLocationCmd.getCreatedAt());
     }
 }

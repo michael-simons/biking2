@@ -32,19 +32,19 @@ public class AccumulatedPeriod {
     private final int value;
 
     public AccumulatedPeriod(LocalDate startOfPeriod, int value) {
-	this(GregorianCalendar.from(startOfPeriod.atStartOfDay(ZoneId.systemDefault())), value);
+        this(GregorianCalendar.from(startOfPeriod.atStartOfDay(ZoneId.systemDefault())), value);
     }
 
     public AccumulatedPeriod(Calendar startOfPeriod, int value) {
-	this.startOfPeriod = startOfPeriod;
-	this.value = value;
+        this.startOfPeriod = startOfPeriod;
+        this.value = value;
     }
 
     public Calendar getStartOfPeriod() {
-	return startOfPeriod;
+        return startOfPeriod;
     }
 
     public int getValue() {
-	return value;
+        return value;
     }
 }

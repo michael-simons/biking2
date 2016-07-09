@@ -44,48 +44,48 @@ class BikingPicturesController {
     private final File datastoreBaseDirectory;
 
     public BikingPicturesController(BikingPictureRepository bikingPictureRepository, final File datastoreBaseDirectory) {
-	this.bikingPictureRepository = bikingPictureRepository;
-	this.datastoreBaseDirectory = datastoreBaseDirectory;
+        this.bikingPictureRepository = bikingPictureRepository;
+        this.datastoreBaseDirectory = datastoreBaseDirectory;
     }
 
     @RequestMapping("/api/bikingPictures")
     @ResponseBody
     public List<BikingPictureEntity> getBikingPictures() {
-	return bikingPictureRepository.findAll(new Sort(Sort.Direction.ASC, "pubDate"));
+        return bikingPictureRepository.findAll(new Sort(Sort.Direction.ASC, "pubDate"));
     }
 
     @RequestMapping({"/api/bikingPictures/{id:\\d+}.jpg"})
     public void getBikingPicture(
-	    @PathVariable final Integer id,
-	    final HttpServletRequest request,
-	    final HttpServletResponse response
+            @PathVariable final Integer id,
+            final HttpServletRequest request,
+            final HttpServletResponse response
     ) throws IOException {
 
-	BikingPictureEntity bikingPicture;
-	if ((bikingPicture = this.bikingPictureRepository.findOne(id)) == null) {
-	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	} else {
-	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%d.jpg", DatastoreConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId()));
+        BikingPictureEntity bikingPicture;
+        if ((bikingPicture = this.bikingPictureRepository.findOne(id)) == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%d.jpg", DatastoreConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId()));
 
-	    final int cacheForDays = 365;
-	    response.setHeader("Content-Type", "image/jpeg");
-	    response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
-	    response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME.withLocale(Locale.US)));
-	    response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
+            final int cacheForDays = 365;
+            response.setHeader("Content-Type", "image/jpeg");
+            response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
+            response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME.withLocale(Locale.US)));
+            response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
 
-	    // Attribute maybe null
-	    if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
-		Files.copy(imageFile.toPath(), response.getOutputStream());
-		response.getOutputStream().flush();
-	    } else {
-		long l = imageFile.length();
-		request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
-		request.setAttribute("org.apache.tomcat.sendfile.start", 0L);
-		request.setAttribute("org.apache.tomcat.sendfile.end", l);
-		response.setHeader("Content-Length", Long.toString(l));
-	    }
-	}
+            // Attribute maybe null
+            if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
+                Files.copy(imageFile.toPath(), response.getOutputStream());
+                response.getOutputStream().flush();
+            } else {
+                long l = imageFile.length();
+                request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
+                request.setAttribute("org.apache.tomcat.sendfile.start", 0L);
+                request.setAttribute("org.apache.tomcat.sendfile.end", l);
+                response.setHeader("Content-Length", Long.toString(l));
+            }
+        }
 
-	response.flushBuffer();
+        response.flushBuffer();
     }
 }

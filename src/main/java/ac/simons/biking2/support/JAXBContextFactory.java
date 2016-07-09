@@ -29,11 +29,11 @@ import javax.xml.bind.JAXBException;
  */
 public class JAXBContextFactory {
     public static JAXBContext createContext(final Class<?> baseClass) {
-	try {
-	    return JAXBContext.newInstance(baseClass);
-	} catch (JAXBException ex) {
-	    Logger.getLogger(JAXBContextFactory.class.getName()).log(Level.SEVERE, null, ex);
-	    throw new RuntimeException(ex);
-	}
+        try {
+            return JAXBContext.newInstance(baseClass);
+        } catch (JAXBException ex) {
+            Logger.getLogger(JAXBContextFactory.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
+        }
     }
 }

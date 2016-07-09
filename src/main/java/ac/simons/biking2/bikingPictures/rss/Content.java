@@ -32,18 +32,18 @@ public class Content {
     private String url;
 
     public String getType() {
-	return type;
+        return type;
     }
 
     public void setType(String type) {
-	this.type = type;
+        this.type = type;
     }
 
     public String getUrl() {
-	return url;
+        return url;
     }
 
     public void setUrl(String url) {
-	this.url = url;
+        this.url = url;
     }
 }

@@ -33,22 +33,22 @@ public class Title {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Title> sink;
+        private final Sink<PB, Title> sink;
 
-	private String text;
+        private String text;
 
-	Builder(Sink<PB, Title> sink) {
-	    this.sink = sink;
-	}
+        Builder(Sink<PB, Title> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> withText(final String text) {
-	    this.text = text;
-	    return this;
-	}
+        public Builder<PB> withText(final String text) {
+            this.text = text;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(new Title(text));
-	}
+        public PB build() {
+            return this.sink.setObject(new Title(text));
+        }
     }
 
     /**
@@ -59,11 +59,11 @@ public class Title {
 
     @JsonCreator
     Title(@JsonProperty("text") String text) {
-	this.text = text;
+        this.text = text;
     }
 
     public String getText() {
-	return text;
+        return text;
     }
 
 }

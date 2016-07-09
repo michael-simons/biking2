@@ -27,10 +27,10 @@ public class GuidTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("isPermaLink", true);
-	values.put("value", "value");
+        final Map<String, Object> values = new HashMap<>();
+        values.put("isPermaLink", true);
+        values.put("value", "value");
 
-	values.forEach(new BeanTester(Guid.class));
+        values.forEach(new BeanTester(Guid.class));
     }
 }

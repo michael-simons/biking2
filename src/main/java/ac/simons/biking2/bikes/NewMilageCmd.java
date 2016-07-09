@@ -33,22 +33,22 @@ class NewMilageCmd {
     private Double amount;
 
     public Date getRecordedOn() {
-	return recordedOn;
+        return recordedOn;
     }
 
     public void setRecordedOn(Date recordedOn) {
-	this.recordedOn = recordedOn;
+        this.recordedOn = recordedOn;
     }
 
     public Double getAmount() {
-	return amount;
+        return amount;
     }
 
     public void setAmount(Double amount) {
-	this.amount = amount;
+        this.amount = amount;
     }
 
     public LocalDate recordedOnAsLocalDate() {
-	return LocalDateTime.ofInstant(this.getRecordedOn().toInstant(), ZoneId.systemDefault()).toLocalDate();
+        return LocalDateTime.ofInstant(this.getRecordedOn().toInstant(), ZoneId.systemDefault()).toLocalDate();
     }
 }

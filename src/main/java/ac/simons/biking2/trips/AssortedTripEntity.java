@@ -56,42 +56,42 @@ public class AssortedTripEntity implements Serializable {
     }
 
     public AssortedTripEntity(Calendar coveredOn, BigDecimal distance) {
-	this.coveredOn = coveredOn;
-	this.distance = distance;
+        this.coveredOn = coveredOn;
+        this.distance = distance;
     }
 
     public Integer getId() {
-	return id;
+        return id;
     }
 
     public Calendar getCoveredOn() {
-	return coveredOn;
+        return coveredOn;
     }
 
     public BigDecimal getDistance() {
-	return distance;
+        return distance;
     }
 
     @Override
     public int hashCode() {
-	int hash = 5;
-	hash = 83 * hash + Objects.hashCode(this.coveredOn);
-	hash = 83 * hash + Objects.hashCode(this.distance);
-	return hash;
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.coveredOn);
+        hash = 83 * hash + Objects.hashCode(this.distance);
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final AssortedTripEntity other = (AssortedTripEntity) obj;
-	if (!Objects.equals(this.coveredOn, other.coveredOn)) {
-	    return false;
-	}
-	return Objects.equals(this.distance, other.distance);
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AssortedTripEntity other = (AssortedTripEntity) obj;
+        if (!Objects.equals(this.coveredOn, other.coveredOn)) {
+            return false;
+        }
+        return Objects.equals(this.distance, other.distance);
     }
 }

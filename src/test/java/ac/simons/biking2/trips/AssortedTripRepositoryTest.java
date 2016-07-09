@@ -40,6 +40,6 @@ public class AssortedTripRepositoryTest {
 
     @Test
     public void testGetTotalDistance() {
-	assertThat(this.assortedTripRepository.getTotalDistance().doubleValue(), is(equalTo(43.8)));
+        assertThat(this.assortedTripRepository.getTotalDistance().doubleValue(), is(equalTo(43.8)));
     }
 }

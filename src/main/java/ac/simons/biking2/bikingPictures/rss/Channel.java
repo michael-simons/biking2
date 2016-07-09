@@ -46,58 +46,58 @@ public class Channel {
     private List<Item> items;
 
     public String getPrevious() {
-	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
+        return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "previous".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
     }
 
     public String getNext() {
-	return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
+        return ofNullable(links).orElseGet(() -> new ArrayList<>()).stream().filter(link -> "next".equalsIgnoreCase(link.getRel())).findFirst().orElse(new Link()).getHref();
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     public String getLink() {
-	return link;
+        return link;
     }
 
     public void setLink(String link) {
-	this.link = link;
+        this.link = link;
     }
 
     public String getDescription() {
-	return description;
+        return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
     public ZonedDateTime getPubDate() {
-	return pubDate;
+        return pubDate;
     }
 
     public void setPubDate(ZonedDateTime pubDate) {
-	this.pubDate = pubDate;
+        this.pubDate = pubDate;
     }
 
     public List<Link> getLinks() {
-	return links;
+        return links;
     }
 
     public void setLinks(List<Link> links) {
-	this.links = links;
+        this.links = links;
     }
 
     public List<Item> getItems() {
-	return items;
+        return items;
     }
 
     public void setItems(List<Item> items) {
-	this.items = items;
+        this.items = items;
     }
 }

@@ -31,22 +31,22 @@ class Coordinate {
 
     @Autowired
     public Coordinate(
-	    @Value("${biking2.home.longitude}") final String longitude,
-	    @Value("${biking2.home.latitude}") final String latitude
+            @Value("${biking2.home.longitude}") final String longitude,
+            @Value("${biking2.home.latitude}") final String latitude
     ) {
-	this(new BigDecimal(longitude), new BigDecimal(latitude));
+        this(new BigDecimal(longitude), new BigDecimal(latitude));
     }
 
     public Coordinate(BigDecimal longitude, BigDecimal latitude) {
-	this.longitude = longitude;
-	this.latitude = latitude;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public double getLatitude() {
-	return latitude.doubleValue();
+        return latitude.doubleValue();
     }
 
     public double getLongitude() {
-	return longitude.doubleValue();
+        return longitude.doubleValue();
     }
 }

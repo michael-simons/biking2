@@ -59,99 +59,99 @@ class GalleryController {
     @FunctionalInterface
     public interface FilenameGenerator {
 
-	public String generateFile(final String originalFilename);
+        public String generateFile(final String originalFilename);
     }
 
     private final GalleryPictureRepository galleryPictureRepository;
     private final File datastoreBaseDirectory;
     private FilenameGenerator filenameGenerator = originalFilename -> {
-	try {
-	    final byte[] digest = getInstance("MD5").digest(String.format("%s-%d", originalFilename, System.currentTimeMillis()).getBytes());
-	    return format("%032x.jpg", new BigInteger(1, digest));
-	} catch (NoSuchAlgorithmException e) {
-	    throw new RuntimeException(e);
-	}
+        try {
+            final byte[] digest = getInstance("MD5").digest(String.format("%s-%d", originalFilename, System.currentTimeMillis()).getBytes());
+            return format("%032x.jpg", new BigInteger(1, digest));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     };
 
     public GalleryController(GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
-	this.galleryPictureRepository = galleryPictureRepository;
-	this.datastoreBaseDirectory = datastoreBaseDirectory;
+        this.galleryPictureRepository = galleryPictureRepository;
+        this.datastoreBaseDirectory = datastoreBaseDirectory;
     }
 
     @RequestMapping("/api/galleryPictures")
     @ResponseBody
     public List<GalleryPictureEntity> getGalleryPictures() {
-	return galleryPictureRepository.findAll(new Sort(Sort.Direction.ASC, "takenOn"));
+        return galleryPictureRepository.findAll(new Sort(Sort.Direction.ASC, "takenOn"));
     }
 
     @RequestMapping(value = "/api/galleryPictures", method = POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GalleryPictureEntity> createGalleryPicture(
-	    @RequestParam(value = "takenOn", required = true)
-	    @DateTimeFormat(iso = DATE_TIME)
-	    final ZonedDateTime takenOn,
-	    @RequestParam(value = "description", required = true)
-	    final String description,
-	    @RequestParam("imageData")
-	    final MultipartFile imageData
+            @RequestParam(value = "takenOn", required = true)
+            @DateTimeFormat(iso = DATE_TIME)
+            final ZonedDateTime takenOn,
+            @RequestParam(value = "description", required = true)
+            final String description,
+            @RequestParam("imageData")
+            final MultipartFile imageData
     ) {
-	ResponseEntity<GalleryPictureEntity> rv;
-	if (imageData == null || imageData.isEmpty()) {
-	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	} else {
-	    final String filename = this.filenameGenerator.generateFile(imageData.getOriginalFilename());
-	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, filename));
+        ResponseEntity<GalleryPictureEntity> rv;
+        if (imageData == null || imageData.isEmpty()) {
+            rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            final String filename = this.filenameGenerator.generateFile(imageData.getOriginalFilename());
+            final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, filename));
 
-	    try (FileOutputStream out = new FileOutputStream(imageFile);) {
-		out.getChannel().transferFrom(Channels.newChannel(imageData.getInputStream()), 0, Integer.MAX_VALUE);
-		out.flush();
+            try (FileOutputStream out = new FileOutputStream(imageFile);) {
+                out.getChannel().transferFrom(Channels.newChannel(imageData.getInputStream()), 0, Integer.MAX_VALUE);
+                out.flush();
 
-		GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
-		galleryPicture.setDescription(description);
+                GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
+                galleryPicture.setDescription(description);
 
-		rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);
-	    } catch (IOException e) {
-		// Could not store data...
-		rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    } catch (DataIntegrityViolationException e) {
-		rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	    }
-	}
-	return rv;
+                rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);
+            } catch (IOException e) {
+                // Could not store data...
+                rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (DataIntegrityViolationException e) {
+                rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        return rv;
     }
 
     @RequestMapping({"/api/galleryPictures/{id:\\d+}.jpg"})
     public void getGalleryPicture(
-	    @PathVariable final Integer id,
-	    final HttpServletRequest request,
-	    final HttpServletResponse response
+            @PathVariable final Integer id,
+            final HttpServletRequest request,
+            final HttpServletResponse response
     ) throws IOException {
 
-	GalleryPictureEntity galleryPicture;
-	if ((galleryPicture = this.galleryPictureRepository.findOne(id)) == null) {
-	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	} else {
-	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
+        GalleryPictureEntity galleryPicture;
+        if ((galleryPicture = this.galleryPictureRepository.findOne(id)) == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
 
-	    final int cacheForDays = 365;
-	    response.setHeader("Content-Type", "image/jpeg");
-	    response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
-	    response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME));
-	    response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
+            final int cacheForDays = 365;
+            response.setHeader("Content-Type", "image/jpeg");
+            response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
+            response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME));
+            response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
 
-	    // Attribute maybe null
-	    if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
-		Files.copy(imageFile.toPath(), response.getOutputStream());
-		response.getOutputStream().flush();
-	    } else {
-		long l = imageFile.length();
-		request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
-		request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
-		request.setAttribute("org.apache.tomcat.sendfile.end", l);
-		response.setHeader("Content-Length", Long.toString(l));
-	    }
-	}
+            // Attribute maybe null
+            if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
+                Files.copy(imageFile.toPath(), response.getOutputStream());
+                response.getOutputStream().flush();
+            } else {
+                long l = imageFile.length();
+                request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
+                request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
+                request.setAttribute("org.apache.tomcat.sendfile.end", l);
+                response.setHeader("Content-Length", Long.toString(l));
+            }
+        }
 
-	response.flushBuffer();
+        response.flushBuffer();
     }
 }

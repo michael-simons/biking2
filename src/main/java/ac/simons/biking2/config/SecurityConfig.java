@@ -43,28 +43,28 @@ public class SecurityConfig {
     @Order(SecurityProperties.BASIC_AUTH_ORDER - 20)
     @ConditionalOnBean(SecurityConfig.class)
     protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception {
-	    http
-		.httpBasic()
-		    .and()
-		.authorizeRequests()
-		    .antMatchers(
-			    "/api/system/env/java.(runtime|vm).*",
-			    "/api/system/metrics/**"
-		    ).permitAll()
-		    .antMatchers("/api/system/env/**").denyAll()
-		    .antMatchers("/**").permitAll()
-		    .and()
-		.sessionManagement()
-		    .sessionCreationPolicy(STATELESS)
-		    .and()
-		.csrf()
-		    .disable()
-		.headers()
-		    .frameOptions() // OEmbedController#embedTrack uses an iframe
-		    .disable()
-		;
-	}
+        @Override
+        protected void configure(final HttpSecurity http) throws Exception {
+            http
+                .httpBasic()
+                    .and()
+                .authorizeRequests()
+                    .antMatchers(
+                            "/api/system/env/java.(runtime|vm).*",
+                            "/api/system/metrics/**"
+                    ).permitAll()
+                    .antMatchers("/api/system/env/**").denyAll()
+                    .antMatchers("/**").permitAll()
+                    .and()
+                .sessionManagement()
+                    .sessionCreationPolicy(STATELESS)
+                    .and()
+                .csrf()
+                    .disable()
+                .headers()
+                    .frameOptions() // OEmbedController#embedTrack uses an iframe
+                    .disable()
+                ;
+        }
     }
 }

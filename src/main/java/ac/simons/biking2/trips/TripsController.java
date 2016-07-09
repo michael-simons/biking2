@@ -41,27 +41,27 @@ public class TripsController {
     private final AssortedTripRepository assortedTripRepository;
 
     public TripsController(AssortedTripRepository assortedTripRepository) {
-	this.assortedTripRepository = assortedTripRepository;
+        this.assortedTripRepository = assortedTripRepository;
     }
 
     @RequestMapping(value = "", method = POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> createTrip(final @RequestBody @Valid NewTripCmd newTrip, final BindingResult bindingResult) {
-	ResponseEntity<?> rv;
+        ResponseEntity<?> rv;
 
-	if (bindingResult.hasErrors()) {
-	    rv = new ResponseEntity<>("Invalid arguments.", HttpStatus.BAD_REQUEST);
-	} else {
-	    final Calendar coveredOn = Calendar.getInstance();
-	    coveredOn.setTime(newTrip.getCoveredOn());
-	    try {
-		final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
-		rv = new ResponseEntity<>(trip, HttpStatus.OK);
-	    } catch (DataIntegrityViolationException e) {
-		rv = new ResponseEntity<>(HttpStatus.CONFLICT);
-	    }
-	}
+        if (bindingResult.hasErrors()) {
+            rv = new ResponseEntity<>("Invalid arguments.", HttpStatus.BAD_REQUEST);
+        } else {
+            final Calendar coveredOn = Calendar.getInstance();
+            coveredOn.setTime(newTrip.getCoveredOn());
+            try {
+                final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
+                rv = new ResponseEntity<>(trip, HttpStatus.OK);
+            } catch (DataIntegrityViolationException e) {
+                rv = new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        }
 
-	return rv;
+        return rv;
     }
 }

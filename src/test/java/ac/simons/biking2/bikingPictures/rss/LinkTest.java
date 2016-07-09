@@ -26,11 +26,11 @@ import org.junit.Test;
 public class LinkTest {
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("rel", "rel");
-	values.put("type", "type");
-	values.put("href", "href");
+        final Map<String, Object> values = new HashMap<>();
+        values.put("rel", "rel");
+        values.put("type", "type");
+        values.put("href", "href");
 
-	values.forEach(new BeanTester(Link.class));
+        values.forEach(new BeanTester(Link.class));
     }
 }

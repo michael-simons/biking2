@@ -32,31 +32,31 @@ public class Chart {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Chart> sink;
+        private final Sink<PB, Chart> sink;
 
-	private Integer borderWidth;
+        private Integer borderWidth;
 
-	private String type;
+        private String type;
 
-	Builder(final Sink<PB, Chart> sink) {
-	    this.sink = sink;
-	}
+        Builder(final Sink<PB, Chart> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> withBorderWidth(final Integer borderWidth) {
-	    this.borderWidth = borderWidth;
-	    return this;
-	}
+        public Builder<PB> withBorderWidth(final Integer borderWidth) {
+            this.borderWidth = borderWidth;
+            return this;
+        }
 
-	public Builder<PB> withType(final String type) {
-	    this.type = type;
-	    return this;
-	}
+        public Builder<PB> withType(final String type) {
+            this.type = type;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(
-		    new Chart(borderWidth, type)
-	    );
-	}
+        public PB build() {
+            return this.sink.setObject(
+                    new Chart(borderWidth, type)
+            );
+        }
     }
 
     private final Integer borderWidth;
@@ -65,18 +65,18 @@ public class Chart {
 
     @JsonCreator
     Chart(
-	    @JsonProperty("borderWidth") Integer borderWidth,
-	    @JsonProperty("type") String type
+            @JsonProperty("borderWidth") Integer borderWidth,
+            @JsonProperty("type") String type
     ) {
-	this.borderWidth = borderWidth;
-	this.type = type;
+        this.borderWidth = borderWidth;
+        this.type = type;
     }
 
     public Integer getBorderWidth() {
-	return borderWidth;
+        return borderWidth;
     }
 
     public String getType() {
-	return type;
+        return type;
     }
 }

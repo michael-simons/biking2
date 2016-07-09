@@ -39,14 +39,14 @@ public class DatastoreConfig {
      */
     @Bean
     public File datastoreBaseDirectory(@Value("${biking2.datastore-base-directory:${user.dir}/var/dev}") final String datastoreBaseDirectoryPath) {
-	final File rv = new File(datastoreBaseDirectoryPath);
-	if (!(rv.isDirectory() || rv.mkdirs())) {
-	    throw new RuntimeException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
-	}
+        final File rv = new File(datastoreBaseDirectoryPath);
+        if (!(rv.isDirectory() || rv.mkdirs())) {
+            throw new RuntimeException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
+        }
 
-	new File(rv, BIKING_PICTURES_DIRECTORY).mkdirs();
-	new File(rv, GALLERY_PICTURES_DIRECTORY).mkdirs();
-	new File(rv, TRACK_DIRECTORY).mkdirs();
-	return rv;
+        new File(rv, BIKING_PICTURES_DIRECTORY).mkdirs();
+        new File(rv, GALLERY_PICTURES_DIRECTORY).mkdirs();
+        new File(rv, TRACK_DIRECTORY).mkdirs();
+        return rv;
     }
 }

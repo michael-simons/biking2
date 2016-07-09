@@ -28,10 +28,10 @@ public class NewTripCmdTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("coveredOn", new Date());
-	values.put("distance", 2342.0);
+        final Map<String, Object> values = new HashMap<>();
+        values.put("coveredOn", new Date());
+        values.put("distance", 2342.0);
 
-	values.forEach(new BeanTester(NewTripCmd.class));
+        values.forEach(new BeanTester(NewTripCmd.class));
     }
 }

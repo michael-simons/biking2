@@ -39,34 +39,34 @@ class LocationController {
     private final LocationService locationService;
 
     public LocationController(LocationService locationService) {
-	this.locationService = locationService;
+        this.locationService = locationService;
     }
 
     @RequestMapping(value = "/locations", method = GET)
     public List<LocationEntity> getLocations() {
-	return this.locationService.getLocationsForTheLastNHours(1);
+        return this.locationService.getLocationsForTheLastNHours(1);
     }
 
     @RequestMapping(value = "/locations/count", method = GET)
     public long getLocationCount() {
-	return this.locationService.getLocationCount();
+        return this.locationService.getLocationCount();
     }
 
     @RequestMapping(value = "/locations", method = POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LocationEntity> createLocation(@RequestBody @Valid final NewLocationCmd newLocationCmd, final BindingResult bindingResult) {
-	if (bindingResult.hasErrors()) {
-	    throw new IllegalArgumentException("Invalid arguments.");
-	}
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid arguments.");
+        }
 
-	ResponseEntity<LocationEntity> rv;
+        ResponseEntity<LocationEntity> rv;
 
-	try {
-	    rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.CREATED);
-	} catch (DataIntegrityViolationException e) {
-	    rv = new ResponseEntity<>(HttpStatus.CONFLICT);
-	}
+        try {
+            rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            rv = new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
 
-	return rv;
+        return rv;
     }
 }

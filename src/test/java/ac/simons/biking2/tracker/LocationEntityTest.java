@@ -30,31 +30,31 @@ public class LocationEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Calendar now = Calendar.getInstance();
+        final Calendar now = Calendar.getInstance();
 
-	final Map<String, Object> values = new HashMap<>();
-	values.put("description", "description");
+        final Map<String, Object> values = new HashMap<>();
+        values.put("description", "description");
 
-	values.forEach(new BeanTester(LocationEntity.class));
+        values.forEach(new BeanTester(LocationEntity.class));
 
-	final LocationEntity l1 = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, now);
-	final LocationEntity otherL1 = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, now);
-	Assert.assertEquals(l1, otherL1);
-	Assert.assertEquals(l1.hashCode(), otherL1.hashCode());
-	Assert.assertNotEquals(l1, "something else");
-	Assert.assertNotEquals(l1, null);
-	Assert.assertEquals(BigDecimal.ONE, l1.getLatitude());
-	Assert.assertEquals(BigDecimal.TEN, l1.getLongitude());
-	Assert.assertEquals(now, l1.getCreatedAt());
-	Assert.assertNull(l1.getId());
+        final LocationEntity l1 = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, now);
+        final LocationEntity otherL1 = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, now);
+        Assert.assertEquals(l1, otherL1);
+        Assert.assertEquals(l1.hashCode(), otherL1.hashCode());
+        Assert.assertNotEquals(l1, "something else");
+        Assert.assertNotEquals(l1, null);
+        Assert.assertEquals(BigDecimal.ONE, l1.getLatitude());
+        Assert.assertEquals(BigDecimal.TEN, l1.getLongitude());
+        Assert.assertEquals(now, l1.getCreatedAt());
+        Assert.assertNull(l1.getId());
 
-	final Calendar then = Calendar.getInstance();
-	then.add(Calendar.YEAR, 1);
-	LocationEntity other = new LocationEntity(BigDecimal.ZERO, BigDecimal.TEN, now);
-	Assert.assertNotEquals(l1, other);
-	other = new LocationEntity(BigDecimal.ONE, BigDecimal.ZERO, now);
-	Assert.assertNotEquals(l1, other);
-	other = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, then);
-	Assert.assertNotEquals(l1, other);
+        final Calendar then = Calendar.getInstance();
+        then.add(Calendar.YEAR, 1);
+        LocationEntity other = new LocationEntity(BigDecimal.ZERO, BigDecimal.TEN, now);
+        Assert.assertNotEquals(l1, other);
+        other = new LocationEntity(BigDecimal.ONE, BigDecimal.ZERO, now);
+        Assert.assertNotEquals(l1, other);
+        other = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, then);
+        Assert.assertNotEquals(l1, other);
     }
 }

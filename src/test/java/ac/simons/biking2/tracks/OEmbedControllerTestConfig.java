@@ -39,11 +39,11 @@ public class OEmbedControllerTestConfig {
 
     @Bean
     public Coordinate home() {
-	return new Coordinate(new BigDecimal("-122.4194200"), new BigDecimal("37.7749300"));
+        return new Coordinate(new BigDecimal("-122.4194200"), new BigDecimal("37.7749300"));
     }
 
     @Bean
     public OEmbedController oEmbedController(TrackRepository trackRepository, Coordinate home) {
-	return new OEmbedController(trackRepository, home);
+        return new OEmbedController(trackRepository, home);
     }
 }

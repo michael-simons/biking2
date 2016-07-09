@@ -32,11 +32,11 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
-	return new ResponseEntity<>(HttpStatus.CONFLICT);
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }

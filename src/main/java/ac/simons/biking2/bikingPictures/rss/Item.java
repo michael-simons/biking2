@@ -46,58 +46,58 @@ public class Item {
     private List<Content> content;
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     public String getLink() {
-	return link;
+        return link;
     }
 
     public void setLink(String link) {
-	this.link = link;
+        this.link = link;
     }
 
     public String getDescription() {
-	return description;
+        return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
     public ZonedDateTime getPubDate() {
-	return pubDate;
+        return pubDate;
     }
 
     public void setPubDate(ZonedDateTime pubDate) {
-	this.pubDate = pubDate;
+        this.pubDate = pubDate;
     }
 
     public Guid getGuid() {
-	return guid;
+        return guid;
     }
 
     public void setGuid(Guid guid) {
-	this.guid = guid;
+        this.guid = guid;
     }
 
     public Thumbnail getThumbnail() {
-	return thumbnail;
+        return thumbnail;
     }
 
     public void setThumbnail(Thumbnail thumbnail) {
-	this.thumbnail = thumbnail;
+        this.thumbnail = thumbnail;
     }
 
     public List<Content> getContent() {
-	return content;
+        return content;
     }
 
     public void setContent(List<Content> content) {
-	this.content = content;
+        this.content = content;
     }
 }

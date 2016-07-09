@@ -30,45 +30,45 @@ public class ChannelTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("title", "title");
-	values.put("link", "link");
-	values.put("description", "description");
-	values.put("pubDate", ZonedDateTime.now());
-	values.put("links", new ArrayList<>());
-	values.put("items", new ArrayList<>());
+        final Map<String, Object> values = new HashMap<>();
+        values.put("title", "title");
+        values.put("link", "link");
+        values.put("description", "description");
+        values.put("pubDate", ZonedDateTime.now());
+        values.put("links", new ArrayList<>());
+        values.put("items", new ArrayList<>());
 
-	values.forEach(new BeanTester(Channel.class));
+        values.forEach(new BeanTester(Channel.class));
     }
 
     @Test
     public void previousAndNextShouldWorkAsExpected() {
-	final Channel channel = new Channel();
-	channel.setLinks(new ArrayList<>());
+        final Channel channel = new Channel();
+        channel.setLinks(new ArrayList<>());
 
-	Link link;
+        Link link;
 
-	link = new Link();
-	link.setRel("previous");
-	link.setHref("p1");
-	channel.getLinks().add(link);
+        link = new Link();
+        link.setRel("previous");
+        link.setHref("p1");
+        channel.getLinks().add(link);
 
-	link = new Link();
-	link.setRel("next");
-	link.setHref("n1");
-	channel.getLinks().add(link);
+        link = new Link();
+        link.setRel("next");
+        link.setHref("n1");
+        channel.getLinks().add(link);
 
-	link = new Link();
-	link.setRel("previous");
-	link.setHref("p2");
-	channel.getLinks().add(link);
+        link = new Link();
+        link.setRel("previous");
+        link.setHref("p2");
+        channel.getLinks().add(link);
 
-	link = new Link();
-	link.setRel("next");
-	link.setHref("n2");
-	channel.getLinks().add(link);
+        link = new Link();
+        link.setRel("next");
+        link.setHref("n2");
+        channel.getLinks().add(link);
 
-	Assert.assertEquals("p1", channel.getPrevious());
-	Assert.assertEquals("n1", channel.getNext());
+        Assert.assertEquals("p1", channel.getPrevious());
+        Assert.assertEquals("n1", channel.getNext());
     }
 }

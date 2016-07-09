@@ -28,23 +28,23 @@ public class OEmbedResponseTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("type", "type");
-	values.put("version", "version");
-	values.put("title", "title");
-	values.put("authorName", "authorName");
-	values.put("authorUrl", "authorUrl");
-	values.put("providerName", "providerName");
-	values.put("providerUrl", "providerUrl");
-	values.put("cacheAge", 123l);
-	values.put("thumbnailUrl", "thumbnailUrl");
-	values.put("thumbnailWidth", 23);
-	values.put("thumbnailHeight", 23);
-	values.put("url", "url");
-	values.put("html", "html");
-	values.put("width", 42);
-	values.put("height", 42);
+        final Map<String, Object> values = new HashMap<>();
+        values.put("type", "type");
+        values.put("version", "version");
+        values.put("title", "title");
+        values.put("authorName", "authorName");
+        values.put("authorUrl", "authorUrl");
+        values.put("providerName", "providerName");
+        values.put("providerUrl", "providerUrl");
+        values.put("cacheAge", 123l);
+        values.put("thumbnailUrl", "thumbnailUrl");
+        values.put("thumbnailWidth", 23);
+        values.put("thumbnailHeight", 23);
+        values.put("url", "url");
+        values.put("html", "html");
+        values.put("width", 42);
+        values.put("height", 42);
 
-	values.forEach(new BeanTester(OEmbedResponse.class));
+        values.forEach(new BeanTester(OEmbedResponse.class));
     }
 }

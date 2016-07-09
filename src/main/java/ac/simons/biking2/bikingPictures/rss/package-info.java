@@ -15,8 +15,8 @@
  */
 @XmlSchema(
     xmlns={
-	@XmlNs(prefix="atom", namespaceURI="http://www.w3.org/2005/Atom"),
-	@XmlNs(prefix="media", namespaceURI="http://search.yahoo.com/mrss/"),
+        @XmlNs(prefix="atom", namespaceURI="http://www.w3.org/2005/Atom"),
+        @XmlNs(prefix="media", namespaceURI="http://search.yahoo.com/mrss/"),
     }
 )
 package ac.simons.biking2.bikingPictures.rss;

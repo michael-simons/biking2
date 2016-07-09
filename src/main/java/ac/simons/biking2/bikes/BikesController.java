@@ -44,94 +44,94 @@ class BikesController {
     private final BikeRepository bikeRepository;
 
     public BikesController(final BikeRepository bikeRepository) {
-	this.bikeRepository = bikeRepository;
+        this.bikeRepository = bikeRepository;
     }
 
     @RequestMapping(value = "/bikes", method = GET)
     public List<BikeEntity> getBikes(final @RequestParam(required = false, defaultValue = "false") boolean all) {
-	List<BikeEntity> rv;
-	if(all) {
-	    rv = bikeRepository.findAll(new Sort(Sort.Direction.ASC, "boughtOn", "decommissionedOn", "name"));
-	} else {
-	    rv = bikeRepository.findByDecommissionedOnIsNull(new Sort(Sort.Direction.ASC, "name"));
-	}
-	return rv;
+        List<BikeEntity> rv;
+        if(all) {
+            rv = bikeRepository.findAll(new Sort(Sort.Direction.ASC, "boughtOn", "decommissionedOn", "name"));
+        } else {
+            rv = bikeRepository.findByDecommissionedOnIsNull(new Sort(Sort.Direction.ASC, "name"));
+        }
+        return rv;
     }
 
     @RequestMapping(value = "/bikes/{id:\\d+}/milages", method = POST)
     @PreAuthorize("isAuthenticated()")
     public MilageEntity createMilage(final @PathVariable Integer id, final @RequestBody @Valid NewMilageCmd cmd, final BindingResult bindingResult) {
-	if(bindingResult.hasErrors()) {
-	    throw new IllegalArgumentException("Invalid arguments.");
-	}
+        if(bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid arguments.");
+        }
 
-	final BikeEntity bike = bikeRepository.findOne(id);
+        final BikeEntity bike = bikeRepository.findOne(id);
 
-	MilageEntity rv;
-	if(bike == null) {
-	    throw new ResourceNotFoundException();
-	} else if(bike.getDecommissionedOn() != null) {
-	    throw new IllegalArgumentException("Bike has already been decommissioned.");
-	} else {
-	    rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
-	    this.bikeRepository.save(bike);
-	}
+        MilageEntity rv;
+        if(bike == null) {
+            throw new ResourceNotFoundException();
+        } else if(bike.getDecommissionedOn() != null) {
+            throw new IllegalArgumentException("Bike has already been decommissioned.");
+        } else {
+            rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
+            this.bikeRepository.save(bike);
+        }
 
-	return rv;
+        return rv;
     }
 
     @RequestMapping(value = "/bikes", method = POST)
     @PreAuthorize("isAuthenticated()")
     public BikeEntity createBike(final @RequestBody @Valid BikeCmd newBike, final BindingResult bindingResult) {
-	if(bindingResult.hasErrors()) {
-	    throw new IllegalArgumentException("Invalid arguments.");
-	}
+        if(bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid arguments.");
+        }
 
-	final BikeEntity bike = new BikeEntity(newBike.getName(), newBike.boughtOnAsLocalDate());
-	bike.setColor(newBike.getColor());
-	bike.addMilage(newBike.boughtOnAsLocalDate().withDayOfMonth(1), 0);
+        final BikeEntity bike = new BikeEntity(newBike.getName(), newBike.boughtOnAsLocalDate());
+        bike.setColor(newBike.getColor());
+        bike.addMilage(newBike.boughtOnAsLocalDate().withDayOfMonth(1), 0);
 
-	return this.bikeRepository.save(bike);
+        return this.bikeRepository.save(bike);
     }
 
     @RequestMapping(value = "/bikes/{id:\\d+}", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
     public BikeEntity updateBike(@PathVariable final Integer id, @RequestBody @Valid final BikeCmd updatedBike, final BindingResult bindingResult) {
-	if(bindingResult.hasErrors()) {
-	    throw new IllegalArgumentException("Invalid arguments.");
-	}
+        if(bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid arguments.");
+        }
 
-	final BikeEntity bike = bikeRepository.findOne(id);
+        final BikeEntity bike = bikeRepository.findOne(id);
 
-	if(bike == null) {
-	    throw new ResourceNotFoundException();
-	} else if(bike.getDecommissionedOn() != null) {
-	    throw new IllegalArgumentException("Bike has already been decommissioned.");
-	} else {
-	    bike.setColor(updatedBike.getColor());
-	    bike.decommission(updatedBike.decommissionedOnAsLocalDate());
-	}
-	return bike;
+        if(bike == null) {
+            throw new ResourceNotFoundException();
+        } else if(bike.getDecommissionedOn() != null) {
+            throw new IllegalArgumentException("Bike has already been decommissioned.");
+        } else {
+            bike.setColor(updatedBike.getColor());
+            bike.decommission(updatedBike.decommissionedOnAsLocalDate());
+        }
+        return bike;
     }
 
     @RequestMapping(value = "/bikes/{id:\\d+}/story", method = PUT)
     @PreAuthorize("isAuthenticated()")
     @Transactional
     public BikeEntity updateBikeStory(@PathVariable final Integer id, @RequestBody(required = false) @Valid final StoryCmd newStory, final BindingResult bindingResult) {
-	if(bindingResult.hasErrors()) {
-	    throw new IllegalArgumentException("Invalid arguments.");
-	}
+        if(bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid arguments.");
+        }
 
-	final BikeEntity bike = bikeRepository.findOne(id);
+        final BikeEntity bike = bikeRepository.findOne(id);
 
-	if(bike == null) {
-	    throw new ResourceNotFoundException();
-	} else if(bike.getDecommissionedOn() != null) {
-	    throw new IllegalArgumentException("Bike has already been decommissioned.");
-	} else {
-	    bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));
-	}
-	return bike;
+        if(bike == null) {
+            throw new ResourceNotFoundException();
+        } else if(bike.getDecommissionedOn() != null) {
+            throw new IllegalArgumentException("Bike has already been decommissioned.");
+        } else {
+            bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));
+        }
+        return bike;
     }
 }

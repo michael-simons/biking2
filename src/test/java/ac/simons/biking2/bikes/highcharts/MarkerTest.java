@@ -30,21 +30,21 @@ public class MarkerTest {
 
     @Test
     public void testBuilder() {
-	Marker marker = new Marker.Builder<>(object -> object)
-		.withLineWidth(1.0)
-		.withFillColor("#CCCCCC")
-		.withLineColor("#FFFFFF")
-		.build();
+        Marker marker = new Marker.Builder<>(object -> object)
+                .withLineWidth(1.0)
+                .withFillColor("#CCCCCC")
+                .withLineColor("#FFFFFF")
+                .build();
 
-	assertThat(marker.getLineWidth(), is(equalTo(1.0)));
-	assertThat(marker.getFillColor(), is(equalTo("#CCCCCC")));
-	assertThat(marker.getLineColor(), is(equalTo("#FFFFFF")));
+        assertThat(marker.getLineWidth(), is(equalTo(1.0)));
+        assertThat(marker.getFillColor(), is(equalTo("#CCCCCC")));
+        assertThat(marker.getLineColor(), is(equalTo("#FFFFFF")));
 
-	marker = new Marker.Builder<>(object -> object)
-		.build();
+        marker = new Marker.Builder<>(object -> object)
+                .build();
 
-	assertThat(marker.getLineWidth(), is(nullValue()));
-	assertThat(marker.getFillColor(), is(nullValue()));
-	assertThat(marker.getLineColor(), is(nullValue()));
+        assertThat(marker.getLineWidth(), is(nullValue()));
+        assertThat(marker.getFillColor(), is(nullValue()));
+        assertThat(marker.getLineColor(), is(nullValue()));
     }
 }

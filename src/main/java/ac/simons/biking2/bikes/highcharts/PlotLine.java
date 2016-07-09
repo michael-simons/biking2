@@ -30,38 +30,38 @@ public class PlotLine {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, PlotLine> sink;
+        private final Sink<PB, PlotLine> sink;
 
-	private Number value;
+        private Number value;
 
-	private Double width;
+        private Double width;
 
-	private String color;
+        private String color;
 
-	public Builder(Sink<PB, PlotLine> sink) {
-	    this.sink = sink;
-	}
+        public Builder(Sink<PB, PlotLine> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> at(final Number value) {
-	    this.value = value;
-	    return this;
-	}
+        public Builder<PB> at(final Number value) {
+            this.value = value;
+            return this;
+        }
 
-	public Builder<PB> withWidth(final Double lineWidth) {
-	    this.width = lineWidth;
-	    return this;
-	}
+        public Builder<PB> withWidth(final Double lineWidth) {
+            this.width = lineWidth;
+            return this;
+        }
 
-	public Builder<PB> withColor(final String lineColor) {
-	    this.color = lineColor;
-	    return this;
-	}
+        public Builder<PB> withColor(final String lineColor) {
+            this.color = lineColor;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(
-		    new PlotLine(value, width, color)
-	    );
-	}
+        public PB build() {
+            return this.sink.setObject(
+                    new PlotLine(value, width, color)
+            );
+        }
     }
 
     private final Number value;
@@ -71,20 +71,20 @@ public class PlotLine {
     private final String color;
 
     public PlotLine(Number value, Double width, String color) {
-	this.value = value;
-	this.width = width;
-	this.color = color;
+        this.value = value;
+        this.width = width;
+        this.color = color;
     }
 
     public Number getValue() {
-	return value;
+        return value;
     }
 
     public Double getWidth() {
-	return width;
+        return width;
     }
 
     public String getColor() {
-	return color;
+        return color;
     }
 }

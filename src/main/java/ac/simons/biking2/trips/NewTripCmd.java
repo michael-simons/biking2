@@ -36,18 +36,18 @@ public class NewTripCmd implements Serializable {
     private Double distance;
 
     public Date getCoveredOn() {
-	return coveredOn;
+        return coveredOn;
     }
 
     public void setCoveredOn(Date coveredOn) {
-	this.coveredOn = coveredOn;
+        this.coveredOn = coveredOn;
     }
 
     public Double getDistance() {
-	return distance;
+        return distance;
     }
 
     public void setDistance(Double distance) {
-	this.distance = distance;
+        this.distance = distance;
     }
 }

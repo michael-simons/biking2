@@ -36,26 +36,26 @@ class SummaryController {
     private final AssortedTripRepository assortedTripRepository;
 
     public SummaryController(final BikeRepository bikeRepository, final AssortedTripRepository assortedTripRepository) {
-	this.bikeRepository = bikeRepository;
-	this.assortedTripRepository = assortedTripRepository;
+        this.bikeRepository = bikeRepository;
+        this.assortedTripRepository = assortedTripRepository;
     }
 
     @RequestMapping("/summary")
     public Summary getSummary() {
-	final List<BikeEntity> allBikes = this.bikeRepository.findAll();
+        final List<BikeEntity> allBikes = this.bikeRepository.findAll();
 
-	final Summary summary = new Summary();
-	summary.setDateOfFirstRecord(this.bikeRepository.getDateOfFirstRecord());
-	summary.setTotal(allBikes.stream().mapToInt(BikeEntity::getMilage).sum()
-		+ this.assortedTripRepository.getTotalDistance().doubleValue()
-	);
+        final Summary summary = new Summary();
+        summary.setDateOfFirstRecord(this.bikeRepository.getDateOfFirstRecord());
+        summary.setTotal(allBikes.stream().mapToInt(BikeEntity::getMilage).sum()
+                + this.assortedTripRepository.getTotalDistance().doubleValue()
+        );
 
-	final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(allBikes, null);
+        final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(allBikes, null);
 
-	summary.setWorstPeriod(BikeEntity.getWorstPeriod(summarizedPeriods));
-	summary.setBestPeriod(BikeEntity.getBestPeriod(summarizedPeriods));
-	summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
+        summary.setWorstPeriod(BikeEntity.getWorstPeriod(summarizedPeriods));
+        summary.setBestPeriod(BikeEntity.getBestPeriod(summarizedPeriods));
+        summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
 
-	return summary;
+        return summary;
     }
 }

@@ -30,38 +30,38 @@ public class Marker {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Marker> sink;
+        private final Sink<PB, Marker> sink;
 
-	private Double lineWidth;
+        private Double lineWidth;
 
-	private String lineColor;
+        private String lineColor;
 
-	private String fillColor;
+        private String fillColor;
 
-	public Builder(Sink<PB, Marker> sink) {
-	    this.sink = sink;
-	}
+        public Builder(Sink<PB, Marker> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> withLineWidth(final Double lineWidth) {
-	    this.lineWidth = lineWidth;
-	    return this;
-	}
+        public Builder<PB> withLineWidth(final Double lineWidth) {
+            this.lineWidth = lineWidth;
+            return this;
+        }
 
-	public Builder<PB> withFillColor(final String fillColor) {
-	    this.fillColor = fillColor;
-	    return this;
-	}
+        public Builder<PB> withFillColor(final String fillColor) {
+            this.fillColor = fillColor;
+            return this;
+        }
 
-	public Builder<PB> withLineColor(final String lineColor) {
-	    this.lineColor = lineColor;
-	    return this;
-	}
+        public Builder<PB> withLineColor(final String lineColor) {
+            this.lineColor = lineColor;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(
-		    new Marker(lineWidth, lineColor, fillColor)
-	    );
-	}
+        public PB build() {
+            return this.sink.setObject(
+                    new Marker(lineWidth, lineColor, fillColor)
+            );
+        }
     }
 
     private final Double lineWidth;
@@ -71,20 +71,20 @@ public class Marker {
     private final String fillColor;
 
     public Marker(Double lineWidth, String lineColor, String fillColor) {
-	this.lineWidth = lineWidth;
-	this.lineColor = lineColor;
-	this.fillColor = fillColor;
+        this.lineWidth = lineWidth;
+        this.lineColor = lineColor;
+        this.fillColor = fillColor;
     }
 
     public Double getLineWidth() {
-	return lineWidth;
+        return lineWidth;
     }
 
     public String getLineColor() {
-	return lineColor;
+        return lineColor;
     }
 
     public String getFillColor() {
-	return fillColor;
+        return fillColor;
     }
 }

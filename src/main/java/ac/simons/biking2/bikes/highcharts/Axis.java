@@ -35,79 +35,79 @@ import java.util.List;
 public class Axis {
 
     public static class Builder<PB> {
-	private final Sink<PB, Axis> sink;
+        private final Sink<PB, Axis> sink;
 
-	private Collection<String> categories;
+        private Collection<String> categories;
 
-	private Number min;
+        private Number min;
 
-	private Number max;
+        private Number max;
 
-	private Number tickInterval;
+        private Number tickInterval;
 
-	private Boolean endOnTick;
+        private Boolean endOnTick;
 
-	private Title title;
+        private Title title;
 
-	private List<PlotLine> plotLines;
+        private List<PlotLine> plotLines;
 
-	Builder(final Sink<PB, Axis> sink) {
-	    this.sink = sink;
-	}
+        Builder(final Sink<PB, Axis> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> withCategories(final String... categories) {
-	    this.categories = Arrays.asList(categories);
-	    return this;
-	}
+        public Builder<PB> withCategories(final String... categories) {
+            this.categories = Arrays.asList(categories);
+            return this;
+        }
 
-	public Builder<PB> withMin(final Number min) {
-	    this.min = min;
-	    return this;
-	}
+        public Builder<PB> withMin(final Number min) {
+            this.min = min;
+            return this;
+        }
 
-	public Builder<PB> withMax(final Number max) {
-	    this.max = max;
-	    return this;
-	}
+        public Builder<PB> withMax(final Number max) {
+            this.max = max;
+            return this;
+        }
 
-	public Builder<PB> withTickInterval(final Number tickInterval) {
-	    this.tickInterval = tickInterval;
-	    return this;
-	}
+        public Builder<PB> withTickInterval(final Number tickInterval) {
+            this.tickInterval = tickInterval;
+            return this;
+        }
 
-	public Builder<PB> enableEndOnTick() {
-	    this.endOnTick = true;
-	    return this;
-	}
+        public Builder<PB> enableEndOnTick() {
+            this.endOnTick = true;
+            return this;
+        }
 
-	public Builder<PB> disableEndOnTick() {
-	    this.endOnTick = false;
-	    return this;
-	}
+        public Builder<PB> disableEndOnTick() {
+            this.endOnTick = false;
+            return this;
+        }
 
-	public Title.Builder<Builder<PB>> title() {
-	    return new Title.Builder<>(title -> {
-		Builder.this.title = title;
-		return Builder.this;
-	    });
-	}
+        public Title.Builder<Builder<PB>> title() {
+            return new Title.Builder<>(title -> {
+                Builder.this.title = title;
+                return Builder.this;
+            });
+        }
 
-	public PlotLine.Builder<Builder<PB>> withPlotLine() {
-	    return new PlotLine.Builder<>(plotLine -> {
-		if(Builder.this.plotLines == null) {
-		    Builder.this.plotLines = new ArrayList<>();
-		}
-		Builder.this.plotLines.add(plotLine);
-		return Builder.this;
-	    });
-	}
+        public PlotLine.Builder<Builder<PB>> withPlotLine() {
+            return new PlotLine.Builder<>(plotLine -> {
+                if(Builder.this.plotLines == null) {
+                    Builder.this.plotLines = new ArrayList<>();
+                }
+                Builder.this.plotLines.add(plotLine);
+                return Builder.this;
+            });
+        }
 
 
-	public PB build() {
-	    return this.sink.setObject(
-		    new Axis(categories, endOnTick, max, min, tickInterval, title, plotLines)
-	    );
-	}
+        public PB build() {
+            return this.sink.setObject(
+                    new Axis(categories, endOnTick, max, min, tickInterval, title, plotLines)
+            );
+        }
     }
 
     private final Collection<String> categories;
@@ -126,48 +126,48 @@ public class Axis {
 
     @JsonCreator
     Axis(
-	    @JsonProperty("categories") Collection<String> categories,
-	    @JsonProperty("endOnTick") Boolean endOnTick,
-	    @JsonProperty("max") Number max,
-	    @JsonProperty("min") Number min,
-	    @JsonProperty("tickInterval") Number tickInterval,
-	    @JsonProperty("title") Title title,
-	    @JsonProperty("plotLines") Collection<PlotLine> plotLines
+            @JsonProperty("categories") Collection<String> categories,
+            @JsonProperty("endOnTick") Boolean endOnTick,
+            @JsonProperty("max") Number max,
+            @JsonProperty("min") Number min,
+            @JsonProperty("tickInterval") Number tickInterval,
+            @JsonProperty("title") Title title,
+            @JsonProperty("plotLines") Collection<PlotLine> plotLines
     ) {
-	this.categories = categories;
-	this.endOnTick = endOnTick;
-	this.max = max;
-	this.min = min;
-	this.tickInterval = tickInterval;
-	this.title = title;
-	this.plotLines = plotLines;
+        this.categories = categories;
+        this.endOnTick = endOnTick;
+        this.max = max;
+        this.min = min;
+        this.tickInterval = tickInterval;
+        this.title = title;
+        this.plotLines = plotLines;
     }
 
     public Collection<String> getCategories() {
-	return categories;
+        return categories;
     }
 
     public Number getMin() {
-	return min;
+        return min;
     }
 
     public Number getMax() {
-	return max;
+        return max;
     }
 
     public Number getTickInterval() {
-	return tickInterval;
+        return tickInterval;
     }
 
     public Boolean isEndOnTick() {
-	return endOnTick;
+        return endOnTick;
     }
 
     public Title getTitle() {
-	return title;
+        return title;
     }
 
     public Collection<PlotLine> getPlotLines() {
-	return plotLines;
+        return plotLines;
     }
 }

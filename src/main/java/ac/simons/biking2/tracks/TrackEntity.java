@@ -62,17 +62,17 @@ class TrackEntity implements Serializable {
      * @return
      */
     public static Integer getId(final String fromPrettyId) {
-	Integer rv = null;
-	try {
-	    rv = Integer.parseInt(fromPrettyId, 36);
-	} catch (NullPointerException | NumberFormatException e) {
-	}
-	return rv;
+        Integer rv = null;
+        try {
+            rv = Integer.parseInt(fromPrettyId, 36);
+        } catch (NullPointerException | NumberFormatException e) {
+        }
+        return rv;
     }
 
     public enum Type {
 
-	biking, running
+        biking, running
     }
 
     @Id
@@ -114,102 +114,102 @@ class TrackEntity implements Serializable {
     }
 
     public TrackEntity(String name, Calendar coveredOn) {
-	this.name = name;
-	this.coveredOn = coveredOn;
+        this.name = name;
+        this.coveredOn = coveredOn;
     }
 
     public Integer getId() {
-	return this.id;
+        return this.id;
     }
 
     public String getName() {
-	return this.name;
+        return this.name;
     }
 
     public Calendar getCoveredOn() {
-	return this.coveredOn;
+        return this.coveredOn;
     }
 
     public String getDescription() {
-	return this.description;
+        return this.description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
     public BigDecimal getMinlat() {
-	return this.minlat;
+        return this.minlat;
     }
 
     public void setMinlat(BigDecimal minlat) {
-	this.minlat = minlat;
+        this.minlat = minlat;
     }
 
     public BigDecimal getMinlon() {
-	return this.minlon;
+        return this.minlon;
     }
 
     public void setMinlon(BigDecimal minlon) {
-	this.minlon = minlon;
+        this.minlon = minlon;
     }
 
     public BigDecimal getMaxlat() {
-	return this.maxlat;
+        return this.maxlat;
     }
 
     public void setMaxlat(BigDecimal maxlat) {
-	this.maxlat = maxlat;
+        this.maxlat = maxlat;
     }
 
     public BigDecimal getMaxlon() {
-	return this.maxlon;
+        return this.maxlon;
     }
 
     public void setMaxlon(BigDecimal maxlon) {
-	this.maxlon = maxlon;
+        this.maxlon = maxlon;
     }
 
     public Type getType() {
-	return type;
+        return type;
     }
 
     public void setType(Type type) {
-	this.type = type;
+        this.type = type;
     }
 
     @JsonProperty("id")
     public String getPrettyId() {
-	return this.getId() == null ? "" : Integer.toString(this.getId(), 36);
+        return this.getId() == null ? "" : Integer.toString(this.getId(), 36);
     }
 
     public File getTrackFile(final File datastoreBaseDirectory, final String format) {
-	return new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, this.getId(), format));
+        return new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, this.getId(), format));
     }
 
     @Override
     public int hashCode() {
-	int hash = 7;
-	hash = 31 * hash + Objects.hashCode(this.name);
-	hash = 31 * hash + Objects.hashCode(this.coveredOn);
-	return hash;
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.name);
+        hash = 31 * hash + Objects.hashCode(this.coveredOn);
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final TrackEntity other = (TrackEntity) obj;
-	if (!Objects.equals(this.name, other.name)) {
-	    return false;
-	}
-	if (!Objects.equals(this.coveredOn, other.coveredOn)) {
-	    return false;
-	}
-	return true;
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TrackEntity other = (TrackEntity) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.coveredOn, other.coveredOn)) {
+            return false;
+        }
+        return true;
     }
 }

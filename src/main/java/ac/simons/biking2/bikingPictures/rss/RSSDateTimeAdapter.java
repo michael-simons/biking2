@@ -29,11 +29,11 @@ public class RSSDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
 
     @Override
     public ZonedDateTime unmarshal(String v) throws Exception {
-	return ZonedDateTime.parse(v, formatter);
+        return ZonedDateTime.parse(v, formatter);
     }
 
     @Override
     public String marshal(ZonedDateTime v) throws Exception {
-	return v.format(formatter);
+        return v.format(formatter);
     }
 }

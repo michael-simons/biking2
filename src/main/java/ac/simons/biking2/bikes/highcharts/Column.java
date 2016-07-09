@@ -32,29 +32,29 @@ public class Column {
 
     public static class Builder<PB> {
 
-	private final Sink<PB, Column> sink;
+        private final Sink<PB, Column> sink;
 
-	private Number borderWidth;
+        private Number borderWidth;
 
-	private Number pointPadding;
+        private Number pointPadding;
 
-	Builder(Sink<PB, Column> sink) {
-	    this.sink = sink;
-	}
+        Builder(Sink<PB, Column> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> withBorderWidth(final Number borderWidth) {
-	    this.borderWidth = borderWidth;
-	    return this;
-	}
+        public Builder<PB> withBorderWidth(final Number borderWidth) {
+            this.borderWidth = borderWidth;
+            return this;
+        }
 
-	public Builder<PB> withPointPadding(final Number pointPadding) {
-	    this.pointPadding = pointPadding;
-	    return this;
-	}
+        public Builder<PB> withPointPadding(final Number pointPadding) {
+            this.pointPadding = pointPadding;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(new Column(borderWidth, pointPadding));
-	}
+        public PB build() {
+            return this.sink.setObject(new Column(borderWidth, pointPadding));
+        }
     }
 
     /**
@@ -69,18 +69,18 @@ public class Column {
 
     @JsonCreator
     Column(
-	    @JsonProperty("borderWidth") Number borderWidth,
-	    @JsonProperty("pointPadding") Number pointPadding
+            @JsonProperty("borderWidth") Number borderWidth,
+            @JsonProperty("pointPadding") Number pointPadding
     ) {
-	this.borderWidth = borderWidth;
-	this.pointPadding = pointPadding;
+        this.borderWidth = borderWidth;
+        this.pointPadding = pointPadding;
     }
 
     public Number getBorderWidth() {
-	return borderWidth;
+        return borderWidth;
     }
 
     public Number getPointPadding() {
-	return pointPadding;
+        return pointPadding;
     }
 }

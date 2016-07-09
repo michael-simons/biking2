@@ -71,46 +71,46 @@ class BikingPictureEntity implements Serializable {
     }
 
     public BikingPictureEntity(final String guid, final ZonedDateTime pubDate, String link) {
-	final Matcher matcher = GUID_PATTERN.matcher(guid);
-	if(!matcher.matches())
-	    throw new RuntimeException("Invalid GUID");
-	this.externalId = Integer.parseInt(matcher.group(1));
-	this.pubDate = GregorianCalendar.from(pubDate);
-	this.link = link;
+        final Matcher matcher = GUID_PATTERN.matcher(guid);
+        if(!matcher.matches())
+            throw new RuntimeException("Invalid GUID");
+        this.externalId = Integer.parseInt(matcher.group(1));
+        this.pubDate = GregorianCalendar.from(pubDate);
+        this.link = link;
     }
 
     public Integer getId() {
-	return this.id;
+        return this.id;
     }
 
     public Integer getExternalId() {
-	return externalId;
+        return externalId;
     }
 
     public String getLink() {
-	return this.link;
+        return this.link;
     }
 
     public Calendar getPubDate() {
-	return pubDate;
+        return pubDate;
     }
 
     @Override
     public int hashCode() {
-	int hash = 5;
-	hash = 67 * hash + Objects.hashCode(this.externalId);
-	return hash;
+        int hash = 5;
+        hash = 67 * hash + Objects.hashCode(this.externalId);
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final BikingPictureEntity other = (BikingPictureEntity) obj;
-	return Objects.equals(this.externalId, other.externalId);
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BikingPictureEntity other = (BikingPictureEntity) obj;
+        return Objects.equals(this.externalId, other.externalId);
     }
 }

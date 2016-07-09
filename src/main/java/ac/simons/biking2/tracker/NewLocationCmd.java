@@ -46,22 +46,22 @@ public class NewLocationCmd {
     private Long timestampMillis;
 
     public BigDecimal getLatitude() {
-	return latitude;
+        return latitude;
     }
 
     public BigDecimal getLongitude() {
-	return longitude;
+        return longitude;
     }
 
     public Calendar getCreatedAt() {
-	Calendar rv = null;
-	if (this.timestampSeconds != null) {
-	    rv = Calendar.getInstance();
-	    rv.setTimeInMillis(this.timestampSeconds * 1000);
-	} else if (this.timestampMillis != null) {
-	    rv = Calendar.getInstance();
-	    rv.setTimeInMillis(this.timestampMillis);
-	}
-	return rv;
+        Calendar rv = null;
+        if (this.timestampSeconds != null) {
+            rv = Calendar.getInstance();
+            rv.setTimeInMillis(this.timestampSeconds * 1000);
+        } else if (this.timestampMillis != null) {
+            rv = Calendar.getInstance();
+            rv.setTimeInMillis(this.timestampMillis);
+        }
+        return rv;
     }
 }
