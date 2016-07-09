@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/api/banner")
 class BannerController {
+
     private final Banner banner;
 
     private final Environment environment;
@@ -42,10 +43,8 @@ class BannerController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public void get(final HttpServletResponse response) throws IOException {
-        try(PrintStream printStream = new PrintStream(response.getOutputStream())) {
+        try (PrintStream printStream = new PrintStream(response.getOutputStream())) {
             banner.printBanner(environment, BannerController.class, printStream);
         }
     }
 }
-
-

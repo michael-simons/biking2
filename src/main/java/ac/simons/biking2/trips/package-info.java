@@ -15,7 +15,7 @@
  */
 /**
  <!-- tag::intent[] -->
-   `trips` manages distances that have been covered on single days without 
+   `trips` manages distances that have been covered on single days without
    relationships to bikes.
  <!-- end::intent[] -->
  */

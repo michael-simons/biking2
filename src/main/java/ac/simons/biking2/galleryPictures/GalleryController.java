@@ -146,7 +146,7 @@ class GalleryController {
             } else {
                 long l = imageFile.length();
                 request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
-                request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
+                request.setAttribute("org.apache.tomcat.sendfile.start", 0L);
                 request.setAttribute("org.apache.tomcat.sendfile.end", l);
                 response.setHeader("Content-Length", Long.toString(l));
             }

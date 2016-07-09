@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/** 
+/**
  <!-- tag::intent[] -->
    `bikes` provides the external API for reading, creating and manipulating
    bikes and their milages as well as computing statistics and generating charts.

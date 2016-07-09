@@ -35,6 +35,7 @@ import java.util.List;
 public final class Axis {
 
     public static final class Builder<PB> {
+
         private final Sink<PB, Axis> sink;
 
         private Collection<String> categories;
@@ -94,14 +95,13 @@ public final class Axis {
 
         public PlotLine.Builder<Builder<PB>> withPlotLine() {
             return new PlotLine.Builder<>(plotLine -> {
-                if(Builder.this.plotLines == null) {
+                if (Builder.this.plotLines == null) {
                     Builder.this.plotLines = new ArrayList<>();
                 }
                 Builder.this.plotLines.add(plotLine);
                 return Builder.this;
             });
         }
-
 
         public PB build() {
             return this.sink.setObject(

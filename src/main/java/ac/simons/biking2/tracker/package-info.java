@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * `tracker` provides the realtime interface for receiving the bikers current 
+ * `tracker` provides the realtime interface for receiving the bikers current
  * location, the location repository and a REST interface for retrieving the
  * locations of the last 30 minutes.
  */

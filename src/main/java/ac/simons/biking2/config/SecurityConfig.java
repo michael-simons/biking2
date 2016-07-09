@@ -63,8 +63,7 @@ public class SecurityConfig {
                     .disable()
                 .headers()
                     .frameOptions() // OEmbedController#embedTrack uses an iframe
-                    .disable()
-                ;
+                    .disable();
         }
     }
 }

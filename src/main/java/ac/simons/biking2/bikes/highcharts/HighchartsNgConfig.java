@@ -57,7 +57,7 @@ public class HighchartsNgConfig {
             return series.stream()
                     .flatMap(series -> series.getData().stream())
                     .filter(val -> val instanceof Number)
-                    .map(val -> (Number)val)
+                    .map(val -> (Number) val)
                     .max((a, b) -> Double.compare(a.doubleValue(), b.doubleValue())).orElse(0);
         }
 
@@ -98,8 +98,8 @@ public class HighchartsNgConfig {
     @JsonCreator
     public HighchartsNgConfig(
             @JsonProperty("options") final Options options,
-            @JsonProperty("series") final Collection<Series<?>> series)
-    {
+            @JsonProperty("series") final Collection<Series<?>> series
+    ) {
         this(options, series, null);
     }
 

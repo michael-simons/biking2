@@ -38,8 +38,10 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 class OEmbedController {
+
     private static final Pattern EMBEDDABLE_TRACK_URL_PATTERN = Pattern.compile(".*?\\/tracks\\/(\\w+)(\\/|\\.(\\w+))?$");
     private static final Map<String, String> ACCEPTABLE_FORMATS;
+
     static {
         final Map<String, String> hlp = new HashMap<>();
         hlp.put("json", "application/json");
@@ -50,8 +52,8 @@ class OEmbedController {
     private final TrackRepository trackRepository;
     private final Coordinate home;
 
-    OEmbedController(final TrackRepository TrackRepository, final Coordinate home) {
-        this.trackRepository = TrackRepository;
+    OEmbedController(final TrackRepository trackRepository, final Coordinate home) {
+        this.trackRepository = trackRepository;
         this.home = home;
     }
 
@@ -68,11 +70,11 @@ class OEmbedController {
         final Integer id = m.matches() ? TrackEntity.getId(m.group(1)) : null;
         final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
         TrackEntity track;
-        if(id == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat))
+        if (id == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        else if((track = this.trackRepository.findOne(id)) == null)
+        } else if ((track = this.trackRepository.findOne(id)) == null) {
             rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        else {
+        } else {
             final OEmbedResponse response = new OEmbedResponse();
 
             response.setType("rich");
@@ -82,21 +84,21 @@ class OEmbedController {
             response.setAuthorUrl("http://michael-simons.eu");
             response.setProviderName("biking2");
             response.setProviderUrl("http://biking.michael-simons.eu");
-            response.setCacheAge((long)(24 * 60 * 60));
+            response.setCacheAge((long) (24 * 60 * 60));
             response.setHtml(new StringBuilder()
                     .append("<iframe ")
-                        .append("width='").append(maxwidth).append("' ")
-                        .append("height='").append(maxheight).append("' ")
-                        .append("src='")
-                            .append(request.getScheme()).append("://")
-                            .append(request.getServerName())
-                            .append(Arrays.asList(80, 443).contains(request.getServerPort()) ? "" : (":" + request.getServerPort()))
-                            .append(request.getContextPath())
-                            .append("/tracks/").append(m.group(1)).append("/embed?")
-                                .append("width=").append(maxwidth).append("&")
-                                .append("height=").append(maxheight)
-                        .append("' ")
-                        .append("class='bikingTrack'>")
+                    .append("width='").append(maxwidth).append("' ")
+                    .append("height='").append(maxheight).append("' ")
+                    .append("src='")
+                    .append(request.getScheme()).append("://")
+                    .append(request.getServerName())
+                    .append(Arrays.asList(80, 443).contains(request.getServerPort()) ? "" : (":" + request.getServerPort()))
+                    .append(request.getContextPath())
+                    .append("/tracks/").append(m.group(1)).append("/embed?")
+                    .append("width=").append(maxwidth).append("&")
+                    .append("height=").append(maxheight)
+                    .append("' ")
+                    .append("class='bikingTrack'>")
                     .append("</iframe>")
                     .toString()
             );

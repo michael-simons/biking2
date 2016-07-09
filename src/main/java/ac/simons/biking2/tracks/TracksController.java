@@ -105,9 +105,9 @@ class TracksController {
             final MultipartFile trackData
     ) throws IOException {
         ResponseEntity<TrackEntity> rv;
-        if(trackData == null || trackData.isEmpty())
+        if (trackData == null || trackData.isEmpty()) {
             rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        else {
+        } else {
             try {
                 TrackEntity track = new TrackEntity(name, GregorianCalendar.from(coveredOn));
                 track.setDescription(description);
@@ -120,14 +120,14 @@ class TracksController {
 
                     track = this.trackRepository.save(track);
                     rv = new ResponseEntity<>(track, HttpStatus.OK);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     this.trackRepository.delete(track);
                     track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
                     track.getTrackFile(datastoreBaseDirectory, "gpx").delete();
 
                     rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
-            } catch(DataIntegrityViolationException e) {
+            } catch (DataIntegrityViolationException e) {
                 rv = new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
@@ -151,8 +151,9 @@ class TracksController {
             process.waitFor();
             int exitValue = process.exitValue();
 
-            if(exitValue != 0)
+            if (exitValue != 0) {
                 throw new RuntimeException("GPSBabel could not convert the input file!");
+            }
             final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
             GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
             track.setMinlon(gpx.getBounds().getMinlon());
@@ -233,7 +234,7 @@ class TracksController {
             } else {
                 long l = trackFile.length();
                 request.setAttribute("org.apache.tomcat.sendfile.filename", trackFile.getAbsolutePath());
-                request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
+                request.setAttribute("org.apache.tomcat.sendfile.start", 0L);
                 request.setAttribute("org.apache.tomcat.sendfile.end", l);
                 response.setHeader("Content-Length", Long.toString(l));
             }

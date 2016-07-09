@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,9 @@ class BikingPictureEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /** The url of the image itself */
+    /**
+     * The url of the image itself
+     */
     @Column(name = "external_id", nullable = false, unique = true)
     @NotNull
     private Integer externalId;
@@ -60,7 +62,9 @@ class BikingPictureEntity implements Serializable {
     @NotNull
     private Calendar pubDate;
 
-    /** A link to the webpage */
+    /**
+     * A link to the webpage
+     */
     @Column(name = "link", nullable = false, length = 512)
     @URL
     @NotNull
@@ -72,8 +76,9 @@ class BikingPictureEntity implements Serializable {
 
     BikingPictureEntity(final String guid, final ZonedDateTime pubDate, final String link) {
         final Matcher matcher = GUID_PATTERN.matcher(guid);
-        if(!matcher.matches())
+        if (!matcher.matches()) {
             throw new RuntimeException("Invalid GUID");
+        }
         this.externalId = Integer.parseInt(matcher.group(1));
         this.pubDate = GregorianCalendar.from(pubDate);
         this.link = link;

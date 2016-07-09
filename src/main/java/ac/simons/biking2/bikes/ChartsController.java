@@ -179,16 +179,16 @@ class ChartsController {
                         // create the array if necessary
                         int[] year = map.computeIfAbsent(period.getKey().getYear(), key -> generate(() -> 0).limit(12).toArray());
                         // add to the array
-                        year[period.getKey().getMonthValue()-1] += period.getValue();
+                        year[period.getKey().getMonthValue() - 1] += period.getValue();
                     },
                     // Merge the array (necessary if the stream runs in parallel)
                     (map1, map2) -> map2.forEach((k, v) -> map1.merge(k, v, ChartsController::addArrays))
             );
         // Create series in builder
-        data.forEach((k,v) -> builder.series().withName(Integer.toString(k)).withData(v).build());
+        data.forEach((k, v) -> builder.series().withName(Integer.toString(k)).withData(v).build());
 
         final StringBuilder title = new StringBuilder();
-        if(data.isEmpty()) {
+        if (data.isEmpty()) {
             title.append("No historical data available.");
         } else {
             // Compute summed years
@@ -199,7 +199,7 @@ class ChartsController {
             final Optional<Map.Entry<Integer, Integer>> worstYear = summedYears.entrySet().stream().min(Map.Entry.comparingByValue());
             final Optional<Map.Entry<Integer, Integer>> bestYear = summedYears.entrySet().stream().max(Map.Entry.comparingByValue());
             // Only add them if they differ
-            if(!worstYear.equals(bestYear)) {
+            if (!worstYear.equals(bestYear)) {
                 userData.put("worstYear", worstYear.orElse(null));
                 userData.put("bestYear", bestYear.orElse(null));
             }
@@ -284,11 +284,11 @@ class ChartsController {
         // Create stupid arrays from statistics...
         final Double[] averages = new Double[12];
         final Integer[][] ranges = new Integer[12][];
-        for(int i=0; i<12; ++i) {
-            final IntSummaryStatistics s = statistics.get(i+1);
-            if(s == null) {
+        for (int i = 0; i < 12; ++i) {
+            final IntSummaryStatistics s = statistics.get(i + 1);
+            if (s == null) {
                 averages[i] = 0.0;
-                ranges[i] = new Integer[]{0,0};
+                ranges[i] = new Integer[]{0, 0};
             } else {
                 averages[i] = s.getAverage();
                 ranges[i] = new Integer[]{s.getMin(), s.getMax()};

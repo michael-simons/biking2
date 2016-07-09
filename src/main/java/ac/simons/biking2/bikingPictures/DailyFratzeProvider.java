@@ -58,7 +58,7 @@ class DailyFratzeProvider {
         URLConnection rv = null;
         try {
             rv = new URL(String.format(imageUrlFormat, "s", id)).openConnection();
-            rv.setRequestProperty ("Authorization", String.format("Bearer %s", accessToken));
+            rv.setRequestProperty("Authorization", String.format("Bearer %s", accessToken));
         } catch (IOException ex) {
             Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);
         }

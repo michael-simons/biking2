@@ -59,7 +59,7 @@ public final class Series<T> {
         }
 
         public Builder<PB, T> withData(final int... data) {
-            this.data = (Collection<T>)Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            this.data = (Collection<T>) Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
             return this;
         }
 

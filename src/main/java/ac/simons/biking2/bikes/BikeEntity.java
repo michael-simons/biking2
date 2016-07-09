@@ -203,12 +203,14 @@ public class BikeEntity implements Serializable {
     }
 
     /**
-     * Use a verb instead of a setter to show that the time part is explicitly stripped of
+     * Use a verb instead of a setter to show that the time part is explicitly
+     * stripped of
+     *
      * @param decommissionedOn Date of decommission. If null nothing changes
      * @return true if the bike was decommissioned
      */
     public boolean decommission(final LocalDate decommissionedOn) {
-        if(decommissionedOn != null) {
+        if (decommissionedOn != null) {
             this.decommissionedOn = GregorianCalendar.from(decommissionedOn.atStartOfDay(ZoneId.systemDefault()));
         }
         return this.decommissionedOn != null;
@@ -219,13 +221,15 @@ public class BikeEntity implements Serializable {
     }
 
     public synchronized MilageEntity addMilage(final LocalDate recordedOn, final double amount) {
-        if(!this.milages.isEmpty()) {
+        if (!this.milages.isEmpty()) {
             final MilageEntity lastMilage = this.milages.get(this.milages.size() - 1);
             LocalDate nextValidDate = lastMilage.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusMonths(1);
-            if(!recordedOn.equals(nextValidDate))
+            if (!recordedOn.equals(nextValidDate)) {
                 throw new IllegalArgumentException("Next valid date for milage is " + nextValidDate);
-            if(lastMilage.getAmount().doubleValue() > amount)
+            }
+            if (lastMilage.getAmount().doubleValue() > amount) {
                 throw new IllegalArgumentException("New amount must be greater than or equal " + lastMilage.getAmount().toPlainString());
+            }
         }
         final MilageEntity milage = new MilageEntity(this, recordedOn.withDayOfMonth(1), amount);
         this.milages.add(milage);
@@ -266,7 +270,7 @@ public class BikeEntity implements Serializable {
 
     @JsonProperty
     public int getLastMilage() {
-        return this.milages == null || this.milages.isEmpty() ? 0 : this.milages.get(this.milages.size()-1).getAmount().intValue();
+        return this.milages == null || this.milages.isEmpty() ? 0 : this.milages.get(this.milages.size() - 1).getAmount().intValue();
     }
 
     /**
@@ -297,7 +301,7 @@ public class BikeEntity implements Serializable {
      * Returns the sum of all milages in the given year
      *
      * @param year The year for which the sum of milages should be computed
-     * @return  The sum of all milages in the given year
+     * @return The sum of all milages in the given year
      */
     public int getMilageInYear(final int year) {
         return Arrays.stream(getMilagesInYear(year)).sum();
@@ -346,6 +350,7 @@ public class BikeEntity implements Serializable {
     }
 
     public static class BikeByMilageInYearComparator implements Comparator<BikeEntity> {
+
         private final int year;
 
         public BikeByMilageInYearComparator(final int year) {
@@ -359,53 +364,56 @@ public class BikeEntity implements Serializable {
     }
 
     /**
-     * This method groups all periods of the given bikes by their period start and
-     * summarizes the value
+     * This method groups all periods of the given bikes by their period start
+     * and summarizes the value
      *
-     * @param bikes A likst of bikes whose milage periods should be grouped together
+     * @param bikes A likst of bikes whose milage periods should be grouped
+     * together
      * @param entryFilter An optional filter for the entries
      * @return A map of grouped periods
      */
     public static Map<LocalDate, Integer> summarizePeriods(final List<BikeEntity> bikes, final Predicate<Map.Entry<LocalDate, Integer>> entryFilter) {
         return bikes.stream()
-            .filter(BikeEntity::hasMilages)
-            .flatMap(bike -> bike.getPeriods().entrySet().stream())
-            .filter(Optional.ofNullable(entryFilter).orElse(entry -> true))
-            .collect(
-                Collectors.groupingBy(
-                    Map.Entry::getKey,
-                    Collectors.reducing(0, Map.Entry::getValue, Integer::sum)
-                )
-            );
+                .filter(BikeEntity::hasMilages)
+                .flatMap(bike -> bike.getPeriods().entrySet().stream())
+                .filter(Optional.ofNullable(entryFilter).orElse(entry -> true))
+                .collect(
+                        Collectors.groupingBy(
+                                Map.Entry::getKey,
+                                Collectors.reducing(0, Map.Entry::getValue, Integer::sum)
+                        )
+                );
     }
 
     /**
-     * Returns the worst performing period in the list of summarized (grouped) periods
+     * Returns the worst performing period in the list of summarized (grouped)
+     * periods
      *
      * @param summarizedPeriods A list of grouped periods
      * @return The worst (with the lowest value) period
      */
     public static AccumulatedPeriod getWorstPeriod(final Map<LocalDate, Integer> summarizedPeriods) {
-         return summarizedPeriods
-                        .entrySet()
-                        .stream()
-                        .min(BikeEntity::comparePeriodsByValue)
-                        .map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
-                        .orElse(null);
+        return summarizedPeriods
+                .entrySet()
+                .stream()
+                .min(BikeEntity::comparePeriodsByValue)
+                .map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+                .orElse(null);
     }
 
     /**
-     * Returns the best performing period in the list of summarized (grouped) periods
+     * Returns the best performing period in the list of summarized (grouped)
+     * periods
      *
      * @param summarizedPeriods A list of grouped periods
      * @return The best (with the highest value) period
      */
     public static AccumulatedPeriod getBestPeriod(final Map<LocalDate, Integer> summarizedPeriods) {
-         return summarizedPeriods
-                        .entrySet()
-                        .stream()
-                        .max(BikeEntity::comparePeriodsByValue)
-                        .map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
-                        .orElse(null);
+        return summarizedPeriods
+                .entrySet()
+                .stream()
+                .max(BikeEntity::comparePeriodsByValue)
+                .map(entry -> new AccumulatedPeriod(entry.getKey(), entry.getValue()))
+                .orElse(null);
     }
 }

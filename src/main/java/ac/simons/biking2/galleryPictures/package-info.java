@@ -15,7 +15,7 @@
  */
 /**
  <!-- tag::intent[] -->
-   `galleryPictures` manages file uploads (images). It stores them locally and 
+   `galleryPictures` manages file uploads (images). It stores them locally and
    provides an RSS interface for getting metadata and image data.
  <!-- end::intent[] -->
  */

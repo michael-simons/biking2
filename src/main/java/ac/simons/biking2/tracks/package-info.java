@@ -15,8 +15,8 @@
  */
 /**
  <!-- tag::intent[] -->
-   `tracks` manages file uploads (TCX files), converts them to GPX files and 
-   computes their surrounding rectangle (envelope) using GPSBabel. 
+   `tracks` manages file uploads (TCX files), converts them to GPX files and
+   computes their surrounding rectangle (envelope) using GPSBabel.
    It also provides the oEmbed interface that resolves URLS to embeddable tracks.
  <!-- end::intent[] -->
  */
