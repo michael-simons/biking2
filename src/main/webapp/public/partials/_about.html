@@ -37,7 +37,7 @@
 		</table>
 	    </div>
 	    <div class="col-md-6">
-		<pre>{{ banner }}</pre>
+                <pre ng-bind-html="banner | ansi_to_html"></pre>
 	    </div>
 	</div>
 
