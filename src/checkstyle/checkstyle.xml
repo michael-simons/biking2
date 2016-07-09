@@ -31,6 +31,11 @@
 -->
 
 <module name="Checker">
+    <module name="RegexpHeader">
+	<property name="headerFile" value="src/checkstyle/checkstyle-header.txt" />
+	<property name="fileExtensions" value="java" />
+    </module>
+    
     <!--
         If you set the basedir property below, then all reported file
         names will be relative to the specified directory. See
