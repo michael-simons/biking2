@@ -14,7 +14,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<!-- tag::wro4jconcept[] -->
 <groups xmlns="http://www.isdc.ro/wro">
+    <!-- end::wro4jconcept[] -->
     <!-- OSM / Openlayer Dependencies -->
     <group name="osm">
 	<css>/webjars/openlayers/@openlayers.version@/theme/default/style.css</css>
@@ -34,6 +36,7 @@ limitations under the License.
 	<js>/js/directives.js</js>
     </group>
     
+    <!-- tag::wro4jconcept[] -->    
     <!-- Dependencies for the full site -->
     <group name="biking2">
 	<group-ref>osm</group-ref>
@@ -63,3 +66,4 @@ limitations under the License.
 	<js>/js/directives.js</js>
     </group>
 </groups>
+<!-- end::wro4jconcept[] -->
