@@ -71,6 +71,7 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     @NotNull
     private Calendar createdAt;
 
+    @SuppressWarnings({"squid:S2637"})
     protected MilageEntity() {
     }
 

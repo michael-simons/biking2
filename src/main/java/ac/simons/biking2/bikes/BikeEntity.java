@@ -167,6 +167,7 @@ public class BikeEntity implements Serializable {
     @JsonIgnore
     private transient Map<LocalDate, Integer> periods;
 
+    @SuppressWarnings({"squid:S2637"})
     protected BikeEntity() {
     }
 

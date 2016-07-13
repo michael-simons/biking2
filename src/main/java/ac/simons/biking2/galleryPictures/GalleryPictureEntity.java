@@ -67,6 +67,7 @@ class GalleryPictureEntity implements Serializable {
     @JsonIgnore
     private Calendar createdAt;
 
+    @SuppressWarnings({"squid:S2637"})
     protected GalleryPictureEntity() {
     }
 
