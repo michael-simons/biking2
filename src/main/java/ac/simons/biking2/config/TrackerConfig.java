@@ -211,7 +211,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
                     hlp = new String(bytes);
                 }
             } catch (JMSException ex) {
-                Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, null, ex);
+                Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, "Could not handle location message...", ex);
             }
 
             if (hlp == null) {
@@ -221,7 +221,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             try {
                 locationService.createAndSendNewLocation(objectMapper.readValue(hlp, NewLocationCmd.class));
             } catch (DataIntegrityViolationException | IOException ex) {
-                Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, null, ex);
+                Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, "Could not store new location...", ex);
             }
         });
         rv.setConnectionFactory(connectionFactory);
