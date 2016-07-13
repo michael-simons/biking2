@@ -67,6 +67,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static java.time.LocalDate.now;
+import org.hamcrest.CoreMatchers;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @author Michael J. Simons, 2014-02-20
@@ -214,8 +216,9 @@ public class BikesControllerTest {
                         .content(objectMapper.writeValueAsString(newMilageCmd))
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(new BikeEntity("testBike", now).addMilage(now, 23.0)))
-                )
+                .andExpect(MockMvcResultMatchers.jsonPath("$.amount", is(23.0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bike.name", is("testBike")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bike.lastMilage", is(23)))                
                 .andDo(
                         document(
                                 "api/bikes/milages/post",

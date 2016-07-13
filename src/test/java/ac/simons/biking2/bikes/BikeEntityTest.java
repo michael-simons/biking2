@@ -16,7 +16,6 @@
 package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.bikes.BikeEntity.Link;
-import ac.simons.biking2.support.BeanTester;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
@@ -74,13 +73,10 @@ public class BikeEntityTest {
     public void beanShouldWorkAsExpected() {
         final LocalDate now = LocalDate.now();
         BikeEntity bike = new BikeEntity("poef", now.withDayOfMonth(1));
-        bike.prePersist();
 
         BikeEntity same = new BikeEntity("poef", now.withDayOfMonth(1));
-        same.prePersist();
 
         BikeEntity other = new BikeEntity("other", now.withDayOfMonth(1));
-        other.prePersist();
         other.decommission(null);
         Assert.assertNull(other.getDecommissionedOn());
         other.decommission(now);

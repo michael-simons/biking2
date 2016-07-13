@@ -30,7 +30,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -79,13 +78,7 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
         this.bike = bike;
         this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));
         this.amount = BigDecimal.valueOf(amount);
-    }
-
-    @PrePersist
-    public void prePersist() {
-        if (this.createdAt == null) {
-            this.createdAt = Calendar.getInstance();
-        }
+        this.createdAt = Calendar.getInstance();
     }
 
     public Integer getId() {
