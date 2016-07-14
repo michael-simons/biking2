@@ -52,6 +52,7 @@ public class AssortedTripEntity implements Serializable {
     @NotNull
     private BigDecimal distance;
 
+    @SuppressWarnings({"squid:S2637"})
     protected AssortedTripEntity() {
     }
 

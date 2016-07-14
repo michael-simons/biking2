@@ -37,7 +37,6 @@ public class GalleryPictureEntityTest {
         values.forEach(new BeanTester(GalleryPictureEntity.class));
 
         final GalleryPictureEntity bean = new GalleryPictureEntity(now, "poef");
-        bean.prePersist();
         final GalleryPictureEntity otherBean = new GalleryPictureEntity(now, "poef");
         Assert.assertEquals(bean, otherBean);
         Assert.assertEquals(bean.hashCode(), otherBean.hashCode());

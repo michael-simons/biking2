@@ -110,6 +110,7 @@ class TrackEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private Type type = Type.biking;
 
+    @SuppressWarnings({"squid:S2637"})
     protected TrackEntity() {
     }
 

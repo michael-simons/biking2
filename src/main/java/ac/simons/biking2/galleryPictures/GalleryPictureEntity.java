@@ -24,7 +24,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -67,19 +66,14 @@ class GalleryPictureEntity implements Serializable {
     @JsonIgnore
     private Calendar createdAt;
 
+    @SuppressWarnings({"squid:S2637"})
     protected GalleryPictureEntity() {
     }
 
     GalleryPictureEntity(final Calendar takenOn, final String filename) {
         this.takenOn = takenOn;
         this.filename = filename;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        if (this.createdAt == null) {
-            this.createdAt = Calendar.getInstance();
-        }
+        this.createdAt = Calendar.getInstance();
     }
 
     public Integer getId() {

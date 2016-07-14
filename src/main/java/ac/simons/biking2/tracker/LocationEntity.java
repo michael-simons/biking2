@@ -59,6 +59,7 @@ public class LocationEntity implements Serializable {
     @NotNull
     private Calendar createdAt;
 
+    @SuppressWarnings({"squid:S2637"})
     protected LocationEntity() {
     }
 

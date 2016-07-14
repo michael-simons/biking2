@@ -71,6 +71,7 @@ class BikingPictureEntity implements Serializable {
     @Size(max = 512)
     private String link;
 
+    @SuppressWarnings({"squid:S2637"})
     protected BikingPictureEntity() {
     }
 

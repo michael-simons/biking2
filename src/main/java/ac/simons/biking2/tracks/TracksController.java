@@ -85,7 +85,8 @@ class TracksController {
     }
 
     @RequestMapping("/api/tracks")
-    public @ResponseBody
+    @ResponseBody
+    public
     List<TrackEntity> getTracks() {
         return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
     }
@@ -170,7 +171,7 @@ class TracksController {
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.GET)
     @SuppressWarnings({"checkstyle:innerassignment"})
-    public ResponseEntity<TrackEntity> getTrack(final @PathVariable String id) {
+    public ResponseEntity<TrackEntity> getTrack(@PathVariable final String id) {
         final Integer requestedId = TrackEntity.getId(id);
 
         TrackEntity track;
@@ -189,7 +190,7 @@ class TracksController {
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
     @PreAuthorize("isAuthenticated()")
     @SuppressWarnings({"checkstyle:innerassignment"})
-    public ResponseEntity<Void> deleteTrack(final @PathVariable String id) {
+    public ResponseEntity<Void> deleteTrack(@PathVariable final String id) {
         final Integer requestedId = TrackEntity.getId(id);
 
         TrackEntity track;
@@ -214,8 +215,8 @@ class TracksController {
     @RequestMapping({"/tracks/{id:\\w+}.{format}"})
     @SuppressWarnings({"checkstyle:innerassignment"})
     public void downloadTrack(
-            final @PathVariable String id,
-            final @PathVariable String format,
+            @PathVariable final String id,
+            @PathVariable final String format,
             final HttpServletRequest request,
             final HttpServletResponse response
     ) throws IOException {

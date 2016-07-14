@@ -47,7 +47,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -167,19 +166,14 @@ public class BikeEntity implements Serializable {
     @JsonIgnore
     private transient Map<LocalDate, Integer> periods;
 
+    @SuppressWarnings({"squid:S2637"})
     protected BikeEntity() {
     }
 
     public BikeEntity(final String name, final LocalDate boughtOn) {
         this.name = name;
         this.boughtOn = GregorianCalendar.from(boughtOn.atStartOfDay(ZoneId.systemDefault()));
-    }
-
-    @PrePersist
-    public void prePersist() {
-        if (this.createdAt == null) {
-            this.createdAt = Calendar.getInstance();
-        }
+        this.createdAt = Calendar.getInstance();
     }
 
     public Integer getId() {
