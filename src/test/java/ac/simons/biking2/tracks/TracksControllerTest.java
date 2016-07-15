@@ -430,7 +430,7 @@ public class TracksControllerTest {
 	final TracksController controller = new TracksController(trackRepository, this.tmpDir, new File("/iam/not/gpsBabel").getAbsolutePath(), null);
 	
 	this.expectedException.expect(RuntimeException.class);	
-	this.expectedException.expectMessage("java.io.IOException: Cannot run program \"/iam/not/gpsBabel\": error=2, No such file or directory");
+	this.expectedException.expectMessage(new RegexMatcher("java.io.IOException: Cannot run program \"/iam/not/gpsBabel\": error=2,.+"));
 	controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 	
 	Mockito.verify(track);
