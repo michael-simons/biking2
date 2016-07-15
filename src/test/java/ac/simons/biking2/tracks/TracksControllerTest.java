@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletResponse;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -410,8 +411,9 @@ public class TracksControllerTest {
 	final TrackRepository trackRepository = mock(TrackRepository.class);	
 	final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 	
-	this.expectedException.expect(RuntimeException.class);	
-	this.expectedException.expectMessage(new RegexMatcher(".*\\(Is a directory\\)$"));
+	this.expectedException.expect(RuntimeException.class);
+        this.expectedException.expectCause(IsInstanceOf.instanceOf(IOException.class));
+	this.expectedException.expectMessage(new RegexMatcher(".*java.io.FileNotFoundException.+$"));        
 	controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 	
 	Mockito.verify(track);
