@@ -37,6 +37,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -60,6 +62,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @Controller
 class TracksController {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(TracksController.class.getPackage().getName());
 
     private static final Map<String, String> ACCEPTABLE_FORMATS;
 
@@ -130,6 +134,7 @@ class TracksController {
                     rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
             } catch (DataIntegrityViolationException e) {
+                LOGGER.debug("Data integrity violation while storing a new track (coveredOn=" + coveredOn + ",name=" + name + ")", e);
                 rv = new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }

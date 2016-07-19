@@ -35,6 +35,7 @@ import org.springframework.validation.BindingResult;
 
 import static org.junit.rules.ExpectedException.none;
 import static java.util.Calendar.getInstance;
+import org.joor.Reflect;
 import static org.mockito.Mockito.when;
 
 /**
@@ -98,7 +99,11 @@ public class LocationControllerTest {
 
     @Test
     public void shouldNotCreateDuplicateLocation() {
-        final NewLocationCmd newLocationCmd = new NewLocationCmd();
+        final NewLocationCmd newLocationCmd = Reflect
+                .on(new NewLocationCmd())
+                .set("latitude", new BigDecimal("1"))
+                .set("longitude", new BigDecimal("2")).get();
+        
         Mockito.stub(locationService.createAndSendNewLocation(newLocationCmd)).toThrow(new DataIntegrityViolationException("foobar"));
         final BindingResult bindingResult = Mockito.mock(BindingResult.class);
         Mockito.stub(bindingResult.hasErrors()).toReturn(false);

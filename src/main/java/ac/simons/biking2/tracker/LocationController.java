@@ -17,6 +17,8 @@ package ac.simons.biking2.tracker;
 
 import java.util.List;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequestMapping("/api")
 class LocationController {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(LocationController.class.getPackage().getName());
 
     private final LocationService locationService;
 
@@ -64,6 +68,7 @@ class LocationController {
         try {
             rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
+            LOGGER.debug("Data integrity violation while storing a new location (" + newLocationCmd.getLatitude().doubleValue() + "," + newLocationCmd.getLongitude().doubleValue() + ")", e);
             rv = new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
