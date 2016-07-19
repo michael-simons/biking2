@@ -49,12 +49,16 @@ import static java.lang.String.format;
 import static java.security.MessageDigest.getInstance;
 import static java.time.ZoneId.of;
 import static java.time.ZonedDateTime.now;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael J. Simons, 2014-02-22
  */
 @Controller
 class GalleryController {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(GalleryController.class.getPackage().getName());
 
     @FunctionalInterface
     public interface FilenameGenerator {
@@ -114,6 +118,7 @@ class GalleryController {
                 // Could not store data...
                 rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (DataIntegrityViolationException e) {
+                LOGGER.debug("Data integrity violation while uploading a new picture (filename=" + filename + ")", e);
                 rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
