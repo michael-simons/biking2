@@ -33,6 +33,7 @@ public class Application extends SpringBootServletInitializer {
         return application.sources(Application.class);
     }
 
+    @SuppressWarnings({"squid:S2095"}) // Ignore 'Close this "ConfigurableApplicationContext".'
     public static void main(final String... args) {
         SpringApplication.run(Application.class, args);
     }
