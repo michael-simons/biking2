@@ -22,12 +22,16 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import static java.time.ZoneId.systemDefault;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael J. Simons, 2014-03-20
  */
 @Service
 public class LocationService {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(LocationService.class.getPackage().getName());
 
     private final LocationRepository locationRepository;
     private final SimpMessagingTemplate messagingTemplate;

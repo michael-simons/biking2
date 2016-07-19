@@ -133,7 +133,9 @@ Errors handling to inconsistent data (in regard to the data models constraint) a
 
 Spring Boot configures logging per default to standard out. The default <<Configurability, configuration>> isn't change in that regard, so all framework logging (especially Spring and Hiberate) go to standard out in standard format and can be grabbed or ignored via OS specific means.
 
-All business components use `java.util.logging` facilities which are configured through the Spring Boot runtime.
+All business components use the _Simple Logging Facade for Java_ (SLF4J). The actual configuration of logging is configured through the means of Spring Boot. No special implementation is included manually, instead _biking2_ depends transitively on `spring-boot-starter-logging`.
+
+The names of the logger corresponds with the package names of the classes which instantiate loggers, so the modules are immediately recognizable in the logs.
 
 === Configurability
 

@@ -26,6 +26,7 @@
 | RSS                         | Rich Site Summary,
                                 Really Simple Syndication
                                                         | https://en.wikipedia.org/wiki/RSS[RSS] uses a family of standard web feed formats to publish frequently updated information: blog entries, news headlines, audio, video.
+| SLF4J                       | Simple Logging Facade for Java | The http://www.slf4j.org[Simple Logging Facade for Java (SLF4J)] serves as a simple facade or abstraction for various logging frameworks (e.g. java.util.logging, logback, log4j) allowing the end user to plug in the desired logging framework at deployment time.
 | SPA                         | spa                     | Single Page Application
 | Spring Boot                 |                         | http://projects.spring.io/spring-boot/[Spring Boot] makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run".
 | Spring Data JPA             |                         | http://projects.spring.io/spring-data-jpa/[Spring Data JPA], part of the larger Spring Data family, makes it easy to easily implement JPA based repositories.

@@ -29,8 +29,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Assert;
@@ -40,7 +38,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static ac.simons.biking2.bikingPictures.BikingPicturesControllerTest.RegexMatcher.matches;
 import static ac.simons.biking2.config.DatastoreConfig.BIKING_PICTURES_DIRECTORY;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
@@ -55,13 +52,13 @@ import static ac.simons.biking2.bikingPictures.BikingPicturesControllerTest.Rege
  * @author Michael J. Simons, 2014-02-19
  */
 public class BikingPicturesControllerTest {
-
+    
     private final RSSDateTimeAdapter dateTimeAdapter = new RSSDateTimeAdapter();
     private final File tmpDir;
     private final File bikingPictures;
-    private byte[] testData;
+    private final byte[] testData;
 
-    public BikingPicturesControllerTest() {
+    public BikingPicturesControllerTest() throws IOException {
         this.tmpDir = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
         this.tmpDir.deleteOnExit();
         this.bikingPictures = new File(this.tmpDir, BIKING_PICTURES_DIRECTORY);
@@ -79,8 +76,6 @@ public class BikingPicturesControllerTest {
             this.testData = bytes.toByteArray();
             out.getChannel().transferFrom(Channels.newChannel(new ByteArrayInputStream(this.testData)), 0, this.testData.length);
             out.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(BikingPicturesControllerTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

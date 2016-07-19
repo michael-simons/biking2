@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.jms.BytesMessage;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -211,7 +209,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
                     hlp = new String(bytes);
                 }
             } catch (JMSException ex) {
-                Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, "Could not handle location message...", ex);
+                LocationService.LOGGER.warn("Could not handle location message...", ex);
             }
 
             if (hlp == null) {
@@ -221,7 +219,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
             try {
                 locationService.createAndSendNewLocation(objectMapper.readValue(hlp, NewLocationCmd.class));
             } catch (DataIntegrityViolationException | IOException ex) {
-                Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, "Could not store new location...", ex);
+                LocationService.LOGGER.warn("Could not store new location...", ex);
             }
         });
         rv.setConnectionFactory(connectionFactory);
