@@ -16,19 +16,11 @@
 package ac.simons.biking2.config;
 
 import ac.simons.biking2.config.TrackerConfig.TrackerProperties;
-import ac.simons.biking2.tracker.LocationService;
-import ac.simons.biking2.tracker.NewLocationCmd;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
+import ac.simons.biking2.tracker.NewLocationMessageListener;
 import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import javax.jms.BytesMessage;
 import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerFactory;
 import org.apache.activemq.broker.BrokerPlugin;
@@ -43,7 +35,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -192,36 +183,11 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Bean
     public SimpleMessageListenerContainer locationMessagesContainer(
-            final LocationService locationService,
-            final ObjectMapper objectMapper,
+            final NewLocationMessageListener newLocationMessageListener,
             final ConnectionFactory connectionFactory
     ) {
         final SimpleMessageListenerContainer rv = new SimpleMessageListenerContainer();
-        rv.setMessageListener((MessageListener) (Message message) -> {
-            String hlp = null;
-            try {
-                if (message instanceof TextMessage) {
-                    hlp = ((TextMessage) message).getText();
-                } else if (message instanceof BytesMessage) {
-                    final BytesMessage bytesMessage = (BytesMessage) message;
-                    byte[] bytes = new byte[(int) bytesMessage.getBodyLength()];
-                    bytesMessage.readBytes(bytes);
-                    hlp = new String(bytes);
-                }
-            } catch (JMSException ex) {
-                LocationService.LOGGER.warn("Could not handle location message...", ex);
-            }
-
-            if (hlp == null) {
-                return;
-            }
-
-            try {
-                locationService.createAndSendNewLocation(objectMapper.readValue(hlp, NewLocationCmd.class));
-            } catch (DataIntegrityViolationException | IOException ex) {
-                LocationService.LOGGER.warn("Could not store new location...", ex);
-            }
-        });
+        rv.setMessageListener(newLocationMessageListener);
         rv.setConnectionFactory(connectionFactory);
         rv.setPubSubDomain(true);
         rv.setDestinationName(String.format("owntracks.%s.%s", properties.getUsername(), properties.getDevice()));
