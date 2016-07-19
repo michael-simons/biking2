@@ -28,8 +28,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -41,6 +39,8 @@ import org.springframework.stereotype.Component;
 
 import static java.util.stream.Collectors.toList;
 import static java.time.ZonedDateTime.ofInstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael J. Simons, 2014-02-17
@@ -49,6 +49,8 @@ import static java.time.ZonedDateTime.ofInstant;
 @Profile({"default", "prod"})
 @ConditionalOnBean(DailyFratzeProvider.class)
 class FetchBikingPicturesJob {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(FetchBikingPicturesJob.class.getPackage().getName());
 
     private final DailyFratzeProvider dailyFratzeProvider;
     private final BikingPictureRepository bikingPictureRepository;
@@ -91,7 +93,7 @@ class FetchBikingPicturesJob {
         do {
             rss = getRSSFeed(url);
             if (rss == null) {
-                Logger.getLogger(FetchBikingPicturesJob.class.getName()).log(Level.WARNING, "There was a problem getting the feed data");
+                LOGGER.warn("There was a problem getting the feed data");
             } else {
                 final List<BikingPictureEntity> intermediateResult
                         = rss.getChannel()
@@ -122,7 +124,7 @@ class FetchBikingPicturesJob {
                             Files.copy(inputStream, new File(bikingPicturesStorage, String.format("%d.jpg", incoming.getExternalId())).toPath(), StandardCopyOption.REPLACE_EXISTING);
                             rv.add(this.bikingPictureRepository.save(incoming));
                         } catch (IOException ex) {
-                            Logger.getLogger(FetchBikingPicturesJob.class.getName()).log(Level.SEVERE, "Could not download image data, skipping!", ex);
+                            LOGGER.error("Could not download image data, skipping!", ex);
                         }
                     }
                 }
@@ -140,7 +142,7 @@ class FetchBikingPicturesJob {
                 final Unmarshaller unmarschaller = rssContext.createUnmarshaller();
                 rss = (RSS) unmarschaller.unmarshal(inputStream);
             } catch (IOException | JAXBException ex) {
-                Logger.getLogger(FetchBikingPicturesJob.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.error(ex.getMessage(), ex);
             }
         }
         return rss;
