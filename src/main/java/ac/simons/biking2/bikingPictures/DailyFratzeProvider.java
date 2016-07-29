@@ -22,6 +22,7 @@ import java.net.URLConnection;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
@@ -38,6 +39,7 @@ class DailyFratzeProvider {
     private final String accessToken;
     private final String imageUrlFormat;
 
+    @Autowired
     DailyFratzeProvider(@Value("${biking2.dailyfratze-access-token}") final String accessToken) {
         this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
     }
