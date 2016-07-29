@@ -86,10 +86,6 @@ public class HighchartsNgConfig {
         }
     }
 
-    public static Builder define() {
-        return new Builder(object -> object);
-    }
-
     private final Options options;
 
     private final Collection<Series<?>> series;
@@ -108,6 +104,10 @@ public class HighchartsNgConfig {
         this.options = options;
         this.series = series;
         this.userData = userData;
+    }
+
+    public static Builder define() {
+        return new Builder(object -> object);
     }
 
     public Options getOptions() {

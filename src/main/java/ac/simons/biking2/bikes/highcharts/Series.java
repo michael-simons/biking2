@@ -54,6 +54,10 @@ public final class Series<T> {
 
         private Marker marker;
 
+        Builder(final Sink<PB, Series> sink) {
+            this.sink = sink;
+        }
+
         public Builder<PB, T> withData(final T... data) {
             this.data = Arrays.asList(data);
             return this;
@@ -104,10 +108,6 @@ public final class Series<T> {
                 Builder.this.marker = marker;
                 return Builder.this;
             });
-        }
-
-        Builder(final Sink<PB, Series> sink) {
-            this.sink = sink;
         }
 
         public PB build() {

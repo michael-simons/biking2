@@ -50,7 +50,7 @@ class TripsController {
 
     @RequestMapping(value = "", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> createTrip(final @RequestBody @Valid NewTripCmd newTrip, final BindingResult bindingResult) {
+    public ResponseEntity<?> createTrip(@RequestBody @Valid final NewTripCmd newTrip, final BindingResult bindingResult) {
         ResponseEntity<?> rv;
 
         if (bindingResult.hasErrors()) {
