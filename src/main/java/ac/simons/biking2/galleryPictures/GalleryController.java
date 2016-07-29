@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,6 +49,8 @@ import static java.lang.String.format;
 import static java.security.MessageDigest.getInstance;
 import static java.time.ZoneId.of;
 import static java.time.ZonedDateTime.now;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael J. Simons, 2014-02-22
@@ -57,103 +58,105 @@ import static java.time.ZonedDateTime.now;
 @Controller
 class GalleryController {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(GalleryController.class.getPackage().getName());
+
     @FunctionalInterface
     public interface FilenameGenerator {
 
-	public String generateFile(final String originalFilename);
+        String generateFile(final String originalFilename);
     }
 
     private final GalleryPictureRepository galleryPictureRepository;
     private final File datastoreBaseDirectory;
     private FilenameGenerator filenameGenerator = originalFilename -> {
-	try {
-	    final byte[] digest = getInstance("MD5").digest(String.format("%s-%d", originalFilename, System.currentTimeMillis()).getBytes());
-	    return format("%032x.jpg", new BigInteger(1, digest));
-	} catch (NoSuchAlgorithmException e) {
-	    throw new RuntimeException(e);
-	}
+        try {
+            final byte[] digest = getInstance("MD5").digest(String.format("%s-%d", originalFilename, System.currentTimeMillis()).getBytes());
+            return format("%032x.jpg", new BigInteger(1, digest));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     };
 
-    @Autowired
-    public GalleryController(GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
-	this.galleryPictureRepository = galleryPictureRepository;
-	this.datastoreBaseDirectory = datastoreBaseDirectory;
+    GalleryController(final GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
+        this.galleryPictureRepository = galleryPictureRepository;
+        this.datastoreBaseDirectory = datastoreBaseDirectory;
     }
 
     @RequestMapping("/api/galleryPictures")
-    public @ResponseBody
-    List<GalleryPictureEntity> getGalleryPictures() {
-	return galleryPictureRepository.findAll(new Sort(Sort.Direction.ASC, "takenOn"));
+    @ResponseBody
+    public List<GalleryPictureEntity> getGalleryPictures() {
+        return galleryPictureRepository.findAll(new Sort(Sort.Direction.ASC, "takenOn"));
     }
 
     @RequestMapping(value = "/api/galleryPictures", method = POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GalleryPictureEntity> createGalleryPicture(
-	    @RequestParam(value = "takenOn", required = true)
-	    @DateTimeFormat(iso = DATE_TIME)
-	    final ZonedDateTime takenOn,
-	    @RequestParam(value = "description", required = true)
-	    final String description,
-	    @RequestParam("imageData")
-	    final MultipartFile imageData
+            @RequestParam(value = "takenOn", required = true)
+            @DateTimeFormat(iso = DATE_TIME)
+            final ZonedDateTime takenOn,
+            @RequestParam(value = "description", required = true)
+            final String description,
+            @RequestParam("imageData")
+            final MultipartFile imageData
     ) {
-	ResponseEntity<GalleryPictureEntity> rv;
-	if (imageData == null || imageData.isEmpty()) {
-	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	} else {
-	    final String filename = this.filenameGenerator.generateFile(imageData.getOriginalFilename());
-	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, filename));
+        ResponseEntity<GalleryPictureEntity> rv;
+        if (imageData == null || imageData.isEmpty()) {
+            rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            final String filename = this.filenameGenerator.generateFile(imageData.getOriginalFilename());
+            final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, filename));
 
-	    try (FileOutputStream out = new FileOutputStream(imageFile);) {
-		out.getChannel().transferFrom(Channels.newChannel(imageData.getInputStream()), 0, Integer.MAX_VALUE);
-		out.flush();
+            try (FileOutputStream out = new FileOutputStream(imageFile);) {
+                out.getChannel().transferFrom(Channels.newChannel(imageData.getInputStream()), 0, Integer.MAX_VALUE);
+                out.flush();
 
-		GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
-		galleryPicture.setDescription(description);
+                GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
+                galleryPicture.setDescription(description);
 
-		rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);
-	    } catch (IOException e) {
-		// Could not store data...
-		rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    } catch (DataIntegrityViolationException e) {
-		rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	    }
-	}
-	return rv;
+                rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);
+            } catch (IOException e) {
+                // Could not store data...
+                rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (DataIntegrityViolationException e) {
+                LOGGER.debug("Data integrity violation while uploading a new picture (filename=" + filename + ")", e);
+                rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        return rv;
     }
-    
+
     @RequestMapping({"/api/galleryPictures/{id:\\d+}.jpg"})
     public void getGalleryPicture(
-	    final @PathVariable Integer id,
-	    final HttpServletRequest request,
-	    final HttpServletResponse response
+            @PathVariable final Integer id,
+            final HttpServletRequest request,
+            final HttpServletResponse response
     ) throws IOException {
 
-	GalleryPictureEntity galleryPicture;
-	if ((galleryPicture = this.galleryPictureRepository.findOne(id)) == null) {
-	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	} else {
-	    final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
-	    
-	    final int cacheForDays = 365;
-	    response.setHeader("Content-Type", "image/jpeg");
-	    response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
-	    response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME));
-	    response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
-	    
-	    // Attribute maybe null
-	    if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
-		Files.copy(imageFile.toPath(), response.getOutputStream());
-		response.getOutputStream().flush();
-	    } else {
-		long l = imageFile.length();
-		request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
-		request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
-		request.setAttribute("org.apache.tomcat.sendfile.end", l);
-		response.setHeader("Content-Length", Long.toString(l));
-	    }
-	}
+        final GalleryPictureEntity galleryPicture = this.galleryPictureRepository.findOne(id);
+        if (galleryPicture == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
 
-	response.flushBuffer();
+            final int cacheForDays = 365;
+            response.setHeader("Content-Type", "image/jpeg");
+            response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
+            response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME));
+            response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
+
+            // Attribute maybe null
+            if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
+                Files.copy(imageFile.toPath(), response.getOutputStream());
+                response.getOutputStream().flush();
+            } else {
+                long l = imageFile.length();
+                request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
+                request.setAttribute("org.apache.tomcat.sendfile.start", 0L);
+                request.setAttribute("org.apache.tomcat.sendfile.end", l);
+                response.setHeader("Content-Length", Long.toString(l));
+            }
+        }
+
+        response.flushBuffer();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,17 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 /**
  * @author Michael J. Simons, 2014-02-17
  */
-public class RSSDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
+public final class RSSDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
 
     @Override
-    public ZonedDateTime unmarshal(String v) throws Exception {
-	return ZonedDateTime.parse(v, formatter);
+    public ZonedDateTime unmarshal(final String v) throws Exception {
+        return ZonedDateTime.parse(v, formatter);
     }
 
     @Override
-    public String marshal(ZonedDateTime v) throws Exception {
-	return v.format(formatter);
+    public String marshal(final ZonedDateTime v) throws Exception {
+        return v.format(formatter);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@ package ac.simons.biking2.tracker;
 
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,38 +38,40 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/api")
 class LocationController {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(LocationController.class.getPackage().getName());
+
     private final LocationService locationService;
 
-    @Autowired
-    public LocationController(LocationService locationService) {
-	this.locationService = locationService;
+    LocationController(final LocationService locationService) {
+        this.locationService = locationService;
     }
-    
+
     @RequestMapping(value = "/locations", method = GET)
     public List<LocationEntity> getLocations() {
-	return this.locationService.getLocationsForTheLastNHours(1);
+        return this.locationService.getLocationsForTheLastNHours(1);
     }
-    
+
     @RequestMapping(value = "/locations/count", method = GET)
     public long getLocationCount() {
-	return this.locationService.getLocationCount();
+        return this.locationService.getLocationCount();
     }
 
     @RequestMapping(value = "/locations", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<LocationEntity> createLocation(final @RequestBody @Valid NewLocationCmd newLocationCmd, final BindingResult bindingResult) {
-	if (bindingResult.hasErrors()) {
-	    throw new IllegalArgumentException("Invalid arguments.");
-	}
+    public ResponseEntity<LocationEntity> createLocation(@RequestBody @Valid final NewLocationCmd newLocationCmd, final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid arguments.");
+        }
 
-	ResponseEntity<LocationEntity> rv;
+        ResponseEntity<LocationEntity> rv;
 
-	try {
-	    rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.CREATED);
-	} catch (DataIntegrityViolationException e) {
-	    rv = new ResponseEntity<>(HttpStatus.CONFLICT);
-	}
+        try {
+            rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.debug("Data integrity violation while storing a new location (" + newLocationCmd.getLatitude().doubleValue() + "," + newLocationCmd.getLongitude().doubleValue() + ")", e);
+            rv = new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
 
-	return rv;
+        return rv;
     }
 }

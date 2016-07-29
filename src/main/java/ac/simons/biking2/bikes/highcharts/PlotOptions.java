@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,39 +28,40 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlotOptions {
+public final class PlotOptions {
 
-    public static class Builder<PB> {
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private final Sink<PB, PlotOptions> sink;
+        private final Sink<PB, PlotOptions> sink;
 
-	private Column column;
+        private Column column;
 
-	private SeriesOptions series;
+        private SeriesOptions series;
 
-	Builder(Sink<PB, PlotOptions> sink) {
-	    this.sink = sink;
-	}
+        Builder(final Sink<PB, PlotOptions> sink) {
+            this.sink = sink;
+        }
 
-	public Column.Builder<Builder<PB>> column() {
-	    return new Column.Builder<>(column -> {
-		Builder.this.column = column;
-		return Builder.this;
-	    });
-	}
+        public Column.Builder<Builder<PB>> column() {
+            return new Column.Builder<>(column -> {
+                Builder.this.column = column;
+                return Builder.this;
+            });
+        }
 
-	public SeriesOptions.Builder<Builder<PB>> series() {
-	    return new SeriesOptions.Builder<>(series -> {
-		Builder.this.series = series;
-		return Builder.this;
-	    });
-	}
+        public SeriesOptions.Builder<Builder<PB>> series() {
+            return new SeriesOptions.Builder<>(series -> {
+                Builder.this.series = series;
+                return Builder.this;
+            });
+        }
 
-	public PB build() {
-	    return this.sink.setObject(
-		    new PlotOptions(column, series)
-	    );
-	}
+        public PB build() {
+            return this.sink.setObject(
+                    new PlotOptions(column, series)
+            );
+        }
     }
 
     private final Column column;
@@ -69,18 +70,18 @@ public class PlotOptions {
 
     @JsonCreator
     PlotOptions(
-	    @JsonProperty("categories") Column column,
-	    @JsonProperty("categories") SeriesOptions series
+            @JsonProperty("categories") final Column column,
+            @JsonProperty("categories") final SeriesOptions series
     ) {
-	this.column = column;
-	this.series = series;
+        this.column = column;
+        this.series = series;
     }
 
     public Column getColumn() {
-	return column;
+        return column;
     }
 
     public SeriesOptions getSeries() {
-	return series;
+        return series;
     }
 }

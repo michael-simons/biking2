@@ -27,11 +27,11 @@ public class AssortedTripEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	Calendar now = Calendar.getInstance();
-	final AssortedTripEntity trip = new AssortedTripEntity(now, BigDecimal.TEN);
-	Assert.assertNull(trip.getId());
-	Assert.assertEquals(now, trip.getCoveredOn());
-	Assert.assertEquals(BigDecimal.TEN, trip.getDistance());
-	Assert.assertEquals(new AssortedTripEntity(), new AssortedTripEntity());
+        Calendar now = Calendar.getInstance();
+        final AssortedTripEntity trip = new AssortedTripEntity(now, BigDecimal.TEN);
+        Assert.assertNull(trip.getId());
+        Assert.assertEquals(now, trip.getCoveredOn());
+        Assert.assertEquals(BigDecimal.TEN, trip.getDistance());
+        Assert.assertEquals(new AssortedTripEntity(), new AssortedTripEntity());
     }
 }

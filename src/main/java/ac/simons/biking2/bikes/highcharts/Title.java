@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,26 +29,27 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Title {
+public final class Title {
 
-    public static class Builder<PB> {
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private final Sink<PB, Title> sink;
+        private final Sink<PB, Title> sink;
 
-	private String text;
+        private String text;
 
-	Builder(Sink<PB, Title> sink) {
-	    this.sink = sink;
-	}
+        Builder(final Sink<PB, Title> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> withText(final String text) {
-	    this.text = text;
-	    return this;
-	}
+        public Builder<PB> withText(final String text) {
+            this.text = text;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(new Title(text));
-	}
+        public PB build() {
+            return this.sink.setObject(new Title(text));
+        }
     }
 
     /**
@@ -58,12 +59,12 @@ public class Title {
     private final String text;
 
     @JsonCreator
-    Title(@JsonProperty("text") String text) {
-	this.text = text;
+    Title(@JsonProperty("text") final String text) {
+        this.text = text;
     }
 
     public String getText() {
-	return text;
+        return text;
     }
 
 }

@@ -27,10 +27,10 @@ public class ContentTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("type", "blog");
-	values.put("url", "http://info.michael-simons.eu");
+        final Map<String, Object> values = new HashMap<>();
+        values.put("type", "blog");
+        values.put("url", "http://info.michael-simons.eu");
 
-	values.forEach(new BeanTester(Content.class));
+        values.forEach(new BeanTester(Content.class));
     }
 }

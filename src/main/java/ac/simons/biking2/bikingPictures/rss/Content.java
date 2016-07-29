@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Content {
+public final class Content {
 
     @XmlAttribute
     private String type;
@@ -32,18 +32,18 @@ public class Content {
     private String url;
 
     public String getType() {
-	return type;
+        return type;
     }
 
-    public void setType(String type) {
-	this.type = type;
+    public void setType(final String type) {
+        this.type = type;
     }
 
     public String getUrl() {
-	return url;
+        return url;
     }
 
-    public void setUrl(String url) {
-	this.url = url;
+    public void setUrl(final String url) {
+        this.url = url;
     }
 }

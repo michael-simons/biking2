@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,11 @@
 package ac.simons.biking2.config;
 
 import ac.simons.biking2.config.TrackerConfig.TrackerProperties;
-import ac.simons.biking2.tracker.LocationService;
-import ac.simons.biking2.tracker.NewLocationCmd;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
+import ac.simons.biking2.tracker.NewLocationMessageListener;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.jms.BytesMessage;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerFactory;
 import org.apache.activemq.broker.BrokerPlugin;
@@ -37,23 +29,24 @@ import org.apache.activemq.hooks.SpringContextHook;
 import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.activemq.security.AuthenticationUser;
 import org.apache.activemq.security.SimpleAuthenticationPlugin;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 /**
  * @author Michael J. Simons, 2014-03-19
  */
 @Configuration
+@EnableWebSocketMessageBroker
 @EnableConfigurationProperties(TrackerProperties.class)
 @Profile({"default", "prod"})
 public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
@@ -61,195 +54,178 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @ConfigurationProperties("biking2.tracker")
     public static class TrackerProperties {
 
-	private String host;
+        private String host;
 
-	private int mqttPort;
+        private int mqttPort;
 
-	private int stompPort;
+        private int stompPort;
 
-	private String username;
+        private String username;
 
-	private String password;
-	
-	private String device;
-	
-	private int inboundPoolSize = 1;
+        private String password;
 
-	private int outboundPoolSize = 2;
+        private String device;
 
-	private boolean useJMX = true;
-	
-	public String getHost() {
-	    return host;
-	}
+        private int inboundPoolSize = 1;
 
-	public void setHost(String host) {
-	    this.host = host;
-	}
+        private int outboundPoolSize = 2;
 
-	public int getMqttPort() {
-	    return mqttPort;
-	}
+        private boolean useJMX = true;
 
-	public void setMqttPort(int mqttPort) {
-	    this.mqttPort = mqttPort;
-	}
+        public String getHost() {
+            return host;
+        }
 
-	public int getStompPort() {
-	    return stompPort;
-	}
+        public void setHost(final String host) {
+            this.host = host;
+        }
 
-	public void setStompPort(int stompPort) {
-	    this.stompPort = stompPort;
-	}
+        public int getMqttPort() {
+            return mqttPort;
+        }
 
-	public String getUsername() {
-	    return username;
-	}
+        public void setMqttPort(final int mqttPort) {
+            this.mqttPort = mqttPort;
+        }
 
-	public void setUsername(String username) {
-	    this.username = username;
-	}
+        public int getStompPort() {
+            return stompPort;
+        }
 
-	public String getPassword() {
-	    return password;
-	}
+        public void setStompPort(final int stompPort) {
+            this.stompPort = stompPort;
+        }
 
-	public void setPassword(String password) {
-	    this.password = password;
-	}
+        public String getUsername() {
+            return username;
+        }
 
-	public String getDevice() {
-	    return device;
-	}
+        public void setUsername(final String username) {
+            this.username = username;
+        }
 
-	public void setDevice(String device) {
-	    this.device = device;
-	}
-	
-	public int getInboundPoolSize() {
-	    return inboundPoolSize;
-	}
+        public String getPassword() {
+            return password;
+        }
 
-	public void setInboundPoolSize(int inboundPoolSize) {
-	    this.inboundPoolSize = inboundPoolSize;
-	}
+        public void setPassword(final String password) {
+            this.password = password;
+        }
 
-	public int getOutboundPoolSize() {
-	    return outboundPoolSize;
-	}
+        public String getDevice() {
+            return device;
+        }
 
-	public void setOutboundPoolSize(int outboundPoolSize) {
-	    this.outboundPoolSize = outboundPoolSize;
-	}
+        public void setDevice(final String device) {
+            this.device = device;
+        }
 
-	public boolean isUseJMX() {
-	    return useJMX;
-	}
+        public int getInboundPoolSize() {
+            return inboundPoolSize;
+        }
 
-	public void setUseJMX(boolean useJMX) {
-	    this.useJMX = useJMX;
-	}
+        public void setInboundPoolSize(final int inboundPoolSize) {
+            this.inboundPoolSize = inboundPoolSize;
+        }
+
+        public int getOutboundPoolSize() {
+            return outboundPoolSize;
+        }
+
+        public void setOutboundPoolSize(final int outboundPoolSize) {
+            this.outboundPoolSize = outboundPoolSize;
+        }
+
+        public boolean isUseJMX() {
+            return useJMX;
+        }
+
+        public void setUseJMX(final boolean useJMX) {
+            this.useJMX = useJMX;
+        }
     }
 
-    @Autowired
-    private TrackerProperties properties;
+    private final TrackerProperties properties;
+
+    public TrackerConfig(final TrackerProperties properties) {
+        this.properties = properties;
+    }
+
+    @Bean(destroyMethod = "shutdown")
+    public Executor taskScheduler(@Value("${biking2.scheduled-thread-pool-size:10}") final int scheduledThreadPoolSize) {
+        return Executors.newScheduledThreadPool(scheduledThreadPoolSize);
+    }
 
     @Bean
     public BrokerService brokerService() throws Exception {
-	final BrokerService rv = BrokerFactory.createBroker(
-		String.format("broker:("
-			+ "vm://localhost,"
-			+ "stomp://localhost:%d,"
-			+ "mqtt+nio://%s:%d"
-			+ ")?persistent=false&useJmx=%s&useShutdownHook=true",
-			properties.getStompPort(),
-			properties.getHost(),
-			properties.getMqttPort(),
-			properties.isUseJMX()
-		)
-	);
+        final BrokerService rv = BrokerFactory.createBroker(
+                String.format("broker:("
+                        + "vm://localhost,"
+                        + "stomp://localhost:%d,"
+                        + "mqtt+nio://%s:%d"
+                        + ")?persistent=false&useJmx=%s&useShutdownHook=true",
+                        properties.getStompPort(),
+                        properties.getHost(),
+                        properties.getMqttPort(),
+                        properties.isUseJMX()
+                )
+        );
 
-	final SimpleAuthenticationPlugin authenticationPlugin = new SimpleAuthenticationPlugin();
-	authenticationPlugin.setAnonymousAccessAllowed(false);
-	authenticationPlugin.setUsers(Arrays.asList(new AuthenticationUser(properties.getUsername(), properties.getPassword(), "")));
+        final SimpleAuthenticationPlugin authenticationPlugin = new SimpleAuthenticationPlugin();
+        authenticationPlugin.setAnonymousAccessAllowed(false);
+        authenticationPlugin.setUsers(Arrays.asList(new AuthenticationUser(properties.getUsername(), properties.getPassword(), "")));
 
-	rv.addShutdownHook(new SpringContextHook());
-	rv.setPlugins(new BrokerPlugin[]{authenticationPlugin});
-	rv.start();
-	return rv;
+        rv.addShutdownHook(new SpringContextHook());
+        rv.setPlugins(new BrokerPlugin[]{authenticationPlugin});
+        rv.start();
+        return rv;
     }
 
     @Bean
     public SimpleMessageListenerContainer locationMessagesContainer(
-	    final LocationService locationService,
-	    final ObjectMapper objectMapper,
-	    final ConnectionFactory connectionFactory
+            final NewLocationMessageListener newLocationMessageListener,
+            final ConnectionFactory connectionFactory
     ) {
-	final SimpleMessageListenerContainer rv = new SimpleMessageListenerContainer();		
-	rv.setMessageListener((MessageListener) (Message message) -> {
-	    String hlp = null;
-	    try {
-		if (message instanceof TextMessage) {
-		    hlp = ((TextMessage) message).getText();
-		} else if (message instanceof BytesMessage) {
-		    final BytesMessage bytesMessage = (BytesMessage) message;
-		    byte[] bytes = new byte[(int) bytesMessage.getBodyLength()];
-		    bytesMessage.readBytes(bytes);
-		    hlp = new String(bytes);
-		}
-	    } catch (JMSException ex) {
-		Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, null, ex);
-	    }
-
-	    if (hlp == null) {
-		return;
-	    }
-
-	    try {
-		locationService.createAndSendNewLocation(objectMapper.readValue(hlp, NewLocationCmd.class));
-	    } catch (DataIntegrityViolationException | IOException ex) {
-		Logger.getLogger(LocationService.class.getName()).log(Level.WARNING, null, ex);
-	    }
-	});
-	rv.setConnectionFactory(connectionFactory);
-	rv.setPubSubDomain(true);
-	rv.setDestinationName(String.format("owntracks.%s.%s", properties.getUsername(), properties.getDevice()));	
-	return rv;
+        final SimpleMessageListenerContainer rv = new SimpleMessageListenerContainer();
+        rv.setMessageListener(newLocationMessageListener);
+        rv.setConnectionFactory(connectionFactory);
+        rv.setPubSubDomain(true);
+        rv.setDestinationName(String.format("owntracks.%s.%s", properties.getUsername(), properties.getDevice()));
+        return rv;
     }
 
     @Bean
     public ConnectionFactory jmsConnectionFactory() {
-	final ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("vm://localhost");
-	activeMQConnectionFactory.setUserName(properties.getUsername());
-	activeMQConnectionFactory.setPassword(properties.getPassword());
+        final ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("vm://localhost");
+        activeMQConnectionFactory.setUserName(properties.getUsername());
+        activeMQConnectionFactory.setPassword(properties.getPassword());
 
-	return new PooledConnectionFactory(activeMQConnectionFactory);
+        return new PooledConnectionFactory(activeMQConnectionFactory);
     }
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-	registry.enableStompBrokerRelay("/topic/currentLocation")
-		.setRelayPort(properties.getStompPort())
-		.setClientLogin(properties.getUsername())
-		.setClientPasscode(properties.getPassword())
-		.setSystemLogin(properties.getUsername())
-		.setSystemPasscode(properties.getPassword());
-	registry.setApplicationDestinationPrefixes("/app");
+    public void configureMessageBroker(final MessageBrokerRegistry registry) {
+        registry.enableStompBrokerRelay("/topic/currentLocation")
+                .setRelayPort(properties.getStompPort())
+                .setClientLogin(properties.getUsername())
+                .setClientPasscode(properties.getPassword())
+                .setSystemLogin(properties.getUsername())
+                .setSystemPasscode(properties.getPassword());
+        registry.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-	registry.addEndpoint("/api/ws").withSockJS();
+    public void registerStompEndpoints(final StompEndpointRegistry registry) {
+        registry.addEndpoint("/api/ws").withSockJS();
     }
 
     @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-	registration.taskExecutor().corePoolSize(this.properties.getInboundPoolSize());
+    public void configureClientInboundChannel(final ChannelRegistration registration) {
+        registration.taskExecutor().corePoolSize(this.properties.getInboundPoolSize());
     }
 
     @Override
-    public void configureClientOutboundChannel(ChannelRegistration registration) {
-	registration.taskExecutor().corePoolSize(this.properties.getOutboundPoolSize());
+    public void configureClientOutboundChannel(final ChannelRegistration registration) {
+        registration.taskExecutor().corePoolSize(this.properties.getOutboundPoolSize());
     }
 }

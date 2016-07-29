@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package ac.simons.biking2.config;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.orm.jpa.EntityScan;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +38,6 @@ public class TestConfig {
 
     @Bean(destroyMethod = "shutdown")
     public Executor taskScheduler() {
-	return Executors.newSingleThreadScheduledExecutor();
+        return Executors.newSingleThreadScheduledExecutor();
     }
 }

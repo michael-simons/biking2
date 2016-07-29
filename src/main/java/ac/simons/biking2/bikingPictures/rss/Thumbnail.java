@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Thumbnail {
+public final class Thumbnail {
 
     @XmlAttribute
     private String url;
@@ -35,26 +35,26 @@ public class Thumbnail {
     private Integer height;
 
     public String getUrl() {
-	return url;
+        return url;
     }
 
-    public void setUrl(String url) {
-	this.url = url;
+    public void setUrl(final String url) {
+        this.url = url;
     }
 
     public Integer getWidth() {
-	return width;
+        return width;
     }
 
-    public void setWidth(Integer width) {
-	this.width = width;
+    public void setWidth(final Integer width) {
+        this.width = width;
     }
 
     public Integer getHeight() {
-	return height;
+        return height;
     }
 
-    public void setHeight(Integer height) {
-	this.height = height;
+    public void setHeight(final Integer height) {
+        this.height = height;
     }
 }

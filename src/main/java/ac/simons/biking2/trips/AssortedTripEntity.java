@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,46 +52,47 @@ public class AssortedTripEntity implements Serializable {
     @NotNull
     private BigDecimal distance;
 
-    protected AssortedTripEntity() {	
+    @SuppressWarnings({"squid:S2637"})
+    protected AssortedTripEntity() {
     }
-    
-    public AssortedTripEntity(Calendar coveredOn, BigDecimal distance) {
-	this.coveredOn = coveredOn;
-	this.distance = distance;
+
+    public AssortedTripEntity(final Calendar coveredOn, final BigDecimal distance) {
+        this.coveredOn = coveredOn;
+        this.distance = distance;
     }
-    
+
     public Integer getId() {
-	return id;
+        return id;
     }
 
     public Calendar getCoveredOn() {
-	return coveredOn;
+        return coveredOn;
     }
 
     public BigDecimal getDistance() {
-	return distance;
+        return distance;
     }
 
     @Override
     public int hashCode() {
-	int hash = 5;
-	hash = 83 * hash + Objects.hashCode(this.coveredOn);
-	hash = 83 * hash + Objects.hashCode(this.distance);
-	return hash;
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.coveredOn);
+        hash = 83 * hash + Objects.hashCode(this.distance);
+        return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final AssortedTripEntity other = (AssortedTripEntity) obj;
-	if (!Objects.equals(this.coveredOn, other.coveredOn)) {
-	    return false;
-	}
-	return Objects.equals(this.distance, other.distance);
-    }   
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AssortedTripEntity other = (AssortedTripEntity) obj;
+        if (!Objects.equals(this.coveredOn, other.coveredOn)) {
+            return false;
+        }
+        return Objects.equals(this.distance, other.distance);
+    }
 }

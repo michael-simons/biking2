@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
 
     @Query(value
-	    = "Select b from BikeEntity b "
-	    + " where b.decommissionedOn is null "
-	    + "    or b.decommissionedOn >= :cutoffDate "
-	    + " order by b.name asc "
+            = "Select b from BikeEntity b "
+            + " where b.decommissionedOn is null "
+            + "    or b.decommissionedOn >= :cutoffDate "
+            + " order by b.name asc "
     )
     List<BikeEntity> findActive(final Calendar cutoffDate);
 

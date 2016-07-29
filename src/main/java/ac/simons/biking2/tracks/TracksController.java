@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.time.ZonedDateTime;
@@ -36,7 +37,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -61,13 +63,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 class TracksController {
 
-    private final static Map<String, String> acceptableFormats;
+    public static final Logger LOGGER = LoggerFactory.getLogger(TracksController.class.getPackage().getName());
+
+    private static final Map<String, String> ACCEPTABLE_FORMATS;
 
     static {
-	final Map<String, String> hlp = new HashMap<>();
-	hlp.put("gpx", "application/gpx+xml");
-	hlp.put("tcx", "application/xml");
-	acceptableFormats = Collections.unmodifiableMap(hlp);
+        final Map<String, String> hlp = new HashMap<>();
+        hlp.put("gpx", "application/gpx+xml");
+        hlp.put("tcx", "application/xml");
+        ACCEPTABLE_FORMATS = Collections.unmodifiableMap(hlp);
     }
 
     private final TrackRepository trackRepository;
@@ -76,176 +80,181 @@ class TracksController {
     private final Coordinate home;
     private final JAXBContext gpxContext;
 
-    @Autowired
-    public TracksController(TrackRepository trackRepository, final File datastoreBaseDirectory, final @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") String gpsBabel, final Coordinate home) {
-	this.trackRepository = trackRepository;
-	this.datastoreBaseDirectory = datastoreBaseDirectory;
-	this.gpsBabel = gpsBabel;
-	this.home = home;
-	this.gpxContext = JAXBContextFactory.createContext(GPX.class);	
+    TracksController(final TrackRepository trackRepository, final File datastoreBaseDirectory, @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") final String gpsBabel, final Coordinate home) {
+        this.trackRepository = trackRepository;
+        this.datastoreBaseDirectory = datastoreBaseDirectory;
+        this.gpsBabel = gpsBabel;
+        this.home = home;
+        this.gpxContext = JAXBContextFactory.createContext(GPX.class);
     }
 
     @RequestMapping("/api/tracks")
-    public @ResponseBody
+    @ResponseBody
+    public
     List<TrackEntity> getTracks() {
-	return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
+        return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
     }
-    
+
     @RequestMapping(value = "/api/tracks", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<TrackEntity> createTrack(	    
-	    @RequestParam(value = "name", required = true)
-	    final String name,	    
-	    @RequestParam(value = "coveredOn", required = true)
-	    @DateTimeFormat(iso = DATE_TIME) 
-	    final ZonedDateTime coveredOn,
-	    @RequestParam(value = "description", required = false)
-	    final String description,
-	    @RequestParam(value = "type", required = true, defaultValue = "biking")
-	    final Type type,
-	    @RequestParam("trackData")
-	    final MultipartFile trackData
+    public ResponseEntity<TrackEntity> createTrack(
+            @RequestParam(value = "name", required = true)
+            final String name,
+            @RequestParam(value = "coveredOn", required = true)
+            @DateTimeFormat(iso = DATE_TIME)
+            final ZonedDateTime coveredOn,
+            @RequestParam(value = "description", required = false)
+            final String description,
+            @RequestParam(value = "type", required = true, defaultValue = "biking")
+            final Type type,
+            @RequestParam("trackData")
+            final MultipartFile trackData
     ) throws IOException {
-	ResponseEntity<TrackEntity> rv;
-	if(trackData == null || trackData.isEmpty())
-	    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	else {
-	    try {
-		TrackEntity track = new TrackEntity(name, GregorianCalendar.from(coveredOn));
-		track.setDescription(description);
-		track.setType(type);
-		
-		track = this.trackRepository.save(track);	   
-		
-		try {
-		    this.storeFile(track, trackData.getInputStream());		    
-		    
-		    track = this.trackRepository.save(track);
-		    rv = new ResponseEntity<>(track, HttpStatus.OK);		    
-		} catch(Exception e) {
-		    this.trackRepository.delete(track);
-		    track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
-		    track.getTrackFile(datastoreBaseDirectory, "gpx").delete();
-		    
-		    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}		
-	    } catch(DataIntegrityViolationException e) {	    
-		rv = new ResponseEntity<>(HttpStatus.CONFLICT);
-	    }
-	}
+        ResponseEntity<TrackEntity> rv;
+        if (trackData == null || trackData.isEmpty()) {
+            rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            try {
+                TrackEntity track = new TrackEntity(name, GregorianCalendar.from(coveredOn));
+                track.setDescription(description);
+                track.setType(type);
 
-	return rv;
+                track = this.trackRepository.save(track);
+
+                try {
+                    this.storeFile(track, trackData.getInputStream());
+
+                    track = this.trackRepository.save(track);
+                    rv = new ResponseEntity<>(track, HttpStatus.OK);
+                } catch (Exception e) {
+                    this.trackRepository.delete(track);
+                    track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
+                    track.getTrackFile(datastoreBaseDirectory, "gpx").delete();
+
+                    rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            } catch (DataIntegrityViolationException e) {
+                LOGGER.debug("Data integrity violation while storing a new track (coveredOn=" + coveredOn + ",name=" + name + ")", e);
+                rv = new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        }
+
+        return rv;
     }
-    
+
     TrackEntity storeFile(final TrackEntity track, final InputStream tcxData) {
-	final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
-	final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");	
+        final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
+        final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
 
-	try (FileOutputStream out = new FileOutputStream(tcxFile);) {
-	    out.getChannel().transferFrom(Channels.newChannel(tcxData), 0, Integer.MAX_VALUE);
-	    out.flush();
-	} catch (IOException ex) {
-	    throw new RuntimeException(ex);
-	}
+        try (FileOutputStream out = new FileOutputStream(tcxFile);) {
+            out.getChannel().transferFrom(Channels.newChannel(tcxData), 0, Integer.MAX_VALUE);
+            out.flush();
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
+        }
 
-	try {
-	    final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
-	    process.waitFor();
-	    int exitValue = process.exitValue();
-	    
-	    if(exitValue != 0)
-		throw new RuntimeException("GPSBabel could not convert the input file!");
-	    final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
-	    GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
-	    track.setMinlon(gpx.getBounds().getMinlon());
-	    track.setMinlat(gpx.getBounds().getMinlat());
-	    track.setMaxlon(gpx.getBounds().getMaxlon());
-	    track.setMaxlat(gpx.getBounds().getMaxlat());
-	} catch (IOException | JAXBException | InterruptedException ex) {
-	    throw new RuntimeException(ex);
-	}
+        try {
+            final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
+            process.waitFor();
+            int exitValue = process.exitValue();
 
-	return track;
+            if (exitValue != 0) {
+                throw new RuntimeException("GPSBabel could not convert the input file!");
+            }
+            final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
+            GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
+            track.setMinlon(gpx.getBounds().getMinlon());
+            track.setMinlat(gpx.getBounds().getMinlat());
+            track.setMaxlon(gpx.getBounds().getMaxlon());
+            track.setMaxlat(gpx.getBounds().getMaxlat());
+        } catch (IOException | JAXBException | InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        return track;
     }
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.GET)
-    public ResponseEntity<TrackEntity> getTrack(final @PathVariable String id) {
-	final Integer _id = TrackEntity.getId(id);
+    @SuppressWarnings({"checkstyle:innerassignment"})
+    public ResponseEntity<TrackEntity> getTrack(@PathVariable final String id) {
+        final Integer requestedId = TrackEntity.getId(id);
 
-	TrackEntity track;
-	ResponseEntity<TrackEntity> rv;
-	if (_id == null) {
-	    rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	} else if ((track = this.trackRepository.findOne(_id)) == null) {
-	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	} else {
-	    rv = new ResponseEntity<>(track, HttpStatus.OK);
-	}
+        TrackEntity track;
+        ResponseEntity<TrackEntity> rv;
+        if (requestedId == null) {
+            rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
+            rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            rv = new ResponseEntity<>(track, HttpStatus.OK);
+        }
 
-	return rv;
-    }    
+        return rv;
+    }
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> deleteTrack(final @PathVariable String id) {
-	final Integer _id = TrackEntity.getId(id);
+    @SuppressWarnings({"checkstyle:innerassignment"})
+    public ResponseEntity<Void> deleteTrack(@PathVariable final String id) {
+        final Integer requestedId = TrackEntity.getId(id);
 
-	TrackEntity track;
-	ResponseEntity<Void> rv;
-	if (_id == null) {
-	    rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	} else if ((track = this.trackRepository.findOne(_id)) == null) {
-	    rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	} else {
-	    final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
-	    final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
-	    if (tcxFile.delete() && gpxFile.delete()) {
-		this.trackRepository.delete(track);
-		rv = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	    } else {
-		rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	}
-	return rv;
+        TrackEntity track;
+        ResponseEntity<Void> rv;
+        if (requestedId == null) {
+            rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
+            rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
+            final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
+            if (tcxFile.delete() && gpxFile.delete()) {
+                this.trackRepository.delete(track);
+                rv = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        return rv;
     }
 
     @RequestMapping({"/tracks/{id:\\w+}.{format}"})
+    @SuppressWarnings({"checkstyle:innerassignment"})
     public void downloadTrack(
-	    final @PathVariable String id,
-	    final @PathVariable String format,
-	    final HttpServletRequest request,
-	    final HttpServletResponse response
+            @PathVariable final String id,
+            @PathVariable final String format,
+            final HttpServletRequest request,
+            final HttpServletResponse response
     ) throws IOException {
-	final Integer _id = TrackEntity.getId(id);
-	final String _format = Optional.ofNullable(format).orElse("").toLowerCase();
-	TrackEntity track;
-	if (_id == null || !acceptableFormats.containsKey(_format)) {
-	    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-	} else if ((track = this.trackRepository.findOne(_id)) == null) {
-	    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	} else {
-	    final File trackFile = track.getTrackFile(datastoreBaseDirectory, _format);
-	    response.setHeader("Content-Type", acceptableFormats.get(_format));
-	    response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, _format));
+        final Integer requestedId = TrackEntity.getId(id);
+        final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
+        TrackEntity track;
+        if (requestedId == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
+            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            final File trackFile = track.getTrackFile(datastoreBaseDirectory, requestedFormat);
+            response.setHeader("Content-Type", ACCEPTABLE_FORMATS.get(requestedFormat));
+            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, requestedFormat));
 
-	    // Attribute maybe null
-	    if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
-		Files.copy(trackFile.toPath(), response.getOutputStream());
-		response.getOutputStream().flush();
-	    } else {
-		long l = trackFile.length();
-		request.setAttribute("org.apache.tomcat.sendfile.filename", trackFile.getAbsolutePath());
-		request.setAttribute("org.apache.tomcat.sendfile.start", 0l);
-		request.setAttribute("org.apache.tomcat.sendfile.end", l);
-		response.setHeader("Content-Length", Long.toString(l));
-	    }
-	}
+            // Attribute maybe null
+            if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
+                Files.copy(trackFile.toPath(), response.getOutputStream());
+                response.getOutputStream().flush();
+            } else {
+                long l = trackFile.length();
+                request.setAttribute("org.apache.tomcat.sendfile.filename", trackFile.getAbsolutePath());
+                request.setAttribute("org.apache.tomcat.sendfile.start", 0L);
+                request.setAttribute("org.apache.tomcat.sendfile.end", l);
+                response.setHeader("Content-Length", Long.toString(l));
+            }
+        }
 
-	response.flushBuffer();
+        response.flushBuffer();
     }
-    
+
     @RequestMapping("/api/home")
     public @ResponseBody Coordinate getHome() {
-	return this.home;
+        return this.home;
     }
 }

@@ -34,6 +34,7 @@ Array.prototype.randomize = function() {
 var biking2 = angular
 	.module('biking2', [
 	    'ngRoute', 
+            'ngSanitize',
 	    'angularFileUpload', 
 	    'ui.bootstrap', 
 	    'track-map-ng',	    
@@ -121,6 +122,11 @@ var biking2 = angular
 		return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  '' + units[number];
 	    };
 	})
+        .filter('ansi_to_html', ['$sce', function($sce) {
+            return function(ansi) {                
+                return $sce.trustAsHtml(ansi !== undefined ? ansi_up.ansi_to_html(ansi) : ansi);
+            };
+        }])
 	.run(['$rootScope', function($rootScope) {
 	    $rootScope.currentYear = new Date().getFullYear();
 	}]);    

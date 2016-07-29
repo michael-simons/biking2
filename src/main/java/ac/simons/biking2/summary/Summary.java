@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,50 +26,50 @@ class Summary {
     private Calendar dateOfFirstRecord;
 
     private Double total;
-        
+
     private AccumulatedPeriod worstPeriod;
-    
+
     private AccumulatedPeriod bestPeriod;
-    
+
     private Double average;
 
     public Calendar getDateOfFirstRecord() {
-	return dateOfFirstRecord;
+        return dateOfFirstRecord;
     }
 
-    public void setDateOfFirstRecord(Calendar dateOfFirstRecord) {
-	this.dateOfFirstRecord = dateOfFirstRecord;
+    public void setDateOfFirstRecord(final Calendar dateOfFirstRecord) {
+        this.dateOfFirstRecord = dateOfFirstRecord;
     }
 
     public Double getTotal() {
-	return total;
+        return total;
     }
 
-    public void setTotal(Double total) {
-	this.total = total;
+    public void setTotal(final Double total) {
+        this.total = total;
     }
 
     public AccumulatedPeriod getWorstPeriod() {
-	return worstPeriod;
+        return worstPeriod;
     }
 
-    public void setWorstPeriod(AccumulatedPeriod worstPeriod) {
-	this.worstPeriod = worstPeriod;
+    public void setWorstPeriod(final AccumulatedPeriod worstPeriod) {
+        this.worstPeriod = worstPeriod;
     }
 
     public AccumulatedPeriod getBestPeriod() {
-	return bestPeriod;
+        return bestPeriod;
     }
 
-    public void setBestPeriod(AccumulatedPeriod bestPeriod) {
-	this.bestPeriod = bestPeriod;
-    }    
+    public void setBestPeriod(final AccumulatedPeriod bestPeriod) {
+        this.bestPeriod = bestPeriod;
+    }
 
     public Double getAverage() {
-	return average;
+        return average;
     }
 
-    public void setAverage(Double average) {
-	this.average = average;
+    public void setAverage(final Double average) {
+        this.average = average;
     }
 }

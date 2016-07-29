@@ -31,41 +31,41 @@ import static org.junit.rules.ExpectedException.none;
 public class BikingPictureEntityTest {
     @Rule
     public final ExpectedException expectedException = none();
-    
+
     @Test
     public void beanShouldWorkAsExpected() {
-	// Test default constructor
-	BikingPictureEntity bikingPicture;
-	
-	bikingPicture = new BikingPictureEntity();
-	Assert.assertEquals(bikingPicture, new BikingPictureEntity());
-	Assert.assertNull(bikingPicture.getExternalId());
-	Assert.assertNull(bikingPicture.getId());
-	Assert.assertNull(bikingPicture.getLink());
-	Assert.assertNull(bikingPicture.getPubDate());
-	
-	final ZonedDateTime now = ZonedDateTime.now();
-	bikingPicture = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
-	
-	Assert.assertNotEquals(bikingPicture, new BikingPictureEntity());
-	Assert.assertNotEquals(bikingPicture, null);
-	Assert.assertNotEquals(bikingPicture, "not equals");
-	Assert.assertEquals(new Integer(45644), bikingPicture.getExternalId());
-	Assert.assertNull(bikingPicture.getId());
-	Assert.assertEquals("http://dailyfratze.de/michael/2014/1/12", bikingPicture.getLink());
-	Assert.assertEquals(GregorianCalendar.from(now), bikingPicture.getPubDate());	
-	
-	final BikingPictureEntity bikingPicture2 = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
-	Assert.assertEquals(bikingPicture, bikingPicture2);
-	Assert.assertEquals(bikingPicture.hashCode(), bikingPicture2.hashCode());
+        // Test default constructor
+        BikingPictureEntity bikingPicture;
+
+        bikingPicture = new BikingPictureEntity();
+        Assert.assertEquals(bikingPicture, new BikingPictureEntity());
+        Assert.assertNull(bikingPicture.getExternalId());
+        Assert.assertNull(bikingPicture.getId());
+        Assert.assertNull(bikingPicture.getLink());
+        Assert.assertNull(bikingPicture.getPubDate());
+
+        final ZonedDateTime now = ZonedDateTime.now();
+        bikingPicture = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
+
+        Assert.assertNotEquals(bikingPicture, new BikingPictureEntity());
+        Assert.assertNotEquals(bikingPicture, null);
+        Assert.assertNotEquals(bikingPicture, "not equals");
+        Assert.assertEquals(new Integer(45644), bikingPicture.getExternalId());
+        Assert.assertNull(bikingPicture.getId());
+        Assert.assertEquals("http://dailyfratze.de/michael/2014/1/12", bikingPicture.getLink());
+        Assert.assertEquals(GregorianCalendar.from(now), bikingPicture.getPubDate());
+
+        final BikingPictureEntity bikingPicture2 = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
+        Assert.assertEquals(bikingPicture, bikingPicture2);
+        Assert.assertEquals(bikingPicture.hashCode(), bikingPicture2.hashCode());
     }
 
     @Test
     public void shouldHandleInvalidGuidsGracefully() {
-	this.expectedException.expect(RuntimeException.class);
-	this.expectedException.expectMessage("Invalid GUID");
-	
-	final ZonedDateTime now = ZonedDateTime.now();
-	new BikingPictureEntity("http://www.heise.de", now, "http://www.heise.de");	
+        this.expectedException.expect(RuntimeException.class);
+        this.expectedException.expectMessage("Invalid GUID");
+
+        final ZonedDateTime now = ZonedDateTime.now();
+        new BikingPictureEntity("http://www.heise.de", now, "http://www.heise.de");
     }
 }

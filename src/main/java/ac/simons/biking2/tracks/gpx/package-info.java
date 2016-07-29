@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 @XmlSchema(
-	namespace = "http://www.topografix.com/GPX/1/0", 
-	elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
+        namespace = "http://www.topografix.com/GPX/1/0",
+        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
 )
 package ac.simons.biking2.tracks.gpx;
 

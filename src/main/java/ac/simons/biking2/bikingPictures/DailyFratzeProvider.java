@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
@@ -32,38 +31,40 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConditionalOnExpression(value = "environment['biking2.dailyfratze-access-token'] != null && !environment['biking2.dailyfratze-access-token'].isEmpty()")
-class DailyFratzeProvider {    
-    private final String accessToken;    
+class DailyFratzeProvider {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(DailyFratzeProvider.class.getPackage().getName());
+
+    private final String accessToken;
     private final String imageUrlFormat;
-    
-    @Autowired
-    public DailyFratzeProvider(final @Value("${biking2.dailyfratze-access-token}") String accessToken) {
-	this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
+
+    DailyFratzeProvider(@Value("${biking2.dailyfratze-access-token}") final String accessToken) {
+        this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
     }
-    
+
     DailyFratzeProvider(final String accessToken, final String imageUrlFormat) {
-	this.accessToken = accessToken;
-	this.imageUrlFormat = imageUrlFormat;
+        this.accessToken = accessToken;
+        this.imageUrlFormat = imageUrlFormat;
     }
-    
+
     public URLConnection getRSSConnection(final String url) {
-	URLConnection rv = null;
-	try {
-	    rv = new URL(Optional.ofNullable(url).orElse("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d")).openConnection();	    
-	} catch (IOException ex) {	    
-	    Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return rv;
+        URLConnection rv = null;
+        try {
+            rv = new URL(Optional.ofNullable(url).orElse("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d")).openConnection();
+        } catch (IOException ex) {
+            LOGGER.error("Failed to open URL connection to DailyFratze RSS endpoint", ex);
+        }
+        return rv;
     }
-    
+
     public URLConnection getImageConnection(final Integer id) {
-	URLConnection rv = null;
-	try {	    		
-	    rv = new URL(String.format(imageUrlFormat, "s", id)).openConnection();	    
-	    rv.setRequestProperty ("Authorization", String.format("Bearer %s", accessToken));
-	} catch (IOException ex) {	    
-	    Logger.getLogger(DailyFratzeProvider.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return rv;
+        URLConnection rv = null;
+        try {
+            rv = new URL(String.format(imageUrlFormat, "s", id)).openConnection();
+            rv.setRequestProperty("Authorization", String.format("Bearer %s", accessToken));
+        } catch (IOException ex) {
+            LOGGER.error("Failed to open secure connection to DailyFratze image api", ex);
+        }
+        return rv;
     }
 }

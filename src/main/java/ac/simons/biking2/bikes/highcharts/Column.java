@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,33 +28,34 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Column {
+public final class Column {
 
-    public static class Builder<PB> {
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private final Sink<PB, Column> sink;
+        private final Sink<PB, Column> sink;
 
-	private Number borderWidth;
+        private Number borderWidth;
 
-	private Number pointPadding;
+        private Number pointPadding;
 
-	Builder(Sink<PB, Column> sink) {
-	    this.sink = sink;
-	}
+        Builder(final Sink<PB, Column> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> withBorderWidth(final Number borderWidth) {
-	    this.borderWidth = borderWidth;
-	    return this;
-	}
+        public Builder<PB> withBorderWidth(final Number borderWidth) {
+            this.borderWidth = borderWidth;
+            return this;
+        }
 
-	public Builder<PB> withPointPadding(final Number pointPadding) {
-	    this.pointPadding = pointPadding;
-	    return this;
-	}
+        public Builder<PB> withPointPadding(final Number pointPadding) {
+            this.pointPadding = pointPadding;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(new Column(borderWidth, pointPadding));
-	}
+        public PB build() {
+            return this.sink.setObject(new Column(borderWidth, pointPadding));
+        }
     }
 
     /**
@@ -69,18 +70,18 @@ public class Column {
 
     @JsonCreator
     Column(
-	    @JsonProperty("borderWidth") Number borderWidth,
-	    @JsonProperty("pointPadding") Number pointPadding
+            @JsonProperty("borderWidth") final Number borderWidth,
+            @JsonProperty("pointPadding") final Number pointPadding
     ) {
-	this.borderWidth = borderWidth;
-	this.pointPadding = pointPadding;
+        this.borderWidth = borderWidth;
+        this.pointPadding = pointPadding;
     }
 
     public Number getBorderWidth() {
-	return borderWidth;
+        return borderWidth;
     }
 
     public Number getPointPadding() {
-	return pointPadding;
+        return pointPadding;
     }
 }

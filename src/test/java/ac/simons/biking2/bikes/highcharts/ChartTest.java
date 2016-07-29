@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,16 +30,16 @@ public class ChartTest {
 
     @Test
     public void testBuilder() {
-	Chart chart = new Chart.Builder<>(object -> object).build();
-	assertThat(chart.getBorderWidth(), is(nullValue()));
-	assertThat(chart.getType(), is(nullValue()));
-	
-	chart = new Chart.Builder<>(object -> object)
-	    .withBorderWidth(1)
-	    .withType("line")
-	.build();
-	
-	assertThat(chart.getBorderWidth(), is(equalTo(1)));
-	assertThat(chart.getType(), is(equalTo("line")));
+        Chart chart = new Chart.Builder<>(object -> object).build();
+        assertThat(chart.getBorderWidth(), is(nullValue()));
+        assertThat(chart.getType(), is(nullValue()));
+
+        chart = new Chart.Builder<>(object -> object)
+            .withBorderWidth(1)
+            .withType("line")
+        .build();
+
+        assertThat(chart.getBorderWidth(), is(equalTo(1)));
+        assertThat(chart.getType(), is(equalTo("line")));
     }
 }

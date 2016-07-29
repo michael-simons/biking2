@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,13 @@ public class CreditsTest {
 
     @Test
     public void testBuilder() {
-	Credits credits = new Credits.Builder<>(object -> object).build();
-	assertThat(credits.isEnabled(), is(true));
+        Credits credits = new Credits.Builder<>(object -> object).build();
+        assertThat(credits.isEnabled(), is(true));
 
-	credits = new Credits.Builder<>(object -> object).disable().build();
-	assertThat(credits.isEnabled(), is(false));
+        credits = new Credits.Builder<>(object -> object).disable().build();
+        assertThat(credits.isEnabled(), is(false));
 
-	credits = new Credits.Builder<>(object -> object).enable().build();
-	assertThat(credits.isEnabled(), is(true));
+        credits = new Credits.Builder<>(object -> object).enable().build();
+        assertThat(credits.isEnabled(), is(true));
     }
 }

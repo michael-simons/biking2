@@ -30,21 +30,21 @@ public class PlotLineTest {
 
     @Test
     public void testBuilder() {
-	PlotLine plotline = new PlotLine.Builder<>(object -> object)
-		.at(23.0)
-		.withWidth(42.0)
-		.withColor("#FFFFFF")
-		.build();
+        PlotLine plotline = new PlotLine.Builder<>(object -> object)
+                .at(23.0)
+                .withWidth(42.0)
+                .withColor("#FFFFFF")
+                .build();
 
-	assertThat(plotline.getValue(), is(equalTo(23.0)));
-	assertThat(plotline.getWidth(), is(equalTo(42.0)));
-	assertThat(plotline.getColor(), is(equalTo("#FFFFFF")));
+        assertThat(plotline.getValue(), is(equalTo(23.0)));
+        assertThat(plotline.getWidth(), is(equalTo(42.0)));
+        assertThat(plotline.getColor(), is(equalTo("#FFFFFF")));
 
-	plotline = new PlotLine.Builder<>(object -> object)
-		.build();
+        plotline = new PlotLine.Builder<>(object -> object)
+                .build();
 
-	assertThat(plotline.getValue(), is(nullValue()));
-	assertThat(plotline.getWidth(), is(nullValue()));
-	assertThat(plotline.getColor(), is(nullValue()));
+        assertThat(plotline.getValue(), is(nullValue()));
+        assertThat(plotline.getWidth(), is(nullValue()));
+        assertThat(plotline.getColor(), is(nullValue()));
     }
 }

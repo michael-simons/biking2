@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,42 +26,43 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlotLine {
+public final class PlotLine {
 
-    public static class Builder<PB> {
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private final Sink<PB, PlotLine> sink;
+        private final Sink<PB, PlotLine> sink;
 
-	private Number value;
+        private Number value;
 
-	private Double width;
+        private Double width;
 
-	private String color;
+        private String color;
 
-	public Builder(Sink<PB, PlotLine> sink) {
-	    this.sink = sink;
-	}
+        public Builder(final Sink<PB, PlotLine> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> at(final Number value) {
-	    this.value = value;
-	    return this;
-	}
-	
-	public Builder<PB> withWidth(final Double lineWidth) {
-	    this.width = lineWidth;
-	    return this;
-	}
+        public Builder<PB> at(final Number value) {
+            this.value = value;
+            return this;
+        }
 
-	public Builder<PB> withColor(final String lineColor) {
-	    this.color = lineColor;
-	    return this;
-	}
+        public Builder<PB> withWidth(final Double lineWidth) {
+            this.width = lineWidth;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(
-		    new PlotLine(value, width, color)
-	    );
-	}
+        public Builder<PB> withColor(final String lineColor) {
+            this.color = lineColor;
+            return this;
+        }
+
+        public PB build() {
+            return this.sink.setObject(
+                    new PlotLine(value, width, color)
+            );
+        }
     }
 
     private final Number value;
@@ -70,21 +71,21 @@ public class PlotLine {
 
     private final String color;
 
-    public PlotLine(Number value, Double width, String color) {
-	this.value = value;
-	this.width = width;
-	this.color = color;
+    public PlotLine(final Number value, final Double width, final String color) {
+        this.value = value;
+        this.width = width;
+        this.color = color;
     }
 
     public Number getValue() {
-	return value;
+        return value;
     }
 
     public Double getWidth() {
-	return width;
+        return width;
     }
 
     public String getColor() {
-	return color;
+        return color;
     }
 }

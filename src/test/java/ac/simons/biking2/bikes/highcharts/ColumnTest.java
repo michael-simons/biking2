@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@ public class ColumnTest {
 
     @Test
     public void testBuilder() {
-	Column column = new Column.Builder<>(object -> object)
-		.withPointPadding(0.2)
-		.withBorderWidth(0)
-	.build();
-	assertThat(column.getPointPadding(), is(equalTo(0.2)));
-	assertThat(column.getBorderWidth(), is(equalTo(0)));
+        Column column = new Column.Builder<>(object -> object)
+                .withPointPadding(0.2)
+                .withBorderWidth(0)
+        .build();
+        assertThat(column.getPointPadding(), is(equalTo(0.2)));
+        assertThat(column.getBorderWidth(), is(equalTo(0)));
     }
 }

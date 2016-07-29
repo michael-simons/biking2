@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,122 +72,122 @@ class OEmbedResponse implements Serializable {
     private Integer height;
 
     public String getType() {
-	return type;
+        return type;
     }
 
-    public void setType(String type) {
-	this.type = type;
+    public void setType(final String type) {
+        this.type = type;
     }
 
     public String getVersion() {
-	return version;
+        return version;
     }
 
-    public void setVersion(String version) {
-	this.version = version;
+    public void setVersion(final String version) {
+        this.version = version;
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
-    public void setTitle(String title) {
-	this.title = title;
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
     public String getAuthorName() {
-	return authorName;
+        return authorName;
     }
 
-    public void setAuthorName(String authorName) {
-	this.authorName = authorName;
+    public void setAuthorName(final String authorName) {
+        this.authorName = authorName;
     }
 
     public String getAuthorUrl() {
-	return authorUrl;
+        return authorUrl;
     }
 
-    public void setAuthorUrl(String authorUrl) {
-	this.authorUrl = authorUrl;
+    public void setAuthorUrl(final String authorUrl) {
+        this.authorUrl = authorUrl;
     }
 
     public String getProviderName() {
-	return providerName;
+        return providerName;
     }
 
-    public void setProviderName(String providerName) {
-	this.providerName = providerName;
+    public void setProviderName(final String providerName) {
+        this.providerName = providerName;
     }
 
     public String getProviderUrl() {
-	return providerUrl;
+        return providerUrl;
     }
 
-    public void setProviderUrl(String providerUrl) {
-	this.providerUrl = providerUrl;
+    public void setProviderUrl(final String providerUrl) {
+        this.providerUrl = providerUrl;
     }
 
     public Long getCacheAge() {
-	return cacheAge;
+        return cacheAge;
     }
 
-    public void setCacheAge(Long cacheAge) {
-	this.cacheAge = cacheAge;
+    public void setCacheAge(final Long cacheAge) {
+        this.cacheAge = cacheAge;
     }
 
     public String getThumbnailUrl() {
-	return thumbnailUrl;
+        return thumbnailUrl;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-	this.thumbnailUrl = thumbnailUrl;
+    public void setThumbnailUrl(final String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public Integer getThumbnailWidth() {
-	return thumbnailWidth;
+        return thumbnailWidth;
     }
 
-    public void setThumbnailWidth(Integer thumbnailWidth) {
-	this.thumbnailWidth = thumbnailWidth;
+    public void setThumbnailWidth(final Integer thumbnailWidth) {
+        this.thumbnailWidth = thumbnailWidth;
     }
 
     public Integer getThumbnailHeight() {
-	return thumbnailHeight;
+        return thumbnailHeight;
     }
 
-    public void setThumbnailHeight(Integer thumbnailHeight) {
-	this.thumbnailHeight = thumbnailHeight;
+    public void setThumbnailHeight(final Integer thumbnailHeight) {
+        this.thumbnailHeight = thumbnailHeight;
     }
 
     public String getUrl() {
-	return url;
+        return url;
     }
 
-    public void setUrl(String url) {
-	this.url = url;
+    public void setUrl(final String url) {
+        this.url = url;
     }
 
     public String getHtml() {
-	return html;
+        return html;
     }
 
-    public void setHtml(String html) {
-	this.html = html;
+    public void setHtml(final String html) {
+        this.html = html;
     }
 
     public Integer getWidth() {
-	return width;
+        return width;
     }
 
-    public void setWidth(Integer width) {
-	this.width = width;
+    public void setWidth(final Integer width) {
+        this.width = width;
     }
 
     public Integer getHeight() {
-	return height;
+        return height;
     }
 
-    public void setHeight(Integer height) {
-	this.height = height;
+    public void setHeight(final Integer height) {
+        this.height = height;
     }
 }

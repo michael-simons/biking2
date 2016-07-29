@@ -27,9 +27,9 @@ public class GPXTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-	final Map<String, Object> values = new HashMap<>();
-	values.put("bounds", new Bounds());
-	
-	values.forEach(new BeanTester(GPX.class));
+        final Map<String, Object> values = new HashMap<>();
+        values.put("bounds", new Bounds());
+
+        values.forEach(new BeanTester(GPX.class));
     }
 }

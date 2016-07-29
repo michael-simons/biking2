@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,15 +38,15 @@ public class DatastoreConfig {
      * @return
      */
     @Bean
-    public File datastoreBaseDirectory(final @Value("${biking2.datastore-base-directory:${user.dir}/var/dev}") String datastoreBaseDirectoryPath) {
-	final File rv = new File(datastoreBaseDirectoryPath);
-	if (!(rv.isDirectory() || rv.mkdirs())) {
-	    throw new RuntimeException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
-	}
+    public File datastoreBaseDirectory(@Value("${biking2.datastore-base-directory:${user.dir}/var/dev}") final String datastoreBaseDirectoryPath) {
+        final File rv = new File(datastoreBaseDirectoryPath);
+        if (!(rv.isDirectory() || rv.mkdirs())) {
+            throw new RuntimeException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
+        }
 
-	new File(rv, BIKING_PICTURES_DIRECTORY).mkdirs();
-	new File(rv, GALLERY_PICTURES_DIRECTORY).mkdirs();
-	new File(rv, TRACK_DIRECTORY).mkdirs();
-	return rv;
+        new File(rv, BIKING_PICTURES_DIRECTORY).mkdirs();
+        new File(rv, GALLERY_PICTURES_DIRECTORY).mkdirs();
+        new File(rv, TRACK_DIRECTORY).mkdirs();
+        return rv;
     }
 }

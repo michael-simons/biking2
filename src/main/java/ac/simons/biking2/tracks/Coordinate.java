@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,23 +30,23 @@ class Coordinate {
     private final BigDecimal latitude;
 
     @Autowired
-    public Coordinate(
-	    final @Value("${biking2.home.longitude}") String longitude,
-	    final @Value("${biking2.home.latitude}") String latitude
+    Coordinate(
+            @Value("${biking2.home.longitude}") final String longitude,
+            @Value("${biking2.home.latitude}") final String latitude
     ) {
-	this(new BigDecimal(longitude), new BigDecimal(latitude));
+        this(new BigDecimal(longitude), new BigDecimal(latitude));
     }
 
-    public Coordinate(BigDecimal longitude, BigDecimal latitude) {
-	this.longitude = longitude;
-	this.latitude = latitude;
+    Coordinate(final BigDecimal longitude, final BigDecimal latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public double getLatitude() {
-	return latitude.doubleValue();
+        return latitude.doubleValue();
     }
 
     public double getLongitude() {
-	return longitude.doubleValue();
+        return longitude.doubleValue();
     }
 }

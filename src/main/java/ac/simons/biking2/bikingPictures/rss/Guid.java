@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,28 +24,28 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Michael J. Simons, 2014-02-17
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Guid {
+public final class Guid {
 
     @XmlAttribute
     private Boolean isPermaLink;
-    
+
     @XmlValue
     private String value;
 
     public Boolean isIsPermaLink() {
-	return isPermaLink;
+        return isPermaLink;
     }
 
-    public void setIsPermaLink(Boolean isPermaLink) {
-	this.isPermaLink = isPermaLink;
+    public void setIsPermaLink(final Boolean isPermaLink) {
+        this.isPermaLink = isPermaLink;
     }
-    
+
     public String getValue() {
-	return value;
+        return value;
     }
 
-    public void setValue(String value) {
-	this.value = value;
+    public void setValue(final String value) {
+        this.value = value;
     }
 
 }

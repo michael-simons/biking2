@@ -86,33 +86,7 @@ wro4j provides a model like this:
 
 [source,xml]
 ---------------------------------------------------------------------
-<groups xmlns="http://www.isdc.ro/wro">
-    <!-- Dependencies for the full site -->
-    <group name="biking2">
-    	<group-ref>osm</group-ref>
-	
-    	<css minimize="false">/webjars/bootstrap/@bootstrap.version@/css/bootstrap.min.css</css>	
-    	<css>/css/stylesheet.css</css>
-
-    	<js minimize="false">/webjars/jquery/@jquery.version@/jquery.min.js</js>
-    	<js minimize="false">/webjars/bootstrap/@bootstrap.version@/js/bootstrap.min.js</js>
-    	<js minimize="false">/webjars/momentjs/@momentjs.version@/min/moment-with-locales.min.js</js>
-    	<js minimize="false">/webjars/angular-file-upload/@angular-file-upload.version@/angular-file-upload-html5-shim.min.js</js>
-    	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular.min.js</js>
-    	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular-route.min.js</js>
-    	<js minimize="false">/webjars/angular-file-upload/@angular-file-upload.version@/angular-file-upload.min.js</js>
-    	<js minimize="false">/webjars/angular-ui-bootstrap/@angular-ui-bootstrap.version@/ui-bootstrap.min.js</js>
-    	<js minimize="false">/webjars/angular-ui-bootstrap/@angular-ui-bootstrap.version@/ui-bootstrap-tpls.min.js</js>
-    	<js minimize="false">/webjars/highcharts/@highcharts.version@/highcharts.js</js>
-    	<js minimize="false">/webjars/highcharts/@highcharts.version@/highcharts-more.js</js>
-    	<js minimize="false">/webjars/sockjs-client/@sockjs-client.version@/sockjs.min.js</js>
-    	<js minimize="false">/webjars/stomp-websocket/@stomp-websocket.version@/stomp.min.js</js>
-		
-    	<js>/js/app.js</js>
-    	<js>/js/controllers.js</js>
-    	<js>/js/directives.js</js>
-    </group>
-</groups>
+include::../main/resources/wro.xml[tags=wro4jconcept]
 ---------------------------------------------------------------------
 
 This model file is filtered by the Maven build, version placeholders will be replaced and all resources, in webjars as well as inside the filesystem, will be available as `biking.css` and `biking.js`.
@@ -159,7 +133,9 @@ Errors handling to inconsistent data (in regard to the data models constraint) a
 
 Spring Boot configures logging per default to standard out. The default <<Configurability, configuration>> isn't change in that regard, so all framework logging (especially Spring and Hiberate) go to standard out in standard format and can be grabbed or ignored via OS specific means.
 
-All business components use `java.util.logging` facilities which are configured through the Spring Boot runtime.
+All business components use the _Simple Logging Facade for Java_ (SLF4J). The actual configuration of logging is configured through the means of Spring Boot. No special implementation is included manually, instead _biking2_ depends transitively on `spring-boot-starter-logging`.
+
+The names of the logger corresponds with the package names of the classes which instantiate loggers, so the modules are immediately recognizable in the logs.
 
 === Configurability
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,70 +28,71 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Tooltip {
+public final class Tooltip {
 
-    public static class Builder<PB> {
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private final Sink<PB, Tooltip> sink;
+        private final Sink<PB, Tooltip> sink;
 
-	private String footerFormat;
+        private String footerFormat;
 
-	private String headerFormat;
+        private String headerFormat;
 
-	private String pointFormat;
+        private String pointFormat;
 
-	private Boolean shared;
+        private Boolean shared;
 
-	private Boolean useHTML;
-	
-	private Boolean crosshairs;
-	
-	private String valueSuffix;
+        private Boolean useHTML;
 
-	public Builder(Sink<PB, Tooltip> sink) {
-	    this.sink = sink;
-	}
-	
-	public Builder<PB> withFooterFormat(final String footerFormat) {
-	    this.footerFormat = footerFormat;
-	    return this;
-	}
-	
-	public Builder<PB> withHeaderFormat(final String headerFormat) {
-	    this.headerFormat = headerFormat;
-	    return this;
-	}
-	
-	public Builder<PB> withPointFormat(final String pointFormat) {
-	    this.pointFormat = pointFormat;
-	    return this;
-	}
-	
-	public Builder<PB> withValueSuffix(final String valueSuffix) {
-	    this.valueSuffix = valueSuffix;
-	    return this;
-	}
-	
-	public Builder<PB> share() {
-	    this.shared = true;
-	    return this;
-	}
-			
-	public Builder<PB> useHTML() {
-	    this.useHTML = true;
-	    return this;
-	}
-	
-	public Builder<PB> enableCrosshairs() {
-	    this.crosshairs = true;
-	    return this;
-	}
-		
-	public PB build() {
-	    return this.sink.setObject(
-		    new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML, crosshairs, valueSuffix)
-	    );
-	}
+        private Boolean crosshairs;
+
+        private String valueSuffix;
+
+        public Builder(final Sink<PB, Tooltip> sink) {
+            this.sink = sink;
+        }
+
+        public Builder<PB> withFooterFormat(final String footerFormat) {
+            this.footerFormat = footerFormat;
+            return this;
+        }
+
+        public Builder<PB> withHeaderFormat(final String headerFormat) {
+            this.headerFormat = headerFormat;
+            return this;
+        }
+
+        public Builder<PB> withPointFormat(final String pointFormat) {
+            this.pointFormat = pointFormat;
+            return this;
+        }
+
+        public Builder<PB> withValueSuffix(final String valueSuffix) {
+            this.valueSuffix = valueSuffix;
+            return this;
+        }
+
+        public Builder<PB> share() {
+            this.shared = true;
+            return this;
+        }
+
+        public Builder<PB> useHTML() {
+            this.useHTML = true;
+            return this;
+        }
+
+        public Builder<PB> enableCrosshairs() {
+            this.crosshairs = true;
+            return this;
+        }
+
+        public PB build() {
+            return this.sink.setObject(
+                    new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML, crosshairs, valueSuffix)
+            );
+        }
     }
 
     /**
@@ -101,7 +102,7 @@ public class Tooltip {
 
     /**
      * The HTML of the tooltip header line. Variables are enclosed by curly
-     * brackets. Available variables	are point.key, series.name, series.color
+     * brackets. Available variables    are point.key, series.name, series.color
      * and other members from the point and series objects. The point.key
      * variable contains the category name, x value or datetime string depending
      * on the type of axis. For datetime axes, the point.key date format can be
@@ -135,55 +136,55 @@ public class Tooltip {
      * Firefox. Defaults to false.
      */
     private final Boolean useHTML;
-    
+
     private final Boolean crosshairs;
-    
+
     private final String valueSuffix;
 
     @JsonCreator
     Tooltip(
-	    @JsonProperty("footerFormat") String footerFormat, 
-	    @JsonProperty("headerFormat") String headerFormat, 
-	    @JsonProperty("pointFormat") String pointFormat, 
-	    @JsonProperty("shared") Boolean shared, 
-	    @JsonProperty("useHTML") Boolean useHTML,
-	    @JsonProperty("crosshairs") Boolean crosshairs,
-	    @JsonProperty("valueSuffix") String valueSuffix 
+            @JsonProperty("footerFormat") final String footerFormat,
+            @JsonProperty("headerFormat") final String headerFormat,
+            @JsonProperty("pointFormat") final String pointFormat,
+            @JsonProperty("shared") final Boolean shared,
+            @JsonProperty("useHTML") final Boolean useHTML,
+            @JsonProperty("crosshairs") final Boolean crosshairs,
+            @JsonProperty("valueSuffix") final String valueSuffix
     ) {
-	this.footerFormat = footerFormat;
-	this.headerFormat = headerFormat;
-	this.pointFormat = pointFormat;
-	this.shared = shared;
-	this.useHTML = useHTML;
-	this.crosshairs = crosshairs;		
-	this.valueSuffix = valueSuffix;
+        this.footerFormat = footerFormat;
+        this.headerFormat = headerFormat;
+        this.pointFormat = pointFormat;
+        this.shared = shared;
+        this.useHTML = useHTML;
+        this.crosshairs = crosshairs;
+        this.valueSuffix = valueSuffix;
     }
 
     public String getFooterFormat() {
-	return footerFormat;
+        return footerFormat;
     }
 
     public String getHeaderFormat() {
-	return headerFormat;
+        return headerFormat;
     }
 
     public String getPointFormat() {
-	return pointFormat;
+        return pointFormat;
     }
 
     public Boolean isShared() {
-	return shared;
+        return shared;
     }
 
     public Boolean isUseHTML() {
-	return useHTML;
+        return useHTML;
     }
 
     public Boolean isCrosshairs() {
-	return crosshairs;
+        return crosshairs;
     }
 
     public String getValueSuffix() {
-	return valueSuffix;
+        return valueSuffix;
     }
 }

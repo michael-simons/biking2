@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2015-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  * @author Michael J. Simons, 2015-06-09
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NewTripCmd implements Serializable {
+public final class NewTripCmd implements Serializable {
 
     private static final long serialVersionUID = 2711961034108614560L;
 
@@ -36,18 +36,18 @@ public class NewTripCmd implements Serializable {
     private Double distance;
 
     public Date getCoveredOn() {
-	return coveredOn;
+        return coveredOn;
     }
 
-    public void setCoveredOn(Date coveredOn) {
-	this.coveredOn = coveredOn;
+    public void setCoveredOn(final Date coveredOn) {
+        this.coveredOn = coveredOn;
     }
 
     public Double getDistance() {
-	return distance;
+        return distance;
     }
 
-    public void setDistance(Double distance) {
-	this.distance = distance;
+    public void setDistance(final Double distance) {
+        this.distance = distance;
     }
 }

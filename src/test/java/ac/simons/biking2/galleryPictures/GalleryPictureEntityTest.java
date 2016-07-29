@@ -26,33 +26,32 @@ import org.junit.Test;
  * @author Michael J. Simons, 2014-05-23
  */
 public class GalleryPictureEntityTest {
-    
+
     @Test
     public void beanShouldWorkAsExpected() {
-	final Calendar now = Calendar.getInstance();
-	
-	final Map<String, Object> values = new HashMap<>();	
-	values.put("description", "description");		
+        final Calendar now = Calendar.getInstance();
 
-	values.forEach(new BeanTester(GalleryPictureEntity.class));
+        final Map<String, Object> values = new HashMap<>();
+        values.put("description", "description");
 
-	final GalleryPictureEntity bean = new GalleryPictureEntity(now, "poef");
-	bean.prePersist();
-	final GalleryPictureEntity otherBean = new GalleryPictureEntity(now, "poef");
-	Assert.assertEquals(bean, otherBean);
-	Assert.assertEquals(bean.hashCode(), otherBean.hashCode());
-	Assert.assertNotEquals(bean, "something else");
-	Assert.assertNotEquals(bean, null);
-	Assert.assertEquals(now, bean.getTakenOn());
-	Assert.assertNotNull(bean.getCreatedAt());
-	Assert.assertEquals("poef", bean.getFilename());
-	Assert.assertNull(bean.getId());
-	
-	final Calendar then = Calendar.getInstance();
-	then.add(Calendar.YEAR, 1);
-	GalleryPictureEntity other = new GalleryPictureEntity(now, "something else");
-	Assert.assertNotEquals(bean, other);
-	other = new GalleryPictureEntity(then, "poef");
-	Assert.assertNotEquals(bean, other);		
+        values.forEach(new BeanTester(GalleryPictureEntity.class));
+
+        final GalleryPictureEntity bean = new GalleryPictureEntity(now, "poef");
+        final GalleryPictureEntity otherBean = new GalleryPictureEntity(now, "poef");
+        Assert.assertEquals(bean, otherBean);
+        Assert.assertEquals(bean.hashCode(), otherBean.hashCode());
+        Assert.assertNotEquals(bean, "something else");
+        Assert.assertNotEquals(bean, null);
+        Assert.assertEquals(now, bean.getTakenOn());
+        Assert.assertNotNull(bean.getCreatedAt());
+        Assert.assertEquals("poef", bean.getFilename());
+        Assert.assertNull(bean.getId());
+
+        final Calendar then = Calendar.getInstance();
+        then.add(Calendar.YEAR, 1);
+        GalleryPictureEntity other = new GalleryPictureEntity(now, "something else");
+        Assert.assertNotEquals(bean, other);
+        other = new GalleryPictureEntity(then, "poef");
+        Assert.assertNotEquals(bean, other);
     }
 }

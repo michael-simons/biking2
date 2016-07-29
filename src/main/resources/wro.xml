@@ -14,7 +14,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<!-- tag::wro4jconcept[] -->
 <groups xmlns="http://www.isdc.ro/wro">
+    <!-- end::wro4jconcept[] -->
     <!-- OSM / Openlayer Dependencies -->
     <group name="osm">
 	<css>/webjars/openlayers/@openlayers.version@/theme/default/style.css</css>
@@ -34,6 +36,7 @@ limitations under the License.
 	<js>/js/directives.js</js>
     </group>
     
+    <!-- tag::wro4jconcept[] -->    
     <!-- Dependencies for the full site -->
     <group name="biking2">
 	<group-ref>osm</group-ref>
@@ -48,6 +51,7 @@ limitations under the License.
 	<js minimize="false">/webjars/angular-file-upload/@angular-file-upload.version@/angular-file-upload-html5-shim.min.js</js>
 	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular.min.js</js>
 	<js minimize="false">/webjars/angularjs/@angularjs.version@/angular-route.min.js</js>
+        <js minimize="false">/webjars/angularjs/@angularjs.version@/angular-sanitize.min.js</js>
 	<js minimize="false">/webjars/angular-file-upload/@angular-file-upload.version@/angular-file-upload.min.js</js>
 	<js minimize="false">/webjars/angular-ui-bootstrap/@angular-ui-bootstrap.version@/ui-bootstrap.min.js</js>
 	<js minimize="false">/webjars/angular-ui-bootstrap/@angular-ui-bootstrap.version@/ui-bootstrap-tpls.min.js</js>
@@ -55,9 +59,11 @@ limitations under the License.
 	<js minimize="false">/webjars/highcharts/@highcharts.version@/highcharts-more.js</js>
 	<js minimize="false">/webjars/sockjs-client/@sockjs-client.version@/sockjs.min.js</js>
 	<js minimize="false">/webjars/stomp-websocket/@stomp-websocket.version@/stomp.min.js</js>
-		
+	
+        <js>/js/ansi_up.js</js>	
 	<js>/js/app.js</js>
 	<js>/js/controllers.js</js>
 	<js>/js/directives.js</js>
     </group>
 </groups>
+<!-- end::wro4jconcept[] -->

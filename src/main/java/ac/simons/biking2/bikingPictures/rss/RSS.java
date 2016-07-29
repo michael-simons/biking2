@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,21 +25,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RSS {
+public final class RSS {
     @XmlAttribute
     private final String version = "2.0";
 
     private Channel channel;
 
     public String getVersion() {
-	return version;
+        return version;
     }
 
     public Channel getChannel() {
-	return channel;
+        return channel;
     }
 
-    public void setChannel(Channel channel) {
-	this.channel = channel;
+    public void setChannel(final Channel channel) {
+        this.channel = channel;
     }
 }

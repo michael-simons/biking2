@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,34 +39,34 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
      * Allow cross origin requests for all api endpoints.
-     * @param registry 
+     * @param registry
      */
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-	registry.addMapping("/api/**").allowedOrigins("*");
+    public void addCorsMappings(final CorsRegistry registry) {
+        registry.addMapping("/api/**").allowedOrigins("*");
     }
-    
+
     /**
      * Maps all AngularJS routes to index so that they work with direct linking.
      */
     @Controller
     static class Routes {
 
-	@RequestMapping({
-	    "/",
-	    "/bikes",
-	    "/milages",
-	    "/gallery",
-	    "/tracks",
-	    "/tracks/{id:\\w+}",
-	    "/location",
-	    "/about"
-	})
-	public String index() {
-	    return "forward:/index.html";
-	}
+        @RequestMapping({
+            "/",
+            "/bikes",
+            "/milages",
+            "/gallery",
+            "/tracks",
+            "/tracks/{id:\\w+}",
+            "/location",
+            "/about"
+        })
+        public String index() {
+            return "forward:/index.html";
+        }
     }
-    
+
     /**
      * Enable favor of format parameter over requested content type, needed for
      * {@code OEmbedController#getEmbeddableTrack(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, javax.servlet.http.HttpServletRequest)}
@@ -74,20 +74,20 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * @param configurer
      */
     @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-	super.configureContentNegotiation(configurer);
-	configurer.favorParameter(true);
+    public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
+        super.configureContentNegotiation(configurer);
+        configurer.favorParameter(true);
     }
 
     /**
      * This makes mapping of
-     * {@code TracksController#downloadTrack(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)} 
+     * {@code TracksController#downloadTrack(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
      * and the default mapping in separate methods possible.
      * @param configurer
      */
     @Override
     public void configurePathMatch(final PathMatchConfigurer configurer) {
-	configurer.setUseRegisteredSuffixPatternMatch(true);
+        configurer.setUseRegisteredSuffixPatternMatch(true);
     }
 
     /**
@@ -98,27 +98,27 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      */
     @Bean
     public ObjectMapper jacksonObjectMapper() {
-	return new ObjectMapper().registerModules(
-		new JaxbAnnotationModule().setPriority(Priority.SECONDARY)
-	);
+        return new ObjectMapper().registerModules(
+                new JaxbAnnotationModule().setPriority(Priority.SECONDARY)
+        );
     }
 
-    @Bean    
+    @Bean
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
-	    final @Value("${biking2.connector.proxyName:}") String proxyName,
-	    final @Value("${biking2.connector.proxyPort:80}") int proxyPort
+            @Value("${biking2.connector.proxyName:}") final String proxyName,
+            @Value("${biking2.connector.proxyPort:80}") final int proxyPort
     ) {
-	return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
-	    if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
-		final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
-		containerFactory.setTldSkip("*.jar");
-		if(!proxyName.isEmpty()) {
-		    containerFactory.addConnectorCustomizers(connector -> {
-			connector.setProxyName(proxyName);
-			connector.setProxyPort(proxyPort);
-		    });
-		}
-	    }
-	};
+        return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
+            if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
+                final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
+                containerFactory.setTldSkip("*.jar");
+                if (!proxyName.isEmpty()) {
+                    containerFactory.addConnectorCustomizers(connector -> {
+                        connector.setProxyName(proxyName);
+                        connector.setProxyPort(proxyPort);
+                    });
+                }
+            }
+        };
     }
 }

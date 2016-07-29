@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,32 +37,32 @@ public class RSSTest {
 
     @Test
     public void testJAXBMapping() throws JAXBException {
-	JAXBContext context = JAXBContextFactory.createContext(RSS.class);
+        JAXBContext context = JAXBContextFactory.createContext(RSS.class);
 
-	final Unmarshaller unmarschaller = context.createUnmarshaller();
-	final RSS rss = (RSS) unmarschaller.unmarshal(this.getClass().getResourceAsStream("/biking_pictures.rss"));
+        final Unmarshaller unmarschaller = context.createUnmarshaller();
+        final RSS rss = (RSS) unmarschaller.unmarshal(this.getClass().getResourceAsStream("/biking_pictures.rss"));
 
-	assertThat(rss.getVersion(), is(equalTo("2.0")));
-	assertThat(rss.getChannel().getLink(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?page=1&dir=desc")));
-	assertThat(rss.getChannel().getDescription(), is(equalTo("DailyFratze.de: \"A daily picture - everyday.\".")));
-	assertThat(rss.getChannel().getLinks().get(0).getHref(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=1")));
-	assertThat(rss.getChannel().getLinks().get(1).getHref(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2")));
-	
-	final Item item = rss.getChannel().getItems().get(0);
-	assertThat(item.getTitle(), is(equalTo("michael - January 12, 2014")));
-	assertThat(item.getLink(), is(equalTo("http://dailyfratze.de/michael/2014/1/12")));
-	assertThat(item.getDescription(), is(equalTo("<img src=\"http://dailyfratze.de/fratzen/m/45644.jpg\" /><br />")));
-	ZoneId berlin = ZoneId.of("Europe/Berlin");
-	assertThat(item.getPubDate().withZoneSameInstant(berlin), is(equalTo(ZonedDateTime.of(2014, 1, 12, 22, 40, 25, 0, berlin))));
-	assertThat(item.getGuid().getValue(), is(equalTo("http://dailyfratze.de/fratzen/m/45644.jpg")));
-	assertThat(item.getThumbnail().getUrl(), is(equalTo("http://dailyfratze.de/fratzen/s/45644.jpg")));
-	assertThat(item.getThumbnail().getWidth(), is(equalTo(150)));
-	assertThat(item.getThumbnail().getHeight(), is(equalTo(113)));
-	assertThat(item.getContent().size(), is(equalTo(2)));
-	assertThat(item.getContent().get(0).getUrl(), is(equalTo("http://dailyfratze.de/fratzen/m/45644.jpg")));
-	assertThat(item.getContent().get(1).getUrl(), is(equalTo("http://dailyfratze.de/fratzen/l/45644.jpg")));
-	
-	rss.setChannel(null);
-	assertThat(rss.getChannel(), is(nullValue()));
-    }    
+        assertThat(rss.getVersion(), is(equalTo("2.0")));
+        assertThat(rss.getChannel().getLink(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?page=1&dir=desc")));
+        assertThat(rss.getChannel().getDescription(), is(equalTo("DailyFratze.de: \"A daily picture - everyday.\".")));
+        assertThat(rss.getChannel().getLinks().get(0).getHref(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=1")));
+        assertThat(rss.getChannel().getLinks().get(1).getHref(), is(equalTo("http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2")));
+
+        final Item item = rss.getChannel().getItems().get(0);
+        assertThat(item.getTitle(), is(equalTo("michael - January 12, 2014")));
+        assertThat(item.getLink(), is(equalTo("http://dailyfratze.de/michael/2014/1/12")));
+        assertThat(item.getDescription(), is(equalTo("<img src=\"http://dailyfratze.de/fratzen/m/45644.jpg\" /><br />")));
+        ZoneId berlin = ZoneId.of("Europe/Berlin");
+        assertThat(item.getPubDate().withZoneSameInstant(berlin), is(equalTo(ZonedDateTime.of(2014, 1, 12, 22, 40, 25, 0, berlin))));
+        assertThat(item.getGuid().getValue(), is(equalTo("http://dailyfratze.de/fratzen/m/45644.jpg")));
+        assertThat(item.getThumbnail().getUrl(), is(equalTo("http://dailyfratze.de/fratzen/s/45644.jpg")));
+        assertThat(item.getThumbnail().getWidth(), is(equalTo(150)));
+        assertThat(item.getThumbnail().getHeight(), is(equalTo(113)));
+        assertThat(item.getContent().size(), is(equalTo(2)));
+        assertThat(item.getContent().get(0).getUrl(), is(equalTo("http://dailyfratze.de/fratzen/m/45644.jpg")));
+        assertThat(item.getContent().get(1).getUrl(), is(equalTo("http://dailyfratze.de/fratzen/l/45644.jpg")));
+
+        rss.setChannel(null);
+        assertThat(rss.getChannel(), is(nullValue()));
+    }
 }

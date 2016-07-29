@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,28 +30,28 @@ public class TooltipTest {
 
     @Test
     public void testBuilder() {
-	Tooltip tooltip = new Tooltip.Builder<>(object -> object)
-		.withHeaderFormat("testHeader")
-		.withPointFormat("testPoint")
-		.withFooterFormat("testFoot")
-		.withValueSuffix("km")
-		.enableCrosshairs()
-		.share()
-		.useHTML()
-	.build();
-	assertThat(tooltip.getHeaderFormat(), is(equalTo("testHeader")));
-	assertThat(tooltip.getPointFormat(), is(equalTo("testPoint")));
-	assertThat(tooltip.getFooterFormat(), is(equalTo("testFoot")));
-	assertThat(tooltip.getValueSuffix(), is(equalTo("km")));
-	assertThat(tooltip.isCrosshairs(), is(true));
-	assertThat(tooltip.isShared(), is(true));
-	assertThat(tooltip.isUseHTML(), is(true));	
-	
-	tooltip = new Tooltip.Builder<>(object -> object).build();
-	
-	assertThat(tooltip.isCrosshairs(), is(nullValue()));
-	assertThat(tooltip.isShared(), is(nullValue()));
-	assertThat(tooltip.isUseHTML(), is(nullValue()));	
-	assertThat(tooltip.getValueSuffix(), is(nullValue()));	
+        Tooltip tooltip = new Tooltip.Builder<>(object -> object)
+                .withHeaderFormat("testHeader")
+                .withPointFormat("testPoint")
+                .withFooterFormat("testFoot")
+                .withValueSuffix("km")
+                .enableCrosshairs()
+                .share()
+                .useHTML()
+        .build();
+        assertThat(tooltip.getHeaderFormat(), is(equalTo("testHeader")));
+        assertThat(tooltip.getPointFormat(), is(equalTo("testPoint")));
+        assertThat(tooltip.getFooterFormat(), is(equalTo("testFoot")));
+        assertThat(tooltip.getValueSuffix(), is(equalTo("km")));
+        assertThat(tooltip.isCrosshairs(), is(true));
+        assertThat(tooltip.isShared(), is(true));
+        assertThat(tooltip.isUseHTML(), is(true));
+
+        tooltip = new Tooltip.Builder<>(object -> object).build();
+
+        assertThat(tooltip.isCrosshairs(), is(nullValue()));
+        assertThat(tooltip.isShared(), is(nullValue()));
+        assertThat(tooltip.isUseHTML(), is(nullValue()));
+        assertThat(tooltip.getValueSuffix(), is(nullValue()));
     }
 }

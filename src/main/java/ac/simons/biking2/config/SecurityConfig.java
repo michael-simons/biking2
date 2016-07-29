@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,28 +43,27 @@ public class SecurityConfig {
     @Order(SecurityProperties.BASIC_AUTH_ORDER - 20)
     @ConditionalOnBean(SecurityConfig.class)
     protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception {	  
-	    http
-		.httpBasic()
-		    .and()
-		.authorizeRequests()	
-		    .antMatchers(		
-			    "/api/system/env/java.(runtime|vm).*",
-			    "/api/system/metrics/**"
-		    ).permitAll()
-		    .antMatchers("/api/system/env/**").denyAll()		    
-		    .antMatchers("/**").permitAll()		    
-		    .and()
-		.sessionManagement()
-		    .sessionCreationPolicy(STATELESS)
-		    .and()
-		.csrf()
-		    .disable()
-		.headers()
-		    .frameOptions() // OEmbedController#embedTrack uses an iframe
-		    .disable()
-		;  
-	}
+        @Override
+        protected void configure(final HttpSecurity http) throws Exception {
+            http
+                .httpBasic()
+                    .and()
+                .authorizeRequests()
+                    .antMatchers(
+                            "/api/system/env/java.(runtime|vm).*",
+                            "/api/system/metrics/**"
+                    ).permitAll()
+                    .antMatchers("/api/system/env/**").denyAll()
+                    .antMatchers("/**").permitAll()
+                    .and()
+                .sessionManagement()
+                    .sessionCreationPolicy(STATELESS)
+                    .and()
+                .csrf()
+                    .disable()
+                .headers()
+                    .frameOptions() // OEmbedController#embedTrack uses an iframe
+                    .disable();
+        }
     }
 }

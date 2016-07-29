@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NewLocationCmd {
+public final class NewLocationCmd {
 
     @JsonProperty(value = "lat")
     @NotNull
@@ -46,22 +46,22 @@ public class NewLocationCmd {
     private Long timestampMillis;
 
     public BigDecimal getLatitude() {
-	return latitude;
+        return latitude;
     }
 
     public BigDecimal getLongitude() {
-	return longitude;
+        return longitude;
     }
 
     public Calendar getCreatedAt() {
-	Calendar rv = null;
-	if (this.timestampSeconds != null) {
-	    rv = Calendar.getInstance();
-	    rv.setTimeInMillis(this.timestampSeconds * 1000);
-	} else if (this.timestampMillis != null) {
-	    rv = Calendar.getInstance();
-	    rv.setTimeInMillis(this.timestampMillis);
-	}
-	return rv;
+        Calendar rv = null;
+        if (this.timestampSeconds != null) {
+            rv = Calendar.getInstance();
+            rv.setTimeInMillis(this.timestampSeconds * 1000);
+        } else if (this.timestampMillis != null) {
+            rv = Calendar.getInstance();
+            rv.setTimeInMillis(this.timestampMillis);
+        }
+        return rv;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.support;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * I don't want to deal with the checked {@link JAXBException} in the calling 
- * class so this is a wrapper that handles those for me. I don't expect any 
+ * I don't want to deal with the checked {@link JAXBException} in the calling
+ * class so this is a wrapper that handles those for me. I don't expect any
  * exception to be thrown
  * @author Michael J. Simons, 2014-05-23
  */
 public class JAXBContextFactory {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(JAXBContextFactory.class.getPackage().getName());
+
     public static JAXBContext createContext(final Class<?> baseClass) {
-	try {
-	    return JAXBContext.newInstance(baseClass);
-	} catch (JAXBException ex) {
-	    Logger.getLogger(JAXBContextFactory.class.getName()).log(Level.SEVERE, null, ex);	    
-	    throw new RuntimeException(ex);
-	}
+        try {
+            return JAXBContext.newInstance(baseClass);
+        } catch (JAXBException ex) {
+            LOGGER.error("Could not instantiate JAXB context", ex);
+            throw new RuntimeException(ex);
+        }
     }
 }

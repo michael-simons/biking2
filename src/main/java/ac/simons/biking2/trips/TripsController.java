@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2015-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@ package ac.simons.biking2.trips;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,33 +38,35 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @RestController
 @RequestMapping("/api/trips")
-public class TripsController {
+class TripsController {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(TripsController.class.getPackage().getName());
 
     private final AssortedTripRepository assortedTripRepository;
 
-    @Autowired
-    public TripsController(AssortedTripRepository assortedTripRepository) {
-	this.assortedTripRepository = assortedTripRepository;
+    TripsController(final AssortedTripRepository assortedTripRepository) {
+        this.assortedTripRepository = assortedTripRepository;
     }
 
     @RequestMapping(value = "", method = POST)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> createTrip(final @RequestBody @Valid NewTripCmd newTrip, final BindingResult bindingResult) {
-	ResponseEntity<?> rv;
+        ResponseEntity<?> rv;
 
-	if (bindingResult.hasErrors()) {
-	    rv = new ResponseEntity<>("Invalid arguments.", HttpStatus.BAD_REQUEST);
-	} else {
-	    final Calendar coveredOn = Calendar.getInstance();
-	    coveredOn.setTime(newTrip.getCoveredOn());
-	    try {
-		final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
-		rv = new ResponseEntity<>(trip, HttpStatus.OK);
-	    } catch (DataIntegrityViolationException e) {
-		rv = new ResponseEntity<>(HttpStatus.CONFLICT);
-	    }
-	}
+        if (bindingResult.hasErrors()) {
+            rv = new ResponseEntity<>("Invalid arguments.", HttpStatus.BAD_REQUEST);
+        } else {
+            final Calendar coveredOn = Calendar.getInstance();
+            coveredOn.setTime(newTrip.getCoveredOn());
+            try {
+                final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
+                rv = new ResponseEntity<>(trip, HttpStatus.OK);
+            } catch (DataIntegrityViolationException e) {
+                LOGGER.debug("Data integrity violation while uploading a new trip", e);
+                rv = new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        }
 
-	return rv;
+        return rv;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,92 +28,93 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Options {
-    
-    public static class Builder<PB> {
+public final class Options {
 
-	private final Sink<PB, Options> sink;
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private Chart chart;
+        private final Sink<PB, Options> sink;
 
-	private Credits credits;
+        private Chart chart;
 
-	private PlotOptions plotOptions;
+        private Credits credits;
 
-	private Title title;
+        private PlotOptions plotOptions;
 
-	private Tooltip tooltip;
+        private Title title;
 
-	private Axis xAxis;
+        private Tooltip tooltip;
 
-	private Axis yAxis;
+        private Axis xAxis;
 
-	Builder(Sink<PB, Options> sink) {
-	    this.sink = sink;
-	}
-	
-	public Chart.Builder<Builder<PB>> chart() {
-	    return new Chart.Builder<>(chart -> {
-		Builder.this.chart = chart;
-		return Builder.this;
-	    });
-	}
-	
-	public Credits.Builder<Builder<PB>> credits() {
-	    return new Credits.Builder<>(credits -> {
-		Builder.this.credits = credits;
-		return Builder.this;
-	    });
-	}
-	
-	public PlotOptions.Builder<Builder<PB>> plotOptions() {
-	    return new PlotOptions.Builder<>(plotOptions -> {
-		Builder.this.plotOptions = plotOptions;
-		return Builder.this;
-	    });
-	}
-	
-	public Title.Builder<Builder<PB>> title() {
-	    return new Title.Builder<>(title -> {
-		Builder.this.title = title;
-		return Builder.this;
-	    });
-	}
-	
-	public Tooltip.Builder<Builder<PB>> tooltip() {
-	    return new Tooltip.Builder<>(tooltip -> {
-		Builder.this.tooltip = tooltip;
-		return Builder.this;
-	    });
-	}
-	
-	public Axis.Builder<Builder<PB>> xAxis() {
-	    return new Axis.Builder<>(xAxis -> {
-		Builder.this.xAxis = xAxis;
-		return Builder.this;
-	    });
-	}
-	
-	public Axis.Builder<Builder<PB>> yAxis() {
-	    return new Axis.Builder<>(yAxis -> {
-		Builder.this.yAxis = yAxis;
-		return Builder.this;
-	    });
-	}
+        private Axis yAxis;
 
-	public PB build() {
-	    return this.sink.setObject(
-		    new Options(chart, credits, plotOptions, title, tooltip, xAxis, yAxis)
-	    );
-	}
+        Builder(final Sink<PB, Options> sink) {
+            this.sink = sink;
+        }
+
+        public Chart.Builder<Builder<PB>> chart() {
+            return new Chart.Builder<>(chart -> {
+                Builder.this.chart = chart;
+                return Builder.this;
+            });
+        }
+
+        public Credits.Builder<Builder<PB>> credits() {
+            return new Credits.Builder<>(credits -> {
+                Builder.this.credits = credits;
+                return Builder.this;
+            });
+        }
+
+        public PlotOptions.Builder<Builder<PB>> plotOptions() {
+            return new PlotOptions.Builder<>(plotOptions -> {
+                Builder.this.plotOptions = plotOptions;
+                return Builder.this;
+            });
+        }
+
+        public Title.Builder<Builder<PB>> title() {
+            return new Title.Builder<>(title -> {
+                Builder.this.title = title;
+                return Builder.this;
+            });
+        }
+
+        public Tooltip.Builder<Builder<PB>> tooltip() {
+            return new Tooltip.Builder<>(tooltip -> {
+                Builder.this.tooltip = tooltip;
+                return Builder.this;
+            });
+        }
+
+        public Axis.Builder<Builder<PB>> xAxis() {
+            return new Axis.Builder<>(xAxis -> {
+                Builder.this.xAxis = xAxis;
+                return Builder.this;
+            });
+        }
+
+        public Axis.Builder<Builder<PB>> yAxis() {
+            return new Axis.Builder<>(yAxis -> {
+                Builder.this.yAxis = yAxis;
+                return Builder.this;
+            });
+        }
+
+        public PB build() {
+            return this.sink.setObject(
+                    new Options(chart, credits, plotOptions, title, tooltip, xAxis, yAxis)
+            );
+        }
     }
- 
+
     private final Chart chart;
 
     private final Credits credits;
 
     private final PlotOptions plotOptions;
-   
+
     private final Title title;
 
     private final Tooltip tooltip;
@@ -124,48 +125,48 @@ public class Options {
 
     @JsonCreator
     Options(
-	    @JsonProperty("chart") Chart chart,
-	    @JsonProperty("credits") Credits credits,
-	    @JsonProperty("plotOptions") PlotOptions plotOptions,
-	    @JsonProperty("title") Title title,
-	    @JsonProperty("tooltip") Tooltip tooltip,
-	    @JsonProperty("xAxis") Axis xAxis,
-	    @JsonProperty("yAxis") Axis yAxis
+            @JsonProperty("chart") final Chart chart,
+            @JsonProperty("credits") final Credits credits,
+            @JsonProperty("plotOptions") final PlotOptions plotOptions,
+            @JsonProperty("title") final Title title,
+            @JsonProperty("tooltip") final Tooltip tooltip,
+            @JsonProperty("xAxis") final Axis xAxis,
+            @JsonProperty("yAxis") final Axis yAxis
     ) {
-	this.chart = chart;
-	this.credits = credits;
-	this.plotOptions = plotOptions;
-	this.title = title;
-	this.tooltip = tooltip;
-	this.xAxis = xAxis;
-	this.yAxis = yAxis;
+        this.chart = chart;
+        this.credits = credits;
+        this.plotOptions = plotOptions;
+        this.title = title;
+        this.tooltip = tooltip;
+        this.xAxis = xAxis;
+        this.yAxis = yAxis;
     }
 
     public Chart getChart() {
-	return chart;
+        return chart;
     }
 
     public Credits getCredits() {
-	return credits;
+        return credits;
     }
 
     public PlotOptions getPlotOptions() {
-	return plotOptions;
+        return plotOptions;
     }
-    
+
     public Title getTitle() {
-	return title;
+        return title;
     }
 
     public Tooltip getTooltip() {
-	return tooltip;
+        return tooltip;
     }
 
     public Axis getxAxis() {
-	return xAxis;
+        return xAxis;
     }
 
     public Axis getyAxis() {
-	return yAxis;
+        return yAxis;
     }
 }

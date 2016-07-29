@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package ac.simons.biking2.config;
 
 import java.util.concurrent.Executor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
@@ -29,11 +28,14 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @EnableScheduling
 public class SchedulingConfig implements SchedulingConfigurer {
 
-    @Autowired
-    private Executor taskScheduler;
+    private final Executor taskScheduler;
+
+    public SchedulingConfig(final Executor taskScheduler) {
+        this.taskScheduler = taskScheduler;
+    }
 
     @Override
-    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-	taskRegistrar.setScheduler(taskScheduler);
+    public void configureTasks(final ScheduledTaskRegistrar taskRegistrar) {
+        taskRegistrar.setScheduler(taskScheduler);
     }
 }

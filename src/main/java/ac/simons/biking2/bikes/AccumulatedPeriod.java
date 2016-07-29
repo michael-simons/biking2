@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,28 +23,28 @@ import java.util.GregorianCalendar;
 
 /**
  * Represents a accumulated period value
- * 
+ *
  * @author Michael J. Simons, 2014-05-05
  */
-public class AccumulatedPeriod {
+public final class AccumulatedPeriod {
     private final Calendar startOfPeriod;
-    
+
     private final int value;
-    
-    public AccumulatedPeriod(LocalDate startOfPeriod, int value) {	
-	this(GregorianCalendar.from(startOfPeriod.atStartOfDay(ZoneId.systemDefault())), value);
+
+    public AccumulatedPeriod(final LocalDate startOfPeriod, final int value) {
+        this(GregorianCalendar.from(startOfPeriod.atStartOfDay(ZoneId.systemDefault())), value);
     }
 
-    public AccumulatedPeriod(Calendar startOfPeriod, int value) {
-	this.startOfPeriod = startOfPeriod;
-	this.value = value;
+    public AccumulatedPeriod(final Calendar startOfPeriod, final int value) {
+        this.startOfPeriod = startOfPeriod;
+        this.value = value;
     }
 
     public Calendar getStartOfPeriod() {
-	return startOfPeriod;
+        return startOfPeriod;
     }
 
     public int getValue() {
-	return value;
+        return value;
     }
 }

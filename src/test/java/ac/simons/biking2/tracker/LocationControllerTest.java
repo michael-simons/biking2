@@ -35,6 +35,7 @@ import org.springframework.validation.BindingResult;
 
 import static org.junit.rules.ExpectedException.none;
 import static java.util.Calendar.getInstance;
+import org.joor.Reflect;
 import static org.mockito.Mockito.when;
 
 /**
@@ -44,78 +45,82 @@ import static org.mockito.Mockito.when;
 public class LocationControllerTest {
     @Rule
     public final ExpectedException expectedException = none();
-    
+
     @Mock
     private LocationService locationService;
-    
+
     @Test
-    public void shouldRetrieveLastLocation() {	
-	ZonedDateTime now = ZonedDateTime.now();
-	
-	final LocationEntity l1 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, GregorianCalendar.from(now));
-	final LocationEntity l2 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, GregorianCalendar.from(now.plusMinutes(1)));
-	Mockito.stub(locationService.getLocationsForTheLastNHours(1)).toReturn(Arrays.asList(l1, l2));	
-	final LocationController locationController = new LocationController(locationService);
-	
-	final List<LocationEntity> locations = locationController.getLocations();
-	
-	Assert.assertEquals(2, locations.size());
-	Assert.assertTrue(locations.contains(l1));
-	Assert.assertTrue(locations.contains(l2));
-	
-	Mockito.verify(locationService).getLocationsForTheLastNHours(1);	
-    }    
-    
+    public void shouldRetrieveLastLocation() {
+        ZonedDateTime now = ZonedDateTime.now();
+
+        final LocationEntity l1 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, GregorianCalendar.from(now));
+        final LocationEntity l2 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, GregorianCalendar.from(now.plusMinutes(1)));
+        Mockito.stub(locationService.getLocationsForTheLastNHours(1)).toReturn(Arrays.asList(l1, l2));
+        final LocationController locationController = new LocationController(locationService);
+
+        final List<LocationEntity> locations = locationController.getLocations();
+
+        Assert.assertEquals(2, locations.size());
+        Assert.assertTrue(locations.contains(l1));
+        Assert.assertTrue(locations.contains(l2));
+
+        Mockito.verify(locationService).getLocationsForTheLastNHours(1);
+    }
+
     @Test
     public void shouldCreateLocation() {
-	final NewLocationCmd newLocationCmd = Mockito.mock(NewLocationCmd.class);	
-	final LocationEntity l = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, getInstance());
-	Mockito.stub(locationService.createAndSendNewLocation(newLocationCmd)).toReturn(l);
-	final BindingResult bindingResult = Mockito.mock(BindingResult.class);
-	Mockito.stub(bindingResult.hasErrors()).toReturn(false);
-	
-	final LocationController locationController = new LocationController(locationService);
-	
-	final ResponseEntity<LocationEntity> r = locationController.createLocation(newLocationCmd, bindingResult);
-	
-	Assert.assertEquals(HttpStatus.CREATED, r.getStatusCode());
-	Assert.assertEquals(l, r.getBody());
+        final NewLocationCmd newLocationCmd = new NewLocationCmd();
+        final LocationEntity l = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, getInstance());
+        Mockito.stub(locationService.createAndSendNewLocation(newLocationCmd)).toReturn(l);
+        final BindingResult bindingResult = Mockito.mock(BindingResult.class);
+        Mockito.stub(bindingResult.hasErrors()).toReturn(false);
+
+        final LocationController locationController = new LocationController(locationService);
+
+        final ResponseEntity<LocationEntity> r = locationController.createLocation(newLocationCmd, bindingResult);
+
+        Assert.assertEquals(HttpStatus.CREATED, r.getStatusCode());
+        Assert.assertEquals(l, r.getBody());
     }
-    
+
     @Test
     public void shouldNotCreateInvalidLocation() {
-	final NewLocationCmd newLocationCmd = Mockito.mock(NewLocationCmd.class);	
-	final BindingResult bindingResult = Mockito.mock(BindingResult.class);
-	Mockito.stub(bindingResult.hasErrors()).toReturn(true);
-	
-	final LocationController locationController = new LocationController(locationService);
-	
-	this.expectedException.expect(IllegalArgumentException.class);
-	this.expectedException.expectMessage("Invalid arguments.");
-	
-	locationController.createLocation(newLocationCmd, bindingResult);	
+        final NewLocationCmd newLocationCmd = new NewLocationCmd();
+        final BindingResult bindingResult = Mockito.mock(BindingResult.class);
+        Mockito.stub(bindingResult.hasErrors()).toReturn(true);
+
+        final LocationController locationController = new LocationController(locationService);
+
+        this.expectedException.expect(IllegalArgumentException.class);
+        this.expectedException.expectMessage("Invalid arguments.");
+
+        locationController.createLocation(newLocationCmd, bindingResult);
     }
-    
+
     @Test
     public void shouldNotCreateDuplicateLocation() {
-	final NewLocationCmd newLocationCmd = Mockito.mock(NewLocationCmd.class);	
-	Mockito.stub(locationService.createAndSendNewLocation(newLocationCmd)).toThrow(new DataIntegrityViolationException("foobar"));
-	final BindingResult bindingResult = Mockito.mock(BindingResult.class);
-	Mockito.stub(bindingResult.hasErrors()).toReturn(false);
-	
-	final LocationController locationController = new LocationController(locationService);
-	
-	final ResponseEntity<LocationEntity> r = locationController.createLocation(newLocationCmd, bindingResult);	
-	Assert.assertEquals(HttpStatus.CONFLICT, r.getStatusCode());
-	Assert.assertNull(r.getBody());
+        final NewLocationCmd newLocationCmd = Reflect
+                .on(new NewLocationCmd())
+                .set("latitude", new BigDecimal("1"))
+                .set("longitude", new BigDecimal("2")).get();
+        
+        Mockito.stub(locationService.createAndSendNewLocation(newLocationCmd)).toThrow(new DataIntegrityViolationException("foobar"));
+        final BindingResult bindingResult = Mockito.mock(BindingResult.class);
+        Mockito.stub(bindingResult.hasErrors()).toReturn(false);
+
+        final LocationController locationController = new LocationController(locationService);
+
+        final ResponseEntity<LocationEntity> r = locationController.createLocation(newLocationCmd, bindingResult);
+        Assert.assertEquals(HttpStatus.CONFLICT, r.getStatusCode());
+        Assert.assertNull(r.getBody());
     }
-    
+
     @Test
     public void getLocationCountShouldWork() {
-	when(locationService.getLocationCount()).thenReturn(4711l);
-	
-	final LocationController locationController = new LocationController(locationService);
-		
-	Assert.assertEquals(4711l, locationController.getLocationCount());	
+        when(locationService.getLocationCount()).thenReturn(4711l);
+
+        final LocationController locationController = new LocationController(locationService);
+
+        Assert.assertEquals(4711l, locationController.getLocationCount());
     }
 }

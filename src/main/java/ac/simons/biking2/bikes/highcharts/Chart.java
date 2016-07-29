@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,35 +28,36 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Chart {
+public final class Chart {
 
-    public static class Builder<PB> {
+    @SuppressWarnings({"checkstyle:hiddenfield"})
+    public static final class Builder<PB> {
 
-	private final Sink<PB, Chart> sink;
+        private final Sink<PB, Chart> sink;
 
-	private Integer borderWidth;
+        private Integer borderWidth;
 
-	private String type;
+        private String type;
 
-	Builder(final Sink<PB, Chart> sink) {
-	    this.sink = sink;
-	}
+        Builder(final Sink<PB, Chart> sink) {
+            this.sink = sink;
+        }
 
-	public Builder<PB> withBorderWidth(final Integer borderWidth) {
-	    this.borderWidth = borderWidth;
-	    return this;
-	}
+        public Builder<PB> withBorderWidth(final Integer borderWidth) {
+            this.borderWidth = borderWidth;
+            return this;
+        }
 
-	public Builder<PB> withType(final String type) {
-	    this.type = type;
-	    return this;
-	}
+        public Builder<PB> withType(final String type) {
+            this.type = type;
+            return this;
+        }
 
-	public PB build() {
-	    return this.sink.setObject(
-		    new Chart(borderWidth, type)
-	    );
-	}
+        public PB build() {
+            return this.sink.setObject(
+                    new Chart(borderWidth, type)
+            );
+        }
     }
 
     private final Integer borderWidth;
@@ -65,18 +66,18 @@ public class Chart {
 
     @JsonCreator
     Chart(
-	    @JsonProperty("borderWidth") Integer borderWidth, 
-	    @JsonProperty("type") String type
+            @JsonProperty("borderWidth") final Integer borderWidth,
+            @JsonProperty("type") final String type
     ) {
-	this.borderWidth = borderWidth;
-	this.type = type;
+        this.borderWidth = borderWidth;
+        this.type = type;
     }
 
     public Integer getBorderWidth() {
-	return borderWidth;
+        return borderWidth;
     }
 
     public String getType() {
-	return type;
+        return type;
     }
 }

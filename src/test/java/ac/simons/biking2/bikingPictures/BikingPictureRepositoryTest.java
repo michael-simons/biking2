@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static java.time.ZonedDateTime.of;
 import static java.time.ZonedDateTime.ofInstant;
@@ -36,8 +36,8 @@ import static org.hamcrest.CoreMatchers.is;
 /**
  * @author Michael J. Simons, 2014-02-18
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = TestConfig.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = TestConfig.class)
 @ActiveProfiles("test")
 @Transactional
 public class BikingPictureRepositoryTest {
@@ -48,14 +48,14 @@ public class BikingPictureRepositoryTest {
     @Test
     @Rollback(true)
     public void getMaxPubDate_shouldWork() {
-	ZonedDateTime value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
-	ZonedDateTime expected = of(2003, 9, 21, 14, 13, 00, 00, value.getZone());
-	Assert.assertThat(value, is(equalTo(expected)));
+        ZonedDateTime value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
+        ZonedDateTime expected = of(2003, 9, 21, 14, 13, 00, 00, value.getZone());
+        Assert.assertThat(value, is(equalTo(expected)));
 
-	bikingPictureRepository.deleteAll();
+        bikingPictureRepository.deleteAll();
 
-	value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
-	expected = of(2005, 8, 7, 18, 30, 42, 00, value.getZone());
-	Assert.assertThat(value, is(equalTo(expected)));
+        value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
+        expected = of(2005, 8, 7, 18, 30, 42, 00, value.getZone());
+        Assert.assertThat(value, is(equalTo(expected)));
     }
 }

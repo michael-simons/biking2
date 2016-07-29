@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,92 +32,93 @@ import java.util.Collection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HighchartsNgConfig {
 
+    @SuppressWarnings({"checkstyle:hiddenfield"})
     public static class Builder {
 
-	private final Sink<HighchartsNgConfig, HighchartsNgConfig> sink;
+        private final Sink<HighchartsNgConfig, HighchartsNgConfig> sink;
 
-	private Options options;
-	
-	private Object userData;
+        private Options options;
 
-	private final Collection<Series<?>> series = new ArrayList<>();
+        private Object userData;
 
-	Builder(Sink<HighchartsNgConfig, HighchartsNgConfig> sink) {
-	    this.sink = sink;
-	}
+        private final Collection<Series<?>> series = new ArrayList<>();
 
-	/**
-	 * This is a nice example of how to create one joined stream from things
-	 * that have lists of other things, a reduction of several one-to-many
-	 * association into one stream.
-	 *
-	 * @return
-	 */
-	public Number computeCurrentMaxYValue() {
-	    return series.stream()		    
-		    .flatMap(series -> series.getData().stream())
-		    .filter(val -> val instanceof Number)
-		    .map(val -> (Number)val)
-		    .max((a, b) -> Double.compare(a.doubleValue(), b.doubleValue())).orElse(0);
-	}
+        Builder(final Sink<HighchartsNgConfig, HighchartsNgConfig> sink) {
+            this.sink = sink;
+        }
 
-	public Options.Builder<Builder> options() {
-	    return new Options.Builder<>(options -> {
-		Builder.this.options = options;
-		return Builder.this;
-	    });
-	}
+        /**
+         * This is a nice example of how to create one joined stream from things
+         * that have lists of other things, a reduction of several one-to-many
+         * association into one stream.
+         *
+         * @return
+         */
+        public Number computeCurrentMaxYValue() {
+            return series.stream()
+                    .flatMap(series -> series.getData().stream())
+                    .filter(val -> val instanceof Number)
+                    .map(val -> (Number) val)
+                    .max((a, b) -> Double.compare(a.doubleValue(), b.doubleValue())).orElse(0);
+        }
 
-	public <T> Series.Builder<Builder, T> series() {
-	    return new Series.Builder<>(series -> {
-		Builder.this.series.add(series);
-		return Builder.this;
-	    });
-	}
-	
-	public Builder withUserData(final Object userData) {
-	    this.userData = userData;
-	    return this;
-	}
+        public Options.Builder<Builder> options() {
+            return new Options.Builder<>(options -> {
+                Builder.this.options = options;
+                return Builder.this;
+            });
+        }
 
-	public HighchartsNgConfig build() {
-	    return this.sink.setObject(new HighchartsNgConfig(options, series, userData));
-	}
+        public <T> Series.Builder<Builder, T> series() {
+            return new Series.Builder<>(series -> {
+                Builder.this.series.add(series);
+                return Builder.this;
+            });
+        }
+
+        public Builder withUserData(final Object userData) {
+            this.userData = userData;
+            return this;
+        }
+
+        public HighchartsNgConfig build() {
+            return this.sink.setObject(new HighchartsNgConfig(options, series, userData));
+        }
     }
 
     public static Builder define() {
-	return new Builder(object -> object);
+        return new Builder(object -> object);
     }
 
     private final Options options;
 
     private final Collection<Series<?>> series;
-    
+
     private final Object userData;
 
     @JsonCreator
     public HighchartsNgConfig(
-	    @JsonProperty("options") Options options, 
-	    @JsonProperty("series") Collection<Series<?>> series)	    
-    {
-	this(options, series, null);
+            @JsonProperty("options") final Options options,
+            @JsonProperty("series") final Collection<Series<?>> series
+    ) {
+        this(options, series, null);
     }
 
-    public HighchartsNgConfig(Options options, Collection<Series<?>> series, Object userData) {
-	this.options = options;
-	this.series = series;
-	this.userData = userData;
+    public HighchartsNgConfig(final Options options, final Collection<Series<?>> series, final Object userData) {
+        this.options = options;
+        this.series = series;
+        this.userData = userData;
     }
-    
+
     public Options getOptions() {
-	return options;
+        return options;
     }
 
     public Collection<Series<?>> getSeries() {
-	return series;
+        return series;
     }
 
     public Object getUserData() {
-	return userData;
+        return userData;
     }
 }

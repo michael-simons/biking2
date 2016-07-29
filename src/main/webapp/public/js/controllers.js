@@ -500,9 +500,15 @@ biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', 
     };
     
     
-     $q.all([$http.get('/api/system/info'), $http.get('/api/system/env/java.(runtime|vm).*')]).then(function(values) {
+     $q.all([
+	 $http.get('/api/system/info'), 
+	 $http.get('/api/system/env/java.(runtime|vm).*'),
+	 $http.get('/api/banner')
+     ]).then(function(values) {
 	$scope.info = values[0].data;	
+	$scope.info.versions['spring-boot'] = values[0].data['spring-boot.version'];
 	$scope.info.env = values[1].data;	
+	$scope.banner = values[2].data;
     });
 
     $scope.refresh = function() {

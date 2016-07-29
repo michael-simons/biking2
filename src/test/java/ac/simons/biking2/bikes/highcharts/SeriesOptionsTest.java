@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,17 +29,17 @@ public class SeriesOptionsTest {
 
     @Test
     public void testBuilder() {
-	SeriesOptions seriesOptions = new SeriesOptions.Builder<>(object -> object).build();
-	assertThat(seriesOptions.isAnimation(), is(nullValue()));
+        SeriesOptions seriesOptions = new SeriesOptions.Builder<>(object -> object).build();
+        assertThat(seriesOptions.isAnimation(), is(nullValue()));
 
-	seriesOptions = new SeriesOptions.Builder<>(object -> object)
-		.enableAnimation()
-		.build();
-	assertThat(seriesOptions.isAnimation(), is(true));
+        seriesOptions = new SeriesOptions.Builder<>(object -> object)
+                .enableAnimation()
+                .build();
+        assertThat(seriesOptions.isAnimation(), is(true));
 
-	seriesOptions = new SeriesOptions.Builder<>(object -> object)
-		.disableAnimation()
-		.build();
-	assertThat(seriesOptions.isAnimation(), is(false));
+        seriesOptions = new SeriesOptions.Builder<>(object -> object)
+                .disableAnimation()
+                .build();
+        assertThat(seriesOptions.isAnimation(), is(false));
     }
 }

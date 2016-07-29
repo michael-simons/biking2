@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,12 +30,12 @@ public class TitleTest {
 
     @Test
     public void testBuilder() {
-	Title title = new Title.Builder<>(object -> object).build();
-	assertThat(title.getText(), is(nullValue()));
+        Title title = new Title.Builder<>(object -> object).build();
+        assertThat(title.getText(), is(nullValue()));
 
-	title = new Title.Builder<>(object -> object)
-	    .withText("test 123")
-	.build();
-	assertThat(title.getText(), is(equalTo("test 123")));
+        title = new Title.Builder<>(object -> object)
+            .withText("test 123")
+        .build();
+        assertThat(title.getText(), is(equalTo("test 123")));
     }
 }
