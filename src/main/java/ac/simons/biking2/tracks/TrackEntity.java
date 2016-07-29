@@ -40,6 +40,8 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -54,21 +56,9 @@ import org.hibernate.validator.constraints.NotBlank;
 @JsonIgnoreProperties(ignoreUnknown = true)
 class TrackEntity implements Serializable {
 
-    private static final long serialVersionUID = 7630613853916630933L;
+    public static final Logger LOGGER = LoggerFactory.getLogger(TrackEntity.class.getPackage().getName());
 
-    /**
-     * Converts a string to the real numeric id
-     * @param fromPrettyId
-     * @return
-     */
-    public static Integer getId(final String fromPrettyId) {
-        Integer rv = null;
-        try {
-            rv = Integer.parseInt(fromPrettyId, 36);
-        } catch (NullPointerException | NumberFormatException e) {
-        }
-        return rv;
-    }
+    private static final long serialVersionUID = 7630613853916630933L;
 
     public enum Type {
 
@@ -117,6 +107,21 @@ class TrackEntity implements Serializable {
     TrackEntity(final String name, final Calendar coveredOn) {
         this.name = name;
         this.coveredOn = coveredOn;
+    }
+
+    /**
+     * Converts a string to the real numeric id
+     * @param fromPrettyId
+     * @return
+     */
+    public static Integer getId(final String fromPrettyId) {
+        Integer rv = null;
+        try {
+            rv = Integer.parseInt(fromPrettyId, 36);
+        } catch (NullPointerException | NumberFormatException e) {
+            LOGGER.warn("Could not parse pretty id '" + fromPrettyId + "'", e);
+        }
+        return rv;
     }
 
     public Integer getId() {

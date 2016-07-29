@@ -254,7 +254,8 @@ class TracksController {
     }
 
     @RequestMapping("/api/home")
-    public @ResponseBody Coordinate getHome() {
+    @ResponseBody
+    public Coordinate getHome() {
         return this.home;
     }
 }
