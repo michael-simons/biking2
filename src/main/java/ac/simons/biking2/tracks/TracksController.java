@@ -127,6 +127,8 @@ class TracksController {
                     track = this.trackRepository.save(track);
                     rv = new ResponseEntity<>(track, HttpStatus.OK);
                 } catch (Exception e) {
+                    LOGGER.warn("Could not store track... Maybe an invalid GPX file? Handling as a bad request.", e);
+
                     this.trackRepository.delete(track);
                     track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
                     track.getTrackFile(datastoreBaseDirectory, "gpx").delete();
