@@ -115,7 +115,7 @@ class GalleryController {
 
                 rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);
             } catch (IOException e) {
-                // Could not store data...
+                LOGGER.error("Could not read or store image data, responding with an internal error!", e);
                 rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (DataIntegrityViolationException e) {
                 LOGGER.debug("Data integrity violation while uploading a new picture (filename=" + filename + ")", e);
