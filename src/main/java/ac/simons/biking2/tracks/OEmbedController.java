@@ -66,7 +66,7 @@ class OEmbedController {
             @RequestParam(required = false, defaultValue = "576") final Integer maxheight,
             final HttpServletRequest request
     ) {
-        ResponseEntity<OEmbedResponse> rv = null;
+        ResponseEntity<OEmbedResponse> rv;
         final Matcher m = EMBEDDABLE_TRACK_URL_PATTERN.matcher(url);
         final Integer id = m.matches() ? TrackEntity.getId(m.group(1)) : null;
         final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
