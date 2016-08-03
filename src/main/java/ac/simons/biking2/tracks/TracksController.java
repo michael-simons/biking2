@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -148,8 +149,11 @@ class TracksController {
         final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
         final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
 
-        try (FileOutputStream out = new FileOutputStream(tcxFile);) {
-            out.getChannel().transferFrom(Channels.newChannel(tcxData), 0, Integer.MAX_VALUE);
+        try (
+                ReadableByteChannel tcxDataChannel = Channels.newChannel(tcxData);
+                FileOutputStream out = new FileOutputStream(tcxFile);
+        ) {
+            out.getChannel().transferFrom(tcxDataChannel, 0, Integer.MAX_VALUE);
             out.flush();
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
