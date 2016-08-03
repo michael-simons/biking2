@@ -46,6 +46,7 @@ import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static java.lang.String.format;
+import java.nio.channels.ReadableByteChannel;
 import static java.security.MessageDigest.getInstance;
 import static java.time.ZoneId.of;
 import static java.time.ZonedDateTime.now;
@@ -106,8 +107,11 @@ class GalleryController {
             final String filename = this.filenameGenerator.generateFile(imageData.getOriginalFilename());
             final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, filename));
 
-            try (FileOutputStream out = new FileOutputStream(imageFile);) {
-                out.getChannel().transferFrom(Channels.newChannel(imageData.getInputStream()), 0, Integer.MAX_VALUE);
+            try (
+                    ReadableByteChannel in = Channels.newChannel(imageData.getInputStream());
+                    FileOutputStream out = new FileOutputStream(imageFile);
+            ) {
+                out.getChannel().transferFrom(in, 0, Integer.MAX_VALUE);
                 out.flush();
 
                 GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
