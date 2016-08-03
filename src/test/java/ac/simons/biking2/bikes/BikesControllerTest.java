@@ -67,8 +67,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static java.time.LocalDate.now;
-import org.hamcrest.CoreMatchers;
 import static org.hamcrest.CoreMatchers.is;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.MessageSourceAutoConfiguration;
 
 /**
  * @author Michael J. Simons, 2014-02-20
@@ -79,8 +80,9 @@ import static org.hamcrest.CoreMatchers.is;
         excludeFilters = {
             @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
         },
-        secure = false
+        secure = false        
 )
+@ImportAutoConfiguration(MessageSourceAutoConfiguration.class)
 @AutoConfigureRestDocs(
         outputDir = "target/generated-snippets",
         uriHost = "biking.michael-simons.eu",
