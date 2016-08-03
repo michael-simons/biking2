@@ -70,6 +70,7 @@ import static java.time.LocalDate.now;
 import static org.hamcrest.CoreMatchers.is;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.MessageSourceAutoConfiguration;
+import static java.time.LocalDate.now;
 
 /**
  * @author Michael J. Simons, 2014-02-20
