@@ -32,6 +32,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Profile({"default", "prod"})
+@SuppressWarnings({"squid:S1118"}) // This is not a utility class. It cannot have a private constructor.
 public class SecurityConfig {
 
     /**

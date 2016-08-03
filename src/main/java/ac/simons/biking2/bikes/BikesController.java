@@ -17,9 +17,14 @@ package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.support.ResourceNotFoundException;
 import ac.simons.biking2.bikes.BikeEntity.Link;
+import static ac.simons.biking2.bikes.Messages.ALREADY_DECOMMISSIONED;
+import static ac.simons.biking2.shared.Messages.INVALID_ARGUMENTS;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import javax.validation.Valid;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +48,11 @@ class BikesController {
 
     private final BikeRepository bikeRepository;
 
-    BikesController(final BikeRepository bikeRepository) {
+    private final MessageSourceAccessor i18n;
+
+    BikesController(final BikeRepository bikeRepository, final MessageSource messageSource) {
         this.bikeRepository = bikeRepository;
+        this.i18n = new MessageSourceAccessor(messageSource, Locale.ENGLISH);
     }
 
     @RequestMapping(value = "/bikes", method = GET)
@@ -62,7 +70,7 @@ class BikesController {
     @PreAuthorize("isAuthenticated()")
     public MilageEntity createMilage(@PathVariable final Integer id, @RequestBody @Valid final NewMilageCmd cmd, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("Invalid arguments.");
+            throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
         final BikeEntity bike = bikeRepository.findOne(id);
@@ -71,7 +79,7 @@ class BikesController {
         if (bike == null) {
             throw new ResourceNotFoundException();
         } else if (bike.getDecommissionedOn() != null) {
-            throw new IllegalArgumentException("Bike has already been decommissioned.");
+            throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
             this.bikeRepository.save(bike);
@@ -84,7 +92,7 @@ class BikesController {
     @PreAuthorize("isAuthenticated()")
     public BikeEntity createBike(@RequestBody @Valid final BikeCmd newBike, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("Invalid arguments.");
+            throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
         final BikeEntity bike = new BikeEntity(newBike.getName(), newBike.boughtOnAsLocalDate());
@@ -99,7 +107,7 @@ class BikesController {
     @Transactional
     public BikeEntity updateBike(@PathVariable final Integer id, @RequestBody @Valid final BikeCmd updatedBike, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("Invalid arguments.");
+            throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
         final BikeEntity bike = bikeRepository.findOne(id);
@@ -107,7 +115,7 @@ class BikesController {
         if (bike == null) {
             throw new ResourceNotFoundException();
         } else if (bike.getDecommissionedOn() != null) {
-            throw new IllegalArgumentException("Bike has already been decommissioned.");
+            throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             bike.setColor(updatedBike.getColor());
             bike.decommission(updatedBike.decommissionedOnAsLocalDate());
@@ -120,7 +128,7 @@ class BikesController {
     @Transactional
     public BikeEntity updateBikeStory(@PathVariable final Integer id, @RequestBody(required = false) @Valid final StoryCmd newStory, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("Invalid arguments.");
+            throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
         final BikeEntity bike = bikeRepository.findOne(id);
@@ -128,7 +136,7 @@ class BikesController {
         if (bike == null) {
             throw new ResourceNotFoundException();
         } else if (bike.getDecommissionedOn() != null) {
-            throw new IllegalArgumentException("Bike has already been decommissioned.");
+            throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));
         }
