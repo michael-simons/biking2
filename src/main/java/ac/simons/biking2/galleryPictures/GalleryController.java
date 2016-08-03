@@ -16,17 +16,16 @@
 package ac.simons.biking2.galleryPictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
+import ac.simons.biking2.support.FileBasedResource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.channels.Channels;
-import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -42,14 +41,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static java.lang.String.format;
 import java.nio.channels.ReadableByteChannel;
 import static java.security.MessageDigest.getInstance;
-import static java.time.ZoneId.of;
-import static java.time.ZonedDateTime.now;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,27 +136,8 @@ class GalleryController {
         if (galleryPicture == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            final File imageFile = new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename()));
-
-            final int cacheForDays = 365;
-            response.setHeader("Content-Type", "image/jpeg");
-            response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.jpg\"", id));
-            response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME));
-            response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
-
-            // Attribute maybe null
-            if (request == null || !Boolean.TRUE.equals(request.getAttribute("org.apache.tomcat.sendfile.support"))) {
-                Files.copy(imageFile.toPath(), response.getOutputStream());
-                response.getOutputStream().flush();
-            } else {
-                long l = imageFile.length();
-                request.setAttribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath());
-                request.setAttribute("org.apache.tomcat.sendfile.start", 0L);
-                request.setAttribute("org.apache.tomcat.sendfile.end", l);
-                response.setHeader("Content-Length", Long.toString(l));
-            }
+            final FileBasedResource resource = new FileBasedResource(new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename())), String.format("%s.jpg", id), 365);
+            resource.send(request, response);
         }
-
-        response.flushBuffer();
     }
 }
