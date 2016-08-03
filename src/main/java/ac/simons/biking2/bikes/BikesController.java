@@ -17,6 +17,8 @@ package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.support.ResourceNotFoundException;
 import ac.simons.biking2.bikes.BikeEntity.Link;
+import static ac.simons.biking2.bikes.Messages.ALREADY_DECOMMISSIONED;
+import static ac.simons.biking2.shared.Messages.INVALID_ARGUMENTS;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -68,7 +70,7 @@ class BikesController {
     @PreAuthorize("isAuthenticated()")
     public MilageEntity createMilage(@PathVariable final Integer id, @RequestBody @Valid final NewMilageCmd cmd, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException(i18n.getMessage("shared.invalidArguments"));
+            throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
         final BikeEntity bike = bikeRepository.findOne(id);
@@ -77,7 +79,7 @@ class BikesController {
         if (bike == null) {
             throw new ResourceNotFoundException();
         } else if (bike.getDecommissionedOn() != null) {
-            throw new IllegalArgumentException(i18n.getMessage("bikes.alreadyDecommissioned"));
+            throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
             this.bikeRepository.save(bike);
@@ -90,7 +92,7 @@ class BikesController {
     @PreAuthorize("isAuthenticated()")
     public BikeEntity createBike(@RequestBody @Valid final BikeCmd newBike, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException(i18n.getMessage("shared.invalidArguments"));
+            throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
         final BikeEntity bike = new BikeEntity(newBike.getName(), newBike.boughtOnAsLocalDate());
@@ -105,7 +107,7 @@ class BikesController {
     @Transactional
     public BikeEntity updateBike(@PathVariable final Integer id, @RequestBody @Valid final BikeCmd updatedBike, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException(i18n.getMessage("shared.invalidArguments"));
+            throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
         final BikeEntity bike = bikeRepository.findOne(id);
@@ -113,7 +115,7 @@ class BikesController {
         if (bike == null) {
             throw new ResourceNotFoundException();
         } else if (bike.getDecommissionedOn() != null) {
-            throw new IllegalArgumentException(i18n.getMessage("bikes.alreadyDecommissioned"));
+            throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             bike.setColor(updatedBike.getColor());
             bike.decommission(updatedBike.decommissionedOnAsLocalDate());
@@ -126,7 +128,7 @@ class BikesController {
     @Transactional
     public BikeEntity updateBikeStory(@PathVariable final Integer id, @RequestBody(required = false) @Valid final StoryCmd newStory, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException(i18n.getMessage("shared.invalidArguments"));
+            throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
         final BikeEntity bike = bikeRepository.findOne(id);
@@ -134,7 +136,7 @@ class BikesController {
         if (bike == null) {
             throw new ResourceNotFoundException();
         } else if (bike.getDecommissionedOn() != null) {
-            throw new IllegalArgumentException(i18n.getMessage("bikes.alreadyDecommissioned"));
+            throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));
         }
