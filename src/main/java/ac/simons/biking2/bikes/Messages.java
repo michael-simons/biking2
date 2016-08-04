@@ -20,7 +20,10 @@ package ac.simons.biking2.bikes;
  */
 enum Messages {
 
-    ALREADY_DECOMMISSIONED("alreadyDecommissioned");
+    ALREADY_DECOMMISSIONED("alreadyDecommissioned"),
+    MILAGE_KM("milageKm"),
+    TITLE_MONTHLY_AVERAGE("titleMonthlyAverage"),
+    TITLE_CURRENT_YEAR("titleCurrentYear");
 
     public final String key;
 

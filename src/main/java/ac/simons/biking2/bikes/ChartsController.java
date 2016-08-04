@@ -15,6 +15,8 @@
  */
 package ac.simons.biking2.bikes;
 
+import static ac.simons.biking2.bikes.Messages.MILAGE_KM;
+import static ac.simons.biking2.bikes.Messages.TITLE_CURRENT_YEAR;
 import ac.simons.biking2.bikes.highcharts.HighchartsNgConfig;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -40,6 +42,9 @@ import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.IntStream.generate;
 import static java.util.stream.IntStream.rangeClosed;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
+import static ac.simons.biking2.bikes.Messages.TITLE_MONTHLY_AVERAGE;
 import static java.util.stream.Collectors.groupingBy;
 
 /**
@@ -50,11 +55,19 @@ import static java.util.stream.Collectors.groupingBy;
 class ChartsController {
 
     private final BikeRepository bikeRepository;
+
     private final String colorOfCumulativeGraph;
 
-    ChartsController(final BikeRepository bikeRepository, @Value("${biking2.color-of-cumulative-graph:000000}") final String colorOfCumulativeGraph) {
+    private final MessageSourceAccessor i18n;
+
+    ChartsController(
+            final BikeRepository bikeRepository,
+            @Value("${biking2.color-of-cumulative-graph:000000}") final String colorOfCumulativeGraph,
+            final MessageSource messageSource
+    ) {
         this.bikeRepository = bikeRepository;
         this.colorOfCumulativeGraph = colorOfCumulativeGraph;
+        this.i18n = new MessageSourceAccessor(messageSource, Locale.ENGLISH);
     }
 
     @RequestMapping("/charts/currentYear")
@@ -110,7 +123,7 @@ class ChartsController {
                         .disable()
                         .build()
                     .title()
-                        .withText(String.format("Michis milage in %d", january1st.getYear()))
+                        .withText(i18n.getMessage(TITLE_CURRENT_YEAR.key, new Object[]{january1st.getYear()}))
                         .build()
                     .xAxis()
                         .withCategories(
@@ -123,7 +136,7 @@ class ChartsController {
                         .withTickInterval(100)
                         .enableEndOnTick()
                         .title()
-                            .withText("Milage (km)")
+                            .withText(i18n.getMessage(MILAGE_KM.key))
                             .build()
                         .build()
                     .tooltip()
@@ -243,7 +256,7 @@ class ChartsController {
                         .withTickInterval(100)
                         .enableEndOnTick()
                         .title()
-                            .withText("Milage (km)")
+                            .withText(i18n.getMessage(MILAGE_KM.key))
                             .build()
                         .build()
                     .tooltip()
@@ -311,7 +324,7 @@ class ChartsController {
                         .disable()
                         .build()
                     .title()
-                        .withText("Monthly average")
+                        .withText(i18n.getMessage(TITLE_MONTHLY_AVERAGE.key))
                         .build()
                     .xAxis()
                         .withCategories(
@@ -328,7 +341,7 @@ class ChartsController {
                             .build()
                         .enableEndOnTick()
                         .title()
-                            .withText("Milage (km)")
+                            .withText(i18n.getMessage(MILAGE_KM.key))
                             .build()
                         .build()
                     .plotOptions()
