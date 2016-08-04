@@ -19,6 +19,7 @@ import ac.simons.biking2.bikes.ChartsControllerTest;
 import ac.simons.biking2.bikes.BikeEntity;
 import ac.simons.biking2.trips.AssortedTripRepository;
 import ac.simons.biking2.bikes.BikeRepository;
+import ac.simons.biking2.shared.TestData;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -36,6 +37,12 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
+import static java.time.LocalDate.now;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author Michael J. Simons, 2015-12-17
@@ -43,9 +50,12 @@ import static org.mockito.Mockito.stub;
 public class SummaryControllerTest {
     private final AssortedTripRepository assortedTripRepository;
 
+    private final TestData testData;
+    
     public SummaryControllerTest() {
-        this.assortedTripRepository = mock(AssortedTripRepository.class);
+        this.assortedTripRepository = mock(AssortedTripRepository.class);        
         stub(this.assortedTripRepository.getTotalDistance()).toReturn(BigDecimal.TEN);
+        this.testData = new TestData();
     }
 
     @Test
@@ -53,7 +63,7 @@ public class SummaryControllerTest {
         final Calendar now = Calendar.getInstance();
 
         final BikeRepository bikeRepository = mock(BikeRepository.class);
-        stub(bikeRepository.findAll()).toReturn(ChartsControllerTest.generateTestData());
+        stub(bikeRepository.findAll()).toReturn(testData.value);
         stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
 
         final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
