@@ -33,5 +33,11 @@ public class AssortedTripEntityTest {
         Assert.assertEquals(now, trip.getCoveredOn());
         Assert.assertEquals(BigDecimal.TEN, trip.getDistance());
         Assert.assertEquals(new AssortedTripEntity(), new AssortedTripEntity());
+        Assert.assertNotEquals(new AssortedTripEntity(), null);
+        Assert.assertNotEquals(new AssortedTripEntity(), "foobar");
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DAY_OF_MONTH, -1);
+        Assert.assertNotEquals(trip, new AssortedTripEntity(yesterday, BigDecimal.TEN));
+        Assert.assertEquals(trip.hashCode(), new AssortedTripEntity(now, BigDecimal.TEN).hashCode());
     }
 }
