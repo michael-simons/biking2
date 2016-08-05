@@ -37,7 +37,7 @@ public class RSSTest {
 
     @Test
     public void testJAXBMapping() throws JAXBException {
-        JAXBContext context = JAXBContextFactory.createContext(RSS.class);
+        JAXBContext context = new JAXBContextFactory(RSS.class).createContext();
 
         final Unmarshaller unmarschaller = context.createUnmarshaller();
         final RSS rss = (RSS) unmarschaller.unmarshal(this.getClass().getResourceAsStream("/biking_pictures.rss"));

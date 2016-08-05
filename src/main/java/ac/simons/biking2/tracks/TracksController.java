@@ -84,7 +84,7 @@ class TracksController {
         this.datastoreBaseDirectory = datastoreBaseDirectory;
         this.gpsBabel = gpsBabel;
         this.home = home;
-        this.gpxContext = JAXBContextFactory.createContext(GPX.class);
+        this.gpxContext = new JAXBContextFactory(GPX.class).createContext();
     }
 
     @RequestMapping("/api/tracks")

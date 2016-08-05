@@ -68,7 +68,7 @@ class FetchBikingPicturesJob {
             throw new RuntimeException("Could not create bikingPicturesStorage!");
         }
 
-        this.rssContext = JAXBContextFactory.createContext(RSS.class);
+        this.rssContext = new JAXBContextFactory(RSS.class).createContext();
     }
 
     @PostConstruct
