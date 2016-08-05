@@ -21,32 +21,19 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Michael J. Simons, 2014-02-19
  */
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 class NewMilageCmd {
     @NotNull
     private Date recordedOn;
     @NotNull
     private Double amount;
-
-    public Date getRecordedOn() {
-        return recordedOn;
-    }
-
-    public void setRecordedOn(final Date recordedOn) {
-        this.recordedOn = recordedOn;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(final Double amount) {
-        this.amount = amount;
-    }
 
     public LocalDate recordedOnAsLocalDate() {
         return LocalDateTime.ofInstant(this.getRecordedOn().toInstant(), ZoneId.systemDefault()).toLocalDate();

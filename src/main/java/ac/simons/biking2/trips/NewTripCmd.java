@@ -19,12 +19,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Command class for creating new assorted trips.
  *
  * @author Michael J. Simons, 2015-06-09
  */
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class NewTripCmd implements Serializable {
 
@@ -34,20 +37,4 @@ public final class NewTripCmd implements Serializable {
     private Date coveredOn;
     @NotNull
     private Double distance;
-
-    public Date getCoveredOn() {
-        return coveredOn;
-    }
-
-    public void setCoveredOn(final Date coveredOn) {
-        this.coveredOn = coveredOn;
-    }
-
-    public Double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(final Double distance) {
-        this.distance = distance;
-    }
 }

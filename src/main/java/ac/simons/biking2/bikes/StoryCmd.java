@@ -16,12 +16,15 @@
 package ac.simons.biking2.bikes;
 
 import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
 /**
  * @author Michael J. Simons, 2015-09-21
  */
+@Getter @Setter
 class StoryCmd implements Serializable {
 
     private static final long serialVersionUID = -3074796999424910373L;
@@ -32,20 +35,4 @@ class StoryCmd implements Serializable {
 
     @NotBlank
     private String label;
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(final String url) {
-        this.url = url;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(final String label) {
-        this.label = label;
-    }
 }
