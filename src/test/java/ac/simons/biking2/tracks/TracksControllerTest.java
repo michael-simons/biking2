@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.bikingPictures.BikingPicturesControllerTest.RegexMatcher;
+import ac.simons.biking2.bikingpictures.BikingPicturesControllerTest.RegexMatcher;
 import ac.simons.biking2.config.DatastoreConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
