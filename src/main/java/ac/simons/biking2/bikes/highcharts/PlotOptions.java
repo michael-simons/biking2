@@ -44,15 +44,15 @@ public final class PlotOptions {
         }
 
         public Column.Builder<Builder<P>> column() {
-            return new Column.Builder<>(column -> {
-                Builder.this.column = column;
+            return new Column.Builder<>(newColumn -> {
+                Builder.this.column = newColumn;
                 return Builder.this;
             });
         }
 
         public SeriesOptions.Builder<Builder<P>> series() {
-            return new SeriesOptions.Builder<>(series -> {
-                Builder.this.series = series;
+            return new SeriesOptions.Builder<>(newSeries -> {
+                Builder.this.series = newSeries;
                 return Builder.this;
             });
         }

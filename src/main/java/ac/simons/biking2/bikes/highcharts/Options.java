@@ -54,50 +54,50 @@ public final class Options {
         }
 
         public Chart.Builder<Builder<P>> chart() {
-            return new Chart.Builder<>(chart -> {
-                Builder.this.chart = chart;
+            return new Chart.Builder<>(newChart -> {
+                Builder.this.chart = newChart;
                 return Builder.this;
             });
         }
 
         public Credits.Builder<Builder<P>> credits() {
-            return new Credits.Builder<>(credits -> {
-                Builder.this.credits = credits;
+            return new Credits.Builder<>(newCredits -> {
+                Builder.this.credits = newCredits;
                 return Builder.this;
             });
         }
 
         public PlotOptions.Builder<Builder<P>> plotOptions() {
-            return new PlotOptions.Builder<>(plotOptions -> {
-                Builder.this.plotOptions = plotOptions;
+            return new PlotOptions.Builder<>(newPlotOptions -> {
+                Builder.this.plotOptions = newPlotOptions;
                 return Builder.this;
             });
         }
 
         public Title.Builder<Builder<P>> title() {
-            return new Title.Builder<>(title -> {
-                Builder.this.title = title;
+            return new Title.Builder<>(newTitle -> {
+                Builder.this.title = newTitle;
                 return Builder.this;
             });
         }
 
         public Tooltip.Builder<Builder<P>> tooltip() {
-            return new Tooltip.Builder<>(tooltip -> {
-                Builder.this.tooltip = tooltip;
+            return new Tooltip.Builder<>(newTooltip -> {
+                Builder.this.tooltip = newTooltip;
                 return Builder.this;
             });
         }
 
         public Axis.Builder<Builder<P>> xAxis() {
-            return new Axis.Builder<>(xAxis -> {
-                Builder.this.xAxis = xAxis;
+            return new Axis.Builder<>(newXAxis -> {
+                Builder.this.xAxis = newXAxis;
                 return Builder.this;
             });
         }
 
         public Axis.Builder<Builder<P>> yAxis() {
-            return new Axis.Builder<>(yAxis -> {
-                Builder.this.yAxis = yAxis;
+            return new Axis.Builder<>(newYAxis -> {
+                Builder.this.yAxis = newYAxis;
                 return Builder.this;
             });
         }

@@ -104,8 +104,8 @@ public final class Series<T> {
         }
 
         public Marker.Builder<Builder<P, T>> marker() {
-            return new Marker.Builder<>(marker -> {
-                Builder.this.marker = marker;
+            return new Marker.Builder<>(newMarker -> {
+                Builder.this.marker = newMarker;
                 return Builder.this;
             });
         }
