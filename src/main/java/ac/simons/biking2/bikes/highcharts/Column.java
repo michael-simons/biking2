@@ -31,29 +31,29 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class Column {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, Column> sink;
+        private final Sink<P, Column> sink;
 
         private Number borderWidth;
 
         private Number pointPadding;
 
-        Builder(final Sink<PB, Column> sink) {
+        Builder(final Sink<P, Column> sink) {
             this.sink = sink;
         }
 
-        public Builder<PB> withBorderWidth(final Number borderWidth) {
+        public Builder<P> withBorderWidth(final Number borderWidth) {
             this.borderWidth = borderWidth;
             return this;
         }
 
-        public Builder<PB> withPointPadding(final Number pointPadding) {
+        public Builder<P> withPointPadding(final Number pointPadding) {
             this.pointPadding = pointPadding;
             return this;
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(new Column(borderWidth, pointPadding));
         }
     }

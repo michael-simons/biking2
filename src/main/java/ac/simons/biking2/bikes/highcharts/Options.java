@@ -31,9 +31,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class Options {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, Options> sink;
+        private final Sink<P, Options> sink;
 
         private Chart chart;
 
@@ -49,60 +49,60 @@ public final class Options {
 
         private Axis yAxis;
 
-        Builder(final Sink<PB, Options> sink) {
+        Builder(final Sink<P, Options> sink) {
             this.sink = sink;
         }
 
-        public Chart.Builder<Builder<PB>> chart() {
+        public Chart.Builder<Builder<P>> chart() {
             return new Chart.Builder<>(chart -> {
                 Builder.this.chart = chart;
                 return Builder.this;
             });
         }
 
-        public Credits.Builder<Builder<PB>> credits() {
+        public Credits.Builder<Builder<P>> credits() {
             return new Credits.Builder<>(credits -> {
                 Builder.this.credits = credits;
                 return Builder.this;
             });
         }
 
-        public PlotOptions.Builder<Builder<PB>> plotOptions() {
+        public PlotOptions.Builder<Builder<P>> plotOptions() {
             return new PlotOptions.Builder<>(plotOptions -> {
                 Builder.this.plotOptions = plotOptions;
                 return Builder.this;
             });
         }
 
-        public Title.Builder<Builder<PB>> title() {
+        public Title.Builder<Builder<P>> title() {
             return new Title.Builder<>(title -> {
                 Builder.this.title = title;
                 return Builder.this;
             });
         }
 
-        public Tooltip.Builder<Builder<PB>> tooltip() {
+        public Tooltip.Builder<Builder<P>> tooltip() {
             return new Tooltip.Builder<>(tooltip -> {
                 Builder.this.tooltip = tooltip;
                 return Builder.this;
             });
         }
 
-        public Axis.Builder<Builder<PB>> xAxis() {
+        public Axis.Builder<Builder<P>> xAxis() {
             return new Axis.Builder<>(xAxis -> {
                 Builder.this.xAxis = xAxis;
                 return Builder.this;
             });
         }
 
-        public Axis.Builder<Builder<PB>> yAxis() {
+        public Axis.Builder<Builder<P>> yAxis() {
             return new Axis.Builder<>(yAxis -> {
                 Builder.this.yAxis = yAxis;
                 return Builder.this;
             });
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(
                     new Options(chart, credits, plotOptions, title, tooltip, xAxis, yAxis)
             );

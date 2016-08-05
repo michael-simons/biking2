@@ -31,9 +31,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class Tooltip {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, Tooltip> sink;
+        private final Sink<P, Tooltip> sink;
 
         private String footerFormat;
 
@@ -49,46 +49,46 @@ public final class Tooltip {
 
         private String valueSuffix;
 
-        public Builder(final Sink<PB, Tooltip> sink) {
+        public Builder(final Sink<P, Tooltip> sink) {
             this.sink = sink;
         }
 
-        public Builder<PB> withFooterFormat(final String footerFormat) {
+        public Builder<P> withFooterFormat(final String footerFormat) {
             this.footerFormat = footerFormat;
             return this;
         }
 
-        public Builder<PB> withHeaderFormat(final String headerFormat) {
+        public Builder<P> withHeaderFormat(final String headerFormat) {
             this.headerFormat = headerFormat;
             return this;
         }
 
-        public Builder<PB> withPointFormat(final String pointFormat) {
+        public Builder<P> withPointFormat(final String pointFormat) {
             this.pointFormat = pointFormat;
             return this;
         }
 
-        public Builder<PB> withValueSuffix(final String valueSuffix) {
+        public Builder<P> withValueSuffix(final String valueSuffix) {
             this.valueSuffix = valueSuffix;
             return this;
         }
 
-        public Builder<PB> share() {
+        public Builder<P> share() {
             this.shared = true;
             return this;
         }
 
-        public Builder<PB> useHTML() {
+        public Builder<P> useHTML() {
             this.useHTML = true;
             return this;
         }
 
-        public Builder<PB> enableCrosshairs() {
+        public Builder<P> enableCrosshairs() {
             this.crosshairs = true;
             return this;
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(
                     new Tooltip(footerFormat, headerFormat, pointFormat, shared, useHTML, crosshairs, valueSuffix)
             );

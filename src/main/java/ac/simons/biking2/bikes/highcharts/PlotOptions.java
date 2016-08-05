@@ -31,33 +31,33 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class PlotOptions {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, PlotOptions> sink;
+        private final Sink<P, PlotOptions> sink;
 
         private Column column;
 
         private SeriesOptions series;
 
-        Builder(final Sink<PB, PlotOptions> sink) {
+        Builder(final Sink<P, PlotOptions> sink) {
             this.sink = sink;
         }
 
-        public Column.Builder<Builder<PB>> column() {
+        public Column.Builder<Builder<P>> column() {
             return new Column.Builder<>(column -> {
                 Builder.this.column = column;
                 return Builder.this;
             });
         }
 
-        public SeriesOptions.Builder<Builder<PB>> series() {
+        public SeriesOptions.Builder<Builder<P>> series() {
             return new SeriesOptions.Builder<>(series -> {
                 Builder.this.series = series;
                 return Builder.this;
             });
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(
                     new PlotOptions(column, series)
             );

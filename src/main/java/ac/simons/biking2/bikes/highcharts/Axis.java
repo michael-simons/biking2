@@ -35,9 +35,9 @@ import java.util.List;
 public final class Axis {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, Axis> sink;
+        private final Sink<P, Axis> sink;
 
         private Collection<String> categories;
 
@@ -53,48 +53,48 @@ public final class Axis {
 
         private List<PlotLine> plotLines;
 
-        Builder(final Sink<PB, Axis> sink) {
+        Builder(final Sink<P, Axis> sink) {
             this.sink = sink;
         }
 
-        public Builder<PB> withCategories(final String... categories) {
+        public Builder<P> withCategories(final String... categories) {
             this.categories = Arrays.asList(categories);
             return this;
         }
 
-        public Builder<PB> withMin(final Number min) {
+        public Builder<P> withMin(final Number min) {
             this.min = min;
             return this;
         }
 
-        public Builder<PB> withMax(final Number max) {
+        public Builder<P> withMax(final Number max) {
             this.max = max;
             return this;
         }
 
-        public Builder<PB> withTickInterval(final Number tickInterval) {
+        public Builder<P> withTickInterval(final Number tickInterval) {
             this.tickInterval = tickInterval;
             return this;
         }
 
-        public Builder<PB> enableEndOnTick() {
+        public Builder<P> enableEndOnTick() {
             this.endOnTick = true;
             return this;
         }
 
-        public Builder<PB> disableEndOnTick() {
+        public Builder<P> disableEndOnTick() {
             this.endOnTick = false;
             return this;
         }
 
-        public Title.Builder<Builder<PB>> title() {
+        public Title.Builder<Builder<P>> title() {
             return new Title.Builder<>(t -> {
                 Builder.this.title = t;
                 return Builder.this;
             });
         }
 
-        public PlotLine.Builder<Builder<PB>> withPlotLine() {
+        public PlotLine.Builder<Builder<P>> withPlotLine() {
             return new PlotLine.Builder<>(plotLine -> {
                 if (Builder.this.plotLines == null) {
                     Builder.this.plotLines = new ArrayList<>();
@@ -104,7 +104,7 @@ public final class Axis {
             });
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(
                     new Axis(categories, endOnTick, max, min, tickInterval, title, plotLines)
             );
