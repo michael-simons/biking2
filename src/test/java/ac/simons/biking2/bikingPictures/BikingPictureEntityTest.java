@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.bikingPictures;
 
-import ac.simons.biking2.bikingPictures.BikingPictureEntity;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 import org.junit.Assert;
@@ -62,8 +61,7 @@ public class BikingPictureEntityTest {
 
     @Test
     public void shouldHandleInvalidGuidsGracefully() {
-        this.expectedException.expect(RuntimeException.class);
-        this.expectedException.expectMessage("Invalid GUID");
+        this.expectedException.expect(InvalidGUIDException.class);
 
         final ZonedDateTime now = ZonedDateTime.now();
         new BikingPictureEntity("http://www.heise.de", now, "http://www.heise.de");

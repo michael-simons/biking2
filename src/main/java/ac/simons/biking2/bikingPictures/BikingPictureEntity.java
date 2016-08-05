@@ -78,7 +78,7 @@ class BikingPictureEntity implements Serializable {
     BikingPictureEntity(final String guid, final ZonedDateTime pubDate, final String link) {
         final Matcher matcher = GUID_PATTERN.matcher(guid);
         if (!matcher.matches()) {
-            throw new RuntimeException("Invalid GUID");
+            throw new InvalidGUIDException();
         }
         this.externalId = Integer.parseInt(matcher.group(1));
         this.pubDate = GregorianCalendar.from(pubDate);
