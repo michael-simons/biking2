@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -143,6 +144,7 @@ class TracksController {
         return rv;
     }
 
+    @SneakyThrows({IOException.class, JAXBException.class, InterruptedException.class})
     TrackEntity storeFile(final TrackEntity track, final InputStream tcxData) {
         final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
         final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
@@ -157,23 +159,19 @@ class TracksController {
             throw new UncheckedIOException(ex);
         }
 
-        try {
-            final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
-            process.waitFor();
-            int exitValue = process.exitValue();
+        final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
+        process.waitFor();
+        int exitValue = process.exitValue();
 
-            if (exitValue != 0) {
-                throw new RuntimeException("GPSBabel could not convert the input file!");
-            }
-            final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
-            GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
-            track.setMinlon(gpx.getBounds().getMinlon());
-            track.setMinlat(gpx.getBounds().getMinlat());
-            track.setMaxlon(gpx.getBounds().getMaxlon());
-            track.setMaxlat(gpx.getBounds().getMaxlat());
-        } catch (IOException | JAXBException | InterruptedException ex) {
-            throw new RuntimeException(ex);
+        if (exitValue != 0) {
+            throw new GPSBabelException("GPSBabel could not convert the input file!");
         }
+        final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
+        GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
+        track.setMinlon(gpx.getBounds().getMinlon());
+        track.setMinlat(gpx.getBounds().getMinlat());
+        track.setMaxlon(gpx.getBounds().getMaxlon());
+        track.setMaxlat(gpx.getBounds().getMaxlat());
 
         return track;
     }
