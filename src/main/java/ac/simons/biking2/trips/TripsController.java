@@ -18,6 +18,7 @@ package ac.simons.biking2.trips;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,16 +38,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2015-06-09
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/trips")
 class TripsController {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(TripsController.class.getPackage().getName());
 
     private final AssortedTripRepository assortedTripRepository;
-
-    TripsController(final AssortedTripRepository assortedTripRepository) {
-        this.assortedTripRepository = assortedTripRepository;
-    }
 
     @RequestMapping(value = "", method = POST)
     @PreAuthorize("isAuthenticated()")

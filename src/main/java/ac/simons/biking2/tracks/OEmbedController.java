@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Michael J. Simons, 2014-02-14
  */
 @Controller
+@RequiredArgsConstructor
 class OEmbedController {
 
     private static final Pattern EMBEDDABLE_TRACK_URL_PATTERN = Pattern.compile(".*?\\/tracks\\/(\\w+)(\\/|\\.(\\w+))?$");
@@ -51,11 +53,6 @@ class OEmbedController {
 
     private final TrackRepository trackRepository;
     private final Coordinate home;
-
-    OEmbedController(final TrackRepository trackRepository, final Coordinate home) {
-        this.trackRepository = trackRepository;
-        this.home = home;
-    }
 
     @RequestMapping(value = "/oembed", produces = {"application/json", "application/xml"})
     @SuppressWarnings({"checkstyle:innerassignment"})

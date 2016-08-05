@@ -46,6 +46,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static java.lang.String.format;
 import java.nio.channels.ReadableByteChannel;
 import static java.security.MessageDigest.getInstance;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,7 @@ import org.slf4j.LoggerFactory;
  * @author Michael J. Simons, 2014-02-22
  */
 @Controller
+@RequiredArgsConstructor
 class GalleryController {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(GalleryController.class.getPackage().getName());
@@ -73,12 +75,7 @@ class GalleryController {
             throw new RuntimeException(e);
         }
     };
-
-    GalleryController(final GalleryPictureRepository galleryPictureRepository, final File datastoreBaseDirectory) {
-        this.galleryPictureRepository = galleryPictureRepository;
-        this.datastoreBaseDirectory = datastoreBaseDirectory;
-    }
-
+    
     @RequestMapping("/api/galleryPictures")
     @ResponseBody
     public List<GalleryPictureEntity> getGalleryPictures() {

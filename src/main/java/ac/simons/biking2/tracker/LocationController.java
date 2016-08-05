@@ -17,6 +17,7 @@ package ac.simons.biking2.tracker;
 
 import java.util.List;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,16 +36,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2014-03-20
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 class LocationController {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(LocationController.class.getPackage().getName());
 
     private final LocationService locationService;
-
-    LocationController(final LocationService locationService) {
-        this.locationService = locationService;
-    }
 
     @RequestMapping(value = "/locations", method = GET)
     public List<LocationEntity> getLocations() {
