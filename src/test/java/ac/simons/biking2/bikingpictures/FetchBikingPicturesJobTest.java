@@ -114,7 +114,7 @@ public class FetchBikingPicturesJobTest {
         someFile.deleteOnExit();
         Assert.assertTrue(someFile.createNewFile());
 
-        expectedException.expect(RuntimeException.class);
+        expectedException.expect(BikingPicturesStorageException.class);
         expectedException.expectMessage("Could not create bikingPicturesStorage!");
         new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, someFile);
     }

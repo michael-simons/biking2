@@ -22,7 +22,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.channels.Channels;
-import java.security.NoSuchAlgorithmException;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -47,6 +46,7 @@ import static java.lang.String.format;
 import java.nio.channels.ReadableByteChannel;
 import static java.security.MessageDigest.getInstance;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -65,12 +65,12 @@ class GalleryController {
 
     private final GalleryPictureRepository galleryPictureRepository;
     private final File datastoreBaseDirectory;
-    private FilenameGenerator filenameGenerator = originalFilename -> {
-        try {
+    private FilenameGenerator filenameGenerator = new FilenameGenerator() {
+        @Override
+        @SneakyThrows
+        public String generateFile(final String originalFilename) {
             final byte[] digest = getInstance("MD5").digest(String.format("%s-%d", originalFilename, System.currentTimeMillis()).getBytes());
             return format("%032x.jpg", new BigInteger(1, digest));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
         }
     };
 

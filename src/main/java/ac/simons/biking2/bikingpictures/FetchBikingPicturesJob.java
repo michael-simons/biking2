@@ -65,7 +65,7 @@ class FetchBikingPicturesJob {
 
         this.bikingPicturesStorage = new File(datastoreBaseDirectory, DatastoreConfig.BIKING_PICTURES_DIRECTORY);
         if (!(this.bikingPicturesStorage.isDirectory() || this.bikingPicturesStorage.mkdirs())) {
-            throw new RuntimeException("Could not create bikingPicturesStorage!");
+            throw new BikingPicturesStorageException("Could not create bikingPicturesStorage!");
         }
 
         this.rssContext = new JAXBContextFactory(RSS.class).createContext();

@@ -41,7 +41,7 @@ public class DatastoreConfig {
     public File datastoreBaseDirectory(@Value("${biking2.datastore-base-directory:${user.dir}/var/dev}") final String datastoreBaseDirectoryPath) {
         final File rv = new File(datastoreBaseDirectoryPath);
         if (!(rv.isDirectory() || rv.mkdirs())) {
-            throw new RuntimeException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
+            throw new DatastoreConfigException(String.format("Could not initialize '%s' as base directory for datastore!", rv.getAbsolutePath()));
         }
 
         new File(rv, BIKING_PICTURES_DIRECTORY).mkdirs();
