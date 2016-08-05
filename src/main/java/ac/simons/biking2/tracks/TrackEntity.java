@@ -39,9 +39,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotBlank;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -54,9 +53,8 @@ import org.slf4j.LoggerFactory;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Slf4j
 class TrackEntity implements Serializable {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(TrackEntity.class.getPackage().getName());
 
     private static final long serialVersionUID = 7630613853916630933L;
 
@@ -119,7 +117,7 @@ class TrackEntity implements Serializable {
         try {
             rv = Integer.parseInt(fromPrettyId, 36);
         } catch (NullPointerException | NumberFormatException e) {
-            LOGGER.warn("Could not parse pretty id '" + fromPrettyId + "'", e);
+            log.warn("Could not parse pretty id '" + fromPrettyId + "'", e);
         }
         return rv;
     }

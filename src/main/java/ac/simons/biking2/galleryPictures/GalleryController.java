@@ -47,17 +47,15 @@ import static java.lang.String.format;
 import java.nio.channels.ReadableByteChannel;
 import static java.security.MessageDigest.getInstance;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Michael J. Simons, 2014-02-22
  */
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 class GalleryController {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(GalleryController.class.getPackage().getName());
 
     @FunctionalInterface
     public interface FilenameGenerator {
@@ -75,7 +73,7 @@ class GalleryController {
             throw new RuntimeException(e);
         }
     };
-    
+
     @RequestMapping("/api/galleryPictures")
     @ResponseBody
     public List<GalleryPictureEntity> getGalleryPictures() {
@@ -112,10 +110,10 @@ class GalleryController {
 
                 rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);
             } catch (IOException e) {
-                LOGGER.error("Could not read or store image data, responding with an internal error!", e);
+                log.error("Could not read or store image data, responding with an internal error!", e);
                 rv = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (DataIntegrityViolationException e) {
-                LOGGER.debug("Data integrity violation while uploading a new picture (filename=" + filename + ")", e);
+                log.debug("Data integrity violation while uploading a new picture (filename=" + filename + ")", e);
                 rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }

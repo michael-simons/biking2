@@ -19,8 +19,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,9 +39,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/trips")
+@Slf4j
 class TripsController {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(TripsController.class.getPackage().getName());
 
     private final AssortedTripRepository assortedTripRepository;
 
@@ -60,7 +58,7 @@ class TripsController {
                 final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
                 rv = new ResponseEntity<>(trip, HttpStatus.OK);
             } catch (DataIntegrityViolationException e) {
-                LOGGER.debug("Data integrity violation while uploading a new trip", e);
+                log.debug("Data integrity violation while uploading a new trip", e);
                 rv = new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }

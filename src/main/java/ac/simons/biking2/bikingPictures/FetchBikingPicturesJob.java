@@ -39,8 +39,7 @@ import org.springframework.stereotype.Component;
 
 import static java.util.stream.Collectors.toList;
 import static java.time.ZonedDateTime.ofInstant;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Michael J. Simons, 2014-02-17
@@ -48,9 +47,8 @@ import org.slf4j.LoggerFactory;
 @Component
 @Profile({"default", "prod"})
 @ConditionalOnBean(DailyFratzeProvider.class)
+@Slf4j
 class FetchBikingPicturesJob {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(FetchBikingPicturesJob.class.getPackage().getName());
 
     private final DailyFratzeProvider dailyFratzeProvider;
     private final BikingPictureRepository bikingPictureRepository;
@@ -93,7 +91,7 @@ class FetchBikingPicturesJob {
         do {
             rss = getRSSFeed(url);
             if (rss == null) {
-                LOGGER.warn("There was a problem getting the feed data");
+                log.warn("There was a problem getting the feed data");
             } else {
                 final List<BikingPictureEntity> intermediateResult
                         = rss.getChannel()
@@ -124,7 +122,7 @@ class FetchBikingPicturesJob {
                             Files.copy(inputStream, new File(bikingPicturesStorage, String.format("%d.jpg", incoming.getExternalId())).toPath(), StandardCopyOption.REPLACE_EXISTING);
                             rv.add(this.bikingPictureRepository.save(incoming));
                         } catch (IOException ex) {
-                            LOGGER.error("Could not download image data, skipping!", ex);
+                            log.error("Could not download image data, skipping!", ex);
                         }
                     }
                 }
@@ -142,7 +140,7 @@ class FetchBikingPicturesJob {
                 final Unmarshaller unmarschaller = rssContext.createUnmarshaller();
                 rss = (RSS) unmarschaller.unmarshal(inputStream);
             } catch (IOException | JAXBException ex) {
-                LOGGER.error(ex.getMessage(), ex);
+                log.error(ex.getMessage(), ex);
             }
         }
         return rss;

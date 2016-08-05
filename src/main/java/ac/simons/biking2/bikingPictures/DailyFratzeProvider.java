@@ -20,8 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -32,9 +31,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConditionalOnExpression(value = "environment['biking2.dailyfratze-access-token'] != null && !environment['biking2.dailyfratze-access-token'].isEmpty()")
+@Slf4j
 class DailyFratzeProvider {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(DailyFratzeProvider.class.getPackage().getName());
 
     private final String accessToken;
     private final String imageUrlFormat;
@@ -54,7 +52,7 @@ class DailyFratzeProvider {
         try {
             rv = new URL(Optional.ofNullable(url).orElse("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d")).openConnection();
         } catch (IOException ex) {
-            LOGGER.error("Failed to open URL connection to DailyFratze RSS endpoint", ex);
+            log.error("Failed to open URL connection to DailyFratze RSS endpoint", ex);
         }
         return rv;
     }
@@ -65,7 +63,7 @@ class DailyFratzeProvider {
             rv = new URL(String.format(imageUrlFormat, "s", id)).openConnection();
             rv.setRequestProperty("Authorization", String.format("Bearer %s", accessToken));
         } catch (IOException ex) {
-            LOGGER.error("Failed to open secure connection to DailyFratze image api", ex);
+            log.error("Failed to open secure connection to DailyFratze image api", ex);
         }
         return rv;
     }

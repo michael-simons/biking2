@@ -22,8 +22,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +32,8 @@ import org.springframework.stereotype.Component;
  * @author Michael J. Simons, 2016-07-19
  */
 @Component
+@Slf4j
 public final class NewLocationMessageListener implements MessageListener {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(NewLocationMessageListener.class.getPackage().getName());
 
     private final ObjectMapper objectMapper;
 
@@ -63,9 +61,9 @@ public final class NewLocationMessageListener implements MessageListener {
 
             locationService.createAndSendNewLocation(objectMapper.readValue(hlp, NewLocationCmd.class));
         } catch (JMSException ex) {
-            LOGGER.warn("Could not handle location message...", ex);
+            log.warn("Could not handle location message...", ex);
         } catch (DataIntegrityViolationException | IOException ex) {
-            LOGGER.warn("Could not store new location...", ex);
+            log.warn("Could not store new location...", ex);
         }
     }
 }

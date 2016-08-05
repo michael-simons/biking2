@@ -38,8 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -62,9 +61,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2014-02-15
  */
 @Controller
+@Slf4j
 class TracksController {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(TracksController.class.getPackage().getName());
 
     private static final Map<String, String> ACCEPTABLE_FORMATS;
 
@@ -128,7 +126,7 @@ class TracksController {
                     track = this.trackRepository.save(track);
                     rv = new ResponseEntity<>(track, HttpStatus.OK);
                 } catch (Exception e) {
-                    LOGGER.warn("Could not store track... Maybe an invalid GPX file? Handling as a bad request.", e);
+                    log.warn("Could not store track... Maybe an invalid GPX file? Handling as a bad request.", e);
 
                     this.trackRepository.delete(track);
                     track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
@@ -137,7 +135,7 @@ class TracksController {
                     rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
             } catch (DataIntegrityViolationException e) {
-                LOGGER.debug("Data integrity violation while storing a new track (coveredOn=" + coveredOn + ",name=" + name + ")", e);
+                log.debug("Data integrity violation while storing a new track (coveredOn=" + coveredOn + ",name=" + name + ")", e);
                 rv = new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
