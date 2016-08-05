@@ -46,8 +46,8 @@ class TripsController {
 
     @RequestMapping(value = "", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> createTrip(@RequestBody @Valid final NewTripCmd newTrip, final BindingResult bindingResult) {
-        ResponseEntity<?> rv;
+    public ResponseEntity<Object> createTrip(@RequestBody @Valid final NewTripCmd newTrip, final BindingResult bindingResult) {
+        ResponseEntity<Object> rv;
 
         if (bindingResult.hasErrors()) {
             rv = new ResponseEntity<>("Invalid arguments.", HttpStatus.BAD_REQUEST);
