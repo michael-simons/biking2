@@ -91,6 +91,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <excludeDevtools>true</excludeDevtools>
+          <excludeArtifactIds>lombok</excludeArtifactIds>
         </configuration>
       </plugin>
       <plugin>
