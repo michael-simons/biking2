@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.bikes;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import lombok.Getter;
 
 /**
  * Represents a accumulated period value
  *
  * @author Michael J. Simons, 2014-05-05
  */
+@Getter
 public final class AccumulatedPeriod {
     private final Calendar startOfPeriod;
 
@@ -38,13 +39,5 @@ public final class AccumulatedPeriod {
     public AccumulatedPeriod(final Calendar startOfPeriod, final int value) {
         this.startOfPeriod = startOfPeriod;
         this.value = value;
-    }
-
-    public Calendar getStartOfPeriod() {
-        return startOfPeriod;
-    }
-
-    public int getValue() {
-        return value;
     }
 }

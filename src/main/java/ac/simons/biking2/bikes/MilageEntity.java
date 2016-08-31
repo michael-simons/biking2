@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,6 +34,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Michael J. Simons, 2014-02-08
@@ -43,12 +45,14 @@ import javax.validation.constraints.NotNull;
 @Table(name = "milages", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"bike_id", "recorded_on"})
 })
+@NoArgsConstructor
+@Getter
+@EqualsAndHashCode(of = {"bike", "recordedOn"})
 public class MilageEntity implements Serializable, Comparable<MilageEntity> {
 
     private static final long serialVersionUID = 3561438569324691479L;
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -57,7 +61,7 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     @NotNull
     private Calendar recordedOn;
 
-    @Column(name = "amount", nullable = false, precision = 8, scale = 2)
+    @Column(nullable = false, precision = 8, scale = 2)
     @NotNull
     private BigDecimal amount;
 
@@ -70,61 +74,11 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     @NotNull
     private Calendar createdAt;
 
-    @SuppressWarnings({"squid:S2637"})
-    protected MilageEntity() {
-    }
-
     protected MilageEntity(final BikeEntity bike, final LocalDate recordedOn, final double amount) {
         this.bike = bike;
         this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));
         this.amount = BigDecimal.valueOf(amount);
         this.createdAt = Calendar.getInstance();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Calendar getRecordedOn() {
-        return recordedOn;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public Calendar getCreatedAt() {
-        return createdAt;
-    }
-
-    public BikeEntity getBike() {
-        return bike;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 31 * hash + Objects.hashCode(this.recordedOn);
-        hash = 31 * hash + Objects.hashCode(this.bike);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final MilageEntity other = (MilageEntity) obj;
-        if (!Objects.equals(this.recordedOn, other.recordedOn)) {
-            return false;
-        }
-        if (!Objects.equals(this.amount, other.amount)) {
-            return false;
-        }
-        return Objects.equals(this.bike, other.bike);
     }
 
     @Override

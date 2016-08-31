@@ -46,7 +46,6 @@ class BikingPictureEntity implements Serializable {
     private static final Pattern GUID_PATTERN = Pattern.compile("https?://dailyfratze.de/fratzen/m/(\\d+).jpg");
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -65,7 +64,7 @@ class BikingPictureEntity implements Serializable {
     /**
      * A link to the webpage
      */
-    @Column(name = "link", nullable = false, length = 512)
+    @Column(nullable = false, length = 512)
     @URL
     @NotNull
     @Size(max = 512)

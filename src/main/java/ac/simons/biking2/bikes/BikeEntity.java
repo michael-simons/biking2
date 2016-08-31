@@ -30,7 +30,6 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.function.Predicate;
@@ -57,6 +56,11 @@ import org.hibernate.validator.constraints.URL;
 
 import static java.util.stream.IntStream.rangeClosed;
 import static java.util.stream.Collectors.reducing;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Michael J. Simons, 2014-02-08
@@ -64,86 +68,62 @@ import static java.util.stream.Collectors.reducing;
 @Entity
 @Table(name = "bikes")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
+@NoArgsConstructor
+@EqualsAndHashCode(of = "name")
 public class BikeEntity implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
 
     @Embeddable
+    @NoArgsConstructor
+    @Getter
+    @EqualsAndHashCode(of = "url")
     public static class Link implements Serializable {
 
         private static final long serialVersionUID = 4086706843689307842L;
 
-        @Column(name = "url", length = 512)
+        @Column(length = 512)
         @NotBlank
         @URL
         private String url;
 
-        @Column(name = "label", length = 255)
+        @Column(length = 255)
         @NotBlank
+        @Setter
         private String label;
-
-        protected Link() {
-        }
 
         public Link(final String url, final String label) {
             this.url = url;
             this.label = label;
         }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(final String label) {
-            this.label = label;
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 97 * hash + Objects.hashCode(this.url);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(final Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final Link other = (Link) obj;
-            return Objects.equals(this.url, other.url);
-        }
     }
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Integer id;
 
-    @Column(name = "name", unique = true, length = 255, nullable = false)
+    @Column(unique = true, length = 255, nullable = false)
     @NotBlank
     @Size(max = 255)
+    @Getter
     private String name;
 
-    @Column(name = "color", length = 6, nullable = false)
+    @Column(length = 6, nullable = false)
     @NotBlank
     @Size(max = 6)
+    @Getter @Setter
     private String color = "CCCCCC";
 
     @Column(name = "bought_on", nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull
+    @Getter
     private Calendar boughtOn;
 
     @Column(name = "decommissioned_on")
     @Temporal(TemporalType.DATE)
+    @Getter
     private Calendar decommissionedOn;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
@@ -155,9 +135,11 @@ public class BikeEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @JsonIgnore
+    @Getter
     private Calendar createdAt;
 
     @Embedded
+    @Getter @Setter
     private Link story;
 
     /**
@@ -166,34 +148,10 @@ public class BikeEntity implements Serializable {
     @JsonIgnore
     private transient Map<LocalDate, Integer> periods;
 
-    @SuppressWarnings({"squid:S2637"})
-    protected BikeEntity() {
-    }
-
     public BikeEntity(final String name, final LocalDate boughtOn) {
         this.name = name;
         this.boughtOn = GregorianCalendar.from(boughtOn.atStartOfDay(ZoneId.systemDefault()));
         this.createdAt = Calendar.getInstance();
-    }
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getColor() {
-        return this.color;
-    }
-
-    public void setColor(final String color) {
-        this.color = color;
-    }
-
-    public Calendar getDecommissionedOn() {
-        return this.decommissionedOn;
     }
 
     /**
@@ -208,10 +166,6 @@ public class BikeEntity implements Serializable {
             this.decommissionedOn = GregorianCalendar.from(decommissionDate.atStartOfDay(ZoneId.systemDefault()));
         }
         return this.decommissionedOn != null;
-    }
-
-    public Calendar getCreatedAt() {
-        return this.createdAt;
     }
 
     public synchronized MilageEntity addMilage(final LocalDate recordedOn, final double amount) {
@@ -301,55 +255,18 @@ public class BikeEntity implements Serializable {
         return Arrays.stream(getMilagesInYear(year)).sum();
     }
 
-    public Calendar getBoughtOn() {
-        return boughtOn;
-    }
-
     public boolean hasMilages() {
         return !(this.milages == null || this.milages.isEmpty());
-    }
-
-    public Link getStory() {
-        return story;
-    }
-
-    public void setStory(final Link story) {
-        this.story = story;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.name);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BikeEntity other = (BikeEntity) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        return true;
     }
 
     public static int comparePeriodsByValue(final Map.Entry<LocalDate, Integer> period1, final Map.Entry<LocalDate, Integer> period2) {
         return Integer.compare(period1.getValue(), period2.getValue());
     }
 
+    @RequiredArgsConstructor
     public static class BikeByMilageInYearComparator implements Comparator<BikeEntity> {
 
         private final int year;
-
-        public BikeByMilageInYearComparator(final int year) {
-            this.year = year;
-        }
 
         @Override
         public int compare(final BikeEntity o1, final BikeEntity o2) {
