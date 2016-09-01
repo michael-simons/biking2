@@ -56,6 +56,7 @@ import org.hibernate.validator.constraints.URL;
 
 import static java.util.stream.IntStream.rangeClosed;
 import static java.util.stream.Collectors.reducing;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,14 +69,14 @@ import lombok.Setter;
 @Entity
 @Table(name = "bikes")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "name")
 public class BikeEntity implements Serializable {
 
     private static final long serialVersionUID = 1249824815158908981L;
 
     @Embeddable
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
     @EqualsAndHashCode(of = "url")
     public static class Link implements Serializable {

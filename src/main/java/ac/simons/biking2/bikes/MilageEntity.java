@@ -34,6 +34,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +46,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "milages", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"bike_id", "recorded_on"})
 })
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = {"bike", "recordedOn"})
 public class MilageEntity implements Serializable, Comparable<MilageEntity> {
