@@ -22,6 +22,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
@@ -33,16 +35,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class NewLocationMessageListener implements MessageListener {
 
     private final ObjectMapper objectMapper;
 
     private final LocationService locationService;
-
-    public NewLocationMessageListener(final ObjectMapper objectMapper, final LocationService locationService) {
-        this.objectMapper = objectMapper;
-        this.locationService = locationService;
-    }
 
     @Override
     public void onMessage(final Message message) {

@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.bikingpictures;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConditionalOnExpression(value = "environment['biking2.dailyfratze-access-token'] != null && !environment['biking2.dailyfratze-access-token'].isEmpty()")
 @Slf4j
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class DailyFratzeProvider {
 
     private final String accessToken;
@@ -40,11 +42,6 @@ class DailyFratzeProvider {
     @Autowired
     DailyFratzeProvider(@Value("${biking2.dailyfratze-access-token}") final String accessToken) {
         this(accessToken, "https://dailyfratze.de/api/images/%s/%d.jpg");
-    }
-
-    DailyFratzeProvider(final String accessToken, final String imageUrlFormat) {
-        this.accessToken = accessToken;
-        this.imageUrlFormat = imageUrlFormat;
     }
 
     public URLConnection getRSSConnection(final String url) {

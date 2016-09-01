@@ -16,6 +16,7 @@
 package ac.simons.biking2.tracks;
 
 import java.math.BigDecimal;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Component;
  * @author Michael J. Simons, 2014-02-17
  */
 @Component("home")
+@Getter
 class Coordinate {
 
     private final BigDecimal longitude;
@@ -40,13 +42,5 @@ class Coordinate {
     Coordinate(final BigDecimal longitude, final BigDecimal latitude) {
         this.longitude = longitude;
         this.latitude = latitude;
-    }
-
-    public double getLatitude() {
-        return latitude.doubleValue();
-    }
-
-    public double getLongitude() {
-        return longitude.doubleValue();
     }
 }
