@@ -18,6 +18,7 @@ package ac.simons.biking2.banner;
 import java.io.IOException;
 import java.io.PrintStream;
 import javax.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.Banner;
 import org.springframework.core.env.Environment;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Michael J. Simons, 2016-04-15
  */
 @Controller
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping("/api/banner")
 class BannerController {
 

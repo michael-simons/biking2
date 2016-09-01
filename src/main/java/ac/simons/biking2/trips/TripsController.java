@@ -18,6 +18,7 @@ package ac.simons.biking2.trips;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,7 +38,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2015-06-09
  */
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping("/api/trips")
 @Slf4j
 class TripsController {

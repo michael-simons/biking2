@@ -21,6 +21,7 @@ import ac.simons.biking2.bikes.BikeRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Michael J. Simons, 2014-02-17
  */
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping("/api")
 class SummaryController {
 

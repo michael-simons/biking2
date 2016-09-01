@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,15 +35,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Michael J. Simons, 2014-02-19
  */
 @Controller
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class BikingPicturesController {
 
     private final BikingPictureRepository bikingPictureRepository;
     private final File datastoreBaseDirectory;
-
-    BikingPicturesController(final BikingPictureRepository bikingPictureRepository, final File datastoreBaseDirectory) {
-        this.bikingPictureRepository = bikingPictureRepository;
-        this.datastoreBaseDirectory = datastoreBaseDirectory;
-    }
 
     @RequestMapping("/api/bikingPictures")
     @ResponseBody

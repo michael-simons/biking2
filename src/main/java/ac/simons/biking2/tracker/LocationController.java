@@ -17,6 +17,7 @@ package ac.simons.biking2.tracker;
 
 import java.util.List;
 import javax.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,7 +36,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2014-03-20
  */
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping("/api")
 @Slf4j
 class LocationController {

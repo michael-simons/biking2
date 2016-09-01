@@ -45,6 +45,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static java.lang.String.format;
 import java.nio.channels.ReadableByteChannel;
 import static java.security.MessageDigest.getInstance;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +54,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Michael J. Simons, 2014-02-22
  */
 @Controller
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 class GalleryController {
 
