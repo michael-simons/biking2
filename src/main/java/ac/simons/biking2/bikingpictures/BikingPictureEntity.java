@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.Column;
@@ -32,6 +31,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 /**
@@ -39,6 +41,9 @@ import org.hibernate.validator.constraints.URL;
  */
 @Entity
 @Table(name = "biking_pictures")
+@NoArgsConstructor
+@Getter
+@EqualsAndHashCode(of = "externalId")
 class BikingPictureEntity implements Serializable {
 
     private static final long serialVersionUID = -7050582813676065697L;
@@ -70,10 +75,6 @@ class BikingPictureEntity implements Serializable {
     @Size(max = 512)
     private String link;
 
-    @SuppressWarnings({"squid:S2637"})
-    protected BikingPictureEntity() {
-    }
-
     BikingPictureEntity(final String guid, final ZonedDateTime pubDate, final String link) {
         final Matcher matcher = GUID_PATTERN.matcher(guid);
         if (!matcher.matches()) {
@@ -82,40 +83,5 @@ class BikingPictureEntity implements Serializable {
         this.externalId = Integer.parseInt(matcher.group(1));
         this.pubDate = GregorianCalendar.from(pubDate);
         this.link = link;
-    }
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    public Integer getExternalId() {
-        return externalId;
-    }
-
-    public String getLink() {
-        return this.link;
-    }
-
-    public Calendar getPubDate() {
-        return pubDate;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.externalId);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BikingPictureEntity other = (BikingPictureEntity) obj;
-        return Objects.equals(this.externalId, other.externalId);
     }
 }

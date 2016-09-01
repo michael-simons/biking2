@@ -18,7 +18,6 @@ package ac.simons.biking2.gallerypictures;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +28,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -36,12 +39,14 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity
 @Table(name = "gallery_pictures")
+@NoArgsConstructor
+@Getter
+@EqualsAndHashCode(of = {"takenOn", "filename"})
 class GalleryPictureEntity implements Serializable {
 
     private static final long serialVersionUID = -5303688860568518942L;
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -50,14 +55,15 @@ class GalleryPictureEntity implements Serializable {
     @NotNull
     private Calendar takenOn;
 
-    @Column(name = "filename", length = 36, unique = true, updatable = false)
+    @Column(length = 36, unique = true, updatable = false)
     @NotNull
     @Size(max = 36)
     private String filename;
 
-    @Column(name = "description", length = 2048, nullable = false)
+    @Column(length = 2048, nullable = false)
     @NotBlank
     @Size(max = 2048)
+    @Setter
     private String description;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -66,63 +72,9 @@ class GalleryPictureEntity implements Serializable {
     @JsonIgnore
     private Calendar createdAt;
 
-    @SuppressWarnings({"squid:S2637"})
-    protected GalleryPictureEntity() {
-    }
-
     GalleryPictureEntity(final Calendar takenOn, final String filename) {
         this.takenOn = takenOn;
         this.filename = filename;
         this.createdAt = Calendar.getInstance();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Calendar getTakenOn() {
-        return takenOn;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public Calendar getCreatedAt() {
-        return createdAt;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 23 * hash + Objects.hashCode(this.takenOn);
-        hash = 23 * hash + Objects.hashCode(this.filename);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final GalleryPictureEntity other = (GalleryPictureEntity) obj;
-        if (!Objects.equals(this.takenOn, other.takenOn)) {
-            return false;
-        }
-        if (!Objects.equals(this.filename, other.filename)) {
-            return false;
-        }
-        return true;
     }
 }
