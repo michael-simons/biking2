@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * @author Michael J. Simons, 2014-03-19
  */
-public interface LocationRepository extends JpaRepository<LocationEntity, Integer> {
+interface LocationRepository extends JpaRepository<LocationEntity, Integer> {
 
     List<LocationEntity> findByCreatedAtGreaterThanOrderByCreatedAtAsc(Calendar value);
 }

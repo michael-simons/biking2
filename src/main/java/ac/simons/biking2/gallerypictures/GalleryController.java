@@ -66,7 +66,7 @@ class GalleryController {
 
     private final GalleryPictureRepository galleryPictureRepository;
     private final File datastoreBaseDirectory;
-    private FilenameGenerator filenameGenerator = new FilenameGenerator() {
+    private final FilenameGenerator filenameGenerator = new FilenameGenerator() {
         @Override
         @SneakyThrows
         public String generateFile(final String originalFilename) {
@@ -106,7 +106,7 @@ class GalleryController {
                 out.getChannel().transferFrom(in, 0, Integer.MAX_VALUE);
                 out.flush();
 
-                GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
+                final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
                 galleryPicture.setDescription(description);
 
                 rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);

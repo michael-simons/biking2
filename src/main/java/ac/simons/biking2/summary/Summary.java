@@ -17,10 +17,13 @@ package ac.simons.biking2.summary;
 
 import ac.simons.biking2.bikes.AccumulatedPeriod;
 import java.util.Calendar;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Michael J. Simons, 2014-02-13
  */
+@Getter @Setter
 class Summary {
 
     private Calendar dateOfFirstRecord;
@@ -32,44 +35,4 @@ class Summary {
     private AccumulatedPeriod bestPeriod;
 
     private Double average;
-
-    public Calendar getDateOfFirstRecord() {
-        return dateOfFirstRecord;
-    }
-
-    public void setDateOfFirstRecord(final Calendar dateOfFirstRecord) {
-        this.dateOfFirstRecord = dateOfFirstRecord;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(final Double total) {
-        this.total = total;
-    }
-
-    public AccumulatedPeriod getWorstPeriod() {
-        return worstPeriod;
-    }
-
-    public void setWorstPeriod(final AccumulatedPeriod worstPeriod) {
-        this.worstPeriod = worstPeriod;
-    }
-
-    public AccumulatedPeriod getBestPeriod() {
-        return bestPeriod;
-    }
-
-    public void setBestPeriod(final AccumulatedPeriod bestPeriod) {
-        this.bestPeriod = bestPeriod;
-    }
-
-    public Double getAverage() {
-        return average;
-    }
-
-    public void setAverage(final Double average) {
-        this.average = average;
-    }
 }
