@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.4.0.RELEASE</version>
+    <version>1.4.1.RELEASE</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -315,13 +315,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <!-- TODO See above -->
-      <exclusions>
-        <exclusion>
-          <groupId>com.fasterxml</groupId>
-          <artifactId>classmate</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -405,12 +398,6 @@
       <groupId>org.springframework.restdocs</groupId>
       <artifactId>spring-restdocs-mockmvc</artifactId>
       <scope>test</scope>
-    </dependency>
-    <!-- TODO Remove dependency, workaround for https://github.com/spring-projects/spring-boot/issues/6502 -->
-    <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>      
-        <scope>test</scope>
     </dependency>
 
     <!-- Web UI -->
