@@ -22,11 +22,14 @@ import java.time.ZoneId;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * @author Michael J. Simons, 2014-02-20
  */
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 class BikeCmd {
 
@@ -42,38 +45,6 @@ class BikeCmd {
     private String color;
 
     private Date decommissionedOn;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public Date getBoughtOn() {
-        return boughtOn;
-    }
-
-    public void setBoughtOn(final Date boughtOn) {
-        this.boughtOn = boughtOn;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(final String color) {
-        this.color = color;
-    }
-
-    public Date getDecommissionedOn() {
-        return decommissionedOn;
-    }
-
-    public void setDecommissionedOn(final Date decommissionedOn) {
-        this.decommissionedOn = decommissionedOn;
-    }
 
     public LocalDate boughtOnAsLocalDate() {
         return LocalDateTime.ofInstant(this.boughtOn.toInstant(), ZoneId.systemDefault()).toLocalDate();

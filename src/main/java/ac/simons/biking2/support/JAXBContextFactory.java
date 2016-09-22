@@ -17,25 +17,23 @@ package ac.simons.biking2.support;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 /**
  * I don't want to deal with the checked {@link JAXBException} in the calling
  * class so this is a wrapper that handles those for me. I don't expect any
  * exception to be thrown
+ *
  * @author Michael J. Simons, 2014-05-23
  */
-public class JAXBContextFactory {
+@RequiredArgsConstructor
+public final class JAXBContextFactory {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(JAXBContextFactory.class.getPackage().getName());
+    private final Class<?> baseClass;
 
-    public static JAXBContext createContext(final Class<?> baseClass) {
-        try {
-            return JAXBContext.newInstance(baseClass);
-        } catch (JAXBException ex) {
-            LOGGER.error("Could not instantiate JAXB context", ex);
-            throw new RuntimeException(ex);
-        }
+    @SneakyThrows
+    public JAXBContext createContext() {
+        return JAXBContext.newInstance(this.baseClass);
     }
 }

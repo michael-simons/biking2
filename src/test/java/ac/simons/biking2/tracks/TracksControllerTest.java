@@ -15,11 +15,12 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.bikingPictures.BikingPicturesControllerTest.RegexMatcher;
+import ac.simons.biking2.bikingpictures.BikingPicturesControllerTest.RegexMatcher;
 import ac.simons.biking2.config.DatastoreConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -32,7 +33,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletResponse;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -411,9 +411,7 @@ public class TracksControllerTest {
         final TrackRepository trackRepository = mock(TrackRepository.class);
         final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 
-        this.expectedException.expect(RuntimeException.class);
-        this.expectedException.expectCause(IsInstanceOf.instanceOf(IOException.class));
-	this.expectedException.expectMessage(new RegexMatcher(".*java.io.FileNotFoundException.+$")); 
+        this.expectedException.expect(FileNotFoundException.class);	
         controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 
         Mockito.verify(track).getId();
@@ -431,8 +429,8 @@ public class TracksControllerTest {
         final TrackRepository trackRepository = mock(TrackRepository.class);
         final TracksController controller = new TracksController(trackRepository, this.tmpDir, new File("/iam/not/gpsBabel").getAbsolutePath(), null);
 
-        this.expectedException.expect(RuntimeException.class);
-        this.expectedException.expectMessage(new RegexMatcher("java.io.IOException: Cannot run program \"/iam/not/gpsBabel\": error=2,.+"));
+        this.expectedException.expect(IOException.class);
+        this.expectedException.expectMessage(new RegexMatcher("Cannot run program \"/iam/not/gpsBabel\": error=2,.+"));
         controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 
         Mockito.verify(track).getTrackFile(this.tmpDir, "tcx");

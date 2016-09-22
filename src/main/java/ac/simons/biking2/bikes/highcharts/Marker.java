@@ -29,9 +29,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class Marker {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, Marker> sink;
+        private final Sink<P, Marker> sink;
 
         private Double lineWidth;
 
@@ -39,26 +39,26 @@ public final class Marker {
 
         private String fillColor;
 
-        public Builder(final Sink<PB, Marker> sink) {
+        public Builder(final Sink<P, Marker> sink) {
             this.sink = sink;
         }
 
-        public Builder<PB> withLineWidth(final Double lineWidth) {
+        public Builder<P> withLineWidth(final Double lineWidth) {
             this.lineWidth = lineWidth;
             return this;
         }
 
-        public Builder<PB> withFillColor(final String fillColor) {
+        public Builder<P> withFillColor(final String fillColor) {
             this.fillColor = fillColor;
             return this;
         }
 
-        public Builder<PB> withLineColor(final String lineColor) {
+        public Builder<P> withLineColor(final String lineColor) {
             this.lineColor = lineColor;
             return this;
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(
                     new Marker(lineWidth, lineColor, fillColor)
             );

@@ -18,8 +18,9 @@ package ac.simons.biking2.trips;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,21 +38,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2015-06-09
  */
 @RestController
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping("/api/trips")
+@Slf4j
 class TripsController {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(TripsController.class.getPackage().getName());
 
     private final AssortedTripRepository assortedTripRepository;
 
-    TripsController(final AssortedTripRepository assortedTripRepository) {
-        this.assortedTripRepository = assortedTripRepository;
-    }
-
     @RequestMapping(value = "", method = POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> createTrip(@RequestBody @Valid final NewTripCmd newTrip, final BindingResult bindingResult) {
-        ResponseEntity<?> rv;
+    public ResponseEntity<Object> createTrip(@RequestBody @Valid final NewTripCmd newTrip, final BindingResult bindingResult) {
+        ResponseEntity<Object> rv;
 
         if (bindingResult.hasErrors()) {
             rv = new ResponseEntity<>("Invalid arguments.", HttpStatus.BAD_REQUEST);
@@ -62,7 +59,7 @@ class TripsController {
                 final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
                 rv = new ResponseEntity<>(trip, HttpStatus.OK);
             } catch (DataIntegrityViolationException e) {
-                LOGGER.debug("Data integrity violation while uploading a new trip", e);
+                log.debug("Data integrity violation while uploading a new trip", e);
                 rv = new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }

@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This is a copy from <a
@@ -36,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder(alphabetic = true)
+@Getter @Setter
 class OEmbedResponse implements Serializable {
 
     private static final long serialVersionUID = -887420449262020495L;
@@ -70,124 +73,4 @@ class OEmbedResponse implements Serializable {
     private Integer width;
     @XmlElement(name = "height")
     private Integer height;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(final String version) {
-        this.version = version;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
-    }
-
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(final String authorName) {
-        this.authorName = authorName;
-    }
-
-    public String getAuthorUrl() {
-        return authorUrl;
-    }
-
-    public void setAuthorUrl(final String authorUrl) {
-        this.authorUrl = authorUrl;
-    }
-
-    public String getProviderName() {
-        return providerName;
-    }
-
-    public void setProviderName(final String providerName) {
-        this.providerName = providerName;
-    }
-
-    public String getProviderUrl() {
-        return providerUrl;
-    }
-
-    public void setProviderUrl(final String providerUrl) {
-        this.providerUrl = providerUrl;
-    }
-
-    public Long getCacheAge() {
-        return cacheAge;
-    }
-
-    public void setCacheAge(final Long cacheAge) {
-        this.cacheAge = cacheAge;
-    }
-
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(final String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public Integer getThumbnailWidth() {
-        return thumbnailWidth;
-    }
-
-    public void setThumbnailWidth(final Integer thumbnailWidth) {
-        this.thumbnailWidth = thumbnailWidth;
-    }
-
-    public Integer getThumbnailHeight() {
-        return thumbnailHeight;
-    }
-
-    public void setThumbnailHeight(final Integer thumbnailHeight) {
-        this.thumbnailHeight = thumbnailHeight;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(final String url) {
-        this.url = url;
-    }
-
-    public String getHtml() {
-        return html;
-    }
-
-    public void setHtml(final String html) {
-        this.html = html;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public void setWidth(final Integer width) {
-        this.width = width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(final Integer height) {
-        this.height = height;
-    }
 }

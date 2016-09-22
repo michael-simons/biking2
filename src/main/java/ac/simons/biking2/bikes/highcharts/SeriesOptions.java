@@ -31,27 +31,27 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class SeriesOptions {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, SeriesOptions> sink;
+        private final Sink<P, SeriesOptions> sink;
 
         private Boolean animation;
 
-        Builder(final Sink<PB, SeriesOptions> sink) {
+        Builder(final Sink<P, SeriesOptions> sink) {
             this.sink = sink;
         }
 
-        public Builder<PB> enableAnimation() {
+        public Builder<P> enableAnimation() {
             this.animation = Boolean.TRUE;
             return this;
         }
 
-        public Builder<PB> disableAnimation() {
+        public Builder<P> disableAnimation() {
             this.animation = Boolean.FALSE;
             return this;
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(new SeriesOptions(animation));
         }
     }

@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -39,12 +38,15 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotBlank;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author Michael J. Simons, 2014-02-08
  */
 @Entity
@@ -54,9 +56,11 @@ import org.slf4j.LoggerFactory;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Slf4j
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@EqualsAndHashCode(of = {"name", "coveredOn"})
 class TrackEntity implements Serializable {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(TrackEntity.class.getPackage().getName());
 
     private static final long serialVersionUID = 7630613853916630933L;
 
@@ -66,12 +70,11 @@ class TrackEntity implements Serializable {
     }
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Integer id;
 
-    @Column(name = "name", length = 512, nullable = false)
+    @Column(length = 512, nullable = false)
     @NotBlank
     @Size(max = 512)
     private String name;
@@ -81,28 +84,29 @@ class TrackEntity implements Serializable {
     @NotNull
     private Calendar coveredOn;
 
-    @Column(name = "description", length = 2048)
+    @Column(length = 2048)
+    @Setter
     private String description;
 
-    @Column(name = "minlat", precision = 18, scale = 15)
+    @Column(precision = 18, scale = 15)
+    @Setter
     private BigDecimal minlat;
 
-    @Column(name = "minlon", precision = 18, scale = 15)
+    @Column(precision = 18, scale = 15)
+    @Setter
     private BigDecimal minlon;
 
-    @Column(name = "maxlat", precision = 18, scale = 15)
+    @Column(precision = 18, scale = 15)
+    @Setter
     private BigDecimal maxlat;
 
-    @Column(name = "maxlon", precision = 18, scale = 15)
+    @Column(precision = 18, scale = 15)
+    @Setter
     private BigDecimal maxlon;
 
-    @Column(name = "type")
     @Enumerated(EnumType.STRING)
+    @Setter
     private Type type = Type.biking;
-
-    @SuppressWarnings({"squid:S2637"})
-    protected TrackEntity() {
-    }
 
     TrackEntity(final String name, final Calendar coveredOn) {
         this.name = name;
@@ -119,69 +123,9 @@ class TrackEntity implements Serializable {
         try {
             rv = Integer.parseInt(fromPrettyId, 36);
         } catch (NullPointerException | NumberFormatException e) {
-            LOGGER.warn("Could not parse pretty id '" + fromPrettyId + "'", e);
+            log.warn("Could not parse pretty id '" + fromPrettyId + "'", e);
         }
         return rv;
-    }
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Calendar getCoveredOn() {
-        return this.coveredOn;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getMinlat() {
-        return this.minlat;
-    }
-
-    public void setMinlat(final BigDecimal minlat) {
-        this.minlat = minlat;
-    }
-
-    public BigDecimal getMinlon() {
-        return this.minlon;
-    }
-
-    public void setMinlon(final BigDecimal minlon) {
-        this.minlon = minlon;
-    }
-
-    public BigDecimal getMaxlat() {
-        return this.maxlat;
-    }
-
-    public void setMaxlat(final BigDecimal maxlat) {
-        this.maxlat = maxlat;
-    }
-
-    public BigDecimal getMaxlon() {
-        return this.maxlon;
-    }
-
-    public void setMaxlon(final BigDecimal maxlon) {
-        this.maxlon = maxlon;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(final Type type) {
-        this.type = type;
     }
 
     @JsonProperty("id")
@@ -191,31 +135,5 @@ class TrackEntity implements Serializable {
 
     public File getTrackFile(final File datastoreBaseDirectory, final String format) {
         return new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, this.getId(), format));
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 31 * hash + Objects.hashCode(this.name);
-        hash = 31 * hash + Objects.hashCode(this.coveredOn);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final TrackEntity other = (TrackEntity) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.coveredOn, other.coveredOn)) {
-            return false;
-        }
-        return true;
     }
 }

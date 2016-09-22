@@ -32,22 +32,22 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class Title {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, Title> sink;
+        private final Sink<P, Title> sink;
 
         private String text;
 
-        Builder(final Sink<PB, Title> sink) {
+        Builder(final Sink<P, Title> sink) {
             this.sink = sink;
         }
 
-        public Builder<PB> withText(final String text) {
+        public Builder<P> withText(final String text) {
             this.text = text;
             return this;
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(new Title(text));
         }
     }

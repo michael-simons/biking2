@@ -56,22 +56,22 @@ public class HighchartsNgConfig {
          */
         public Number computeCurrentMaxYValue() {
             return series.stream()
-                    .flatMap(series -> series.getData().stream())
+                    .flatMap(serie -> serie.getData().stream())
                     .filter(val -> val instanceof Number)
                     .map(val -> (Number) val)
                     .max((a, b) -> Double.compare(a.doubleValue(), b.doubleValue())).orElse(0);
         }
 
         public Options.Builder<Builder> options() {
-            return new Options.Builder<>(options -> {
-                Builder.this.options = options;
+            return new Options.Builder<>(newOptions -> {
+                Builder.this.options = newOptions;
                 return Builder.this;
             });
         }
 
         public <T> Series.Builder<Builder, T> series() {
-            return new Series.Builder<>(series -> {
-                Builder.this.series.add(series);
+            return new Series.Builder<>(newSeries -> {
+                Builder.this.series.add(newSeries);
                 return Builder.this;
             });
         }

@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Supports sending files either through Tomcats sendfile support or through
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Michael J. Simons, 2016-08-03
  */
+@RequiredArgsConstructor
 public final class FileBasedResource {
 
     /**
@@ -48,12 +50,6 @@ public final class FileBasedResource {
      * How long should the response be cached.
      */
     private final int cacheForDays;
-
-    public FileBasedResource(final File imageFile, final String filename, final int cacheForDays) {
-        this.imageFile = imageFile;
-        this.filename = filename;
-        this.cacheForDays = cacheForDays;
-    }
 
     /**
      * Sends the file. The responses buffer will be flushed.

@@ -18,6 +18,8 @@ package ac.simons.biking2.banner;
 import java.io.IOException;
 import java.io.PrintStream;
 import javax.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.Banner;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
@@ -29,17 +31,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Michael J. Simons, 2016-04-15
  */
 @Controller
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping("/api/banner")
 class BannerController {
 
     private final Banner banner;
 
     private final Environment environment;
-
-    BannerController(final Banner banner, final Environment environment) {
-        this.banner = banner;
-        this.environment = environment;
-    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public void get(final HttpServletResponse response) throws IOException {

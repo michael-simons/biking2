@@ -9,12 +9,12 @@
 
   <groupId>eu.michael-simons</groupId>
   <artifactId>biking2</artifactId>
-  <version>2.2.3-SNAPSHOT</version>
+  <version>2.2.4-SNAPSHOT</version>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.4.0.RELEASE</version>
+    <version>1.4.1.RELEASE</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -91,6 +91,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <excludeDevtools>true</excludeDevtools>
+          <excludeArtifactIds>lombok</excludeArtifactIds>
         </configuration>
       </plugin>
       <plugin>
@@ -220,7 +221,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.6.201602180812</version>
+        <version>0.7.7.201606060606</version>
         <configuration>
           <excludes>
             <!-- Application starter -->
@@ -260,7 +261,7 @@
                     <limit implementation="org.jacoco.report.check.Limit">
                       <counter>COMPLEXITY</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.90</minimum>
+                      <minimum>0.85</minimum>
                     </limit>
                   </limits>
                 </rule>
@@ -297,6 +298,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>    
     </dependency>
@@ -315,13 +321,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <!-- TODO See above -->
-      <exclusions>
-        <exclusion>
-          <groupId>com.fasterxml</groupId>
-          <artifactId>classmate</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -406,12 +405,6 @@
       <artifactId>spring-restdocs-mockmvc</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- TODO Remove dependency, workaround for https://github.com/spring-projects/spring-boot/issues/6502 -->
-    <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>      
-        <scope>test</scope>
-    </dependency>
 
     <!-- Web UI -->
     <dependency>
@@ -483,7 +476,7 @@
     <dependency>
       <groupId>eu.michael-simons</groupId>
       <artifactId>wro4j-spring-boot-starter</artifactId>
-      <version>0.1.1</version>
+      <version>0.1.2</version>
     </dependency>
   </dependencies>
 

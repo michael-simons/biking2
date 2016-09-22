@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
@@ -38,8 +37,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -62,9 +61,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Michael J. Simons, 2014-02-15
  */
 @Controller
+@Slf4j
 class TracksController {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(TracksController.class.getPackage().getName());
 
     private static final Map<String, String> ACCEPTABLE_FORMATS;
 
@@ -86,7 +84,7 @@ class TracksController {
         this.datastoreBaseDirectory = datastoreBaseDirectory;
         this.gpsBabel = gpsBabel;
         this.home = home;
-        this.gpxContext = JAXBContextFactory.createContext(GPX.class);
+        this.gpxContext = new JAXBContextFactory(GPX.class).createContext();
     }
 
     @RequestMapping("/api/tracks")
@@ -128,7 +126,7 @@ class TracksController {
                     track = this.trackRepository.save(track);
                     rv = new ResponseEntity<>(track, HttpStatus.OK);
                 } catch (Exception e) {
-                    LOGGER.warn("Could not store track... Maybe an invalid GPX file? Handling as a bad request.", e);
+                    log.warn("Could not store track... Maybe an invalid GPX file? Handling as a bad request.", e);
 
                     this.trackRepository.delete(track);
                     track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
@@ -137,7 +135,7 @@ class TracksController {
                     rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
             } catch (DataIntegrityViolationException e) {
-                LOGGER.debug("Data integrity violation while storing a new track (coveredOn=" + coveredOn + ",name=" + name + ")", e);
+                log.debug("Data integrity violation while storing a new track (coveredOn=" + coveredOn + ",name=" + name + ")", e);
                 rv = new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
@@ -145,6 +143,7 @@ class TracksController {
         return rv;
     }
 
+    @SneakyThrows({IOException.class, JAXBException.class, InterruptedException.class})
     TrackEntity storeFile(final TrackEntity track, final InputStream tcxData) {
         final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
         final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
@@ -155,27 +154,21 @@ class TracksController {
         ) {
             out.getChannel().transferFrom(tcxDataChannel, 0, Integer.MAX_VALUE);
             out.flush();
-        } catch (IOException ex) {
-            throw new UncheckedIOException(ex);
         }
 
-        try {
-            final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
-            process.waitFor();
-            int exitValue = process.exitValue();
+        final Process process = new ProcessBuilder(gpsBabel, "-i", "gtrnctr", "-f", tcxFile.getAbsolutePath(), "-o", "gpx", "-F", gpxFile.getAbsolutePath()).start();
+        process.waitFor();
+        int exitValue = process.exitValue();
 
-            if (exitValue != 0) {
-                throw new RuntimeException("GPSBabel could not convert the input file!");
-            }
-            final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
-            GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
-            track.setMinlon(gpx.getBounds().getMinlon());
-            track.setMinlat(gpx.getBounds().getMinlat());
-            track.setMaxlon(gpx.getBounds().getMaxlon());
-            track.setMaxlat(gpx.getBounds().getMaxlat());
-        } catch (IOException | JAXBException | InterruptedException ex) {
-            throw new RuntimeException(ex);
+        if (exitValue != 0) {
+            throw new GPSBabelException("GPSBabel could not convert the input file!");
         }
+        final Unmarshaller unmarschaller = gpxContext.createUnmarshaller();
+        GPX gpx = (GPX) unmarschaller.unmarshal(gpxFile);
+        track.setMinlon(gpx.getBounds().getMinlon());
+        track.setMinlat(gpx.getBounds().getMinlat());
+        track.setMaxlon(gpx.getBounds().getMaxlon());
+        track.setMaxlat(gpx.getBounds().getMaxlat());
 
         return track;
     }

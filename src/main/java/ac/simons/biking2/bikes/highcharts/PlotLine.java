@@ -29,9 +29,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class PlotLine {
 
     @SuppressWarnings({"checkstyle:hiddenfield"})
-    public static final class Builder<PB> {
+    public static final class Builder<P> {
 
-        private final Sink<PB, PlotLine> sink;
+        private final Sink<P, PlotLine> sink;
 
         private Number value;
 
@@ -39,26 +39,26 @@ public final class PlotLine {
 
         private String color;
 
-        public Builder(final Sink<PB, PlotLine> sink) {
+        public Builder(final Sink<P, PlotLine> sink) {
             this.sink = sink;
         }
 
-        public Builder<PB> at(final Number value) {
+        public Builder<P> at(final Number value) {
             this.value = value;
             return this;
         }
 
-        public Builder<PB> withWidth(final Double lineWidth) {
+        public Builder<P> withWidth(final Double lineWidth) {
             this.width = lineWidth;
             return this;
         }
 
-        public Builder<PB> withColor(final String lineColor) {
+        public Builder<P> withColor(final String lineColor) {
             this.color = lineColor;
             return this;
         }
 
-        public PB build() {
+        public P build() {
             return this.sink.setObject(
                     new PlotLine(value, width, color)
             );
