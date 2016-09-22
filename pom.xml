@@ -299,7 +299,7 @@
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>	
+      <artifactId>lombok</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
