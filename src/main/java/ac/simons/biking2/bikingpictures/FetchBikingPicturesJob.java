@@ -118,7 +118,7 @@ class FetchBikingPicturesJob {
                 synchronized (this) {
                     final URLConnection connection = this.dailyFratzeProvider.getImageConnection(incoming.getExternalId());
                     if (connection != null) {
-                        try (final InputStream inputStream = connection.getInputStream()) {
+                        try (InputStream inputStream = connection.getInputStream()) {
                             Files.copy(inputStream, new File(bikingPicturesStorage, String.format("%d.jpg", incoming.getExternalId())).toPath(), StandardCopyOption.REPLACE_EXISTING);
                             rv.add(this.bikingPictureRepository.save(incoming));
                         } catch (IOException ex) {
@@ -136,7 +136,7 @@ class FetchBikingPicturesJob {
         final URLConnection connection = this.dailyFratzeProvider.getRSSConnection(url);
         RSS rss = null;
         if (connection != null) {
-            try (final InputStream inputStream = connection.getInputStream()) {
+            try (InputStream inputStream = connection.getInputStream()) {
                 final Unmarshaller unmarschaller = rssContext.createUnmarshaller();
                 rss = (RSS) unmarschaller.unmarshal(inputStream);
             } catch (IOException | JAXBException ex) {
