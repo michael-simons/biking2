@@ -61,7 +61,7 @@ class GalleryController {
     @FunctionalInterface
     public interface FilenameGenerator {
 
-        String generateFile(final String originalFilename);
+        String generateFile(String originalFilename);
     }
 
     private final GalleryPictureRepository galleryPictureRepository;

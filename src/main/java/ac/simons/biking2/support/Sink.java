@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ac.simons.biking2.support;
 
 /**
@@ -25,5 +24,5 @@ package ac.simons.biking2.support;
  */
 @FunctionalInterface
 public interface Sink<T, O> {
-    T setObject(final O object);
+    T setObject(O object);
 }

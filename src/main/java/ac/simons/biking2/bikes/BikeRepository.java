@@ -32,11 +32,11 @@ public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
             + "    or b.decommissionedOn >= :cutoffDate "
             + " order by b.name asc "
     )
-    List<BikeEntity> findActive(final Calendar cutoffDate);
+    List<BikeEntity> findActive(Calendar cutoffDate);
 
-    BikeEntity findByName(final String name);
+    BikeEntity findByName(String name);
 
-    List<BikeEntity> findByDecommissionedOnIsNull(final Sort sort);
+    List<BikeEntity> findByDecommissionedOnIsNull(Sort sort);
 
     @Query("Select coalesce(min(m.recordedOn), current_date()) as dateOfFirstRecord from MilageEntity m")
     Calendar getDateOfFirstRecord();
