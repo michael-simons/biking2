@@ -68,8 +68,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.CoreMatchers.is;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.autoconfigure.MessageSourceAutoConfiguration;
 import static java.time.LocalDate.now;
+import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 
 /**
  * @author Michael J. Simons, 2014-02-20
