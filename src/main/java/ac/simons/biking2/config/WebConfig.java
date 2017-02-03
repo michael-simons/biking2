@@ -18,6 +18,7 @@ package ac.simons.biking2.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -111,7 +112,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
             if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
                 final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
-                containerFactory.setTldSkip("*.jar");
+                containerFactory.setTldSkipPatterns(Arrays.asList("*.jar"));
                 if (!proxyName.isEmpty()) {
                     containerFactory.addConnectorCustomizers(connector -> {
                         connector.setProxyName(proxyName);
