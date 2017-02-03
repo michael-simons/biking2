@@ -51,9 +51,9 @@ public class SecurityConfig {
                 .httpBasic()
                     .and()
                 .authorizeRequests()
-                    .antMatchers(
-                            "/api/system/env/java.(runtime|vm).*",
-                            "/api/system/metrics/**"
+                    .regexMatchers(
+                            "/api/system/env/java\\.(runtime|vm)\\.\\*",
+                            "/api/system/metrics"
                     ).permitAll()
                     .antMatchers("/api/system/env/**").denyAll()
                     .antMatchers("/**").permitAll()
