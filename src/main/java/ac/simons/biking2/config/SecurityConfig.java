@@ -37,11 +37,12 @@ public class SecurityConfig {
 
     /**
      * When using Spring Boot Dev Tools,
-     * {@code SecurityProperties.BASIC_AUTH_ORDER - 20} will already be used for
-     * the h2 web console if that hasn't been explicitly disabled.
+     * {@link SecurityProperties.ACCESS_OVERRIDE_ORDER} will already be used for
+     * the h2 web console if that hasn't been explicitly disabled and this configurer
+     * will be recognized to late.
      */
     @Configuration
-    @Order(SecurityProperties.BASIC_AUTH_ORDER - 20)
+    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
     @ConditionalOnBean(SecurityConfig.class)
     protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
         @Override
