@@ -15,8 +15,8 @@
  */
 package ac.simons.biking2.config;
 
+import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
@@ -35,13 +35,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @SuppressWarnings({"squid:S1118"}) // This is not a utility class. It cannot have a private constructor.
 public class SecurityConfig {
 
-    /**
-     * When using Spring Boot Dev Tools,
-     * {@code SecurityProperties.BASIC_AUTH_ORDER - 20} will already be used for
-     * the h2 web console if that hasn't been explicitly disabled.
-     */
     @Configuration
-    @Order(SecurityProperties.BASIC_AUTH_ORDER - 20)
+    @Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
     @ConditionalOnBean(SecurityConfig.class)
     protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
         @Override
