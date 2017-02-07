@@ -1,6 +1,6 @@
 # biking2
 
-[![Build Status](https://travis-ci.org/michael-simons/biking2.svg?branch=master)](https://travis-ci.org/michael-simons/biking2)
+[![Build Status](https://travis-ci.org/michael-simons/biking2.svg?branch=public)](https://travis-ci.org/michael-simons/biking2)
 
 ## Abstract
 
