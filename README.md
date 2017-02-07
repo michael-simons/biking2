@@ -1,5 +1,7 @@
 # biking2
 
+[![Build Status](https://travis-ci.org/michael-simons/biking2.svg?branch=master)](https://travis-ci.org/michael-simons/biking2)
+
 ## Abstract
 
 This is a project where i try out Java 8, Spring / Spring Boot and AngularJS. The project is live at [biking.michael-simons.eu][1]. To find out more, checkout the [about page][2] or start reading the series of blog posts:
