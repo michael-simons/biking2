@@ -49,7 +49,7 @@ public class SecurityConfig {
                             "/api/system/env/java.(runtime|vm).*",
                             "/api/system/metrics/**"
                     ).permitAll()
-                    .antMatchers("/api/system/env/**").denyAll()
+                    .antMatchers("/api/system/env/**").authenticated()
                     .antMatchers("/**").permitAll()
                     .and()
                 .sessionManagement()
