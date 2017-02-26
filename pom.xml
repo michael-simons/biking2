@@ -153,6 +153,7 @@
                   <excludes>
                     <exclude>biking2-architecture.*</exclude>
                     <exclude>10_quality_tree.nm5</exclude>
+                    <exclude>degraph.*</exclude>
                   </excludes>
                 </resource>
               </resources>
