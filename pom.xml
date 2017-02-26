@@ -61,6 +61,9 @@
     <start-class>ac.simons.biking2.Application</start-class>
 
     <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
+
+    <!-- Same exclusions as pure JaCoCo -->
+    <sonar.coverage.exclusions>**/Application.java,**/JAXBContextFactory.java,src/main/java/ac/simons/biking2/config/*</sonar.coverage.exclusions>
   </properties>
 
   <build>
