@@ -19,7 +19,7 @@
   </parent>
 
   <name>biking2</name>
-  <url>http://maven.apache.org</url>
+  <url>https://biking.michael-simons.eu</url>
 
   <inceptionYear>2014</inceptionYear>
 
@@ -507,4 +507,10 @@
     </plugins>
   </reporting>  
 
+  <scm>
+    <connection>scm:git:git@github.com:michael-simons/biking2.git</connection>
+    <developerConnection>scm:git:git@github.com:michael-simons/biking2.git</developerConnection>
+    <url>https://github.com/michael-simons/biking2</url>
+    <tag>HEAD</tag>
+  </scm>
 </project>
