@@ -1,9 +1,20 @@
 sudo: required
-
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y gpsbabel
-
+- sudo apt-get -qq update
+- sudo apt-get install -y gpsbabel
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
+addons:
+  sonarqube:
+    token:
+      secure: Ib/AvDAWWk8YMXQUe9dtqpcrTD2+4FqwRApCZQpsumpGArVWrb3ZV+OsriVoX2QGhCfIbH9xTobxDwTZBvXbjIWE9XbxcGvCPSgs6Gn2UdURwxlfUizIzBCkVLvoCGPVgQ26yubNEqhqB6JvaqRdQrOljnYsz3Y4XUFXPANqJRrDeVnsVvCC0AlTRcMike9iMtiGr8TpiO0kwtmN16Ms38wksYSOE+pV/iWx568DTkPl6A5asufMZYqtXWYWolL2j33ft7WT1seSkTxLfbxh+xzPMiCBTACyac5XOiyWS+iO0n0yi3+9DNxdbqYcf1bwlW5ZF57RCSoamC66ZEWuAMSvjx0PBjtGbslLGjH3ias76uRLRrC9UVYVT8e+dTX2/Bj/fpYEIjSr0nLgcOOidvkmCfzcB0fydMKdElmhX/PN2I19cfpHTkhy/0D9IETBccARTtqb5i9XowI29kbDSZ5sEv019miWZCr7SJNwsoKxj6qy2aZWglWP782Drc5ZPNUldqG7C80xkEuCCtn8pXEA+pLS6m313XeBJScVTjYefViDnjz+KXgLh+isJRfgGIzQKTR6TMMIPB3Bzqcr0dfm1eXRQSf+YR6r77NAAHW6VPOCiEoM6WRTO2dTYt288DwaiO1PIkth4WB8BSPMGk++/Xl9L4WGOkwKBJ57uxQ=
+    branches:
+      - master
+      - public
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
