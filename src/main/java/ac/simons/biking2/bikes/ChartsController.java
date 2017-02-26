@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ class ChartsController {
         final Map<String, Object> userData = new HashMap<>();
         userData.put("worstPeriod", BikeEntity.getWorstPeriod(summarizedPeriods));
         userData.put("bestPeriod", BikeEntity.getBestPeriod(summarizedPeriods));
-        userData.put("average", summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0));
+        userData.put("average", summarizedPeriods.entrySet().stream().mapToInt(Entry::getValue).average().orElseGet(() -> 0.0));
         userData.put("preferredBike", bikes.stream().max(new BikeEntity.BikeByMilageInYearComparator(january1st.getYear())).orElse(null));
         userData.put("currentYear", january1st.getYear());
 
@@ -335,7 +335,7 @@ class ChartsController {
                         .withMin(0)
                         .withTickInterval(100)
                         .withPlotLine()
-                            .at(summarizedPeriods.entrySet().stream().mapToInt(entry -> entry.getValue()).average().orElseGet(() -> 0.0))
+                            .at(summarizedPeriods.entrySet().stream().mapToInt(Entry::getValue).average().orElseGet(() -> 0.0))
                             .withWidth(2.0)
                             .withColor("#F04124")
                             .build()
