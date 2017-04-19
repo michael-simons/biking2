@@ -35,6 +35,7 @@ The few constraints on this project are reflected in the final solution. This se
 | OC6 | Published under an Open Source license         | The source, including documentation, should be published as Open Source under the Apache 2 License.
 |===
 
+
 === Conventions
 
 .List of Conventions
@@ -44,4 +45,7 @@ The few constraints on this project are reflected in the final solution. This se
 | C1  | Architecture documentation                      | Structure based on the english arc42-Template in version 6.5
 | C2  | Coding conventions                              | The project uses the http://www.oracle.com/technetwork/java/codeconvtoc-136057.html[Code Conventions for the Java TM Programming Language]. The conventions are enforced through Checkstyle.
 | C3  | Language                                        | English. The project and the corresponding blog targets an international audience, so English should be used throughout the whole project.
+| C4  | Naming conventions                              | There are some naming conventions listed below that are checked and enforced with https://jqassistant.org[jQAssistant]
 |===
+
+include::{rules}/conventions_naming.adoc[]

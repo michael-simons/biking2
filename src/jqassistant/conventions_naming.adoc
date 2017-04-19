@@ -1,0 +1,52 @@
+[[naming:Default]]
+[role=group,includesConstraints="naming:TypeNameMustBeginWithGroupId,naming:TypeNameMustContainArtifactId,naming:EntityClassNameSuffix,naming:RepositoryClassNameSuffix"]
+
+The following naming conventions are used throughout the project:
+
+[[naming:TypeNameMustBeginWithGroupId]]
+[source,cypher,role=constraint]
+.All Java types must be located in packages that start with `ac.simons`.
+----
+MATCH
+  (project:Maven:Project)-[:CREATES]->(:Artifact)-[:CONTAINS]->(type:Type)
+WHERE
+  NOT type.fqn starts with 'ac.simons'
+RETURN
+  project as Project, collect(type) as TypeWithWrongName
+----
+
+[[naming:TypeNameMustContainArtifactId]]
+[source,cypher,role=constraint]
+.All Java types must be located in packages that contains the artifactId of the Maven Project.
+----
+MATCH
+  (project:Maven:Project)-[:CREATES]->(:Artifact)-[:CONTAINS]->(type:Type)
+WHERE
+  NOT type.fqn contains project.artifactId
+RETURN
+  project as Project, collect(type) as TypeWithWrongName
+----
+
+[[naming:EntityClassNameSuffix]]
+[source,cypher,role=constraint,requiresConcepts="jpa:Entity"]
+.All Java types annotated as `@Entity` must have a name that ends with the suffix `Entity`.
+----
+MATCH
+  (t:Jpa:Entity)
+WHERE 
+  NOT t.name ends with "Entity"
+RETURN
+  t as Entity
+----
+
+[[naming:RepositoryClassNameSuffix]]
+[source,cypher,role=constraint,requiresConcepts="spring-data:Repository"]
+.All Java types that represent a repository must have a name that ends with the suffix `Repository`.
+----
+MATCH
+  (t:Repository)
+WHERE
+  NOT t.name ends with "Repository"
+RETURN
+  t as Repository
+----

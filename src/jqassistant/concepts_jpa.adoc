@@ -1,0 +1,15 @@
+==== Concepts related to JPA
+
+[[jpa:Entity]]
+[source,cypher,role="concept",tag=asd]
+.Labels all types annotated with @javax.persistence.Entity with "Jpa" and "Entity".
+----
+MATCH
+  (t:Type)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(a:Type)
+WHERE
+  a.fqn="javax.persistence.Entity"
+SET
+  t:Jpa:Entity
+RETURN
+  t AS JpaEntity
+----
