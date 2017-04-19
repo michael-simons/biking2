@@ -1,0 +1,10 @@
+= Coding Rules
+
+The following rules are checked during a build:
+
+[[default]]
+[role=group,includesGroups=naming:Default]
+- <<naming:Default>>
+
+include::concepts_spring-data.adoc[]
+include::conventions_naming.adoc[]
