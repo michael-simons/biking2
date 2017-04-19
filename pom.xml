@@ -3,14 +3,6 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <prerequisites>
-    <maven>3.3</maven>
-  </prerequisites>
-
-  <groupId>eu.michael-simons</groupId>
-  <artifactId>biking2</artifactId>
-  <version>2.3.7-SNAPSHOT</version>
-
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -18,10 +10,23 @@
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
+  <groupId>eu.michael-simons</groupId>
+  <artifactId>biking2</artifactId>
+  <version>2.3.7-SNAPSHOT</version>
+
   <name>biking2</name>
   <url>https://biking.michael-simons.eu</url>
-
   <inceptionYear>2014</inceptionYear>
+  <organization>
+    <name>michael-simons.eu</name>
+    <url>http://michael-simons.eu</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
 
   <developers>
     <developer>
@@ -30,17 +35,16 @@
     </developer>
   </developers>
 
-  <organization>
-    <name>michael-simons.eu</name>
-    <url>http://michael-simons.eu</url>
-  </organization>
+  <prerequisites>
+    <maven>3.3</maven>
+  </prerequisites>
 
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-    </license>
-  </licenses>
+  <scm>
+    <connection>scm:git:git@github.com:michael-simons/biking2.git</connection>
+    <developerConnection>scm:git:git@github.com:michael-simons/biking2.git</developerConnection>
+    <url>https://github.com/michael-simons/biking2</url>
+    <tag>HEAD</tag>
+  </scm>
 
   <properties>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
@@ -65,6 +69,190 @@
     <!-- Same exclusions as pure JaCoCo -->
     <sonar.coverage.exclusions>**/Application.java,**/JAXBContextFactory.java,src/main/java/ac/simons/biking2/config/*</sonar.coverage.exclusions>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-websocket</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-jaxb-annotations</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-spring</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-stomp</artifactId>
+    </dependency>
+    <!-- Resolve for activemq-client and activemq-mqtt -->
+    <dependency>
+      <groupId>org.fusesource.hawtbuf</groupId>
+      <artifactId>hawtbuf</artifactId>
+      <version>1.11</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource.hawtdispatch</groupId>
+      <artifactId>hawtdispatch-transport</artifactId>
+      <version>1.22</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-mqtt</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.fusesource.hawtbuf</groupId>
+          <artifactId>hawtbuf</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.fusesource.hawtdispatch</groupId>
+          <artifactId>hawtdispatch-transport</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- Needed for MessageBrokerRegistry#enableStompBrokerRelay -->
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-net</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
+      <version>4.0.36.Final</version>
+    </dependency>
+    <!-- Tests and development -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jooq</groupId>
+      <artifactId>joor</artifactId>
+      <version>0.9.6</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.restdocs</groupId>
+      <artifactId>spring-restdocs-mockmvc</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Web UI -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>${bootstrap.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.webjars</groupId>
+          <artifactId>jquery</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>${jquery.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>angularjs</artifactId>
+      <version>${angularjs.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>angular-ui-bootstrap</artifactId>
+      <version>${angular-ui-bootstrap.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.webjars</groupId>
+          <artifactId>angularjs</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars</groupId>
+          <artifactId>bootstrap</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>angular-file-upload</artifactId>
+      <version>${angular-file-upload.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>momentjs</artifactId>
+      <version>${momentjs.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>highcharts</artifactId>
+      <version>${highcharts.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>openlayers</artifactId>
+      <version>${openlayers.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>sockjs-client</artifactId>
+      <version>${sockjs-client.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>stomp-websocket</artifactId>
+      <version>${stomp-websocket.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>eu.michael-simons</groupId>
+      <artifactId>wro4j-spring-boot-starter</artifactId>
+      <version>0.3.3</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement>
@@ -311,190 +499,6 @@
     </resources>
   </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>    
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-thymeleaf</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-websocket</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-jaxb-annotations</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-jms</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-spring</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-stomp</artifactId>
-    </dependency>
-    <!-- Resolve for activemq-client and activemq-mqtt -->
-    <dependency>
-      <groupId>org.fusesource.hawtbuf</groupId>
-      <artifactId>hawtbuf</artifactId>
-      <version>1.11</version>
-    </dependency>
-    <dependency>
-      <groupId>org.fusesource.hawtdispatch</groupId>
-      <artifactId>hawtdispatch-transport</artifactId>
-      <version>1.22</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-mqtt</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.fusesource.hawtbuf</groupId>
-          <artifactId>hawtbuf</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.fusesource.hawtdispatch</groupId>
-          <artifactId>hawtdispatch-transport</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <!-- Needed for MessageBrokerRegistry#enableStompBrokerRelay -->
-    <dependency>
-      <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-net</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-all</artifactId>
-      <version>4.0.36.Final</version>
-    </dependency>
-    <!-- Tests and development -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jooq</groupId>
-      <artifactId>joor</artifactId>
-      <version>0.9.6</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.restdocs</groupId>
-      <artifactId>spring-restdocs-mockmvc</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Web UI -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>bootstrap</artifactId>
-      <version>${bootstrap.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.webjars</groupId>
-          <artifactId>jquery</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery</artifactId>
-      <version>${jquery.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>angularjs</artifactId>
-      <version>${angularjs.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>angular-ui-bootstrap</artifactId>
-      <version>${angular-ui-bootstrap.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.webjars</groupId>
-          <artifactId>angularjs</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.webjars</groupId>
-          <artifactId>bootstrap</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>angular-file-upload</artifactId>
-      <version>${angular-file-upload.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>momentjs</artifactId>
-      <version>${momentjs.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>highcharts</artifactId>
-      <version>${highcharts.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>openlayers</artifactId>
-      <version>${openlayers.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>sockjs-client</artifactId>
-      <version>${sockjs-client.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>stomp-websocket</artifactId>
-      <version>${stomp-websocket.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>eu.michael-simons</groupId>
-      <artifactId>wro4j-spring-boot-starter</artifactId>
-      <version>0.3.3</version>
-    </dependency>
-  </dependencies>
-
   <reporting>
     <plugins>
       <!-- Included a second time to make NetBeans aware of it -->
@@ -508,12 +512,5 @@
         </configuration>
       </plugin>
     </plugins>
-  </reporting>  
-
-  <scm>
-    <connection>scm:git:git@github.com:michael-simons/biking2.git</connection>
-    <developerConnection>scm:git:git@github.com:michael-simons/biking2.git</developerConnection>
-    <url>https://github.com/michael-simons/biking2</url>
-    <tag>HEAD</tag>
-  </scm>
+  </reporting>
 </project>
