@@ -58,7 +58,8 @@ public final class Series<T> {
             this.sink = sink;
         }
 
-        public Builder<P, T> withData(final T... data) {
+        @SafeVarargs
+        public final Builder<P, T> withData(final T... data) {
             this.data = Arrays.asList(data);
             return this;
         }
