@@ -286,6 +286,7 @@
         <configuration>
           <compilerArgs>
             <arg>-parameters</arg>
+            <arg>-Xlint:unchecked</arg>
           </compilerArgs>
           <showDeprecation>true</showDeprecation>
         </configuration>
