@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author Michael J. Simons, 2014-12-11
  */
 @Configuration
-@ComponentScan("ac.simons.biking2.config")
 @EnableAutoConfiguration
 @EntityScan("ac.simons.biking2")
 @EnableJpaRepositories("ac.simons.biking2.persistence.repositories")
