@@ -28,7 +28,7 @@ RETURN
 ----
 
 [[naming:EntityClassNameSuffix]]
-[source,cypher,role=constraint,requiresConcepts="jpa:Entity"]
+[source,cypher,role=constraint,requiresConcepts="jpa2:Entity"]
 .All Java types annotated as `@Entity` must have a name that ends with the suffix `Entity`.
 ----
 MATCH

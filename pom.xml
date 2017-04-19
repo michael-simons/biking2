@@ -508,6 +508,11 @@
             <artifactId>junit</artifactId>
             <version>${jqassistant.plugin.version}</version>
           </dependency>
+          <dependency>
+            <groupId>com.buschmais.jqassistant.plugin</groupId>
+            <artifactId>jpa2</artifactId>
+            <version>${jqassistant.plugin.version}</version>
+          </dependency>
         </dependencies>
       </plugin>
     </plugins>
