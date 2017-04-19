@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.trips;
 
-import ac.simons.biking2.config.TestConfig;
+import ac.simons.biking2.support.TestConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

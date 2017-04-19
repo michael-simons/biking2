@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.bikingpictures;
 
-import ac.simons.biking2.config.TestConfig;
+import ac.simons.biking2.support.TestConfig;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import javax.transaction.Transactional;

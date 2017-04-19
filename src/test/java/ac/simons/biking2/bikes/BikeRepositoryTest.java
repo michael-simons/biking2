@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.config.TestConfig;
+import ac.simons.biking2.support.TestConfig;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ac.simons.biking2.bikingpictures.BikingPicturesControllerTest.RegexMatcher.matches;
+import static ac.simons.biking2.support.RegexMatcher.matches;
 
 /**
  * @author Michael J. Simons, 2014-02-19
@@ -126,27 +126,4 @@ public class BikingPicturesControllerTest {
         Mockito.verifyNoMoreInteractions(repository);
     }
 
-    public static class RegexMatcher extends BaseMatcher {
-
-        private final String regex;
-
-        public RegexMatcher(String regex) {
-            this.regex = regex;
-        }
-
-        @Override
-        public boolean matches(Object o) {
-            return ((String) o).matches(regex);
-
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("matches regex=" + this.regex);
-        }
-
-        public static RegexMatcher matches(String regex) {
-            return new RegexMatcher(regex);
-        }
-    }
 }
