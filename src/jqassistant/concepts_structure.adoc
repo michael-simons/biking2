@@ -1,0 +1,23 @@
+Additional configuration apart from properties lives in the `config` package:
+
+[[structure:configPackages]]
+[source,cypher,role="concept",requiresConcepts="dependency:Package"]
+.Returns the config package.
+----
+MATCH (p:Package)
+WHERE p.fqn in ['ac.simons.biking2.config']
+SET p:Package:Config
+return p
+----
+
+The `support` package contains technical infrastructure classes while the `shared` package contains application wide messages. Those packages are used as _supporting packages_:
+
+[[structure:supportingPackages]]
+[source,cypher,role="concept",requiresConcepts="dependency:Package"]
+.Returns support and shared packages.
+----
+MATCH (p:Package)
+WHERE p.fqn in ['ac.simons.biking2.shared', 'ac.simons.biking2.support']
+SET p:Package:Support
+return p
+----

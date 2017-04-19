@@ -3,8 +3,9 @@
 The following rules are checked during a build:
 
 [[default]]
-[role=group,includesGroups=naming:Default]
+[role=group,includesGroups="naming:Default,structure:Default"]
 - <<naming:Default>>
+- <<structure:Default>>
 
-include::concepts_spring-data.adoc[]
-include::conventions_naming.adoc[]
+include::naming.adoc[]
+include::structure.adoc[]
