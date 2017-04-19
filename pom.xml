@@ -312,6 +312,7 @@
               <sourceDocumentName>index.adoc</sourceDocumentName>
               <attributes>
                 <snippets>${snippetsDirectory}</snippets>
+                <rules>${basedir}/src/jqassistant</rules>
               </attributes>
             </configuration>
           </execution>
