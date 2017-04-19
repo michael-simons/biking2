@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,8 @@ public final class Series<T> {
             this.sink = sink;
         }
 
-        public Builder<P, T> withData(final T... data) {
+        @SafeVarargs
+        public final Builder<P, T> withData(final T... data) {
             this.data = Arrays.asList(data);
             return this;
         }
@@ -111,7 +112,7 @@ public final class Series<T> {
         }
 
         public P build() {
-            return this.sink.setObject(new Series(color, data, name, type, zIndex, fillOpacity, lineWidth, linkedTo, marker));
+            return this.sink.setObject(new Series<>(color, data, name, type, zIndex, fillOpacity, lineWidth, linkedTo, marker));
         }
     }
 
