@@ -112,7 +112,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
             if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
                 final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
-                containerFactory.setTldSkipPatterns(Arrays.asList("*.jar"));
                 if (!proxyName.isEmpty()) {
                     containerFactory.addConnectorCustomizers(connector -> {
                         connector.setProxyName(proxyName);
