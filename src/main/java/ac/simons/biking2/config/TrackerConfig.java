@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,14 @@ import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import javax.jms.ConnectionFactory;
-import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerFactory;
 import org.apache.activemq.broker.BrokerPlugin;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.hooks.SpringContextHook;
-import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.activemq.security.AuthenticationUser;
 import org.apache.activemq.security.SimpleAuthenticationPlugin;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -59,10 +58,6 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
         private int mqttPort;
 
         private int stompPort;
-
-        private String username;
-
-        private String password;
 
         private String device;
 
@@ -94,22 +89,6 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
         public void setStompPort(final int stompPort) {
             this.stompPort = stompPort;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(final String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(final String password) {
-            this.password = password;
         }
 
         public String getDevice() {
@@ -147,8 +126,11 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     private final TrackerProperties properties;
 
-    public TrackerConfig(final TrackerProperties properties) {
+    private final SecurityProperties.User user;
+
+    public TrackerConfig(final TrackerProperties properties, final SecurityProperties securityProperties) {
         this.properties = properties;
+        this.user = securityProperties.getUser();
     }
 
     @Bean(destroyMethod = "shutdown")
@@ -173,7 +155,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
         final SimpleAuthenticationPlugin authenticationPlugin = new SimpleAuthenticationPlugin();
         authenticationPlugin.setAnonymousAccessAllowed(false);
-        authenticationPlugin.setUsers(Arrays.asList(new AuthenticationUser(properties.getUsername(), properties.getPassword(), "")));
+        authenticationPlugin.setUsers(Arrays.asList(new AuthenticationUser(user.getName(), user.getPassword(), "")));
 
         rv.addShutdownHook(new SpringContextHook());
         rv.setPlugins(new BrokerPlugin[]{authenticationPlugin});
@@ -190,27 +172,18 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
         rv.setMessageListener(newLocationMessageListener);
         rv.setConnectionFactory(connectionFactory);
         rv.setPubSubDomain(true);
-        rv.setDestinationName(String.format("owntracks.%s.%s", properties.getUsername(), properties.getDevice()));
+        rv.setDestinationName(String.format("owntracks.%s.%s", user.getName(), properties.getDevice()));
         return rv;
-    }
-
-    @Bean
-    public ConnectionFactory jmsConnectionFactory() {
-        final ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("vm://localhost");
-        activeMQConnectionFactory.setUserName(properties.getUsername());
-        activeMQConnectionFactory.setPassword(properties.getPassword());
-
-        return new PooledConnectionFactory(activeMQConnectionFactory);
     }
 
     @Override
     public void configureMessageBroker(final MessageBrokerRegistry registry) {
         registry.enableStompBrokerRelay("/topic/currentLocation")
                 .setRelayPort(properties.getStompPort())
-                .setClientLogin(properties.getUsername())
-                .setClientPasscode(properties.getPassword())
-                .setSystemLogin(properties.getUsername())
-                .setSystemPasscode(properties.getPassword());
+                .setClientLogin(user.getName())
+                .setClientPasscode(user.getPassword())
+                .setSystemLogin(user.getName())
+                .setSystemPasscode(user.getPassword());
         registry.setApplicationDestinationPrefixes("/app");
     }
 
