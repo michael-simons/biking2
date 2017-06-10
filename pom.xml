@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.3.RELEASE</version>
+    <version>1.5.4.RELEASE</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -257,7 +257,7 @@
     <dependency>
       <groupId>eu.michael-simons</groupId>
       <artifactId>wro4j-spring-boot-starter</artifactId>
-      <version>0.3.3</version>
+      <version>0.3.5</version>
     </dependency>
   </dependencies>
 
