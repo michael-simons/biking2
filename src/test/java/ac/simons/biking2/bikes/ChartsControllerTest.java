@@ -61,9 +61,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(
         controllers = ChartsController.class,
-        excludeFilters = {
-            @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
-        },
         secure = false
 )
 @ImportAutoConfiguration(MessageSourceAutoConfiguration.class)

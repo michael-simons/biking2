@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Michael J. Simons.
+ * Copyright 2015-2017 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,9 +60,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(
         controllers = TripsController.class,
-        excludeFilters = {
-            @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
-        },
         secure = false
 )
 @AutoConfigureRestDocs(

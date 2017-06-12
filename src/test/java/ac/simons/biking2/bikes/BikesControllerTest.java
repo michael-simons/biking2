@@ -34,9 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
@@ -77,10 +74,7 @@ import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfigura
 @RunWith(SpringRunner.class)
 @WebMvcTest(
         controllers = BikesController.class,
-        excludeFilters = {
-            @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
-        },
-        secure = false        
+        secure = false
 )
 @ImportAutoConfiguration(MessageSourceAutoConfiguration.class)
 @AutoConfigureRestDocs(
@@ -220,7 +214,7 @@ public class BikesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.amount", is(23.0)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.bike.name", is("testBike")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bike.lastMilage", is(23)))                
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bike.lastMilage", is(23)))
                 .andDo(
                         document(
                                 "api/bikes/milages/post",
