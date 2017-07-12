@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "assorted_trips")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
 @EqualsAndHashCode(of = {"coveredOn", "distance"})
 public class AssortedTripEntity implements Serializable {
