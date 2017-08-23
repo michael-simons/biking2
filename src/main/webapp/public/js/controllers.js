@@ -282,7 +282,7 @@ biking2Controllers.controller('GalleryCtrl', ['$scope', '$http', '$modal', funct
 
 biking2Controllers.controller('AddNewPictureCtrl', ['$scope', '$modalInstance', '$upload', function($scope, $modalInstance, $upload) {
     $scope.picture = {
-	takenOn: null,
+	takenOn: new Date(),
 	description: null
     };
     $scope.imageData = null;
