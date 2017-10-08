@@ -100,7 +100,7 @@ public class TracksControllerTest {
 
         // Try to find gpsbabel
         File tmp = null;
-        for(String possibleExe : new String[]{"/usr/bin/gpsbabel", "/opt/local/bin/gpsbabel"}) {
+        for(String possibleExe : new String[]{"/usr/bin/gpsbabel", "/usr/local/bin/gpsbabel", "/opt/local/bin/gpsbabel"}) {
             tmp = new File(possibleExe);
             if(tmp.canExecute()) {
                 break;
