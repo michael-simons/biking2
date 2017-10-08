@@ -105,6 +105,7 @@ public class TracksControllerTest {
             if(tmp.canExecute()) {
                 break;
             }
+			tmp = null;
         }
         if(tmp == null) {
             throw new IllegalStateException("No gpsbabel found, cannot execute test!");
