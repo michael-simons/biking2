@@ -257,7 +257,7 @@
     <dependency>
       <groupId>eu.michael-simons</groupId>
       <artifactId>wro4j-spring-boot-starter</artifactId>
-      <version>0.3.6</version>
+      <version>0.3.7</version>
     </dependency>
   </dependencies>
 
