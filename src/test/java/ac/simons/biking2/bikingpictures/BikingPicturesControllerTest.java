@@ -29,8 +29,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -40,13 +38,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static ac.simons.biking2.config.DatastoreConfig.BIKING_PICTURES_DIRECTORY;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ac.simons.biking2.support.RegexMatcher.matches;
+import java.util.Optional;
 
 /**
  * @author Michael J. Simons, 2014-02-19
@@ -82,7 +81,7 @@ public class BikingPicturesControllerTest {
     @Test
     public void testGetBikingPicture() throws Exception {
         final BikingPictureRepository repository = mock(BikingPictureRepository.class);
-        stub(repository.findOne(1)).toReturn(new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12"));
+        when(repository.findById(1)).thenReturn(Optional.of(new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12")));
 
         final BikingPicturesController controller = new BikingPicturesController(repository, tmpDir);
         final ZonedDateTime expiresIn = ZonedDateTime.now(ZoneId.of("UTC")).plusDays(365);
@@ -115,7 +114,7 @@ public class BikingPicturesControllerTest {
     @Test
     public void shouldGetGalleryPictures() {
         final BikingPictureRepository repository = mock(BikingPictureRepository.class);
-        Mockito.stub(repository.findAll(Mockito.any(Sort.class))).toReturn(new ArrayList<>());
+        when(repository.findAll(Mockito.any(Sort.class))).thenReturn(new ArrayList<>());
         final BikingPicturesController controller = new BikingPicturesController(repository, this.tmpDir);
 
         final List<BikingPictureEntity> pictures = controller.getBikingPictures();
