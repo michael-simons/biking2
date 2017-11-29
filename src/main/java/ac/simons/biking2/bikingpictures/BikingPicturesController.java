@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package ac.simons.biking2.bikingpictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.support.FileBasedResource;
+import ac.simons.biking2.support.ResourceNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -54,12 +55,10 @@ class BikingPicturesController {
             final HttpServletResponse response
     ) throws IOException {
 
-        final BikingPictureEntity bikingPicture = this.bikingPictureRepository.findOne(id);
-        if (bikingPicture == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        } else {
-            final FileBasedResource resource = new FileBasedResource(new File(datastoreBaseDirectory, String.format("%s/%d.jpg", DatastoreConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId())), String.format("%s.jpg", id), 365);
-            resource.send(request, response);
-        }
+        final BikingPictureEntity bikingPicture = this.bikingPictureRepository
+                .findById(id).orElseThrow(ResourceNotFoundException::new);
+
+        final FileBasedResource resource = new FileBasedResource(new File(datastoreBaseDirectory, String.format("%s/%d.jpg", DatastoreConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId())), String.format("%s.jpg", id), 365);
+        resource.send(request, response);
     }
 }

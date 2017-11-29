@@ -136,7 +136,7 @@ public class OEmbedControllerTest {
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/tracks/n/embed?width=23&height=42"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("track", is(equalTo(this.trackRepository.findOne(23)))))
+                .andExpect(model().attribute("track", is(equalTo(this.trackRepository.findById(23).get()))))
                 .andExpect(model().attribute("home", is(equalTo(home))))
                 .andExpect(model().attribute("width", is(equalTo(23))))
                 .andExpect(model().attribute("height", is(equalTo(42))))

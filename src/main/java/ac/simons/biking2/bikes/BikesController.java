@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,12 +73,11 @@ class BikesController {
             throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
-        final BikeEntity bike = bikeRepository.findOne(id);
+        final BikeEntity bike = bikeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
 
         MilageEntity rv;
-        if (bike == null) {
-            throw new ResourceNotFoundException();
-        } else if (bike.getDecommissionedOn() != null) {
+        if (bike.getDecommissionedOn() != null) {
             throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
@@ -110,7 +109,8 @@ class BikesController {
             throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
-        final BikeEntity bike = bikeRepository.findOne(id);
+        final BikeEntity bike = bikeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
 
         if (bike == null) {
             throw new ResourceNotFoundException();
@@ -131,7 +131,8 @@ class BikesController {
             throw new IllegalArgumentException(i18n.getMessage(INVALID_ARGUMENTS.key));
         }
 
-        final BikeEntity bike = bikeRepository.findOne(id);
+        final BikeEntity bike = bikeRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
 
         if (bike == null) {
             throw new ResourceNotFoundException();

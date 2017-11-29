@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.tracks.gpx.GPX;
 import ac.simons.biking2.support.JAXBContextFactory;
+import ac.simons.biking2.support.ResourceNotFoundException;
 import ac.simons.biking2.tracks.TrackEntity.Type;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -178,17 +179,15 @@ class TracksController {
     public ResponseEntity<TrackEntity> getTrack(@PathVariable final String id) {
         final Integer requestedId = TrackEntity.getId(id);
 
-        TrackEntity track;
         ResponseEntity<TrackEntity> rv;
         if (requestedId == null) {
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
-            rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            rv = new ResponseEntity<>(track, HttpStatus.OK);
         }
 
-        return rv;
+        return this.trackRepository
+                .findById(requestedId)
+                .map(track -> new ResponseEntity<>(track, HttpStatus.OK))
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
@@ -197,13 +196,12 @@ class TracksController {
     public ResponseEntity<Void> deleteTrack(@PathVariable final String id) {
         final Integer requestedId = TrackEntity.getId(id);
 
-        TrackEntity track;
+
         ResponseEntity<Void> rv;
         if (requestedId == null) {
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
-            rv = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
+            final TrackEntity track = this.trackRepository.findById(requestedId).orElseThrow(ResourceNotFoundException::new);
             final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
             final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
             if (tcxFile.delete() && gpxFile.delete()) {
@@ -226,12 +224,10 @@ class TracksController {
     ) throws IOException {
         final Integer requestedId = TrackEntity.getId(id);
         final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
-        TrackEntity track;
         if (requestedId == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-        } else if ((track = this.trackRepository.findOne(requestedId)) == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
+            final TrackEntity track = this.trackRepository.findById(requestedId).orElseThrow(ResourceNotFoundException::new);
             final File trackFile = track.getTrackFile(datastoreBaseDirectory, requestedFormat);
             response.setHeader("Content-Type", ACCEPTABLE_FORMATS.get(requestedFormat));
             response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, requestedFormat));
