@@ -5,3 +5,9 @@ var/
 /activemq-data/
 /nbproject/
 Thumbs.db
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr

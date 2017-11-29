@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.math.BigDecimal;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -45,9 +49,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@SpringBootTest(classes = {TestConfig.class, OEmbedControllerTestConfig.class})
+@SpringBootTest(classes = {TestConfig.class, OEmbedControllerTest.OEmbedControllerTestConfig.class})
 @DirtiesContext
-@WebAppConfiguration
 public class OEmbedControllerTest {
 
     private final static String expectedJsonResult = "{\"author_name\":\"Michael J. Simons\",\"author_url\":\"http://michael-simons.eu\",\"cache_age\":86400,\"html\":\"<iframe width='1024' height='576' src='http://biking.michael-simons.eu/tracks/n/embed?width=1024&height=576' class='bikingTrack'></iframe>\",\"provider_name\":\"biking2\",\"provider_url\":\"http://biking.michael-simons.eu\",\"title\":\"RR bis Simmerath\",\"type\":\"rich\",\"version\":\"1.0\"}";
@@ -147,5 +150,20 @@ public class OEmbedControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("width", is(equalTo(1024))))
                 .andExpect(model().attribute("height", is(equalTo(576))));
+    }
+
+    @Configuration
+    @Profile("test")
+    static class OEmbedControllerTestConfig {
+
+        @Bean
+        public Coordinate home() {
+            return new Coordinate(new BigDecimal("-122.4194200"), new BigDecimal("37.7749300"));
+        }
+
+        @Bean
+        public OEmbedController oEmbedController(TrackRepository trackRepository, Coordinate home) {
+            return new OEmbedController(new TrackIdParser(), trackRepository, home);
+        }
     }
 }

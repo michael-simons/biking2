@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 michael-simons.eu.
+ * Copyright 2016-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.TEXT_PLAIN;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -59,7 +60,7 @@ public class BannerControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testSomeMethod() throws Exception {
+    public void getShouldReturnBanner() throws Exception {
         doAnswer(invocation -> {
             final PrintStream out = invocation.getArgument(2);
             out.write(bannerText.getBytes());
@@ -68,9 +69,10 @@ public class BannerControllerTest {
 
         mockMvc
                 .perform(
-                        get("/api/banner").accept(APPLICATION_JSON)
+                        get("/api/banner").accept(TEXT_PLAIN)
                 )
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("text/plain;charset=UTF-8"))
                 .andExpect(content().string(bannerText))
                 .andDo(document("api/banner",
                         preprocessRequest(prettyPrint()),

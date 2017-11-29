@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -55,6 +54,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -62,11 +62,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.CoreMatchers.is;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import static java.time.LocalDate.now;
 import java.util.Optional;
+import static org.mockito.ArgumentMatchers.any;
 import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 
 /**
@@ -213,9 +215,9 @@ public class BikesControllerTest {
                         .content(objectMapper.writeValueAsString(newMilageCmd))
                 )
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.amount", is(23.0)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bike.name", is("testBike")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bike.lastMilage", is(23)))
+                .andExpect(jsonPath("$.amount", is(23.0)))
+                .andExpect(jsonPath("$.bike.name", is("testBike")))
+                .andExpect(jsonPath("$.bike.lastMilage", is(23)))
                 .andDo(
                         document(
                                 "api/bikes/milages/post",
@@ -233,7 +235,7 @@ public class BikesControllerTest {
                                         fieldWithPath("recordedOn").description("The date the new milage was recorded"),
                                         fieldWithPath("amount").description("The total milage of the bike on the given date"),
                                         fieldWithPath("createdAt").description("The date the new milage record was created"),
-                                        fieldWithPath("bike").description("The bike object the new milage belongs to")
+                                        subsectionWithPath("bike").description("The bike object the new milage belongs to")
                                 )
                         )
                 );

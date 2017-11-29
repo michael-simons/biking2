@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
  * @author Michael J. Simons, 2014-03-19
@@ -48,7 +48,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 @EnableWebSocketMessageBroker
 @EnableConfigurationProperties(TrackerProperties.class)
 @Profile({"default", "prod"})
-public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class TrackerConfig implements WebSocketMessageBrokerConfigurer {
 
     @ConfigurationProperties("biking2.tracker")
     public static class TrackerProperties {
@@ -134,12 +134,17 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
     @Bean(destroyMethod = "shutdown")
-    public Executor taskScheduler(@Value("${biking2.scheduled-thread-pool-size:10}") final int scheduledThreadPoolSize) {
+    public ExecutorService taskScheduler(@Value("${biking2.scheduled-thread-pool-size:10}") final int scheduledThreadPoolSize) {
         return Executors.newScheduledThreadPool(scheduledThreadPoolSize);
     }
 
     @Bean
-    public BrokerService brokerService() throws Exception {
+    public SpringContextHook springContextHook() {
+        return new SpringContextHook();
+    }
+
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public BrokerService brokerService(final SpringContextHook springContextHook) throws Exception {
         final BrokerService rv = BrokerFactory.createBroker(
                 String.format("broker:("
                         + "vm://localhost,"
@@ -157,9 +162,8 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
         authenticationPlugin.setAnonymousAccessAllowed(false);
         authenticationPlugin.setUsers(Arrays.asList(new AuthenticationUser(user.getName(), user.getPassword(), "")));
 
-        rv.addShutdownHook(new SpringContextHook());
+        rv.addShutdownHook(springContextHook);
         rv.setPlugins(new BrokerPlugin[]{authenticationPlugin});
-        rv.start();
         return rv;
     }
 

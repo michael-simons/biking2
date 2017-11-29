@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 michael-simons.eu.
+ * Copyright 2016-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,17 @@
  */
 package ac.simons.biking2.banner;
 
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+
 import javax.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.Banner;
 import org.springframework.core.env.Environment;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,9 +42,11 @@ class BannerController {
 
     private final Environment environment;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = TEXT_PLAIN_VALUE)
     public void get(final HttpServletResponse response) throws IOException {
-        try (PrintStream printStream = new PrintStream(response.getOutputStream())) {
+        final String charset = StandardCharsets.UTF_8.name();
+        response.setHeader("Content-Type", String.format("%s;charset=%s", TEXT_PLAIN_VALUE, charset));
+        try (PrintStream printStream = new PrintStream(response.getOutputStream(), false, charset)) {
             banner.printBanner(environment, BannerController.class, printStream);
         }
     }
