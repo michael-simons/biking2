@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 michael-simons.eu.
+ * Copyright 2015-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 package ac.simons.biking2.bikes;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
 /**
