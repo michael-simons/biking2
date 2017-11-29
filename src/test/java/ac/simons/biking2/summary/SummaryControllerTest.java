@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.summary;
 
-import ac.simons.biking2.bikes.ChartsControllerTest;
 import ac.simons.biking2.bikes.BikeEntity;
 import ac.simons.biking2.trips.AssortedTripRepository;
 import ac.simons.biking2.bikes.BikeRepository;
@@ -29,20 +28,14 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import org.junit.Test;
 
-import static java.time.LocalDate.now;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
 import static java.time.LocalDate.now;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Michael J. Simons, 2015-12-17
@@ -54,7 +47,7 @@ public class SummaryControllerTest {
     
     public SummaryControllerTest() {
         this.assortedTripRepository = mock(AssortedTripRepository.class);        
-        stub(this.assortedTripRepository.getTotalDistance()).toReturn(BigDecimal.TEN);
+        when(this.assortedTripRepository.getTotalDistance()).thenReturn(BigDecimal.TEN);
         this.testData = new TestData();
     }
 
@@ -63,8 +56,8 @@ public class SummaryControllerTest {
         final Calendar now = Calendar.getInstance();
 
         final BikeRepository bikeRepository = mock(BikeRepository.class);
-        stub(bikeRepository.findAll()).toReturn(testData.value);
-        stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+        when(bikeRepository.findAll()).thenReturn(testData.value);
+        when(bikeRepository.getDateOfFirstRecord()).thenReturn(now);
 
         final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
 
@@ -92,8 +85,8 @@ public class SummaryControllerTest {
         );
 
         final BikeRepository bikeRepository = mock(BikeRepository.class);
-        stub(bikeRepository.findAll()).toReturn(bikes);
-        stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+        when(bikeRepository.findAll()).thenReturn(bikes);
+        when(bikeRepository.getDateOfFirstRecord()).thenReturn(now);
 
         final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
         final Summary summary = controller.getSummary();
@@ -115,8 +108,8 @@ public class SummaryControllerTest {
         bikes.add(new BikeEntity("no-milage", now()));
 
         final BikeRepository bikeRepository = mock(BikeRepository.class);
-        stub(bikeRepository.findAll()).toReturn(bikes);
-        stub(bikeRepository.getDateOfFirstRecord()).toReturn(now);
+        when(bikeRepository.findAll()).thenReturn(bikes);
+        when(bikeRepository.getDateOfFirstRecord()).thenReturn(now);
 
         final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
         final Summary summary = controller.getSummary();

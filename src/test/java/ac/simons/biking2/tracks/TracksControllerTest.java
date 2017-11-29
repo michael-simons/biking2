@@ -28,6 +28,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,7 +38,6 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -58,10 +58,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.rules.ExpectedException.none;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.same;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -88,8 +90,8 @@ public class TracksControllerTest {
 
         this.defaultTestData = Stream.of(1, 2, 3).map(i -> {
             final TrackEntity t = mock(TrackEntity.class);
-            stub(t.getId()).toReturn(i);
-            stub(t.getCoveredOn()).toReturn(GregorianCalendar.from(now.minusDays(random.nextInt(365)).atStartOfDay(ZoneId.systemDefault())));
+            when(t.getId()).thenReturn(i);
+            when(t.getCoveredOn()).thenReturn(GregorianCalendar.from(now.minusDays(random.nextInt(365)).atStartOfDay(ZoneId.systemDefault())));
             return t;
         }).collect(toList());
 
@@ -116,7 +118,7 @@ public class TracksControllerTest {
     @Test
     public void testGetTracks() {
         final TrackRepository trackRepository = mock(TrackRepository.class);
-        stub(trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"))).toReturn(defaultTestData);
+        when(trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"))).thenReturn(defaultTestData);
         final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 
         final List<TrackEntity> tracks = tracksController.getTracks();
@@ -129,9 +131,9 @@ public class TracksControllerTest {
         final int validId = 23;
 
         final TrackEntity t = mock(TrackEntity.class);
-        stub(t.getId()).toReturn(validId);
+        when(t.getId()).thenReturn(validId);
         final TrackRepository trackRepository = mock(TrackRepository.class);
-        stub(trackRepository.findOne(validId)).toReturn(t);
+        when(trackRepository.findById(validId)).thenReturn(Optional.of(t));
 
         final String content = "<foo>bar</foo>";
         final List<String> contentGpx = Arrays.asList(content, "gpx");
@@ -140,12 +142,12 @@ public class TracksControllerTest {
         final File trackGpx = new File(tracksDir, String.format("%d.gpx", validId));
         Files.write(trackGpx.toPath(), contentGpx);
         trackGpx.deleteOnExit();
-        stub(t.getTrackFile(tmpDir, "gpx")).toReturn(trackGpx);
+        when(t.getTrackFile(tmpDir, "gpx")).thenReturn(trackGpx);
 
         final File trackTcx = new File(tracksDir, String.format("%d.tcx", validId));
         Files.write(trackTcx.toPath(), contentTcx);
         trackTcx.deleteOnExit();
-        stub(t.getTrackFile(tmpDir, "tcx")).toReturn(trackTcx);
+        when(t.getTrackFile(tmpDir, "tcx")).thenReturn(trackTcx);
 
         final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 
@@ -209,9 +211,9 @@ public class TracksControllerTest {
         final int validId = 23;
 
         final TrackEntity t = mock(TrackEntity.class);
-        stub(t.getId()).toReturn(validId);
+        when(t.getId()).thenReturn(validId);
         final TrackRepository trackRepository = mock(TrackRepository.class);
-        stub(trackRepository.findOne(validId)).toReturn(t);
+        when(trackRepository.findById(validId)).thenReturn(Optional.of(t));
 
         final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
 
@@ -249,7 +251,7 @@ public class TracksControllerTest {
         when(t.getTrackFile(any(File.class), same("gpx"))).thenReturn(new File("fump"));
         when(t.getTrackFile(any(File.class), same("tcx"))).thenReturn(new File("zack"));
 
-        stub(trackRepository.findOne(validId)).toReturn(t);
+        when(trackRepository.findById(validId)).thenReturn(Optional.of(t));
 
         t = mock(TrackEntity.class);
         when(t.getId()).thenReturn(validId + 1);
@@ -257,7 +259,7 @@ public class TracksControllerTest {
         when(t.getTrackFile(any(File.class), same("gpx"))).thenReturn(gpx);
         final File tcx = File.createTempFile("pppp-", ".tcx");
         when(t.getTrackFile(any(File.class), same("tcx"))).thenReturn(tcx);
-        stub(trackRepository.findOne(validId + 1)).toReturn(t);
+        when(trackRepository.findById(validId + 1)).thenReturn(Optional.of(t));
 
         final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
         ResponseEntity<Void> response;
@@ -306,7 +308,7 @@ public class TracksControllerTest {
         };
 
         final TrackRepository trackRepository = mock(TrackRepository.class);
-        stub(trackRepository.save(Matchers.any(TrackEntity.class))).toReturn(track);
+        when(trackRepository.save(any(TrackEntity.class))).thenReturn(track);
 
         final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
@@ -374,13 +376,13 @@ public class TracksControllerTest {
             )
             .andExpect(status().isBadRequest());
 
-        Mockito.verifyZeroInteractions(trackRepository);
+        verifyZeroInteractions(trackRepository);
     }
 
     @Test
     public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
         final TrackRepository trackRepository = mock(TrackRepository.class);
-        stub(trackRepository.save(Matchers.any(TrackEntity.class))).toThrow(new DataIntegrityViolationException("fud"));
+        when(trackRepository.save(any(TrackEntity.class))).thenThrow(new DataIntegrityViolationException("fud"));
 
         final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
@@ -404,10 +406,10 @@ public class TracksControllerTest {
     @Test
     public void shouldHandleIOExceptionsGracefully1() throws Exception {
         TrackEntity track = Mockito.mock(TrackEntity.class);
-        Mockito.stub(track.getId()).toReturn(4223);
-        Mockito.stub(track.getPrettyId()).toReturn(Integer.toString(4223, 36));
+        when(track.getId()).thenReturn(4223);
+        when(track.getPrettyId()).thenReturn(Integer.toString(4223, 36));
         // return a directory so that the controller cannot write to it
-        Mockito.stub(track.getTrackFile(this.tmpDir, "tcx")).toReturn(this.tmpDir);
+        when(track.getTrackFile(this.tmpDir, "tcx")).thenReturn(this.tmpDir);
 
         final TrackRepository trackRepository = mock(TrackRepository.class);
         final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
@@ -415,17 +417,17 @@ public class TracksControllerTest {
         this.expectedException.expect(FileNotFoundException.class);	
         controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 
-        Mockito.verify(track).getId();
-        Mockito.verify(track).getPrettyId();
-        Mockito.verify(track).getTrackFile(this.tmpDir, "tcx");
-        Mockito.verifyNoMoreInteractions(track);
+        verify(track).getId();
+        verify(track).getPrettyId();
+        verify(track).getTrackFile(this.tmpDir, "tcx");
+        verifyNoMoreInteractions(track);
     }
 
     @Test
     public void shouldHandleIOExceptionsGracefully2() throws Exception {
         TrackEntity track = Mockito.mock(TrackEntity.class);
-        Mockito.stub(track.getTrackFile(this.tmpDir, "tcx")).toReturn(File.createTempFile("4223", ".tcx"));
-        Mockito.stub(track.getTrackFile(this.tmpDir, "gpx")).toReturn(File.createTempFile("4223", ".gpx"));
+        when(track.getTrackFile(this.tmpDir, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));
+        when(track.getTrackFile(this.tmpDir, "gpx")).thenReturn(File.createTempFile("4223", ".gpx"));
 
         final TrackRepository trackRepository = mock(TrackRepository.class);
         final TracksController controller = new TracksController(trackRepository, this.tmpDir, new File("/iam/not/gpsBabel").getAbsolutePath(), null);
@@ -442,8 +444,8 @@ public class TracksControllerTest {
     @Test
     public void shouldHandleInvalidTcxFiles() throws Exception {
         TrackEntity track = Mockito.mock(TrackEntity.class);
-        Mockito.stub(track.getTrackFile(this.tmpDir, "tcx")).toReturn(File.createTempFile("4223", ".tcx"));
-        Mockito.stub(track.getTrackFile(this.tmpDir, "gpx")).toReturn(File.createTempFile("4223", ".gpx"));
+        when(track.getTrackFile(this.tmpDir, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));
+        when(track.getTrackFile(this.tmpDir, "gpx")).thenReturn(File.createTempFile("4223", ".gpx"));
 
         final TrackRepository trackRepository = mock(TrackRepository.class);
         final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
@@ -452,9 +454,9 @@ public class TracksControllerTest {
         this.expectedException.expectMessage("GPSBabel could not convert the input file!");
         controller.storeFile(track, this.getClass().getResourceAsStream("/test-invalid.tcx"));
 
-        Mockito.verify(track).getTrackFile(this.tmpDir, "tcx");
-        Mockito.verify(track).getTrackFile(this.tmpDir, "gpx");
-        Mockito.verifyNoMoreInteractions(track);
+        verify(track).getTrackFile(this.tmpDir, "tcx");
+        verify(track).getTrackFile(this.tmpDir, "gpx");
+        verifyNoMoreInteractions(track);
     }
 
     @Test

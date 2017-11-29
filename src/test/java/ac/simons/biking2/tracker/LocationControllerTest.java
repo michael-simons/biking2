@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 michael-simons.eu.
+ * Copyright 2015-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +36,7 @@ import static org.junit.rules.ExpectedException.none;
 import static java.util.Calendar.getInstance;
 import org.joor.Reflect;
 import static org.mockito.Mockito.when;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * @author Michael J. Simons, 2015-12-16
@@ -55,7 +55,7 @@ public class LocationControllerTest {
 
         final LocationEntity l1 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, GregorianCalendar.from(now));
         final LocationEntity l2 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, GregorianCalendar.from(now.plusMinutes(1)));
-        Mockito.stub(locationService.getLocationsForTheLastNHours(1)).toReturn(Arrays.asList(l1, l2));
+        when(locationService.getLocationsForTheLastNHours(1)).thenReturn(Arrays.asList(l1, l2));
         final LocationController locationController = new LocationController(locationService);
 
         final List<LocationEntity> locations = locationController.getLocations();
@@ -71,9 +71,9 @@ public class LocationControllerTest {
     public void shouldCreateLocation() {
         final NewLocationCmd newLocationCmd = new NewLocationCmd();
         final LocationEntity l = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, getInstance());
-        Mockito.stub(locationService.createAndSendNewLocation(newLocationCmd)).toReturn(l);
+        when(locationService.createAndSendNewLocation(newLocationCmd)).thenReturn(l);
         final BindingResult bindingResult = Mockito.mock(BindingResult.class);
-        Mockito.stub(bindingResult.hasErrors()).toReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
 
         final LocationController locationController = new LocationController(locationService);
 
@@ -87,7 +87,7 @@ public class LocationControllerTest {
     public void shouldNotCreateInvalidLocation() {
         final NewLocationCmd newLocationCmd = new NewLocationCmd();
         final BindingResult bindingResult = Mockito.mock(BindingResult.class);
-        Mockito.stub(bindingResult.hasErrors()).toReturn(true);
+        when(bindingResult.hasErrors()).thenReturn(true);
 
         final LocationController locationController = new LocationController(locationService);
 
@@ -104,9 +104,9 @@ public class LocationControllerTest {
                 .set("latitude", new BigDecimal("1"))
                 .set("longitude", new BigDecimal("2")).get();
         
-        Mockito.stub(locationService.createAndSendNewLocation(newLocationCmd)).toThrow(new DataIntegrityViolationException("foobar"));
+        when(locationService.createAndSendNewLocation(newLocationCmd)).thenThrow(new DataIntegrityViolationException("foobar"));
         final BindingResult bindingResult = Mockito.mock(BindingResult.class);
-        Mockito.stub(bindingResult.hasErrors()).toReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
 
         final LocationController locationController = new LocationController(locationService);
 

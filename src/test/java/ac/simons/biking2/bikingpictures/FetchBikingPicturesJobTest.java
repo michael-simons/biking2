@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.rules.ExpectedException.none;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static java.time.ZonedDateTime.of;
@@ -61,10 +61,10 @@ public class FetchBikingPicturesJobTest {
     @Test
     public void jobShouldAbortWhenOlderItemsThanMaxPubDateAreFoundOnPage1() throws Exception {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
-        stub(dailyFratzeProvider.getRSSConnection(null)).toReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
+        when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
 
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        stub(bikingPictureRepository.getMaxPubDate()).toReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sat, 07 Sep 2013 18:43:48 GMT")));
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sat, 07 Sep 2013 18:43:48 GMT")));
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
@@ -77,11 +77,11 @@ public class FetchBikingPicturesJobTest {
     @Test
     public void jobShouldAbortWhenOlderItemsThanMaxPubDateAreFoundOnPage2() throws Exception {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
-        stub(dailyFratzeProvider.getRSSConnection(null)).toReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
+        when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
         final String page2 = "http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2";
-        stub(dailyFratzeProvider.getRSSConnection(page2)).toReturn(this.getClass().getResource("/biking_pictures.2.rss").openConnection());
+        when(dailyFratzeProvider.getRSSConnection(page2)).thenReturn(this.getClass().getResource("/biking_pictures.2.rss").openConnection());
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        stub(bikingPictureRepository.getMaxPubDate()).toReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
@@ -95,10 +95,10 @@ public class FetchBikingPicturesJobTest {
     @Test
     public void jobShouldHandleExceptionsGracefully() throws MalformedURLException, IOException, Exception {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
-        stub(dailyFratzeProvider.getRSSConnection(null)).toReturn(new File("/i/dont/exists").toURI().toURL().openConnection());
+        when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(new File("/i/dont/exists").toURI().toURL().openConnection());
 
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        stub(bikingPictureRepository.getMaxPubDate()).toReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
         final List<BikingPictureEntity> toDownload = job.createDownloadList();
@@ -122,11 +122,11 @@ public class FetchBikingPicturesJobTest {
     @Test
     public void jobShouldAbortWhenNoMorePagesAreAvailable() throws Exception {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
-        stub(dailyFratzeProvider.getRSSConnection(null)).toReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
+        when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
         final String page2 = "http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2";
-        stub(dailyFratzeProvider.getRSSConnection(page2)).toReturn(this.getClass().getResource("/biking_pictures.2.rss").openConnection());
+        when(dailyFratzeProvider.getRSSConnection(page2)).thenReturn(this.getClass().getResource("/biking_pictures.2.rss").openConnection());
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        stub(bikingPictureRepository.getMaxPubDate()).toReturn(GregorianCalendar.from(of(2000, 1, 1, 21, 21, 00, 0, ZoneId.systemDefault())));
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(GregorianCalendar.from(of(2000, 1, 1, 21, 21, 00, 0, ZoneId.systemDefault())));
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
         final List<BikingPictureEntity> toDownload = job.createDownloadList();
@@ -141,20 +141,20 @@ public class FetchBikingPicturesJobTest {
     public void shouldDownloadStuff() throws Exception {
 
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
-        stub(dailyFratzeProvider.getImageConnection(45644)).toReturn(this.getClass().getResource("/45644.jpg").openConnection());
-        stub(dailyFratzeProvider.getImageConnection(45325)).toReturn(this.getClass().getResource("/45325.jpg").openConnection());
+        when(dailyFratzeProvider.getImageConnection(45644)).thenReturn(this.getClass().getResource("/45644.jpg").openConnection());
+        when(dailyFratzeProvider.getImageConnection(45325)).thenReturn(this.getClass().getResource("/45325.jpg").openConnection());
 
         // Failure on connection
         URLConnection mockConnection = mock(URLConnection.class);
-        stub(mockConnection.getInputStream()).toThrow(new IOException("ignoreMe"));
-        stub(dailyFratzeProvider.getImageConnection(44142)).toReturn(mockConnection);
+        when(mockConnection.getInputStream()).thenThrow(new IOException("ignoreMe"));
+        when(dailyFratzeProvider.getImageConnection(44142)).thenReturn(mockConnection);
 
-        stub(dailyFratzeProvider.getImageConnection(43461)).toReturn(null);
+        when(dailyFratzeProvider.getImageConnection(43461)).thenReturn(null);
 
         // One picture exists
         final BikingPictureEntity existingPicture = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45325.jpg", dateTimeAdapter.unmarshal("Mon, 30 Dec 2013 23:18:35 GMT"), "http://dailyfratze.de/michael/2013/12/30");
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        stub(bikingPictureRepository.findByExternalId(45325)).toReturn(existingPicture);
+        when(bikingPictureRepository.findByExternalId(45325)).thenReturn(existingPicture);
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
@@ -178,10 +178,10 @@ public class FetchBikingPicturesJobTest {
     @Test
     public void runMethodShouldWorkAsExpected() throws IOException {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
-        stub(dailyFratzeProvider.getRSSConnection(null)).toReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
+        when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
 
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        stub(bikingPictureRepository.getMaxPubDate()).toReturn(getInstance());
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(getInstance());
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
         job.run();

@@ -26,7 +26,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -61,10 +61,10 @@ public class BannerControllerTest {
     @Test
     public void testSomeMethod() throws Exception {
         doAnswer(invocation -> {
-            final PrintStream out = invocation.getArgumentAt(2, PrintStream.class);
+            final PrintStream out = invocation.getArgument(2);
             out.write(bannerText.getBytes());
             return null;
-        }).when(banner).printBanner(anyObject(), anyObject(), anyObject());
+        }).when(banner).printBanner(any(), any(), any());
 
         mockMvc
                 .perform(

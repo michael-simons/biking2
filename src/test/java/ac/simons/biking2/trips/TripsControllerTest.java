@@ -18,7 +18,6 @@ package ac.simons.biking2.trips;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.Calendar;
-import org.hamcrest.Matchers;
 import org.joor.Reflect;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,18 +25,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,7 +49,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- *
  * @author Michael J. Simons, 2015-06-09
  */
 @RunWith(SpringRunner.class)
@@ -93,11 +87,11 @@ public class TripsControllerTest {
         newTripCmd2.setDistance(666.0);
 
         when(repository.save(any(AssortedTripEntity.class))).then(invocation -> {
-            final AssortedTripEntity arg = invocation.getArgumentAt(0, AssortedTripEntity.class);
-            return arg == null ? arg : Reflect.on(invocation.getArgumentAt(0, AssortedTripEntity.class)).set("id", 42).get();
+            final AssortedTripEntity arg = invocation.getArgument(0);
+            return arg == null ? arg : Reflect.on(arg).set("id", 42).get();
         });
-        // Using hamcrest to check for properties of the passed object
-        when(repository.save(argThat(Matchers.<AssortedTripEntity>hasProperty("distance", is(BigDecimal.valueOf(666.0)))))).thenThrow(new DataIntegrityViolationException(""));
+        when(repository.save(argThat(a -> a.getDistance().equals(BigDecimal.valueOf(666.0)))))
+                .thenThrow(new DataIntegrityViolationException(""));
 
         // Empty content
         mockMvc

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 michael-simons.eu.
+ * Copyright 2016-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,13 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
@@ -91,8 +90,8 @@ public class NewLocationMessageListenerTest {
         final BytesMessage message = Mockito.mock(BytesMessage.class);
         final byte[] bytes = "{\"lon\":\"5\", \"lat\":\"50\"}".getBytes();
         when(message.getBodyLength()).thenReturn((long) bytes.length);
-        when(message.readBytes(anyObject())).thenAnswer(invocation -> {
-            final byte[] target = invocation.getArgumentAt(0, byte[].class);
+        when(message.readBytes(any())).thenAnswer(invocation -> {
+            final byte[] target = invocation.getArgument(0);
             System.arraycopy(bytes, 0, target, 0, target.length);
             return null;
         });
