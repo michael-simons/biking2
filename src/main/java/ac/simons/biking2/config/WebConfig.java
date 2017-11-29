@@ -28,13 +28,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author Michael J. Simons, 2014-02-15
  */
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig implements WebMvcConfigurer {
 
     /**
      * Allow cross origin requests for all api endpoints.
@@ -74,7 +74,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
-        super.configureContentNegotiation(configurer);
         configurer.favorParameter(true);
     }
 
