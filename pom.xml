@@ -159,16 +159,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <!-- Needed for MessageBrokerRegistry#enableStompBrokerRelay -->
-    <dependency>
-      <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-net</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-all</artifactId>
-      <version>4.0.36.Final</version>
-    </dependency>
     <!-- Tests and development -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
