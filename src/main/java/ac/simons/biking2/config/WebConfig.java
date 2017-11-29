@@ -19,9 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -104,19 +103,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> embeddedServletContainerCustomizer(
             @Value("${biking2.connector.proxyName:}") final String proxyName,
             @Value("${biking2.connector.proxyPort:80}") final int proxyPort
     ) {
-        return (ConfigurableEmbeddedServletContainer configurableContainer) -> {
-            if (configurableContainer instanceof TomcatEmbeddedServletContainerFactory) {
-                final TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) configurableContainer;
-                if (!proxyName.isEmpty()) {
-                    containerFactory.addConnectorCustomizers(connector -> {
-                        connector.setProxyName(proxyName);
-                        connector.setProxyPort(proxyPort);
-                    });
-                }
+        return (TomcatServletWebServerFactory server) -> {
+            if (!proxyName.isEmpty()) {
+                server.addConnectorCustomizers(connector -> {
+                    connector.setProxyName(proxyName);
+                    connector.setProxyPort(proxyPort);
+                });
             }
         };
     }
