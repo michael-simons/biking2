@@ -66,6 +66,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.hamcrest.CoreMatchers.is;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import static java.time.LocalDate.now;
+import java.util.Optional;
 import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 
 /**
@@ -169,10 +170,10 @@ public class BikesControllerTest {
         LocalDate now = now();
 
         final BikeEntity bike = new BikeEntity("testBike", now);
-        when(repository.findOne(2)).thenReturn(bike);
+        when(repository.findById(2)).thenReturn(Optional.of(bike));
         final BikeEntity decommissionedBike = new BikeEntity("decommissioned", now.minusMonths(2).withDayOfMonth(1));
         decommissionedBike.decommission(now.minusMonths(1));
-        when(repository.findOne(3)).thenReturn(decommissionedBike);
+        when(repository.findById(3)).thenReturn(Optional.of(decommissionedBike));
 
         final NewMilageCmd newMilageCmd = new NewMilageCmd();
         newMilageCmd.setAmount(23.0);
@@ -247,9 +248,9 @@ public class BikesControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content().string("Bike has already been decommissioned."));
 
-        verify(repository, times(1)).findOne(1);
-        verify(repository, times(1)).findOne(2);
-        verify(repository, times(1)).findOne(3);
+        verify(repository, times(1)).findById(1);
+        verify(repository, times(1)).findById(2);
+        verify(repository, times(1)).findById(3);
         verify(repository, times(1)).save(any(BikeEntity.class));
     }
 
@@ -336,12 +337,12 @@ public class BikesControllerTest {
 
         final BikeEntity decommissionedBike = new BikeEntity("decommissioned", now.minusMonths(2).withDayOfMonth(1));
         decommissionedBike.decommission(now.minusMonths(1));
-        when(repository.findOne(3)).thenReturn(decommissionedBike);
+        when(repository.findById(3)).thenReturn(Optional.of(decommissionedBike));
 
         BikeEntity bike = new BikeEntity("test", now.minusMonths(1));
         bike.setColor("000000");
         Calendar boughtOn = bike.getBoughtOn();
-        when(repository.findOne(2)).thenReturn(bike);
+        when(repository.findById(2)).thenReturn(Optional.of(bike));
 
         final BikeCmd updatedBikeCmd = new BikeCmd();
         updatedBikeCmd.setBoughtOn(new Date());
@@ -393,9 +394,9 @@ public class BikesControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content().string("Bike has already been decommissioned."));
 
-        verify(repository, times(1)).findOne(1);
-        verify(repository, times(1)).findOne(2);
-        verify(repository, times(1)).findOne(3);
+        verify(repository, times(1)).findById(1);
+        verify(repository, times(1)).findById(2);
+        verify(repository, times(1)).findById(3);
 
         Assert.assertEquals("test", bike.getName());
         Assert.assertEquals(boughtOn, bike.getBoughtOn());
@@ -411,12 +412,12 @@ public class BikesControllerTest {
 
         final BikeEntity decommissionedBike = new BikeEntity("decommissioned", now.minusMonths(2).withDayOfMonth(1));
         decommissionedBike.decommission(now.minusMonths(1));
-        when(repository.findOne(3)).thenReturn(decommissionedBike);
+        when(repository.findById(3)).thenReturn(Optional.of(decommissionedBike));
 
         BikeEntity bike = new BikeEntity("test", now.minusMonths(1));
         bike.setColor("000000");
         Calendar boughtOn = bike.getBoughtOn();
-        when(repository.findOne(2)).thenReturn(bike);
+        when(repository.findById(2)).thenReturn(Optional.of(bike));
 
         final StoryCmd validNewStoryCmd = new StoryCmd();
         validNewStoryCmd.setLabel("Nie wieder Stadtschlampe");
@@ -507,9 +508,9 @@ public class BikesControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content().string("Bike has already been decommissioned."));
 
-        verify(repository, times(1)).findOne(1);
-        verify(repository, times(2)).findOne(2);
-        verify(repository, times(1)).findOne(3);
+        verify(repository, times(1)).findById(1);
+        verify(repository, times(2)).findById(2);
+        verify(repository, times(1)).findById(3);
 
         verifyNoMoreInteractions(repository);
     }

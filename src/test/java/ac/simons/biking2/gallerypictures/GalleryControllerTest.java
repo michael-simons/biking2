@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,7 +43,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -50,6 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static java.util.TimeZone.getTimeZone;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Michael J. Simons, 2014-03-07
@@ -80,7 +81,7 @@ public class GalleryControllerTest {
                 return 23;
             }
         };
-        stub(repository.save(Mockito.any(GalleryPictureEntity.class))).toReturn(galleryPicture);
+        when(repository.save(Mockito.any(GalleryPictureEntity.class))).thenReturn(galleryPicture);
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
@@ -110,7 +111,7 @@ public class GalleryControllerTest {
                 return 23;
             }
         };
-        stub(repository.save(Mockito.any(GalleryPictureEntity.class))).toReturn(galleryPicture);
+        when(repository.save(Mockito.any(GalleryPictureEntity.class))).thenReturn(galleryPicture);
         // use non existing dir
         final GalleryController controller = new GalleryController(repository, new File(this.tmpDir, "haha, got you"));
 
@@ -130,7 +131,7 @@ public class GalleryControllerTest {
     @Test
     public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
-        stub(repository.save(Mockito.any(GalleryPictureEntity.class))).toThrow(new DataIntegrityViolationException("fud"));
+        when(repository.save(Mockito.any(GalleryPictureEntity.class))).thenThrow(new DataIntegrityViolationException("fud"));
 
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
@@ -191,7 +192,7 @@ public class GalleryControllerTest {
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isNotFound());
 
-        Mockito.verify(repository).findOne(23);
+        Mockito.verify(repository).findById(23);
         Mockito.verifyNoMoreInteractions(repository);
     }
 
@@ -217,7 +218,7 @@ public class GalleryControllerTest {
         Files.copy(new ByteArrayInputStream(imageData), imageFile.toPath());
 
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
-        Mockito.stub(repository.findOne(42)).toReturn(new GalleryPictureEntity(Calendar.getInstance(), imageFile.getName()));
+        when(repository.findById(42)).thenReturn(Optional.of(new GalleryPictureEntity(Calendar.getInstance(), imageFile.getName())));
 
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
@@ -254,14 +255,14 @@ public class GalleryControllerTest {
             .andExpect(header().longValue("Content-Length", imageFile.length()))
             .andReturn();
 
-        Mockito.verify(repository, times(3)).findOne(42);
+        Mockito.verify(repository, times(3)).findById(42);
         Mockito.verifyNoMoreInteractions(repository);
     }
 
     @Test
     public void shouldGetGalleryPictures() {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
-        Mockito.stub(repository.findAll(Mockito.any(Sort.class))).toReturn(new ArrayList<>());
+        when(repository.findAll(Mockito.any(Sort.class))).thenReturn(new ArrayList<>());
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
         final List<GalleryPictureEntity> galleryPictures = controller.getGalleryPictures();

@@ -17,6 +17,7 @@ package ac.simons.biking2.gallerypictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.support.FileBasedResource;
+import ac.simons.biking2.support.ResourceNotFoundException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -128,12 +129,11 @@ class GalleryController {
             final HttpServletResponse response
     ) throws IOException {
 
-        final GalleryPictureEntity galleryPicture = this.galleryPictureRepository.findOne(id);
-        if (galleryPicture == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        } else {
-            final FileBasedResource resource = new FileBasedResource(new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename())), String.format("%s.jpg", id), 365);
-            resource.send(request, response);
-        }
+        final GalleryPictureEntity galleryPicture = this.galleryPictureRepository
+                .findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        final FileBasedResource resource = new FileBasedResource(new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename())), String.format("%s.jpg", id), 365);
+        resource.send(request, response);
     }
 }
