@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import ac.simons.biking2.config.TrackerConfig.TrackerProperties;
 import ac.simons.biking2.tracker.NewLocationMessageListener;
 import java.util.Arrays;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.jms.ConnectionFactory;
 import org.apache.activemq.broker.BrokerFactory;
@@ -134,7 +135,7 @@ public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
     @Bean(destroyMethod = "shutdown")
-    public Executor taskScheduler(@Value("${biking2.scheduled-thread-pool-size:10}") final int scheduledThreadPoolSize) {
+    public ExecutorService taskScheduler(@Value("${biking2.scheduled-thread-pool-size:10}") final int scheduledThreadPoolSize) {
         return Executors.newScheduledThreadPool(scheduledThreadPoolSize);
     }
 
