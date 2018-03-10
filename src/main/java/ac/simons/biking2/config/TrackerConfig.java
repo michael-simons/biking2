@@ -18,7 +18,6 @@ package ac.simons.biking2.config;
 import ac.simons.biking2.config.TrackerConfig.TrackerProperties;
 import ac.simons.biking2.tracker.NewLocationMessageListener;
 import java.util.Arrays;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.jms.ConnectionFactory;
