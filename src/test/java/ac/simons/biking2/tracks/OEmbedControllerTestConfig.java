@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableAutoConfiguration
 @EntityScan("ac.simons.biking2")
-@EnableJpaRepositories("ac.simons.biking2.persistence.repositories")
+@EnableJpaRepositories
 @EnableTransactionManagement
 @Profile("test")
 public class OEmbedControllerTestConfig {
