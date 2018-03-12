@@ -139,7 +139,12 @@ public class TrackerConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     @Bean
-    public BrokerService brokerService() throws Exception {
+    public SpringContextHook springContextHook() {
+        return new SpringContextHook();
+    }
+
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public BrokerService brokerService(final SpringContextHook springContextHook) throws Exception {
         final BrokerService rv = BrokerFactory.createBroker(
                 String.format("broker:("
                         + "vm://localhost,"
@@ -157,9 +162,8 @@ public class TrackerConfig implements WebSocketMessageBrokerConfigurer {
         authenticationPlugin.setAnonymousAccessAllowed(false);
         authenticationPlugin.setUsers(Arrays.asList(new AuthenticationUser(user.getName(), user.getPassword(), "")));
 
-        rv.addShutdownHook(new SpringContextHook());
+        rv.addShutdownHook(springContextHook);
         rv.setPlugins(new BrokerPlugin[]{authenticationPlugin});
-        rv.start();
         return rv;
     }
 
