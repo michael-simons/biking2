@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,12 +179,7 @@ class TracksController {
     public ResponseEntity<TrackEntity> getTrack(@PathVariable final String id) {
         final Integer requestedId = TrackEntity.getId(id);
 
-        ResponseEntity<TrackEntity> rv;
-        if (requestedId == null) {
-            rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        return this.trackRepository
+        return requestedId == null ? new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE) : this.trackRepository
                 .findById(requestedId)
                 .map(track -> new ResponseEntity<>(track, HttpStatus.OK))
                 .orElseThrow(ResourceNotFoundException::new);
