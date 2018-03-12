@@ -54,6 +54,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -233,7 +234,7 @@ public class BikesControllerTest {
                                         fieldWithPath("recordedOn").description("The date the new milage was recorded"),
                                         fieldWithPath("amount").description("The total milage of the bike on the given date"),
                                         fieldWithPath("createdAt").description("The date the new milage record was created"),
-                                        fieldWithPath("bike").description("The bike object the new milage belongs to")
+                                        subsectionWithPath("bike").description("The bike object the new milage belongs to")
                                 )
                         )
                 );
