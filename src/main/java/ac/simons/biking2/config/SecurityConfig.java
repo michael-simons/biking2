@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,18 @@
  */
 package ac.simons.biking2.config;
 
-import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
+import org.springframework.boot.actuate.env.EnvironmentEndpoint;
+import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.actuate.info.InfoEndpoint;
+import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import static org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest.to;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 /**
@@ -36,7 +39,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     @Configuration
-    @Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
     @ConditionalOnBean(SecurityConfig.class)
     protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
         @Override
@@ -45,11 +47,12 @@ public class SecurityConfig {
                 .httpBasic()
                     .and()
                 .authorizeRequests()
-                    .antMatchers(
-                            "/api/system/env/java.(runtime|vm).*",
-                            "/api/system/metrics/**"
-                    ).permitAll()
-                    .antMatchers("/api/system/env/**").authenticated()
+                    .antMatchers("/api/system/env/java.runtime.version")
+                        .permitAll()
+                    .requestMatchers(to(HealthEndpoint.class, InfoEndpoint.class, MetricsEndpoint.class))
+                        .permitAll()
+                    .requestMatchers(to(EnvironmentEndpoint.class))
+                        .authenticated()
                     .antMatchers("/**").permitAll()
                     .and()
                 .sessionManagement()
