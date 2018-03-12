@@ -37,9 +37,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
  * @author Michael J. Simons, 2014-03-19
@@ -48,7 +48,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 @EnableWebSocketMessageBroker
 @EnableConfigurationProperties(TrackerProperties.class)
 @Profile({"default", "prod"})
-public class TrackerConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class TrackerConfig implements WebSocketMessageBrokerConfigurer {
 
     @ConfigurationProperties("biking2.tracker")
     public static class TrackerProperties {
