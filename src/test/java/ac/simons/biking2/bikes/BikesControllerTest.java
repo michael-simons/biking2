@@ -62,6 +62,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.CoreMatchers.is;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -214,9 +215,9 @@ public class BikesControllerTest {
                         .content(objectMapper.writeValueAsString(newMilageCmd))
                 )
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.amount", is(23.0)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bike.name", is("testBike")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bike.lastMilage", is(23)))
+                .andExpect(jsonPath("$.amount", is(23.0)))
+                .andExpect(jsonPath("$.bike.name", is("testBike")))
+                .andExpect(jsonPath("$.bike.lastMilage", is(23)))
                 .andDo(
                         document(
                                 "api/bikes/milages/post",

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,38 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.support.RegexMatcher;
 import ac.simons.biking2.config.DatastoreConfig;
+import ac.simons.biking2.support.RegexMatcher;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.TestPropertySourceUtils;
+import org.springframework.test.web.servlet.MockMvc;
+
+import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -32,28 +57,11 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.servlet.http.HttpServletResponse;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -61,185 +69,161 @@ import static org.junit.rules.ExpectedException.none;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author Michael J. Simons, 2014-02-15
  */
+@RunWith(SpringRunner.class)
+@WebMvcTest(controllers = TracksController.class, secure = false)
 public class TracksControllerTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+
     private final List<TrackEntity> defaultTestData;
-    private final File tmpDir;
-    private final File tracksDir;
-    private final File gpsBabel;
+
+    @MockBean
+    private TrackRepository trackRepository;
+
+    @MockBean
+    private TrackIdParser trackIdParser;
+
+    @Autowired
+    private File datastoreBaseDirectory;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private Coordinate home;
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Rule
     public final ExpectedException expectedException = none();
 
     public TracksControllerTest() {
-        final int[] ids = new int[]{1, 2, 3};
         final LocalDate now = LocalDate.now();
         final Random random = new Random(System.currentTimeMillis());
 
-        this.defaultTestData = Stream.of(1, 2, 3).map(i -> {
-            final TrackEntity t = mock(TrackEntity.class);
-            when(t.getId()).thenReturn(i);
-            when(t.getCoveredOn()).thenReturn(GregorianCalendar.from(now.minusDays(random.nextInt(365)).atStartOfDay(ZoneId.systemDefault())));
-            return t;
-        }).collect(toList());
-
-        this.tmpDir = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
-        this.tmpDir.deleteOnExit();
-        this.tracksDir = new File(this.tmpDir, DatastoreConfig.TRACK_DIRECTORY);
-        this.tracksDir.mkdirs();
-
-        // Try to find gpsbabel
-        File tmp = null;
-        for(String possibleExe : new String[]{"/usr/bin/gpsbabel", "/usr/local/bin/gpsbabel", "/opt/local/bin/gpsbabel"}) {
-            tmp = new File(possibleExe);
-            if(tmp.canExecute()) {
-                break;
-            }
-			tmp = null;
-        }
-        if(tmp == null) {
-            throw new IllegalStateException("No gpsbabel found, cannot execute test!");
-        }
-        this.gpsBabel = tmp;
+        this.defaultTestData = Stream.of(1, 2, 3).map(i ->
+            new TrackEntity(Integer.toString(i), GregorianCalendar.from(now.minusDays(random.nextInt(365)).atStartOfDay(ZoneId.systemDefault())))
+        ).collect(toList());
     }
 
     @Test
-    public void testGetTracks() {
-        final TrackRepository trackRepository = mock(TrackRepository.class);
-        when(trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"))).thenReturn(defaultTestData);
-        final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
+    public void testGetTracks() throws Exception {
+        final Sort sort = Sort.by("coveredOn").ascending();
+        when(trackRepository.findAll(sort)).thenReturn(defaultTestData);
 
-        final List<TrackEntity> tracks = tracksController.getTracks();
+        mockMvc
+            .perform(get("http://biking.michael-simons.eu/api/tracks"))
+            .andExpect(status().isOk())
+            .andExpect(content().json(objectMapper.writeValueAsString(this.defaultTestData)));
 
-        assertThat(tracks, is(equalTo(defaultTestData)));
+        verify(this.trackRepository).findAll(sort);
     }
 
     @Test
-    public void testDownloadTrack() throws IOException {
+    public void testDownloadTrack() throws Exception {
         final int validId = 23;
+        final String validPrettyId = Integer.toString(validId, 36);
+        when(trackIdParser.fromPrettyId(validPrettyId)).thenReturn(validId);
+        when(trackIdParser.fromPrettyId("X")).thenReturn(null);
 
         final TrackEntity t = mock(TrackEntity.class);
         when(t.getId()).thenReturn(validId);
-        final TrackRepository trackRepository = mock(TrackRepository.class);
         when(trackRepository.findById(validId)).thenReturn(Optional.of(t));
 
         final String content = "<foo>bar</foo>";
         final List<String> contentGpx = Arrays.asList(content, "gpx");
         final List<String> contentTcx = Arrays.asList(content, "tcx");
 
+        final File tracksDir = new File(this.datastoreBaseDirectory, DatastoreConfig.TRACK_DIRECTORY);
         final File trackGpx = new File(tracksDir, String.format("%d.gpx", validId));
         Files.write(trackGpx.toPath(), contentGpx);
         trackGpx.deleteOnExit();
-        when(t.getTrackFile(tmpDir, "gpx")).thenReturn(trackGpx);
+        when(t.getTrackFile(datastoreBaseDirectory, "gpx")).thenReturn(trackGpx);
 
         final File trackTcx = new File(tracksDir, String.format("%d.tcx", validId));
         Files.write(trackTcx.toPath(), contentTcx);
         trackTcx.deleteOnExit();
-        when(t.getTrackFile(tmpDir, "tcx")).thenReturn(trackTcx);
-
-        final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
-
-        MockHttpServletRequest request;
-        MockHttpServletResponse response;
+        when(t.getTrackFile(datastoreBaseDirectory, "tcx")).thenReturn(trackTcx);
 
         // Invalid formats...
-        response = new MockHttpServletResponse();
-        final String validPrettyId = Integer.toString(validId, 36);
-        tracksController.downloadTrack(validPrettyId, "html", new MockHttpServletRequest(), response);
-        assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack(Integer.toString(validId, 36), "", new MockHttpServletRequest(), response);
-        assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack(Integer.toString(validId, 36), null, new MockHttpServletRequest(), response);
-        assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
+        mockMvc.perform(get("http://biking.michael-simons.eu/tracks/{id}.html", validPrettyId))
+            .andExpect(status().isNotAcceptable());
+        mockMvc.perform(get("http://biking.michael-simons.eu/tracks/{id}.{format}", validPrettyId, ""))
+            .andExpect(status().isNotAcceptable());
+        mockMvc.perform(get("http://biking.michael-simons.eu/tracks/{id}.{format}", validPrettyId, null))
+            .andExpect(status().isNotAcceptable());
 
         // invalid ids
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack("öäü", "gpx", new MockHttpServletRequest(), response);
-        assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack("", "gpx", new MockHttpServletRequest(), response);
-        assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack(null, "gpx", new MockHttpServletRequest(), response);
-        assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_ACCEPTABLE)));
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack("1", "gpx", new MockHttpServletRequest(), response);
-        assertThat(response.getStatus(), is(equalTo(HttpServletResponse.SC_NOT_FOUND)));
+        mockMvc.perform(get("http://biking.michael-simons.eu/tracks/{id}.gpx", "X"))
+            .andExpect(status().isNotAcceptable());
+        mockMvc.perform(get("http://biking.michael-simons.eu/tracks/{id}.gpx", "1"))
+            .andExpect(status().isNotFound());
 
-        request = new MockHttpServletRequest();
-        request.setAttribute("org.apache.tomcat.sendfile.support", true);
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack(Integer.toString(validId, 36), "gpx", request, response);
-        assertThat(response.getContentType(), is(equalTo("application/gpx+xml")));
-        assertThat(response.getHeader("Content-Disposition"), is(equalTo(String.format("attachment; filename=\"%s.gpx\"", validPrettyId))));
-        assertThat(request.getAttribute("org.apache.tomcat.sendfile.filename"), is(equalTo(trackGpx.getAbsolutePath())));
-        assertThat(request.getAttribute("org.apache.tomcat.sendfile.start"), is(equalTo(0l)));
-        assertThat(request.getAttribute("org.apache.tomcat.sendfile.end"), is(equalTo(trackGpx.length())));
+        mockMvc.perform(get("http://biking.michael-simons.eu/tracks/{id}.gpx", validPrettyId)
+                .requestAttr("org.apache.tomcat.sendfile.support", true))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/gpx+xml"))
+            .andExpect(header().stringValues("Content-Disposition", String.format("attachment; filename=\"%s.gpx\"", validPrettyId)))
+            .andExpect(request().attribute("org.apache.tomcat.sendfile.filename", trackGpx.getAbsolutePath()))
+            .andExpect(request().attribute("org.apache.tomcat.sendfile.start", 0l))
+            .andExpect(request().attribute("org.apache.tomcat.sendfile.end", trackGpx.length()));
 
-        request = new MockHttpServletRequest();
-        request.setAttribute("org.apache.tomcat.sendfile.support", false);
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack(Integer.toString(validId, 36), "gpx", request, response);
-        assertThat(response.getContentType(), is(equalTo("application/gpx+xml")));
-        assertThat(response.getHeader("Content-Disposition"), is(equalTo(String.format("attachment; filename=\"%s.gpx\"", validPrettyId))));
-        assertThat(response.getContentAsString(), is(equalTo(contentGpx.stream().collect(Collectors.joining("\n", "", "\n")))));
+        mockMvc.perform(get("http://biking.michael-simons.eu/tracks/{id}.gpx", validPrettyId)
+            .requestAttr("org.apache.tomcat.sendfile.support", false))
+            .andExpect(status().isOk())
+            .andExpect(header().stringValues("Content-Disposition", String.format("attachment; filename=\"%s.gpx\"", validPrettyId)))
+            .andExpect(request().attribute("org.apache.tomcat.sendfile.filename", nullValue()))
+            .andExpect(content().contentType("application/gpx+xml"))
+            .andExpect(content().string(contentGpx.stream().collect(Collectors.joining("\n", "", "\n"))));
 
-        request = new MockHttpServletRequest();
-        response = new MockHttpServletResponse();
-        tracksController.downloadTrack(Integer.toString(validId, 36), "tcx", request, response);
-        assertThat(response.getContentType(), is(equalTo("application/xml")));
-        assertThat(response.getHeader("Content-Disposition"), is(equalTo(String.format("attachment; filename=\"%s.tcx\"", validPrettyId))));
-        assertThat(response.getContentAsString(), is(equalTo(contentTcx.stream().collect(Collectors.joining("\n", "", "\n")))));
+        mockMvc.perform(get("http://biking.michael-simons.eu/tracks/{id}.tcx", validPrettyId))
+            .andExpect(status().isOk())
+            .andExpect(header().stringValues("Content-Disposition", String.format("attachment; filename=\"%s.tcx\"", validPrettyId)))
+            .andExpect(content().contentType("application/xml"))
+            .andExpect(content().string(contentTcx.stream().collect(Collectors.joining("\n", "", "\n"))));
     }
 
     @Test
-    public void testGetTrack() {
+    public void testGetTrack() throws Exception {
         final int validId = 23;
+        final String validPrettyId = Integer.toString(validId, 36);
+        when(trackIdParser.fromPrettyId(validPrettyId)).thenReturn(validId);
+        when(trackIdParser.fromPrettyId("X")).thenReturn(null);
 
         final TrackEntity t = mock(TrackEntity.class);
         when(t.getId()).thenReturn(validId);
-        final TrackRepository trackRepository = mock(TrackRepository.class);
+        when(t.getName()).thenReturn("testtrack");
         when(trackRepository.findById(validId)).thenReturn(Optional.of(t));
 
-        final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
+        mockMvc.perform(get("http://biking.michael-simons.eu/api/tracks/{id}", validPrettyId))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name", is("testtrack")));
 
-        ResponseEntity<TrackEntity> response;
-        response = tracksController.getTrack(Integer.toString(validId, 36));
-        assertThat(response.getBody(), is(notNullValue()));
-        assertThat(response.getBody().getId(), is(equalTo(validId)));
+        mockMvc.perform(get("http://biking.michael-simons.eu/api/tracks/{id}", "X"))
+            .andExpect(status().isNotAcceptable());
 
-        response = tracksController.getTrack(null);
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
-
-        response = tracksController.getTrack("");
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
-
-        response = tracksController.getTrack("öäü");
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
-
-        response = tracksController.getTrack("1");
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_FOUND)));
+        mockMvc.perform(get("http://biking.michael-simons.eu/api/tracks/{id}", "1"))
+            .andExpect(status().isNotFound());
     }
 
     @Test
+    @Ignore
     public void testDeleteTrack() throws IOException {
         final int validId = 23;
 
@@ -261,32 +245,32 @@ public class TracksControllerTest {
         when(t.getTrackFile(any(File.class), same("tcx"))).thenReturn(tcx);
         when(trackRepository.findById(validId + 1)).thenReturn(Optional.of(t));
 
-        final TracksController tracksController = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
+        final TracksController tracksController = new TracksController(null, trackRepository, this.datastoreBaseDirectory, "this.gpsBabel.getAbsolutePath()", null);
         ResponseEntity<Void> response;
 
         response = tracksController.deleteTrack(null);
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+        assertThat(response.getBody(), is(nullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
 
         response = tracksController.deleteTrack("");
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+        assertThat(response.getBody(), is(nullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
 
         response = tracksController.deleteTrack("öäü");
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+        assertThat(response.getBody(), is(nullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
 
         response = tracksController.deleteTrack("1");
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+        assertThat(response.getBody(), is(nullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_FOUND)));
 
         response = tracksController.deleteTrack(Integer.toString(validId, 36));
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+        assertThat(response.getBody(), is(nullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.INTERNAL_SERVER_ERROR)));
 
         assertTrue(gpx.exists() && gpx.exists());
         response = tracksController.deleteTrack(Integer.toString(validId +1, 36));
-        assertThat(response.getBody(), is(CoreMatchers.nullValue()));
+        assertThat(response.getBody(), is(nullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NO_CONTENT)));
         assertFalse(gpx.exists() && gpx.exists());
     }
@@ -307,72 +291,61 @@ public class TracksControllerTest {
             }
         };
 
-        final TrackRepository trackRepository = mock(TrackRepository.class);
         when(trackRepository.save(any(TrackEntity.class))).thenReturn(track);
-
-        final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         // Test valid track
         MockMultipartFile trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/test.tcx"));
         mockMvc
                 .perform(
-                        fileUpload("http://biking.michael-simons.eu/api/tracks")
+                        multipart("http://biking.michael-simons.eu/api/tracks")
                             .file(trackData)
                             .param("name", "name")
                             .param("coveredOn", "2014-01-01T21:21:21.000Z")
                             .param("description", "description")
                             .param("type", "biking")
                 )
-                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(track)));
-        Assert.assertTrue(new File(tmpDir, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
-        Assert.assertTrue(new File(tmpDir, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
+        assertTrue(new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
+        assertTrue(new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
 
         trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/biking_pictures.rss"));
         mockMvc
                 .perform(
-                        fileUpload("http://biking.michael-simons.eu/api/tracks")
+                        multipart("http://biking.michael-simons.eu/api/tracks")
                             .file(trackData)
                             .param("name", "name")
                             .param("coveredOn", "2014-01-01T21:21:21.000Z")
                             .param("description", "description")
                             .param("type", "biking")
                 )
-                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isBadRequest());
-        Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
-        Assert.assertFalse("There must not be any files leftover", new File(tmpDir, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
-        Mockito.verify(trackRepository, Mockito.times(1)).delete(track);
+        assertFalse("There must not be any files leftover", new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
+        assertFalse("There must not be any files leftover", new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
+        verify(trackRepository, times(1)).delete(track);
     }
 
     @Test
     public void shouldNotCreateInvalidTracks() throws Exception {
-        final TrackRepository trackRepository = mock(TrackRepository.class);
-        final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
-
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
         // Empty data
         final MockMultipartFile multipartFile = new MockMultipartFile("trackData", new byte[0]);
         mockMvc
-                .perform(
-                        fileUpload("http://biking.michael-simons.eu/api/tracks")
-                            .file(multipartFile)
-                            .param("name", "poef")
-                            .param("coveredOn", "2014-03-24T23:00:00.000Z")
-                            .param("description", "description")
-                )
-                .andExpect(status().isBadRequest());
+            .perform(
+                multipart("http://biking.michael-simons.eu/api/tracks")
+                    .file(multipartFile)
+                    .param("name", "poef")
+                    .param("coveredOn", "2014-03-24T23:00:00.000Z")
+                    .param("description", "description")
+            )
+            .andExpect(status().isBadRequest());
 
         // No data
         mockMvc
             .perform(
-                    fileUpload("http://biking.michael-simons.eu/api/tracks")
-                        .param("name", "poef")
-                        .param("coveredOn", "2014-03-24T23:00:00.000Z")
-                        .param("description", "description")
+                multipart("http://biking.michael-simons.eu/api/tracks")
+                    .param("name", "poef")
+                    .param("coveredOn", "2014-03-24T23:00:00.000Z")
+                    .param("description", "description")
             )
             .andExpect(status().isBadRequest());
 
@@ -381,16 +354,12 @@ public class TracksControllerTest {
 
     @Test
     public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
-        final TrackRepository trackRepository = mock(TrackRepository.class);
         when(trackRepository.save(any(TrackEntity.class))).thenThrow(new DataIntegrityViolationException("fud"));
-
-        final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         MockMultipartFile trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/test.tcx"));
         mockMvc
                 .perform(
-                        fileUpload("http://biking.michael-simons.eu/api/tracks")
+                        multipart("http://biking.michael-simons.eu/api/tracks")
                             .file(trackData)
                             .param("name", "name")
                             .param("coveredOn", "2014-01-01T21:21:21.000Z")
@@ -399,8 +368,8 @@ public class TracksControllerTest {
                 )
                 .andExpect(status().isConflict());
 
-        Mockito.verify(trackRepository).save(Mockito.any(TrackEntity.class));
-        Mockito.verifyNoMoreInteractions(trackRepository);
+        verify(trackRepository).save(Mockito.any(TrackEntity.class));
+        verifyNoMoreInteractions(trackRepository);
     }
 
     @Test
@@ -409,62 +378,106 @@ public class TracksControllerTest {
         when(track.getId()).thenReturn(4223);
         when(track.getPrettyId()).thenReturn(Integer.toString(4223, 36));
         // return a directory so that the controller cannot write to it
-        when(track.getTrackFile(this.tmpDir, "tcx")).thenReturn(this.tmpDir);
+        when(track.getTrackFile(this.datastoreBaseDirectory, "tcx")).thenReturn(this.datastoreBaseDirectory);
 
         final TrackRepository trackRepository = mock(TrackRepository.class);
-        final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
+        final TracksController controller = new TracksController(null, trackRepository, this.datastoreBaseDirectory, null, null);
 
-        this.expectedException.expect(FileNotFoundException.class);	
+        this.expectedException.expect(FileNotFoundException.class);
         controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 
         verify(track).getId();
         verify(track).getPrettyId();
-        verify(track).getTrackFile(this.tmpDir, "tcx");
+        verify(track).getTrackFile(this.datastoreBaseDirectory, "tcx");
         verifyNoMoreInteractions(track);
     }
 
     @Test
     public void shouldHandleIOExceptionsGracefully2() throws Exception {
         TrackEntity track = Mockito.mock(TrackEntity.class);
-        when(track.getTrackFile(this.tmpDir, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));
-        when(track.getTrackFile(this.tmpDir, "gpx")).thenReturn(File.createTempFile("4223", ".gpx"));
+        when(track.getTrackFile(this.datastoreBaseDirectory, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));
+        when(track.getTrackFile(this.datastoreBaseDirectory, "gpx")).thenReturn(File.createTempFile("4223", ".gpx"));
 
         final TrackRepository trackRepository = mock(TrackRepository.class);
-        final TracksController controller = new TracksController(trackRepository, this.tmpDir, new File("/iam/not/gpsBabel").getAbsolutePath(), null);
+        final TracksController controller = new TracksController(null, trackRepository, this.datastoreBaseDirectory, new File("/iam/not/gpsBabel").getAbsolutePath(), null);
 
         this.expectedException.expect(IOException.class);
         this.expectedException.expectMessage(new RegexMatcher("Cannot run program \"/iam/not/gpsBabel\": error=2,.+"));
         controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
 
-        Mockito.verify(track).getTrackFile(this.tmpDir, "tcx");
-        Mockito.verify(track).getTrackFile(this.tmpDir, "gpx");
-        Mockito.verifyNoMoreInteractions(track);
-    }
-
-    @Test
-    public void shouldHandleInvalidTcxFiles() throws Exception {
-        TrackEntity track = Mockito.mock(TrackEntity.class);
-        when(track.getTrackFile(this.tmpDir, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));
-        when(track.getTrackFile(this.tmpDir, "gpx")).thenReturn(File.createTempFile("4223", ".gpx"));
-
-        final TrackRepository trackRepository = mock(TrackRepository.class);
-        final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), null);
-
-        this.expectedException.expect(RuntimeException.class);
-        this.expectedException.expectMessage("GPSBabel could not convert the input file!");
-        controller.storeFile(track, this.getClass().getResourceAsStream("/test-invalid.tcx"));
-
-        verify(track).getTrackFile(this.tmpDir, "tcx");
-        verify(track).getTrackFile(this.tmpDir, "gpx");
+        verify(track).getTrackFile(this.datastoreBaseDirectory, "tcx");
+        verify(track).getTrackFile(this.datastoreBaseDirectory, "gpx");
         verifyNoMoreInteractions(track);
     }
 
     @Test
-    public void testGetHome() {
-        final Coordinate home = new Coordinate("13.408056", "52.518611");
-        final TrackRepository trackRepository = mock(TrackRepository.class);
-        final TracksController controller = new TracksController(trackRepository, this.tmpDir, this.gpsBabel.getAbsolutePath(), home);
+    public void shouldHandleInvalidTcxFiles() throws Exception {
+        final TrackEntity track = Mockito.mock(TrackEntity.class);
+        when(track.getTrackFile(this.datastoreBaseDirectory, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));
+        when(track.getTrackFile(this.datastoreBaseDirectory, "gpx")).thenReturn(File.createTempFile("4223", ".gpx"));
+        when(trackRepository.save(any(TrackEntity.class))).thenReturn(track);
 
-        Assert.assertEquals(home, controller.getHome());
+        mockMvc
+            .perform(
+                multipart("http://biking.michael-simons.eu/api/tracks")
+                    .file(new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/test-invalid.tcx")))
+                    .param("name", "name")
+                    .param("coveredOn", "2014-01-01T21:21:21.000Z")
+                    .param("description", "description")
+                    .param("type", "biking")
+            )
+            .andExpect(status().isBadRequest());
+
+        verify(track, times(2)).getTrackFile(this.datastoreBaseDirectory, "tcx");
+        verify(track, times(2)).getTrackFile(this.datastoreBaseDirectory, "gpx");
+        verifyNoMoreInteractions(track);
+    }
+
+    @Test
+    public void testGetHome() throws Exception {
+        mockMvc.perform(get("http://biking.michael-simons.eu/api/home"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.longitude", is(home.getLongitude().doubleValue())))
+            .andExpect(jsonPath("$.latitude", is(home.getLatitude().doubleValue())));
+    }
+
+    @TestConfiguration
+    static class TracksControllerTestConfig implements EnvironmentAware {
+        private ConfigurableEnvironment environment;
+
+        @Bean
+        public File datastoreBaseDirectory() {
+            final File datastoreBaseDirectory  = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
+            datastoreBaseDirectory.deleteOnExit();
+            new File(datastoreBaseDirectory, DatastoreConfig.TRACK_DIRECTORY).mkdirs();
+            return datastoreBaseDirectory;
+        }
+
+        @Bean
+        public Coordinate home() {
+            return new Coordinate(new BigDecimal("-122.41942"), new BigDecimal("37.77493"));
+        }
+
+
+        @Override
+        public void setEnvironment(Environment environment) {
+            this.environment = (ConfigurableEnvironment)environment;
+        }
+
+        @PostConstruct
+        void configureGPSBabel() {
+            File tmp = null;
+            for(String possibleExe : new String[]{"/usr/bin/gpsbabel", "/usr/local/bin/gpsbabel", "/opt/local/bin/gpsbabel"}) {
+                tmp = new File(possibleExe);
+                if(tmp.canExecute()) {
+                    break;
+                }
+                tmp = null;
+            }
+            if(tmp == null) {
+                throw new IllegalStateException("No gpsbabel found, cannot execute test!");
+            }
+            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(environment, "biking2.gpsBabel = " + tmp.getAbsolutePath());
+        }
     }
 }

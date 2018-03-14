@@ -53,6 +53,7 @@ class OEmbedController {
         ACCEPTABLE_FORMATS = Collections.unmodifiableMap(hlp);
     }
 
+    private final TrackIdParser trackIdParser;
     private final TrackRepository trackRepository;
     private final Coordinate home;
 
@@ -67,7 +68,7 @@ class OEmbedController {
     ) {
         ResponseEntity<OEmbedResponse> rv;
         final Matcher m = EMBEDDABLE_TRACK_URL_PATTERN.matcher(url);
-        final Integer id = m.matches() ? TrackEntity.getId(m.group(1)) : null;
+        final Integer id = m.matches() ? trackIdParser.fromPrettyId(m.group(1)) : null;
         final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
         if (id == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -116,7 +117,7 @@ class OEmbedController {
             final Model model,
             final HttpServletResponse response
     ) {
-        final Integer requestedId = TrackEntity.getId(id);
+        final Integer requestedId = trackIdParser.fromPrettyId(id);
         TrackEntity track;
         String rv = null;
         if (requestedId == null) {

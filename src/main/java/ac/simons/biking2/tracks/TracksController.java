@@ -15,29 +15,10 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.tracks.gpx.GPX;
 import ac.simons.biking2.support.JAXBContextFactory;
 import ac.simons.biking2.support.ResourceNotFoundException;
 import ac.simons.biking2.tracks.TrackEntity.Type;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
-import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import ac.simons.biking2.tracks.gpx.GPX;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +35,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -74,13 +75,15 @@ class TracksController {
         ACCEPTABLE_FORMATS = Collections.unmodifiableMap(hlp);
     }
 
+    private final TrackIdParser trackIdParser;
     private final TrackRepository trackRepository;
     private final File datastoreBaseDirectory;
     private final String gpsBabel;
     private final Coordinate home;
     private final JAXBContext gpxContext;
 
-    TracksController(final TrackRepository trackRepository, final File datastoreBaseDirectory, @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") final String gpsBabel, final Coordinate home) {
+    TracksController(final TrackIdParser trackIdParser, final TrackRepository trackRepository, final File datastoreBaseDirectory, @Value("${biking2.gpsBabel:/opt/local/bin/gpsbabel}") final String gpsBabel, final Coordinate home) {
+        this.trackIdParser = trackIdParser;
         this.trackRepository = trackRepository;
         this.datastoreBaseDirectory = datastoreBaseDirectory;
         this.gpsBabel = gpsBabel;
@@ -177,7 +180,7 @@ class TracksController {
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.GET)
     @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<TrackEntity> getTrack(@PathVariable final String id) {
-        final Integer requestedId = TrackEntity.getId(id);
+        final Integer requestedId = trackIdParser.fromPrettyId(id);
 
         return requestedId == null ? new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE) : this.trackRepository
                 .findById(requestedId)
@@ -189,8 +192,7 @@ class TracksController {
     @PreAuthorize("isAuthenticated()")
     @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<Void> deleteTrack(@PathVariable final String id) {
-        final Integer requestedId = TrackEntity.getId(id);
-
+        final Integer requestedId = trackIdParser.fromPrettyId(id);
 
         ResponseEntity<Void> rv;
         if (requestedId == null) {
@@ -217,7 +219,7 @@ class TracksController {
             final HttpServletRequest request,
             final HttpServletResponse response
     ) throws IOException {
-        final Integer requestedId = TrackEntity.getId(id);
+        final Integer requestedId = trackIdParser.fromPrettyId(id);
         final String requestedFormat = Optional.ofNullable(format).orElse("").toLowerCase();
         if (requestedId == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);

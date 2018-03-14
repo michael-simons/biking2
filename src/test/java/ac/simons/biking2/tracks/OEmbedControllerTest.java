@@ -163,7 +163,7 @@ public class OEmbedControllerTest {
 
         @Bean
         public OEmbedController oEmbedController(TrackRepository trackRepository, Coordinate home) {
-            return new OEmbedController(trackRepository, home);
+            return new OEmbedController(new TrackIdParser(), trackRepository, home);
         }
     }
 }

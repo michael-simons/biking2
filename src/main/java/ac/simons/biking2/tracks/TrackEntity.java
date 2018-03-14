@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.io.File;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Calendar;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -39,12 +42,10 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import java.io.File;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Calendar;
 
 /**
  * @author Michael J. Simons, 2014-02-08
@@ -111,21 +112,6 @@ class TrackEntity implements Serializable {
     TrackEntity(final String name, final Calendar coveredOn) {
         this.name = name;
         this.coveredOn = coveredOn;
-    }
-
-    /**
-     * Converts a string to the real numeric id
-     * @param fromPrettyId
-     * @return
-     */
-    public static Integer getId(final String fromPrettyId) {
-        Integer rv = null;
-        try {
-            rv = Integer.parseInt(fromPrettyId, 36);
-        } catch (NullPointerException | NumberFormatException e) {
-            log.warn("Could not parse pretty id '" + fromPrettyId + "'", e);
-        }
-        return rv;
     }
 
     @JsonProperty("id")
