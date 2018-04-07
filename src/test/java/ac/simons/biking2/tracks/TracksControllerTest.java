@@ -34,8 +34,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.TestPropertySourceUtils;
@@ -59,11 +57,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.rules.ExpectedException.none;
 import static org.mockito.ArgumentMatchers.any;
@@ -74,6 +70,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -222,13 +219,16 @@ public class TracksControllerTest {
             .andExpect(status().isNotFound());
     }
 
-    @Test
-    @Ignore
-    public void testDeleteTrack() throws IOException {
+    @Test   
+    public void testDeleteTrack() throws IOException, Exception {
         final int validId = 23;
-
-        final TrackRepository trackRepository = mock(TrackRepository.class);
-
+        final int validExistingId = 23 + 1;
+        final String validPrettyId = Integer.toString(validId, 36);
+        final String validPrettyExistingId = Integer.toString(validExistingId, 36);
+        when(trackIdParser.fromPrettyId(validPrettyId)).thenReturn(validId);
+        when(trackIdParser.fromPrettyId(validPrettyExistingId)).thenReturn(validExistingId);
+        when(trackIdParser.fromPrettyId("X")).thenReturn(null);
+        
         TrackEntity t;
         t = mock(TrackEntity.class);
         when(t.getId()).thenReturn(validId);
@@ -238,41 +238,27 @@ public class TracksControllerTest {
         when(trackRepository.findById(validId)).thenReturn(Optional.of(t));
 
         t = mock(TrackEntity.class);
-        when(t.getId()).thenReturn(validId + 1);
+        when(t.getId()).thenReturn(validExistingId);
         final File gpx = File.createTempFile("pppp-", ".gpx");
         when(t.getTrackFile(any(File.class), same("gpx"))).thenReturn(gpx);
         final File tcx = File.createTempFile("pppp-", ".tcx");
         when(t.getTrackFile(any(File.class), same("tcx"))).thenReturn(tcx);
-        when(trackRepository.findById(validId + 1)).thenReturn(Optional.of(t));
-
-        final TracksController tracksController = new TracksController(null, trackRepository, this.datastoreBaseDirectory, "this.gpsBabel.getAbsolutePath()", null);
-        ResponseEntity<Void> response;
-
-        response = tracksController.deleteTrack(null);
-        assertThat(response.getBody(), is(nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
-
-        response = tracksController.deleteTrack("");
-        assertThat(response.getBody(), is(nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
-
-        response = tracksController.deleteTrack("öäü");
-        assertThat(response.getBody(), is(nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE)));
-
-        response = tracksController.deleteTrack("1");
-        assertThat(response.getBody(), is(nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NOT_FOUND)));
-
-        response = tracksController.deleteTrack(Integer.toString(validId, 36));
-        assertThat(response.getBody(), is(nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.INTERNAL_SERVER_ERROR)));
-
+        when(trackRepository.findById(validExistingId)).thenReturn(Optional.of(t));
+        
+        // invalid ids
+        mockMvc.perform(delete("http://biking.michael-simons.eu/api/tracks/{id}", "X"))
+            .andExpect(status().isNotAcceptable());
+        mockMvc.perform(delete("http://biking.michael-simons.eu/api/tracks/{id}", "1"))
+            .andExpect(status().isNotFound());
+        mockMvc.perform(delete("http://biking.michael-simons.eu/api/tracks/{id}.html", validPrettyId))
+            .andExpect(status().isNotFound());
+        mockMvc.perform(delete("http://biking.michael-simons.eu/api/tracks/{id}", validPrettyId))
+            .andExpect(status().isInternalServerError());
+        
         assertTrue(gpx.exists() && gpx.exists());
-        response = tracksController.deleteTrack(Integer.toString(validId +1, 36));
-        assertThat(response.getBody(), is(nullValue()));
-        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.NO_CONTENT)));
-        assertFalse(gpx.exists() && gpx.exists());
+        mockMvc.perform(delete("http://biking.michael-simons.eu/api/tracks/{id}", validPrettyExistingId))
+            .andExpect(status().isNoContent());
+        assertFalse(gpx.exists() && gpx.exists());                
     }
 
     @Test

@@ -202,6 +202,7 @@ class TracksController {
             final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
             final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
             if (tcxFile.delete() && gpxFile.delete()) {
+                log.debug("Deleted {} and {}", tcxFile, gpxFile);
                 this.trackRepository.delete(track);
                 rv = new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
