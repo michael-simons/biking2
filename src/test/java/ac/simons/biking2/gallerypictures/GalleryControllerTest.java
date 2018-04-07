@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,19 +38,19 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static java.util.TimeZone.getTimeZone;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 
 /**
  * @author Michael J. Simons, 2014-03-07
@@ -89,7 +89,7 @@ public class GalleryControllerTest {
 
         mockMvc
                 .perform(
-                        fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
+                        multipart("http://biking.michael-simons.eu/api/galleryPictures")
                         .file(multipartFile)
                         .param("takenOn", "2014-03-24T23:00:00.000Z")
                         .param("description", "description")
@@ -120,7 +120,7 @@ public class GalleryControllerTest {
 
         mockMvc
                 .perform(
-                        fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
+                        multipart("http://biking.michael-simons.eu/api/galleryPictures")
                         .file(multipartFile)
                         .param("takenOn", "2014-03-24T23:00:00.000Z")
                         .param("description", "description")
@@ -140,10 +140,10 @@ public class GalleryControllerTest {
 
         mockMvc
                 .perform(
-                        fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
-                        .file(multipartFile)
-                        .param("takenOn", "2014-03-24T23:00:00.000Z")
-                        .param("description", "description")
+                        multipart("http://biking.michael-simons.eu/api/galleryPictures")
+                            .file(multipartFile)
+                            .param("takenOn", "2014-03-24T23:00:00.000Z")
+                            .param("description", "description")
                 )
                 .andExpect(status().isBadRequest());
     }
@@ -159,7 +159,7 @@ public class GalleryControllerTest {
         final MockMultipartFile multipartFile = new MockMultipartFile("imageData", new byte[0]);
         mockMvc
                 .perform(
-                        fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
+                        multipart("http://biking.michael-simons.eu/api/galleryPictures")
                             .file(multipartFile)
                             .param("takenOn", "2014-03-24T23:00:00.000Z")
                             .param("description", "description")
@@ -170,7 +170,7 @@ public class GalleryControllerTest {
         // No data
         mockMvc
             .perform(
-                    fileUpload("http://biking.michael-simons.eu/api/galleryPictures")
+                    multipart("http://biking.michael-simons.eu/api/galleryPictures")
                         .param("takenOn", "2014-03-24T23:00:00.000Z")
                         .param("description", "description")
             )
@@ -185,10 +185,7 @@ public class GalleryControllerTest {
 
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get("http://biking.michael-simons.eu/api/galleryPictures/23.jpg")
-
-            )
+            .perform(get("http://biking.michael-simons.eu/api/galleryPictures/23.jpg"))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isNotFound());
 
@@ -227,11 +224,8 @@ public class GalleryControllerTest {
         // Explicit false property
         final MvcResult result =
             mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                            .get("http://biking.michael-simons.eu/api/galleryPictures/42.jpg")
-                            .requestAttr("org.apache.tomcat.sendfile.support", false)
-                )
+                .perform(get("http://biking.michael-simons.eu/api/galleryPictures/42.jpg")
+                        .requestAttr("org.apache.tomcat.sendfile.support", false))
                 .andExpect(status().isOk())
                 .andExpect(request().attribute("org.apache.tomcat.sendfile.filename", CoreMatchers.nullValue()))
                 .andReturn();
@@ -243,10 +237,8 @@ public class GalleryControllerTest {
 
         // Test streaming of resources
         mockMvc
-            .perform(
-                    MockMvcRequestBuilders
-                        .get("http://biking.michael-simons.eu/api/galleryPictures/42.jpg")
-                        .requestAttr("org.apache.tomcat.sendfile.support", true)
+            .perform(get("http://biking.michael-simons.eu/api/galleryPictures/42.jpg")
+                    .requestAttr("org.apache.tomcat.sendfile.support", true)
             )
             .andExpect(status().isOk())
             .andExpect(request().attribute("org.apache.tomcat.sendfile.filename", imageFile.getAbsolutePath()))

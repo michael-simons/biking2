@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 michael-simons.eu.
+ * Copyright 2017-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.hamcrest.Description;
 /**
  * @author Michael J. Simons, 2017-04-19
  */
-public class RegexMatcher extends BaseMatcher {
+public class RegexMatcher extends BaseMatcher<String> {
 
     private final String regex;
 
