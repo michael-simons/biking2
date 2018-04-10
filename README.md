@@ -1,6 +1,6 @@
 # biking2
 
-[![Build Status](https://travis-ci.org/michael-simons/biking2.svg?branch=public)](https://travis-ci.org/michael-simons/biking2) [![Test coverage](https://sonarqube.com/api/badges/measure?key=eu.michael-simons:biking2:public&metric=coverage)](https://sonarqube.com/dashboard/index/eu.michael-simons:biking2:public) [![Quality Gate](https://sonarqube.com/api/badges/gate?key=eu.michael-simons:biking2:public&metric=coverage)](https://sonarqube.com/dashboard/index/eu.michael-simons:biking2:public)
+[![Build Status](https://travis-ci.org/michael-simons/biking2.svg?branch=public)](https://travis-ci.org/michael-simons/biking2) [![Test coverage](https://sonarcloud.io/api/project_badges/measure?project=eu.michael-simons%3Abiking2&metric=coverage)](https://sonarcloud.io/dashboard?id=eu.michael-simons%3Abiking2) [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=eu.michael-simons%3Abiking2&metric=alert_status)](https://sonarcloud.io/dashboard?id=eu.michael-simons%3Abiking2)
 
 ## Abstract
 
