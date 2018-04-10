@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -219,7 +219,7 @@ public class BikeEntity implements Serializable {
 
     @JsonProperty
     public int getLastMilage() {
-        return this.milages == null || this.milages.isEmpty() ? 0 : this.milages.get(this.milages.size() - 1).getAmount().intValue();
+        return this.milages.isEmpty() ? 0 : this.milages.get(this.milages.size() - 1).getAmount().intValue();
     }
 
     /**
@@ -257,7 +257,7 @@ public class BikeEntity implements Serializable {
     }
 
     public boolean hasMilages() {
-        return !(this.milages == null || this.milages.isEmpty());
+        return !this.milages.isEmpty();
     }
 
     public static int comparePeriodsByValue(final Map.Entry<LocalDate, Integer> period1, final Map.Entry<LocalDate, Integer> period2) {
