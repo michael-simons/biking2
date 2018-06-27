@@ -35,9 +35,6 @@
     </developer>
   </developers>
 
-  <prerequisites>
-    <maven>3.3</maven>
-  </prerequisites>
 
   <scm>
     <connection>scm:git:git@github.com:michael-simons/biking2.git</connection>
@@ -341,6 +338,9 @@
             <configuration>
               <rules>
                 <DependencyConvergence />
+                <requireMavenVersion>
+                  <version>3.5.4</version>
+                </requireMavenVersion>
               </rules>
             </configuration>
             <goals>
