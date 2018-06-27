@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 michael-simons.eu.
+ * Copyright 2017-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author Michael J. Simons, 2017-02-03
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = RANDOM_PORT, classes = Application.class)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-@TestPropertySource(locations = "/application-test.properties")
+@TestPropertySource(locations = "/application-test.properties", properties = "spring.main.banner-mode = LOG")
 public class EndpointConfigIT {
 
     @Autowired
@@ -47,10 +47,10 @@ public class EndpointConfigIT {
 
     @Test
     public void someEndpointsShouldBeAccessible() throws Exception {
-        final ResponseEntity<Map> vmProperties = template.getForEntity("/api/system/env/java.(runtime|vm).*", Map.class);
+        final ResponseEntity<Map> vmProperties = template.getForEntity("/api/system/env/java.runtime.version", Map.class);
         assertThat(vmProperties.getStatusCode(), is(equalTo(HttpStatus.OK)));
-        assertThat(vmProperties.getBody().containsKey("java.runtime.name"), is(true));
-        
+        assertThat(vmProperties.getBody().containsKey("property"), is(true));
+
         final ResponseEntity<Map> metrics = template.getForEntity("/api/system/metrics", Map.class);
         assertThat(metrics.getStatusCode(), is(equalTo(HttpStatus.OK)));
     }
