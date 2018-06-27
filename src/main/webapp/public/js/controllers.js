@@ -1,5 +1,5 @@
 /* 
- * Copyright 2014 Michael J. Simons.
+ * Copyright 2014-2018 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -502,12 +502,12 @@ biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', 
     
      $q.all([
 	 $http.get('/api/system/info'), 
-	 $http.get('/api/system/env/java.(runtime|vm).*'),
-	 $http.get('/api/banner')
+	 $http.get('/api/system/env/java.runtime.version'),
+	 $http.get('/api/banner', {headers:  {'Accept': 'text/plain'}})
      ]).then(function(values) {
 	$scope.info = values[0].data;	
 	$scope.info.versions['spring-boot'] = values[0].data['spring-boot.version'];
-	$scope.info.env = values[1].data;	
+	$scope.info.versions['java'] = values[1].data['property']['value'];
 	$scope.banner = values[2].data;
     });
 
@@ -516,22 +516,30 @@ biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', 
 	    return Math.round((bytes / Math.pow(1024, Math.floor(1))) * 10) / 10;
 	};
 
-	$http.get('/api/system/metrics').success(function(data) {
-	    $scope.metrics = data;
-	    $scope.metrics["mem.used"] = $scope.metrics.mem - $scope.metrics["mem.free"];
-	    $scope.humanizedUptime = moment.duration($scope.metrics.uptime).humanize();
-	    var max = 10;
-	    var cur = $scope.memoryConfig.series[0].data.length;
+	$q.all([
+        $http.get('/api/system/metrics/jvm.memory.max'),
+        $http.get('/api/system/metrics/jvm.memory.used'),
+        $http.get('/api/system/metrics/process.uptime')
+	]).then(function(values) {
+        $scope.metrics = new Array();
 
-	    if (cur === max) {
-		$scope.memoryConfig.series[0].data.splice(0, 1);
-		$scope.memoryConfig.series[1].data.splice(0, 1);
-		$scope.memoryConfig.xAxis.categories.splice(0, 1);
-	    }
-	    $scope.memoryConfig.series[0].data.push(formatKibiBytes($scope.metrics["mem.free"]));
-	    $scope.memoryConfig.series[1].data.push(formatKibiBytes($scope.metrics["mem.used"]));
-	    $scope.memoryConfig.xAxis.categories.push($filter('date')(new Date(), "HH:mm:ss"));
-	});
+        $scope.metrics["mem.max"]  = values[0].data['measurements'][0]['value'];
+        $scope.metrics["mem.used"] = values[1].data['measurements'][0]['value'];
+        $scope.metrics["mem.free"] = values[0].data['measurements'][0]['value'] - values[1].data['measurements'][0]['value'];
+        $scope.humanizedUptime = moment.duration(values[2].data['measurements'][0]['value'], 'seconds').humanize();
+
+        var max = 10;
+        var cur = $scope.memoryConfig.series[0].data.length;
+
+        if (cur === max) {
+            $scope.memoryConfig.series[0].data.splice(0, 1);
+            $scope.memoryConfig.series[1].data.splice(0, 1);
+            $scope.memoryConfig.xAxis.categories.splice(0, 1);
+        }
+        $scope.memoryConfig.series[0].data.push(formatKibiBytes($scope.metrics["mem.free"]));
+        $scope.memoryConfig.series[1].data.push(formatKibiBytes($scope.metrics["mem.used"]));
+        $scope.memoryConfig.xAxis.categories.push($filter('date')(new Date(), "HH:mm:ss"));
+    });
     };
 
     var timer = $interval(function() {

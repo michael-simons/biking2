@@ -45,9 +45,8 @@
 	<p>
 	    Running build <strong>{{info.versions.app || 'n/a'}}</strong> from <strong>{{info.buildDate || 'unknown'}}</strong>
 	    for <strong>{{ humanizedUptime || 'n/a'}}</strong>
-	    on Java <strong>{{ info.env["java.runtime.version"] || 'n/a'}}</strong>,
-	    using <strong>{{ metrics["mem.used"] | kibibytes }}</strong> of <strong>{{ metrics.mem | kibibytes }}</strong>.
-	    Maximal available heap memory is <strong>{{ metrics["heap"] | kibibytes }}</strong>.
+	    on Java <strong>{{ info.versions.java || 'n/a'}}</strong>,
+	    using <strong>{{ metrics["mem.used"] | kibibytes }}</strong> of <strong>{{ metrics["mem.max"] | kibibytes }}</strong>.
 	</p>
 
 	<div data-ng-highchart id="chart-memory"  config="memoryConfig" ></div>
