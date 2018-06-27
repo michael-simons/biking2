@@ -15,11 +15,12 @@
  */
 package ac.simons.biking2.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.env.EnvironmentEndpoint;
 import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -38,31 +39,37 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @SuppressWarnings({"squid:S1118"}) // This is not a utility class. It cannot have a private constructor.
 public class SecurityConfig {
 
-    @Configuration
-    @ConditionalOnBean(SecurityConfig.class)
-    protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-        @Override
-        protected void configure(final HttpSecurity http) throws Exception {
-            http
-                .httpBasic()
-                    .and()
-                .authorizeRequests()
-                    .antMatchers("/api/system/env/java.runtime.version")
-                        .permitAll()
-                    .requestMatchers(to(HealthEndpoint.class, InfoEndpoint.class, MetricsEndpoint.class))
-                        .permitAll()
-                    .requestMatchers(to(EnvironmentEndpoint.class))
-                        .authenticated()
-                    .antMatchers("/**").permitAll()
-                    .and()
-                .sessionManagement()
-                    .sessionCreationPolicy(STATELESS)
-                    .and()
-                .csrf()
-                    .disable()
-                .headers()
-                    .frameOptions() // OEmbedController#embedTrack uses an iframe
-                    .disable();
-        }
+    @Bean
+    WebSecurityConfigurerAdapter defaultWebSecurityConfigurerAdapter(@Value("${biking2.require-ssl:false}") final boolean requireSSL) {
+        return new WebSecurityConfigurerAdapter() {
+            @Override
+            protected void configure(final HttpSecurity http) throws Exception {
+                // @formatter:off
+                http
+                    .httpBasic()
+                        .and()
+                    .authorizeRequests()
+                        .antMatchers("/api/system/env/java.runtime.version")
+                            .permitAll()
+                        .requestMatchers(to(HealthEndpoint.class, InfoEndpoint.class, MetricsEndpoint.class))
+                            .permitAll()
+                        .requestMatchers(to(EnvironmentEndpoint.class))
+                            .authenticated()
+                        .antMatchers("/**").permitAll()
+                        .and()
+                    .sessionManagement()
+                        .sessionCreationPolicy(STATELESS)
+                        .and()
+                    .csrf()
+                        .disable()
+                    .headers()
+                        .frameOptions() // OEmbedController#embedTrack uses an iframe
+                        .disable();
+                // @formatter:on
+                if (requireSSL) {
+                    http.requiresChannel().anyRequest().requiresSecure();
+                }
+            }
+        };
     }
 }
