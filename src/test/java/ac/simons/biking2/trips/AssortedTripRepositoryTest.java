@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,5 +41,10 @@ public class AssortedTripRepositoryTest {
     @Test
     public void testGetTotalDistance() {
         assertThat(this.assortedTripRepository.getTotalDistance().doubleValue(), is(equalTo(43.8)));
+    }
+
+    @Test
+    public void testGetTotalDistanceInYear() {
+        assertThat(this.assortedTripRepository.getTotalDistanceInYear(2013).doubleValue(), is(equalTo(21.9)));
     }
 }

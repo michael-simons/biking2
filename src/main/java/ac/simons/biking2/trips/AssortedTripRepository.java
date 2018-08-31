@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,4 +26,7 @@ public interface AssortedTripRepository extends JpaRepository<AssortedTripEntity
 
     @Query("Select coalesce(sum(t.distance), 0) as totalDistance from AssortedTripEntity t")
     BigDecimal getTotalDistance();
+
+    @Query("Select coalesce(sum(t.distance), 0) as totalDistance from AssortedTripEntity t where extract(year from t.coveredOn) = :year")
+    BigDecimal getTotalDistanceInYear(Integer year);
 }
