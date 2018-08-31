@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 /**
  * @author Michael J. Simons, 2014-02-17
  */
@@ -53,7 +52,7 @@ class SummaryController {
 
         summary.setWorstPeriod(BikeEntity.getWorstPeriod(summarizedPeriods));
         summary.setBestPeriod(BikeEntity.getBestPeriod(summarizedPeriods));
-        summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(Entry::getValue).average().orElseGet(() -> 0.0));
+        summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(Entry::getValue).average().orElse(0.0));
 
         return summary;
     }
