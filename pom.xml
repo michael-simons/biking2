@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.6.RELEASE</version>
+    <version>2.1.1.RELEASE</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -107,8 +107,8 @@
       <artifactId>activemq-mqtt</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.projectreactor.ipc</groupId>
-      <artifactId>reactor-netty</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-reactor-netty</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -227,7 +227,7 @@
     <dependency>
       <groupId>eu.michael-simons</groupId>
       <artifactId>wro4j-spring-boot-starter</artifactId>
-      <version>0.4.2</version>
+      <version>0.5.1</version>
     </dependency>
   </dependencies>
 
