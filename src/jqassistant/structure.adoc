@@ -7,7 +7,7 @@ All the blackboxes above should correspond to Java packages. Those packages shou
 [source,cypher,role=constraint,requiresConcepts="structure:configPackages,structure:supportingPackages"]
 .Top level packages should conform to the main building blocks.
 ----
-MATCH (a:Artifact {type: 'jar'})
+MATCH (a:Main:Artifact)
 MATCH (a) -[:CONTAINS]-> (p1:Package) -[:DEPENDS_ON]-> (p2:Package) <-[:CONTAINS]- (a)
 WHERE not p1:Config
   and not (p1) -[:CONTAINS]-> (p2)
