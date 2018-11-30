@@ -45,8 +45,8 @@ RETURN
 ----
 MATCH
   (t:Repository)
-WHERE
-  NOT t.name ends with "Repository"
+WHERE t:Java
+  AND NOT t.name ends with "Repository"
 RETURN
   t as Repository
 ----
