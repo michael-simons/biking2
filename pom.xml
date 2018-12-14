@@ -302,32 +302,14 @@
                 <snippets>${snippetsDirectory}</snippets>
                 <rules>${basedir}/src/jqassistant</rules>
               </attributes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
-          <overwrite>false</overwrite>
-        </configuration>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
+              <!-- Generate documentation in dedicated directory while removing unnecessary files -->
               <outputDirectory>
                 ${project.build.outputDirectory}/public/docs
               </outputDirectory>
               <resources>
                 <resource>
                   <directory>
-                    ${project.build.directory}/generated-docs
+                    ${basedir}/src/docs
                   </directory>
                   <excludes>
                     <exclude>biking2-architecture.*</exclude>
