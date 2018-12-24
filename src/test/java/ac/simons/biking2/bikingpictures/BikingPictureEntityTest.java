@@ -49,7 +49,7 @@ public class BikingPictureEntityTest {
         Assert.assertNotEquals(bikingPicture, new BikingPictureEntity());
         Assert.assertNotEquals(bikingPicture, null);
         Assert.assertNotEquals(bikingPicture, "not equals");
-        Assert.assertEquals(new Integer(45644), bikingPicture.getExternalId());
+        Assert.assertEquals(Integer.valueOf(45644), bikingPicture.getExternalId());
         Assert.assertNull(bikingPicture.getId());
         Assert.assertEquals("http://dailyfratze.de/michael/2014/1/12", bikingPicture.getLink());
         Assert.assertEquals(GregorianCalendar.from(now), bikingPicture.getPubDate());
