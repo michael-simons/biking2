@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2018 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.channels.Channels;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -35,14 +37,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static java.lang.String.format;
 import java.nio.channels.ReadableByteChannel;
 import static java.security.MessageDigest.getInstance;
@@ -55,6 +58,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Michael J. Simons, 2014-02-22
  */
 @Controller
+@RequestMapping("/api/galleryPictures")
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 class GalleryController {
@@ -76,13 +80,34 @@ class GalleryController {
         }
     };
 
-    @RequestMapping("/api/galleryPictures")
+    @GetMapping
     @ResponseBody
     public List<GalleryPictureEntity> getGalleryPictures() {
         return galleryPictureRepository.findAll(new Sort(Sort.Direction.ASC, "takenOn"));
     }
 
-    @RequestMapping(value = "/api/galleryPictures", method = POST)
+    /**
+     * Returns a subset of gallery pictures taken on a given day. The resulting list will be include all pictures on the
+     * given date time truncated to the day up until the next day.
+     *
+     * @param takenOn The day the pictures should been taken on. It will be truncated to start of day.
+     * @return A list of pictures taken on a specific day.
+     */
+    @GetMapping("/{takenOn}")
+    @ResponseBody
+    public List<GalleryPictureEntity> getGalleryPictures(
+            @PathVariable
+            @DateTimeFormat(iso = DATE_TIME)
+            final ZonedDateTime takenOn
+    ) {
+
+        final Calendar from = GregorianCalendar.from(takenOn.truncatedTo(ChronoUnit.DAYS));
+        final Calendar until = GregorianCalendar.from(takenOn.truncatedTo(ChronoUnit.DAYS).plusDays(1));
+
+        return galleryPictureRepository.findAllByTakenOnBetween(from, until);
+    }
+
+    @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GalleryPictureEntity> createGalleryPicture(
             @RequestParam(value = "takenOn", required = true)
@@ -122,7 +147,7 @@ class GalleryController {
         return rv;
     }
 
-    @RequestMapping({"/api/galleryPictures/{id:\\d+}.jpg"})
+    @GetMapping("/{id:\\d+}.jpg")
     public void getGalleryPicture(
             @PathVariable final Integer id,
             final HttpServletRequest request,

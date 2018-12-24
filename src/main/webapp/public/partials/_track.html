@@ -7,3 +7,21 @@
 	</div>
     </div>
 </div>
+
+<br />
+
+<div class="row">
+	<div class="col-md-offset-2 col-md-8">
+		<div >
+			<carousel interval="imageInterval">
+				<slide data-ng-repeat="slide in slides" active="slide.active">
+					<img ng-src="{{slide.image}}" style="margin:auto;" />
+					<div class="carousel-caption">
+						<h4>{{ slide.takenOn | date: 'dd.MM.yyyy' }}</h4>
+						<p>{{slide.text}}</p>
+					</div>
+				</slide>
+			</carousel>
+		</div>
+	</div>
+</div>
