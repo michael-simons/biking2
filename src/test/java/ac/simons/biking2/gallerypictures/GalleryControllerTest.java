@@ -22,12 +22,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -263,5 +272,31 @@ public class GalleryControllerTest {
 
         Mockito.verify(repository).findAll(Mockito.any(Sort.class));
         Mockito.verifyNoMoreInteractions(repository);
+    }
+
+    @Test
+    public void shouldGetGalleryPicturesInRange() throws Exception {
+
+        final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
+        final GalleryController controller = new GalleryController(repository, this.tmpDir);
+
+        GregorianCalendar from = GregorianCalendar.from(ZonedDateTime.of(2018, 12, 24, 0, 0, 0, 0, ZoneId.of("GMT+01:00")));
+        GregorianCalendar until = GregorianCalendar.from(ZonedDateTime.of(2018, 12, 25, 0, 0, 0, 0, ZoneId.of("GMT+01:00")));
+
+        final List<GalleryPictureEntity> galleryPictures = Collections.singletonList(new GalleryPictureEntity(from, "test.jpg"));
+        when(repository.findAllByTakenOnBetween(from, until)).thenReturn(galleryPictures);
+
+        ZonedDateTime takenOn = ZonedDateTime.of(LocalDate.of(2018, 12, 24), LocalTime.of(15,9,0), ZoneId.of("Europe/Berlin"));
+
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc
+                .perform(get("http://biking.michael-simons.eu/api/galleryPictures/" + DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(takenOn)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(galleryPictures)));
+
+        Mockito.verify(repository).findAllByTakenOnBetween(from, until);
+        Mockito.verifyNoMoreInteractions(repository);
+
     }
 }
