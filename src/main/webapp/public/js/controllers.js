@@ -414,11 +414,24 @@ biking2Controllers.controller('AddNewTrackCtrl', ['$scope', '$modalInstance', '$
     };
 }]);
 
-biking2Controllers.controller('TrackCtrl', ['$scope', '$http', '$q', '$routeParams', function($scope, $http, $q, $routeParams) {    
+biking2Controllers.controller('TrackCtrl', ['$scope', '$http', '$q', '$routeParams', function($scope, $http, $q, $routeParams) {
+    $scope.slides = [];
+
     $q.all([$http.get('/api/tracks/' + $routeParams.id), $http.get('/api/home')]).then(function(values) {
-	$scope.track = values[0].data;	
-	$scope.home = values[1].data;	
-    });   
+		$scope.track = values[0].data;
+		$scope.home = values[1].data;
+
+		return $http.get('/api/galleryPictures/' + moment($scope.track.coveredOn).toISOString())
+    }).then(function(values) {
+    	var data = values.data;
+        for (var i = 0; i < data.length; ++i) {
+            $scope.slides.push({
+                image: '/api/galleryPictures/' + data[i].id + '.jpg',
+                takenOn: data[i].takenOn,
+                text: data[i].description
+            });
+        }
+	});
 }]);
 
 biking2Controllers.controller('LocationCtrl', ['$scope', '$http', '$q', function($scope, $http, $q) {
@@ -500,11 +513,11 @@ biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', 
     };
     
     
-     $q.all([
-	 $http.get('/api/system/info'), 
-	 $http.get('/api/system/env/java.runtime.version'),
-	 $http.get('/api/banner', {headers:  {'Accept': 'text/plain'}})
-     ]).then(function(values) {
+    $q.all([
+		$http.get('/api/system/info'),
+		$http.get('/api/system/env/java.runtime.version'),
+		$http.get('/api/banner', {headers:  {'Accept': 'text/plain'}})
+    ]).then(function(values) {
 	$scope.info = values[0].data;	
 	$scope.info.versions['spring-boot'] = values[0].data['spring-boot.version'];
 	$scope.info.versions['java'] = values[1].data['property']['value'];
