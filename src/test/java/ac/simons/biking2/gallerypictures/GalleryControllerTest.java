@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -280,17 +281,17 @@ public class GalleryControllerTest {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
-        GregorianCalendar from = GregorianCalendar.from(ZonedDateTime.of(2018, 12, 24, 0, 0, 0, 0, ZoneId.of("GMT+01:00")));
-        GregorianCalendar until = GregorianCalendar.from(ZonedDateTime.of(2018, 12, 25, 0, 0, 0, 0, ZoneId.of("GMT+01:00")));
+        LocalDate takenOn = LocalDate.of(2018, 12, 24);
+
+        GregorianCalendar from = GregorianCalendar.from(LocalDateTime.of(takenOn, LocalTime.MIN).atZone(ZoneId.systemDefault()));
+        GregorianCalendar until = GregorianCalendar.from(LocalDateTime.of(takenOn, LocalTime.MAX).atZone(ZoneId.systemDefault()));
 
         final List<GalleryPictureEntity> galleryPictures = Collections.singletonList(new GalleryPictureEntity(from, "test.jpg"));
         when(repository.findAllByTakenOnBetween(from, until)).thenReturn(galleryPictures);
 
-        ZonedDateTime takenOn = ZonedDateTime.of(LocalDate.of(2018, 12, 24), LocalTime.of(15,9,0), ZoneId.of("Europe/Berlin"));
-
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         mockMvc
-                .perform(get("http://biking.michael-simons.eu/api/galleryPictures/" + DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(takenOn)))
+                .perform(get("http://biking.michael-simons.eu/api/galleryPictures/" + DateTimeFormatter.ISO_DATE.format(takenOn)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(galleryPictures)));
