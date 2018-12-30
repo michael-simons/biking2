@@ -23,8 +23,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.channels.Channels;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -45,6 +48,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static java.lang.String.format;
 import java.nio.channels.ReadableByteChannel;
@@ -97,12 +101,13 @@ class GalleryController {
     @ResponseBody
     public List<GalleryPictureEntity> getGalleryPictures(
             @PathVariable
-            @DateTimeFormat(iso = DATE_TIME)
-            final ZonedDateTime takenOn
+            @DateTimeFormat(iso = DATE)
+            final LocalDate takenOn
     ) {
 
-        final Calendar from = GregorianCalendar.from(takenOn.truncatedTo(ChronoUnit.DAYS));
-        final Calendar until = GregorianCalendar.from(takenOn.truncatedTo(ChronoUnit.DAYS).plusDays(1));
+        final ZoneId zone = ZoneId.systemDefault(); // Consistently bad with the rest where I used the system default :(
+        final Calendar from = GregorianCalendar.from(LocalDateTime.of(takenOn, LocalTime.MIN).atZone(zone));
+        final Calendar until = GregorianCalendar.from(LocalDateTime.of(takenOn, LocalTime.MAX).atZone(zone));
 
         return galleryPictureRepository.findAllByTakenOnBetween(from, until);
     }

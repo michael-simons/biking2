@@ -421,7 +421,7 @@ biking2Controllers.controller('TrackCtrl', ['$scope', '$http', '$q', '$routePara
 		$scope.track = values[0].data;
 		$scope.home = values[1].data;
 
-		return $http.get('/api/galleryPictures/' + moment($scope.track.coveredOn).toISOString())
+		return $http.get('/api/galleryPictures/' + moment($scope.track.coveredOn).format('YYYY-MM-DD'))
     }).then(function(values) {
     	var data = values.data;
         for (var i = 0; i < data.length; ++i) {
