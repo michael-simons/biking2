@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,22 @@ package ac.simons.biking2.gallerypictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
-import java.util.TimeZone;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -44,6 +40,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -57,7 +54,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static java.util.TimeZone.getTimeZone;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -67,7 +63,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  */
 public class GalleryControllerTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper() // TODO Create a real WebMvcTest and made this go away.
+            .registerModules(new JavaTimeModule(), new Jdk8Module())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    private final MappingJackson2HttpMessageConverter httpMessageConverter = new
+            MappingJackson2HttpMessageConverter(objectMapper);
     private final File tmpDir;
     private final File galleryPictures;
 
@@ -81,8 +81,7 @@ public class GalleryControllerTest {
     @Test
     public void createGalleryPicture() throws Exception {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
-        final GregorianCalendar takenOn = new GregorianCalendar(getTimeZone("UTC"));
-        takenOn.set(2014, 2, 24, 23, 0, 0);
+        final LocalDate takenOn = LocalDate.of(2014, 2, 24);
         final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(takenOn, "description") {
             private static final long serialVersionUID = -3391535625175956488L;
 
@@ -94,9 +93,10 @@ public class GalleryControllerTest {
         when(repository.save(Mockito.any(GalleryPictureEntity.class))).thenReturn(galleryPicture);
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setMessageConverters(httpMessageConverter)
+                .build();
         final MockMultipartFile multipartFile = new MockMultipartFile("imageData", this.getClass().getResourceAsStream("/IMG_0041.JPG"));
-
         mockMvc
                 .perform(
                         multipart("http://biking.michael-simons.eu/api/galleryPictures")
@@ -111,8 +111,7 @@ public class GalleryControllerTest {
     @Test
     public void shouldHandleIOExceptionsGracefully() throws Exception {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
-        final GregorianCalendar takenOn = new GregorianCalendar(getTimeZone("UTC"));
-        takenOn.set(2014, 2, 24, 23, 0, 0);
+        final LocalDate takenOn = LocalDate.of(2014, 2, 24);
         final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(takenOn, "description") {
             private static final long serialVersionUID = -3391535625175956488L;
 
@@ -125,7 +124,9 @@ public class GalleryControllerTest {
         // use non existing dir
         final GalleryController controller = new GalleryController(repository, new File(this.tmpDir, "haha, got you"));
 
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setMessageConverters(httpMessageConverter)
+                .build();
         final MockMultipartFile multipartFile = new MockMultipartFile("imageData", this.getClass().getResourceAsStream("/IMG_0041.JPG"));
 
         mockMvc
@@ -145,7 +146,9 @@ public class GalleryControllerTest {
 
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setMessageConverters(httpMessageConverter)
+                .build();
         final MockMultipartFile multipartFile = new MockMultipartFile("imageData", this.getClass().getResourceAsStream("/IMG_0041.JPG"));
 
         mockMvc
@@ -163,7 +166,9 @@ public class GalleryControllerTest {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setMessageConverters(httpMessageConverter)
+                .build();
 
         // Empty data
         final MockMultipartFile multipartFile = new MockMultipartFile("imageData", new byte[0]);
@@ -193,7 +198,9 @@ public class GalleryControllerTest {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setMessageConverters(httpMessageConverter)
+                .build();
         mockMvc
             .perform(get("http://biking.michael-simons.eu/api/galleryPictures/23.jpg"))
             .andDo(MockMvcResultHandlers.print())
@@ -225,12 +232,14 @@ public class GalleryControllerTest {
         Files.copy(new ByteArrayInputStream(imageData), imageFile.toPath());
 
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
-        when(repository.findById(42)).thenReturn(Optional.of(new GalleryPictureEntity(Calendar.getInstance(), imageFile.getName())));
+        when(repository.findById(42)).thenReturn(Optional.of(new GalleryPictureEntity(LocalDate.now(), imageFile.getName())));
 
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
         // Test copying of resources
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setMessageConverters(httpMessageConverter)
+                .build();
         // Explicit false property
         final MvcResult result =
             mockMvc
@@ -283,21 +292,19 @@ public class GalleryControllerTest {
 
         LocalDate takenOn = LocalDate.of(2018, 12, 24);
 
-        GregorianCalendar from = GregorianCalendar.from(LocalDateTime.of(takenOn, LocalTime.MIN).atZone(ZoneId.systemDefault()));
-        GregorianCalendar until = GregorianCalendar.from(LocalDateTime.of(takenOn, LocalTime.MAX).atZone(ZoneId.systemDefault()));
+        final List<GalleryPictureEntity> galleryPictures = Collections.singletonList(new GalleryPictureEntity(takenOn, "test.jpg"));
+        when(repository.findAllByTakenOnBetween(takenOn, takenOn)).thenReturn(galleryPictures);
 
-        final List<GalleryPictureEntity> galleryPictures = Collections.singletonList(new GalleryPictureEntity(from, "test.jpg"));
-        when(repository.findAllByTakenOnBetween(from, until)).thenReturn(galleryPictures);
-
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setMessageConverters(httpMessageConverter)
+                .build();
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/galleryPictures/" + DateTimeFormatter.ISO_DATE.format(takenOn)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(galleryPictures)));
 
-        Mockito.verify(repository).findAllByTakenOnBetween(from, until);
+        Mockito.verify(repository).findAllByTakenOnBetween(takenOn, takenOn);
         Mockito.verifyNoMoreInteractions(repository);
-
     }
 }

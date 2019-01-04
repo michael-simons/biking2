@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 michael-simons.eu.
+ * Copyright 2016-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,7 @@ package ac.simons.biking2.shared;
 
 import ac.simons.biking2.bikes.BikeEntity;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -32,7 +30,6 @@ import static java.util.stream.Collectors.toList;
 public class TestData {
 
     public final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
-    public final GregorianCalendar cutOffDate = GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault()));
 
     public final List<BikeEntity> value;
 

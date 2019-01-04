@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Michael J. Simons.
+ * Copyright 2015-2019 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package ac.simons.biking2.trips;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Calendar;
 import org.joor.Reflect;
 import org.junit.Test;
@@ -75,15 +76,15 @@ public class TripsControllerTest {
     @Test
     public void testCreateTrip() throws Exception {
         final AssortedTripEntity trip = Reflect
-                .on(new AssortedTripEntity(Calendar.getInstance(), BigDecimal.valueOf(23.42)))
+                .on(new AssortedTripEntity(LocalDate.now(), BigDecimal.valueOf(23.42)))
                 .set("id", 42)
                 .get();
 
         final NewTripCmd newTripCmd1 = new NewTripCmd();
-        newTripCmd1.setCoveredOn(trip.getCoveredOn().getTime());
+        newTripCmd1.setCoveredOn(trip.getCoveredOn());
         newTripCmd1.setDistance(23.42);
         final NewTripCmd newTripCmd2 = new NewTripCmd();
-        newTripCmd2.setCoveredOn(trip.getCoveredOn().getTime());
+        newTripCmd2.setCoveredOn(trip.getCoveredOn());
         newTripCmd2.setDistance(666.0);
 
         when(repository.save(any(AssortedTripEntity.class))).then(invocation -> {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 package ac.simons.biking2.trips;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDate;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class AssortedTripEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-        Calendar now = Calendar.getInstance();
+        LocalDate now = LocalDate.now();
         final AssortedTripEntity trip = new AssortedTripEntity(now, BigDecimal.TEN);
         Assert.assertNull(trip.getId());
         Assert.assertEquals(now, trip.getCoveredOn());
@@ -35,8 +36,7 @@ public class AssortedTripEntityTest {
         Assert.assertEquals(new AssortedTripEntity(), new AssortedTripEntity());
         Assert.assertNotEquals(new AssortedTripEntity(), null);
         Assert.assertNotEquals(new AssortedTripEntity(), "foobar");
-        Calendar yesterday = Calendar.getInstance();
-        yesterday.add(Calendar.DAY_OF_MONTH, -1);
+        LocalDate yesterday = LocalDate.now().minusDays(1);
         Assert.assertNotEquals(trip, new AssortedTripEntity(yesterday, BigDecimal.TEN));
         Assert.assertEquals(trip.hashCode(), new AssortedTripEntity(now, BigDecimal.TEN).hashCode());
     }

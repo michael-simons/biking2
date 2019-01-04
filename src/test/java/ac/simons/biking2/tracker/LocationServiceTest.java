@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +55,7 @@ public class LocationServiceTest {
 
     @Test
     public void shouldGetLocationsForTheLastNHours() {
-        when(locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(Mockito.any(Calendar.class))).thenReturn(new ArrayList<>());
+        when(locationRepository.findByCreatedAtGreaterThanOrderByCreatedAtAsc(Mockito.any(OffsetDateTime.class))).thenReturn(new ArrayList<>());
 
         final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
 
@@ -62,10 +63,10 @@ public class LocationServiceTest {
         Assert.assertNotNull(locations);
         Assert.assertEquals(0, locations.size());
 
-        ArgumentCaptor<GregorianCalendar> argument = ArgumentCaptor.forClass(GregorianCalendar.class);
+        ArgumentCaptor<OffsetDateTime> argument = ArgumentCaptor.forClass(OffsetDateTime.class);
         Mockito.verify(locationRepository).findByCreatedAtGreaterThanOrderByCreatedAtAsc(argument.capture());
 
-        Assert.assertThat(ChronoUnit.HOURS.between(argument.getValue().toInstant(), Instant.now()), is(equalTo(3l)));
+        Assert.assertThat(ChronoUnit.HOURS.between(argument.getValue(), OffsetDateTime.now()), is(equalTo(3l)));
     }
 
     @Test
@@ -74,7 +75,7 @@ public class LocationServiceTest {
 
         final LocationService locationService = new LocationService(locationRepository, simpMessagingTemplate);
 
-        final LocationEntity location = locationService.createAndSendNewLocation(objectMapper.readValue("{\"lon\":\"5\", \"lat\":\"50\"}", NewLocationCmd.class));
+        final LocationEntity location = locationService.createAndSendNewLocation(objectMapper.readValue("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\"}", NewLocationCmd.class));
         Assert.assertEquals(new BigDecimal(50), location.getLatitude());
         Assert.assertEquals(new BigDecimal(5), location.getLongitude());
 

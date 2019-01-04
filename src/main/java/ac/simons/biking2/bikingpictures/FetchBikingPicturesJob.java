@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
@@ -38,7 +37,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import static java.util.stream.Collectors.toList;
-import static java.time.ZonedDateTime.ofInstant;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -85,8 +83,7 @@ class FetchBikingPicturesJob {
         // Current rss data
         RSS rss;
 
-        final Calendar hlp = this.bikingPictureRepository.getMaxPubDate();
-        final ZonedDateTime maxPubDate = ofInstant(hlp.toInstant(), hlp.getTimeZone().toZoneId());
+        final ZonedDateTime maxPubDate = this.bikingPictureRepository.getMaxPubDate().toZonedDateTime();
         boolean foundOlderThanMaxPubDate = false;
         do {
             rss = getRSSFeed(url);

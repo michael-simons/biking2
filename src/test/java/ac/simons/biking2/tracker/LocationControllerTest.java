@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 michael-simons.eu.
+ * Copyright 2015-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,8 @@
 package ac.simons.biking2.tracker;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -33,7 +32,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import static org.junit.rules.ExpectedException.none;
-import static java.util.Calendar.getInstance;
 import org.joor.Reflect;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -51,10 +49,10 @@ public class LocationControllerTest {
 
     @Test
     public void shouldRetrieveLastLocation() {
-        ZonedDateTime now = ZonedDateTime.now();
+        OffsetDateTime now = OffsetDateTime.now();
 
-        final LocationEntity l1 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, GregorianCalendar.from(now));
-        final LocationEntity l2 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, GregorianCalendar.from(now.plusMinutes(1)));
+        final LocationEntity l1 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, now);
+        final LocationEntity l2 = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, now.plusMinutes(1));
         when(locationService.getLocationsForTheLastNHours(1)).thenReturn(Arrays.asList(l1, l2));
         final LocationController locationController = new LocationController(locationService);
 
@@ -70,7 +68,7 @@ public class LocationControllerTest {
     @Test
     public void shouldCreateLocation() {
         final NewLocationCmd newLocationCmd = new NewLocationCmd();
-        final LocationEntity l = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, getInstance());
+        final LocationEntity l = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, OffsetDateTime.now());
         when(locationService.createAndSendNewLocation(newLocationCmd)).thenReturn(l);
         final BindingResult bindingResult = Mockito.mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);

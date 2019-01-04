@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.tracks.TrackEntity.Type;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class TrackEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-        final Calendar now = Calendar.getInstance();
+        final LocalDate now = LocalDate.now();
 
         final TrackEntity bean = new TrackEntity("name", now);
         Assert.assertNull(bean.getId());
@@ -58,8 +58,7 @@ public class TrackEntityTest {
         final TrackEntity t2 = new TrackEntity("t2", now);
         Assert.assertNotEquals(t1, t2);
 
-        final Calendar then = Calendar.getInstance();
-        then.add(Calendar.YEAR, 1);
+        final LocalDate then = LocalDate.now().plusYears(1);
         final TrackEntity t3 = new TrackEntity("t1", then);
         Assert.assertNotEquals(t1, t3);
     }

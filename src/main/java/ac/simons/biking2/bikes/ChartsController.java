@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,9 @@ import static ac.simons.biking2.bikes.Messages.MILAGE_KM;
 import static ac.simons.biking2.bikes.Messages.TITLE_CURRENT_YEAR;
 import ac.simons.biking2.bikes.highcharts.HighchartsNgConfig;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.IntSummaryStatistics;
 import java.util.List;
@@ -76,7 +74,7 @@ class ChartsController {
         final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
 
         // All active bikes
-        final List<BikeEntity> bikes = this.bikeRepository.findActive(GregorianCalendar.from(january1st.atStartOfDay(ZoneId.systemDefault())));
+        final List<BikeEntity> bikes = this.bikeRepository.findActive(january1st);
         final Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(bikes, entry -> !entry.getKey().isBefore(january1st));
 
         final Map<String, Object> userData = new HashMap<>();

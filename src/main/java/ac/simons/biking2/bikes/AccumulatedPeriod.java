@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,18 @@
 package ac.simons.biking2.bikes;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Represents a accumulated period value
  *
  * @author Michael J. Simons, 2014-05-05
  */
+@RequiredArgsConstructor
 @Getter
 public final class AccumulatedPeriod {
-    private final Calendar startOfPeriod;
+    private final LocalDate startOfPeriod;
 
     private final int value;
-
-    public AccumulatedPeriod(final LocalDate startOfPeriod, final int value) {
-        this(GregorianCalendar.from(startOfPeriod.atStartOfDay(ZoneId.systemDefault())), value);
-    }
-
-    public AccumulatedPeriod(final Calendar startOfPeriod, final int value) {
-        this.startOfPeriod = startOfPeriod;
-        this.value = value;
-    }
 }

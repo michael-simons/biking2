@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 michael-simons.eu.
+ * Copyright 2015-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package ac.simons.biking2.trips;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +34,7 @@ public final class NewTripCmd implements Serializable {
     private static final long serialVersionUID = 2711961034108614560L;
 
     @NotNull
-    private Date coveredOn;
+    private LocalDate coveredOn;
     @NotNull
     private Double distance;
 }

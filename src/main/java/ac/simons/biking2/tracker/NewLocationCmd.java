@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -53,15 +55,16 @@ public final class NewLocationCmd {
         return longitude;
     }
 
-    public Calendar getCreatedAt() {
-        Calendar rv = null;
+    public OffsetDateTime getCreatedAt() {
+
+        Instant createdAt;
         if (this.timestampSeconds != null) {
-            rv = Calendar.getInstance();
-            rv.setTimeInMillis(this.timestampSeconds * 1000);
+            createdAt = Instant.ofEpochSecond(this.timestampSeconds);
         } else if (this.timestampMillis != null) {
-            rv = Calendar.getInstance();
-            rv.setTimeInMillis(this.timestampMillis);
+            createdAt = Instant.ofEpochMilli(this.timestampMillis);
+        } else {
+            throw new IllegalStateException("Either timestampSeconds or timestampMillis must be set.");
         }
-        return rv;
+        return OffsetDateTime.ofInstant(createdAt, ZoneId.systemDefault());
     }
 }

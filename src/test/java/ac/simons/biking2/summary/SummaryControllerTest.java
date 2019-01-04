@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,7 @@ import ac.simons.biking2.bikes.BikeRepository;
 import ac.simons.biking2.shared.TestData;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import org.junit.Test;
 
@@ -53,7 +50,7 @@ public class SummaryControllerTest {
 
     @Test
     public void testGetSummary() {
-        final Calendar now = Calendar.getInstance();
+        final LocalDate now = LocalDate.now();
 
         final BikeRepository bikeRepository = mock(BikeRepository.class);
         when(bikeRepository.findAll()).thenReturn(testData.value);
@@ -69,7 +66,7 @@ public class SummaryControllerTest {
 
     @Test
     public void testGetSummaryMinMaxPeriods() {
-        final Calendar now = Calendar.getInstance();
+        final LocalDate now = LocalDate.now();
         final List<BikeEntity> bikes = new ArrayList<>();
         // A bike with no milage should not lead to an error
         bikes.add(new BikeEntity("no-milage", now()));
@@ -91,11 +88,11 @@ public class SummaryControllerTest {
         final SummaryController controller = new SummaryController(bikeRepository, this.assortedTripRepository);
         final Summary summary = controller.getSummary();
         assertNotNull(summary.getWorstPeriod());
-        assertThat(summary.getWorstPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,2,1).atStartOfDay(ZoneId.systemDefault())))));
+        assertThat(summary.getWorstPeriod().getStartOfPeriod(), is(equalTo(LocalDate.of(2009,2,1))));
         assertThat(summary.getWorstPeriod().getValue(), is(equalTo(43)));
 
         assertNotNull(summary.getBestPeriod());
-        assertThat(summary.getBestPeriod().getStartOfPeriod(), is(equalTo(GregorianCalendar.from(LocalDate.of(2009,1,1).atStartOfDay(ZoneId.systemDefault())))));
+        assertThat(summary.getBestPeriod().getStartOfPeriod(), is(equalTo(LocalDate.of(2009,1,1))));
         assertThat(summary.getBestPeriod().getValue(), is(equalTo(50)));
 
         assertThat(summary.getAverage(), is(equalTo(93.0/2)));
@@ -103,7 +100,7 @@ public class SummaryControllerTest {
 
     @Test
     public void testGetSummaryMinMaxPeriodsWithoutPeriods() {
-        final Calendar now = Calendar.getInstance();
+        final LocalDate now = LocalDate.now();
         final List<BikeEntity> bikes = new ArrayList<>();
         bikes.add(new BikeEntity("no-milage", now()));
 

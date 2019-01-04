@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.gallerypictures;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,5 +25,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 interface GalleryPictureRepository extends JpaRepository<GalleryPictureEntity, Integer> {
 
-    List<GalleryPictureEntity> findAllByTakenOnBetween(Calendar from, Calendar until);
+    List<GalleryPictureEntity> findAllByTakenOnBetween(LocalDate from, LocalDate until);
 }

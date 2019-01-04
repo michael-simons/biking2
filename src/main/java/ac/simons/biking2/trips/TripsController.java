@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 michael-simons.eu.
+ * Copyright 2015-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package ac.simons.biking2.trips;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -53,10 +52,8 @@ class TripsController {
         if (bindingResult.hasErrors()) {
             rv = new ResponseEntity<>("Invalid arguments.", HttpStatus.BAD_REQUEST);
         } else {
-            final Calendar coveredOn = Calendar.getInstance();
-            coveredOn.setTime(newTrip.getCoveredOn());
             try {
-                final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(coveredOn, BigDecimal.valueOf(newTrip.getDistance())));
+                final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(newTrip.getCoveredOn(), BigDecimal.valueOf(newTrip.getDistance())));
                 rv = new ResponseEntity<>(trip, HttpStatus.OK);
             } catch (DataIntegrityViolationException e) {
                 log.debug("Data integrity violation while uploading a new trip", e);

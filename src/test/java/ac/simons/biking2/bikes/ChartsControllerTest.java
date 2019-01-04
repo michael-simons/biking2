@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,8 @@ package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.shared.TestData;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -76,7 +73,7 @@ public class ChartsControllerTest {
 
     @Test
     public void testGetCurrentYearDataAvailable() throws Exception {
-        when(bikeRepository.findActive(sharedTestData.cutOffDate)).thenReturn(sharedTestData.value);
+        when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(sharedTestData.value);
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/currentYear"))
                 .andExpect(status().isOk())
@@ -90,31 +87,31 @@ public class ChartsControllerTest {
                 .andExpect(jsonPath("$.series[2].data", is(equalTo(Arrays.asList(0, 0, 0, 10, 10, 10, 10, 10, 10, 0, 0, 0)))))
                 .andExpect(jsonPath("$.series[3].name", is(equalTo("Sum"))))
                 .andExpect(jsonPath("$.series[3].data", is(equalTo(Arrays.asList(10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 30)))));
-        verify(bikeRepository).findActive(sharedTestData.cutOffDate);
+        verify(bikeRepository).findActive(sharedTestData.january1st);
         verifyNoMoreInteractions(bikeRepository);
     }
 
     @Test
     public void testGetCurrentYearNoData() throws Exception {
-        when(bikeRepository.findActive(sharedTestData.cutOffDate)).thenReturn(new ArrayList<>());
+        when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(new ArrayList<>());
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/currentYear"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.series[0].name", is(equalTo("Sum"))))
                 .andExpect(jsonPath("$.series[0].data", is(equalTo(generate(() -> 0).limit(12).collect(ArrayList::new, ArrayList::add, ArrayList::addAll)))));
-        verify(bikeRepository).findActive(sharedTestData.cutOffDate);
+        verify(bikeRepository).findActive(sharedTestData.january1st);
         verifyNoMoreInteractions(bikeRepository);
     }
 
     @Test
     public void testGetCurrentYearNoMilages() throws Exception {
-        when(bikeRepository.findActive(sharedTestData.cutOffDate)).thenReturn(Arrays.asList(new BikeEntity("bike1", LocalDate.now()), new BikeEntity("bike2", LocalDate.now())));
+        when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(Arrays.asList(new BikeEntity("bike1", LocalDate.now()), new BikeEntity("bike2", LocalDate.now())));
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/currentYear"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.series[2].name", is(equalTo("Sum"))))
                 .andExpect(jsonPath("$.series[2].data", is(equalTo(generate(() -> 0).limit(12).collect(ArrayList::new, ArrayList::add, ArrayList::addAll)))));
-        verify(bikeRepository).findActive(sharedTestData.cutOffDate);
+        verify(bikeRepository).findActive(sharedTestData.january1st);
         verifyNoMoreInteractions(bikeRepository);
     }
 
@@ -132,9 +129,8 @@ public class ChartsControllerTest {
 
     @Test
     public void testCompleteData() throws Exception {
-        // Arange
+        // Arrange
         final LocalDate startDate = sharedTestData.january1st.minusYears(2);
-        final Calendar _startDate = GregorianCalendar.from(startDate.atStartOfDay(ZoneId.systemDefault()));
 
         final Map<String, Integer[]> testData = new TreeMap<>();
         testData.put("bike1", new Integer[]{
@@ -163,9 +159,9 @@ public class ChartsControllerTest {
             return bike;
         }).collect(toList());
 
-        when(bikeRepository.findActive(GregorianCalendar.from(sharedTestData.january1st.atStartOfDay(ZoneId.systemDefault())))).thenReturn(Arrays.asList(bikes.get(0)));
+        when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(Arrays.asList(bikes.get(0)));
         when(bikeRepository.findAll()).thenReturn(bikes);
-        when(bikeRepository.getDateOfFirstRecord()).thenReturn(_startDate);
+        when(bikeRepository.getDateOfFirstRecord()).thenReturn(startDate);
 
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/currentYear"))
@@ -227,9 +223,8 @@ public class ChartsControllerTest {
 
     @Test
     public void testCompleteDataFiltered() throws Exception {
-        // Arange
+        // Arrange
         final LocalDate startDate = sharedTestData.january1st.minusYears(2);
-        final Calendar _startDate = GregorianCalendar.from(startDate.atStartOfDay(ZoneId.systemDefault()));
 
         final Map<String, Integer[]> testData = new TreeMap<>();
         testData.put("bike1", new Integer[]{
@@ -258,9 +253,9 @@ public class ChartsControllerTest {
             return bike;
         }).collect(toList());
 
-        when(bikeRepository.findActive(GregorianCalendar.from(sharedTestData.january1st.atStartOfDay(ZoneId.systemDefault())))).thenReturn(Arrays.asList(bikes.get(0)));
+        when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(Arrays.asList(bikes.get(0)));
         when(bikeRepository.findAll()).thenReturn(bikes);
-        when(bikeRepository.getDateOfFirstRecord()).thenReturn(_startDate);
+        when(bikeRepository.getDateOfFirstRecord()).thenReturn(startDate);
 
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/history").param("end", Integer.toString(startDate.getYear() + 1)))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,16 @@
  */
 package ac.simons.biking2.bikes;
 
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,20 +39,23 @@ class BikeCmd {
     @Size(max = 255)
     private String name;
 
+    @DateTimeFormat(iso = DATE_TIME)
     @NotNull
-    private Date boughtOn;
+    private ZonedDateTime boughtOn;
 
     @NotBlank
     @Size(max = 6)
     private String color;
 
-    private Date decommissionedOn;
+    @DateTimeFormat(iso = DATE_TIME)
+    private ZonedDateTime decommissionedOn;
 
     public LocalDate boughtOnAsLocalDate() {
-        return LocalDateTime.ofInstant(this.boughtOn.toInstant(), ZoneId.systemDefault()).toLocalDate();
+        return this.boughtOn.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();
     }
 
     public LocalDate decommissionedOnAsLocalDate() {
-        return this.decommissionedOn == null ? null : LocalDateTime.ofInstant(this.decommissionedOn.toInstant(), ZoneId.systemDefault()).toLocalDate();
+        return this.decommissionedOn == null ? null : this.decommissionedOn.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();
     }
+
 }

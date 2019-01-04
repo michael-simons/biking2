@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.tracker;
 
-import java.util.Calendar;
+import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -24,5 +24,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 interface LocationRepository extends JpaRepository<LocationEntity, Integer> {
 
-    List<LocationEntity> findByCreatedAtGreaterThanOrderByCreatedAtAsc(Calendar value);
+    List<LocationEntity> findByCreatedAtGreaterThanOrderByCreatedAtAsc(OffsetDateTime value);
 }
