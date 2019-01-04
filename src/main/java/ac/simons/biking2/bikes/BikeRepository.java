@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.bikes;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,12 +32,12 @@ public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
             + "    or b.decommissionedOn >= :cutoffDate "
             + " order by b.name asc "
     )
-    List<BikeEntity> findActive(Calendar cutoffDate);
+    List<BikeEntity> findActive(LocalDate cutoffDate);
 
     BikeEntity findByName(String name);
 
     List<BikeEntity> findByDecommissionedOnIsNull(Sort sort);
 
     @Query("Select coalesce(min(m.recordedOn), current_date()) as dateOfFirstRecord from MilageEntity m")
-    Calendar getDateOfFirstRecord();
+    LocalDate getDateOfFirstRecord();
 }

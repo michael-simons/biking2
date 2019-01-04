@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package ac.simons.biking2.bikingpictures;
 
 import ac.simons.biking2.support.TestConfig;
+
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import org.junit.Assert;
@@ -28,8 +30,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static java.time.ZonedDateTime.of;
-import static java.time.ZonedDateTime.ofInstant;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -48,14 +48,14 @@ public class BikingPictureRepositoryTest {
     @Test
     @Rollback(true)
     public void getMaxPubDate_shouldWork() {
-        ZonedDateTime value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
-        ZonedDateTime expected = of(2003, 9, 21, 14, 13, 00, 00, value.getZone());
+        OffsetDateTime value = bikingPictureRepository.getMaxPubDate();
+        OffsetDateTime expected = ZonedDateTime.of(2003, 9, 21, 14, 13, 0, 0, ZoneId.systemDefault()).toOffsetDateTime();
         Assert.assertThat(value, is(equalTo(expected)));
 
         bikingPictureRepository.deleteAll();
 
-        value = ofInstant(bikingPictureRepository.getMaxPubDate().toInstant(), ZoneId.systemDefault());
-        expected = of(2005, 8, 7, 18, 30, 42, 00, value.getZone());
+        value = bikingPictureRepository.getMaxPubDate();
+        expected = ZonedDateTime.of(2005, 8, 7, 18, 30, 42, 00, ZoneId.systemDefault()).toOffsetDateTime();
         Assert.assertThat(value, is(equalTo(expected)));
     }
 }

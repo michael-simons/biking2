@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URLConnection;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -40,8 +41,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static java.time.ZonedDateTime.of;
-import static java.util.Calendar.getInstance;
 
 /**
  * @author Michael J. Simons
@@ -64,7 +63,7 @@ public class FetchBikingPicturesJobTest {
         when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
 
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        when(bikingPictureRepository.getMaxPubDate()).thenReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sat, 07 Sep 2013 18:43:48 GMT")));
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(dateTimeAdapter.unmarshal("Sat, 07 Sep 2013 18:43:48 GMT").toOffsetDateTime());
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
@@ -81,7 +80,7 @@ public class FetchBikingPicturesJobTest {
         final String page2 = "http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2";
         when(dailyFratzeProvider.getRSSConnection(page2)).thenReturn(this.getClass().getResource("/biking_pictures.2.rss").openConnection());
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        when(bikingPictureRepository.getMaxPubDate()).thenReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT").toOffsetDateTime());
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
@@ -98,7 +97,7 @@ public class FetchBikingPicturesJobTest {
         when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(new File("/i/dont/exists").toURI().toURL().openConnection());
 
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        when(bikingPictureRepository.getMaxPubDate()).thenReturn(GregorianCalendar.from(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT")));
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(dateTimeAdapter.unmarshal("Sun, 08 May 2011 18:38:25 GMT").toOffsetDateTime());
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
         final List<BikingPictureEntity> toDownload = job.createDownloadList();
@@ -126,7 +125,7 @@ public class FetchBikingPicturesJobTest {
         final String page2 = "http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2";
         when(dailyFratzeProvider.getRSSConnection(page2)).thenReturn(this.getClass().getResource("/biking_pictures.2.rss").openConnection());
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        when(bikingPictureRepository.getMaxPubDate()).thenReturn(GregorianCalendar.from(of(2000, 1, 1, 21, 21, 00, 0, ZoneId.systemDefault())));
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(ZonedDateTime.of(2000, 1, 1, 21, 21, 00, 0, ZoneId.systemDefault()).toOffsetDateTime());
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
 
         final List<BikingPictureEntity> toDownload = job.createDownloadList();
@@ -181,7 +180,7 @@ public class FetchBikingPicturesJobTest {
         when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
 
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
-        when(bikingPictureRepository.getMaxPubDate()).thenReturn(getInstance());
+        when(bikingPictureRepository.getMaxPubDate()).thenReturn(OffsetDateTime.now());
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
         job.run();

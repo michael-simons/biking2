@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package ac.simons.biking2.tracker;
 
 import ac.simons.biking2.support.BeanTester;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
@@ -30,7 +30,7 @@ public class LocationEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-        final Calendar now = Calendar.getInstance();
+        final OffsetDateTime now = OffsetDateTime.now();
 
         final Map<String, Object> values = new HashMap<>();
         values.put("description", "description");
@@ -48,8 +48,7 @@ public class LocationEntityTest {
         Assert.assertEquals(now, l1.getCreatedAt());
         Assert.assertNull(l1.getId());
 
-        final Calendar then = Calendar.getInstance();
-        then.add(Calendar.YEAR, 1);
+        final OffsetDateTime then = OffsetDateTime.now().plusYears(1);
         LocationEntity other = new LocationEntity(BigDecimal.ZERO, BigDecimal.TEN, now);
         Assert.assertNotEquals(l1, other);
         other = new LocationEntity(BigDecimal.ONE, BigDecimal.ZERO, now);

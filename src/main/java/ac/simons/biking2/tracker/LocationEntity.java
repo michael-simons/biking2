@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,13 @@ package ac.simons.biking2.tracker;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -62,11 +60,10 @@ public class LocationEntity implements Serializable {
     private String description;
 
     @Column(name = "created_at", nullable = false, unique = true)
-    @Temporal(TemporalType.TIMESTAMP)
     @NotNull
-    private Calendar createdAt;
+    private OffsetDateTime createdAt;
 
-    LocationEntity(final BigDecimal latitude, final BigDecimal longitude, final Calendar createdAt) {
+    LocationEntity(final BigDecimal latitude, final BigDecimal longitude, final OffsetDateTime createdAt) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.createdAt = createdAt;

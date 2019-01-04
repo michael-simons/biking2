@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,9 +48,9 @@ import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +118,7 @@ class TracksController {
             rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             try {
-                TrackEntity track = new TrackEntity(name, GregorianCalendar.from(coveredOn));
+                TrackEntity track = new TrackEntity(name, coveredOn.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate());
                 track.setDescription(description);
                 track.setType(type);
 

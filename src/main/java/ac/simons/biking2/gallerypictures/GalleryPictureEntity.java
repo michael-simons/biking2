@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,14 @@ package ac.simons.biking2.gallerypictures;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -52,9 +51,8 @@ class GalleryPictureEntity implements Serializable {
     private Integer id;
 
     @Column(name = "taken_on", nullable = false, updatable = false)
-    @Temporal(TemporalType.DATE)
     @NotNull
-    private Calendar takenOn;
+    private LocalDate takenOn;
 
     @Column(length = 36, unique = true, updatable = false)
     @NotNull
@@ -68,14 +66,13 @@ class GalleryPictureEntity implements Serializable {
     private String description;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @JsonIgnore
-    private Calendar createdAt;
+    private OffsetDateTime createdAt;
 
-    GalleryPictureEntity(final Calendar takenOn, final String filename) {
+    GalleryPictureEntity(final LocalDate takenOn, final String filename) {
         this.takenOn = takenOn;
         this.filename = filename;
-        this.createdAt = Calendar.getInstance();
+        this.createdAt = OffsetDateTime.now();
     }
 }

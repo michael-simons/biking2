@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@ public class TracksControllerTest {
         final Random random = new Random(System.currentTimeMillis());
 
         this.defaultTestData = Stream.of(1, 2, 3).map(i ->
-            new TrackEntity(Integer.toString(i), GregorianCalendar.from(now.minusDays(random.nextInt(365)).atStartOfDay(ZoneId.systemDefault())))
+            new TrackEntity(Integer.toString(i), now.minusDays(random.nextInt(365)))
         ).collect(toList());
     }
 

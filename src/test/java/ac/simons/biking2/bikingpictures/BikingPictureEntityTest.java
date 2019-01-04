@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package ac.simons.biking2.bikingpictures;
 
 import java.time.ZonedDateTime;
-import java.util.GregorianCalendar;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,7 +51,7 @@ public class BikingPictureEntityTest {
         Assert.assertEquals(Integer.valueOf(45644), bikingPicture.getExternalId());
         Assert.assertNull(bikingPicture.getId());
         Assert.assertEquals("http://dailyfratze.de/michael/2014/1/12", bikingPicture.getLink());
-        Assert.assertEquals(GregorianCalendar.from(now), bikingPicture.getPubDate());
+        Assert.assertEquals(now.toOffsetDateTime(), bikingPicture.getPubDate());
 
         final BikingPictureEntity bikingPicture2 = new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", now, "http://dailyfratze.de/michael/2014/1/12");
         Assert.assertEquals(bikingPicture, bikingPicture2);

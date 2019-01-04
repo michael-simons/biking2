@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 michael-simons.eu.
+ * Copyright 2016-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package ac.simons.biking2.support;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import static java.time.ZoneId.of;
-import static java.time.ZonedDateTime.now;
 import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +62,7 @@ public final class FileBasedResource {
     public void send(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         response.setHeader("Content-Type", "image/jpeg");
         response.setHeader("Content-Disposition", String.format("inline; filename=\"%s\"", this.filename));
-        response.setHeader("Expires", now(of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME.withLocale(Locale.US)));
+        response.setHeader("Expires", ZonedDateTime.now(ZoneId.of("UTC")).plusDays(cacheForDays).format(RFC_1123_DATE_TIME.withLocale(Locale.US)));
         response.setHeader("Cache-Control", String.format("max-age=%d, %s", TimeUnit.DAYS.toSeconds(cacheForDays), "public"));
 
         // Attribute maybe null

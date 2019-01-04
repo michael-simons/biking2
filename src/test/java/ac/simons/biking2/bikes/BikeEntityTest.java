@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,10 +90,10 @@ public class BikeEntityTest {
         Assert.assertNotEquals(bike, null);
         Assert.assertNotEquals(bike, "somethingElse");
         Assert.assertNull(bike.getDecommissionedOn());
-        Assert.assertEquals(GregorianCalendar.from(now.withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault())), bike.getBoughtOn());
+        Assert.assertEquals(now.withDayOfMonth(1), bike.getBoughtOn());
 
-        Assert.assertEquals(GregorianCalendar.from(now.withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault())), other.getBoughtOn());
-        Assert.assertEquals(GregorianCalendar.from(now.atStartOfDay(ZoneId.systemDefault())), other.getDecommissionedOn());
+        Assert.assertEquals(now.withDayOfMonth(1), other.getBoughtOn());
+        Assert.assertEquals(now, other.getDecommissionedOn());
 
         final BikeEntity.Link story = new BikeEntity.Link("http://planet-punk.de/2015/08/11/nie-wieder-stadtschlampe/", "Nie wieder Stadtschlampe");
         bike.setStory(story);

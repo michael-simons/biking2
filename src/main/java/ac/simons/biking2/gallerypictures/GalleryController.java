@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.channels.Channels;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -104,12 +100,7 @@ class GalleryController {
             @DateTimeFormat(iso = DATE)
             final LocalDate takenOn
     ) {
-
-        final ZoneId zone = ZoneId.systemDefault(); // Consistently bad with the rest where I used the system default :(
-        final Calendar from = GregorianCalendar.from(LocalDateTime.of(takenOn, LocalTime.MIN).atZone(zone));
-        final Calendar until = GregorianCalendar.from(LocalDateTime.of(takenOn, LocalTime.MAX).atZone(zone));
-
-        return galleryPictureRepository.findAllByTakenOnBetween(from, until);
+        return galleryPictureRepository.findAllByTakenOnBetween(takenOn, takenOn);
     }
 
     @PostMapping
@@ -137,7 +128,7 @@ class GalleryController {
                 out.getChannel().transferFrom(in, 0, Integer.MAX_VALUE);
                 out.flush();
 
-                final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(GregorianCalendar.from(takenOn), filename);
+                final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(takenOn.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate(), filename);
                 galleryPicture.setDescription(description);
 
                 rv = new ResponseEntity<>(this.galleryPictureRepository.save(galleryPicture), HttpStatus.OK);

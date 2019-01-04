@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -44,7 +42,7 @@ import javax.validation.constraints.Size;
 import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 /**
  * @author Michael J. Simons, 2014-02-08
@@ -79,9 +77,8 @@ class TrackEntity implements Serializable {
     private String name;
 
     @Column(name = "covered_on", nullable = false)
-    @Temporal(TemporalType.DATE)
     @NotNull
-    private Calendar coveredOn;
+    private LocalDate coveredOn;
 
     @Column(length = 2048)
     @Setter
@@ -107,7 +104,7 @@ class TrackEntity implements Serializable {
     @Setter
     private Type type = Type.biking;
 
-    TrackEntity(final String name, final Calendar coveredOn) {
+    TrackEntity(final String name, final LocalDate coveredOn) {
         this.name = name;
         this.coveredOn = coveredOn;
     }

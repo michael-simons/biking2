@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.ZoneId;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,10 +45,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.URL;
 
 import static java.util.stream.IntStream.rangeClosed;
@@ -117,15 +114,13 @@ public class BikeEntity implements Serializable {
     private String color = "CCCCCC";
 
     @Column(name = "bought_on", nullable = false)
-    @Temporal(TemporalType.DATE)
     @NotNull
     @Getter
-    private Calendar boughtOn;
+    private LocalDate boughtOn;
 
     @Column(name = "decommissioned_on")
-    @Temporal(TemporalType.DATE)
     @Getter
-    private Calendar decommissionedOn;
+    private LocalDate decommissionedOn;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
@@ -133,11 +128,10 @@ public class BikeEntity implements Serializable {
     private final List<MilageEntity> milages = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @JsonIgnore
     @Getter
-    private Calendar createdAt;
+    private OffsetDateTime createdAt;
 
     @Embedded
     @Getter @Setter
@@ -151,20 +145,17 @@ public class BikeEntity implements Serializable {
 
     public BikeEntity(final String name, final LocalDate boughtOn) {
         this.name = name;
-        this.boughtOn = GregorianCalendar.from(boughtOn.atStartOfDay(ZoneId.systemDefault()));
-        this.createdAt = Calendar.getInstance();
+        this.boughtOn = boughtOn;
+        this.createdAt = OffsetDateTime.now();
     }
 
     /**
-     * Use a verb instead of a setter to show that the time part is explicitly
-     * stripped of
-     *
      * @param decommissionDate Date of decommission. If null nothing changes
      * @return true if the bike was decommissioned
      */
     public boolean decommission(final LocalDate decommissionDate) {
         if (decommissionDate != null) {
-            this.decommissionedOn = GregorianCalendar.from(decommissionDate.atStartOfDay(ZoneId.systemDefault()));
+            this.decommissionedOn = decommissionDate;
         }
         return this.decommissionedOn != null;
     }
@@ -172,7 +163,7 @@ public class BikeEntity implements Serializable {
     public synchronized MilageEntity addMilage(final LocalDate recordedOn, final double amount) {
         if (!this.milages.isEmpty()) {
             final MilageEntity lastMilage = this.milages.get(this.milages.size() - 1);
-            LocalDate nextValidDate = lastMilage.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusMonths(1);
+            LocalDate nextValidDate = lastMilage.getRecordedOn().plusMonths(1);
             if (!recordedOn.equals(nextValidDate)) {
                 throw new IllegalArgumentException("Next valid date for milage is " + nextValidDate);
             }
@@ -198,7 +189,7 @@ public class BikeEntity implements Serializable {
             this.periods = IntStream.range(1, this.milages.size()).collect(TreeMap::new, (map, i) -> {
                 final MilageEntity left = milages.get(i - 1);
                 map.put(
-                        left.getRecordedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                        left.getRecordedOn(),
                         milages.get(i).getAmount().subtract(left.getAmount()).intValue()
                 );
             }, TreeMap::putAll);

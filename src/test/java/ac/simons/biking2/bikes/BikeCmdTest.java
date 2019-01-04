@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@
 package ac.simons.biking2.bikes;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,12 +29,11 @@ public class BikeCmdTest {
     public void beanShouldWorkAsExpected() {
         BikeCmd bean = new BikeCmd();
 
-        bean.setBoughtOn(new Date());
+        bean.setBoughtOn(ZonedDateTime.now());
         Assert.assertEquals(LocalDate.now(), bean.boughtOnAsLocalDate());
-        Assert.assertNull(bean.decommissionedOnAsLocalDate());
-        Calendar hlp = Calendar.getInstance();
-        hlp.add(Calendar.DAY_OF_MONTH, 1);
-        bean.setDecommissionedOn(hlp.getTime());
+        Assert.assertNull(bean.getDecommissionedOn());
+        bean.setDecommissionedOn(ZonedDateTime.now().plusDays(1));
         Assert.assertEquals(LocalDate.now().plusDays(1), bean.decommissionedOnAsLocalDate());
+
     }
 }

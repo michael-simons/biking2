@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.sql.DataSource;
 import org.junit.Rule;
@@ -76,7 +73,7 @@ public class BikeRepositoryTest {
     @Test
     public void testFindActive() {
         final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);
-        final List<BikeEntity> activeBikes = this.bikeRepository.findActive(GregorianCalendar.from(cutOffDate.atStartOfDay(ZoneId.systemDefault())));
+        final List<BikeEntity> activeBikes = this.bikeRepository.findActive(cutOffDate);
 
         assertThat(activeBikes.size(), is(equalTo(3)));
         assertThat(activeBikes.get(0).getName(), is(equalTo("bike1")));
@@ -90,7 +87,7 @@ public class BikeRepositoryTest {
     }
 
     /**
-     * This actualy doesn't test the repository but the mapping, but i wanted to
+     * This actually doesn't test the repository but the mapping, but i wanted to
      * double check if i got the bidirectional mapping right this time. A milage
      * is managed by a bike.
      *
@@ -115,7 +112,7 @@ public class BikeRepositoryTest {
 
     @Test
     public void testGetDateOfFirstRecord() {
-        final Calendar dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();
-        assertThat(LocalDate.from(dateOfFirstRecord.toInstant().atZone(ZoneId.systemDefault())), is(equalTo(LocalDate.of(2012, Month.JANUARY, 1))));
+        final LocalDate dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();
+        assertThat(dateOfFirstRecord, is(equalTo(LocalDate.of(2012, Month.JANUARY, 1))));
     }
 }

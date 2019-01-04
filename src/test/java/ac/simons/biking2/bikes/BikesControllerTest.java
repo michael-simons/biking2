@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,8 @@ import ac.simons.biking2.bikes.BikeEntity.Link;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import org.joor.Reflect;
 import org.junit.Assert;
@@ -102,8 +99,8 @@ public class BikesControllerTest {
                 .set("id", 4711)
                 .set("name", "Bike 1")
                 .set("color", "FF0000")
-                .set("boughtOn", GregorianCalendar.from(LocalDate.of(2015, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault())))
-                .set("decommissionedOn", GregorianCalendar.from(LocalDate.of(2015, Month.DECEMBER, 31).atStartOfDay(ZoneId.systemDefault())))
+                .set("boughtOn", LocalDate.of(2015, Month.JANUARY, 1))
+                .set("decommissionedOn", LocalDate.of(2015, Month.DECEMBER, 31))
                 .set("story", new Link("http://test.com/test", "Test Story"))
                 .call("addMilage", LocalDate.of(2015, Month.JANUARY, 1), 0.0)
                 .call("getBike")
@@ -116,7 +113,7 @@ public class BikesControllerTest {
                 .set("id", 23)
                 .set("name", "Bike 2")
                 .set("color", "CCCCCC")
-                .set("boughtOn", GregorianCalendar.from(LocalDate.of(2014, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault())))
+                .set("boughtOn", LocalDate.of(2014, Month.JANUARY, 1))
                 .call("addMilage", LocalDate.of(2014, Month.JANUARY, 1), 0.0)
                 .call("getBike")
                 .get()
@@ -179,7 +176,7 @@ public class BikesControllerTest {
 
         final NewMilageCmd newMilageCmd = new NewMilageCmd();
         newMilageCmd.setAmount(23.0);
-        newMilageCmd.setRecordedOn(new Date());
+        newMilageCmd.setRecordedOn(ZonedDateTime.now());
 
         // Empty content
         mockMvc
@@ -263,7 +260,7 @@ public class BikesControllerTest {
         when(repository.save(any(BikeEntity.class))).then(returnsFirstArg());
 
         final BikeCmd newBikeCmd = new BikeCmd();
-        newBikeCmd.setBoughtOn(new Date());
+        newBikeCmd.setBoughtOn(ZonedDateTime.now());
         newBikeCmd.setColor("cccccc");
         newBikeCmd.setName("test");
 
@@ -317,7 +314,7 @@ public class BikesControllerTest {
         when(repository.save(any(BikeEntity.class))).thenThrow(new DataIntegrityViolationException(""));
 
         final BikeCmd newBikeCmd = new BikeCmd();
-        newBikeCmd.setBoughtOn(new Date());
+        newBikeCmd.setBoughtOn(ZonedDateTime.now());
         newBikeCmd.setColor("cccccc");
         newBikeCmd.setName("test");
 
@@ -343,12 +340,12 @@ public class BikesControllerTest {
 
         BikeEntity bike = new BikeEntity("test", now.minusMonths(1));
         bike.setColor("000000");
-        Calendar boughtOn = bike.getBoughtOn();
+        LocalDate boughtOn = bike.getBoughtOn();
         when(repository.findById(2)).thenReturn(Optional.of(bike));
 
         final BikeCmd updatedBikeCmd = new BikeCmd();
-        updatedBikeCmd.setBoughtOn(new Date());
-        updatedBikeCmd.setDecommissionedOn(new Date());
+        updatedBikeCmd.setBoughtOn(ZonedDateTime.now());
+        updatedBikeCmd.setDecommissionedOn(ZonedDateTime.now());
         updatedBikeCmd.setColor("FFFCCC");
         updatedBikeCmd.setName("neuer name");
 
@@ -403,7 +400,7 @@ public class BikesControllerTest {
         Assert.assertEquals("test", bike.getName());
         Assert.assertEquals(boughtOn, bike.getBoughtOn());
         Assert.assertEquals("FFFCCC", bike.getColor());
-        Assert.assertEquals(GregorianCalendar.from(now.atStartOfDay(ZoneId.systemDefault())), bike.getDecommissionedOn());
+        Assert.assertEquals(now, bike.getDecommissionedOn());
 
         verifyNoMoreInteractions(repository);
     }
@@ -418,7 +415,7 @@ public class BikesControllerTest {
 
         BikeEntity bike = new BikeEntity("test", now.minusMonths(1));
         bike.setColor("000000");
-        Calendar boughtOn = bike.getBoughtOn();
+        LocalDate boughtOn = bike.getBoughtOn();
         when(repository.findById(2)).thenReturn(Optional.of(bike));
 
         final StoryCmd validNewStoryCmd = new StoryCmd();

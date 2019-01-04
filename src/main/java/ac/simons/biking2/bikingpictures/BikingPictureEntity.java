@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,8 @@
 package ac.simons.biking2.bikingpictures;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.Column;
@@ -27,8 +26,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -63,9 +60,8 @@ class BikingPictureEntity implements Serializable {
     private Integer externalId;
 
     @Column(name = "pub_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @NotNull
-    private Calendar pubDate;
+    private OffsetDateTime pubDate;
 
     /**
      * A link to the webpage
@@ -82,7 +78,7 @@ class BikingPictureEntity implements Serializable {
             throw new InvalidGUIDException();
         }
         this.externalId = Integer.parseInt(matcher.group(1));
-        this.pubDate = GregorianCalendar.from(pubDate);
+        this.pubDate = pubDate.toOffsetDateTime();
         this.link = link;
     }
 }

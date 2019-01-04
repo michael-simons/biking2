@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
  */
 package ac.simons.biking2.bikes;
 
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import javax.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,12 +32,13 @@ import lombok.Setter;
 @Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 class NewMilageCmd {
+    @DateTimeFormat(iso = DATE_TIME)
     @NotNull
-    private Date recordedOn;
+    private ZonedDateTime recordedOn;
     @NotNull
     private Double amount;
 
     public LocalDate recordedOnAsLocalDate() {
-        return LocalDateTime.ofInstant(this.getRecordedOn().toInstant(), ZoneId.systemDefault()).toLocalDate();
+        return this.recordedOn.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();
     }
 }

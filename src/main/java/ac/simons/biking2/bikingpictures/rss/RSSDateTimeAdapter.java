@@ -28,12 +28,12 @@ public final class RSSDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
 
     @Override
-    public ZonedDateTime unmarshal(final String v) throws Exception {
+    public ZonedDateTime unmarshal(final String v) {
         return ZonedDateTime.parse(v, formatter);
     }
 
     @Override
-    public String marshal(final ZonedDateTime v) throws Exception {
+    public String marshal(final ZonedDateTime v) {
         return v.format(formatter);
     }
 }

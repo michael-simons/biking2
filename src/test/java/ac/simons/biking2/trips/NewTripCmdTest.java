@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2015-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 package ac.simons.biking2.trips;
 
 import ac.simons.biking2.support.BeanTester;
-import java.util.Date;
+
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class NewTripCmdTest {
     @Test
     public void beanShouldWorkAsExpected() {
         final Map<String, Object> values = new HashMap<>();
-        values.put("coveredOn", new Date());
+        values.put("coveredOn", LocalDate.now());
         values.put("distance", 2342.0);
 
         values.forEach(new BeanTester(NewTripCmd.class));

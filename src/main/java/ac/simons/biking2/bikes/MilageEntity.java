@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@ package ac.simons.biking2.bikes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,8 +28,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -58,9 +54,8 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     private Integer id;
 
     @Column(name = "recorded_on", nullable = false)
-    @Temporal(TemporalType.DATE)
     @NotNull
-    private Calendar recordedOn;
+    private LocalDate recordedOn;
 
     @Column(nullable = false, precision = 8, scale = 2)
     @NotNull
@@ -71,15 +66,14 @@ public class MilageEntity implements Serializable, Comparable<MilageEntity> {
     private BikeEntity bike;
 
     @Column(name = "created_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @NotNull
-    private Calendar createdAt;
+    private OffsetDateTime createdAt;
 
     protected MilageEntity(final BikeEntity bike, final LocalDate recordedOn, final double amount) {
         this.bike = bike;
-        this.recordedOn = GregorianCalendar.from(recordedOn.atStartOfDay(ZoneId.systemDefault()));
+        this.recordedOn = recordedOn;
         this.amount = BigDecimal.valueOf(amount);
-        this.createdAt = Calendar.getInstance();
+        this.createdAt = OffsetDateTime.now();
     }
 
     @Override
