@@ -53,13 +53,17 @@ public class NewLocationCmdTest {
                 .withMessage("Either timestampSeconds or timestampMillis must be set.");
 
         NewLocationCmd newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\"}");
-        final ZoneId zoneId = ZoneId.systemDefault();
-        Assert.assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, zoneId).toOffsetDateTime(), newLocationCmd.getCreatedAt());
+        final ZoneId berlin = ZoneId.of("Europe/Berlin");
+        final ZoneId systemDefault = ZoneId.systemDefault();
+        Assert.assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, berlin)
+                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.getCreatedAt());
 
         newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tstMillis\": \"1400578694000\"}");
-        Assert.assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 38, 14, 0, zoneId).toOffsetDateTime(), newLocationCmd.getCreatedAt());
+        Assert.assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 38, 14, 0, berlin)
+                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.getCreatedAt());
 
         newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\", \"tstMillis\": \"1400578694000\"}");
-        Assert.assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, zoneId).toOffsetDateTime(), newLocationCmd.getCreatedAt());
+        Assert.assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, berlin)
+                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.getCreatedAt());
     }
 }
