@@ -53,8 +53,8 @@
     <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
     <java.version>11</java.version>
     <joor.version>0.9.9</joor.version>
-    <jqassistant.version>1.6.0-RC1</jqassistant.version>
-    <jqassistant.plugin.version>1.6.0-RC1</jqassistant.plugin.version>
+    <jqassistant.version>1.6.0</jqassistant.version>
+    <jqassistant.plugin.version>1.6.0</jqassistant.plugin.version>
     <jquery.version>1.11.0</jquery.version>
     <angularjs.version>1.2.29</angularjs.version>
     <highcharts.version>3.0.10</highcharts.version>
