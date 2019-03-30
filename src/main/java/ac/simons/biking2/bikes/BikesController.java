@@ -59,9 +59,9 @@ class BikesController {
     public List<BikeEntity> getBikes(@RequestParam(required = false, defaultValue = "false") final boolean all) {
         List<BikeEntity> rv;
         if (all) {
-            rv = bikeRepository.findAll(new Sort(Sort.Direction.ASC, "boughtOn", "decommissionedOn", "name"));
+            rv = bikeRepository.findAll(Sort.by("boughtOn", "decommissionedOn", "name").ascending());
         } else {
-            rv = bikeRepository.findByDecommissionedOnIsNull(new Sort(Sort.Direction.ASC, "name"));
+            rv = bikeRepository.findByDecommissionedOnIsNull(Sort.by("name").ascending());
         }
         return rv;
     }
