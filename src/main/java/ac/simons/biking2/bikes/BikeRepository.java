@@ -17,14 +17,16 @@ package ac.simons.biking2.bikes;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.Repository;
 
 /**
  * @author Michael J. Simons, 2014-02-08
  */
-public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
+public interface BikeRepository extends Repository<BikeEntity, Integer> {
 
     @Query(value
             = "Select b from BikeEntity b "
@@ -40,4 +42,12 @@ public interface BikeRepository extends JpaRepository<BikeEntity, Integer> {
 
     @Query("Select coalesce(min(m.recordedOn), current_date()) as dateOfFirstRecord from MilageEntity m")
     LocalDate getDateOfFirstRecord();
+
+    List<BikeEntity> findAll(Sort sort);
+
+    List<BikeEntity> findAll();
+
+    Optional<BikeEntity> findById(Integer id);
+
+    BikeEntity save(BikeEntity bike);
 }
