@@ -47,7 +47,7 @@
 
     <asciidoctor-maven-plugin.version>1.5.7.1</asciidoctor-maven-plugin.version>
     <bootstrap.version>3.1.1</bootstrap.version>
-    <checkstyle.version>8.15</checkstyle.version>
+    <checkstyle.version>8.18</checkstyle.version>
     <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     <java.version>11</java.version>
     <joor.version>0.9.12</joor.version>
