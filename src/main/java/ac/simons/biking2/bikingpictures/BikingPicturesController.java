@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package ac.simons.biking2.bikingpictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.support.FileBasedResource;
-import ac.simons.biking2.support.ResourceNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -26,11 +25,12 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * @author Michael J. Simons, 2014-02-19
@@ -56,7 +56,7 @@ class BikingPicturesController {
     ) throws IOException {
 
         final BikingPictureEntity bikingPicture = this.bikingPictureRepository
-                .findById(id).orElseThrow(ResourceNotFoundException::new);
+                .findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         final FileBasedResource resource = new FileBasedResource(new File(datastoreBaseDirectory, String.format("%s/%d.jpg", DatastoreConfig.BIKING_PICTURES_DIRECTORY, bikingPicture.getExternalId())), String.format("%s.jpg", id), 365);
         resource.send(request, response);
