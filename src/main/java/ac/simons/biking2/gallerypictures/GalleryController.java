@@ -83,7 +83,7 @@ class GalleryController {
     @GetMapping
     @ResponseBody
     public List<GalleryPictureEntity> getGalleryPictures() {
-        return galleryPictureRepository.findAll(new Sort(Sort.Direction.ASC, "takenOn"));
+        return galleryPictureRepository.findAll(Sort.by("takenOn").ascending());
     }
 
     /**

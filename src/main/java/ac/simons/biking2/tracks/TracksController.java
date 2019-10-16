@@ -95,7 +95,7 @@ class TracksController {
     @ResponseBody
     public
     List<TrackEntity> getTracks() {
-        return trackRepository.findAll(new Sort(Sort.Direction.ASC, "coveredOn"));
+        return trackRepository.findAll(Sort.by("coveredOn").ascending());
     }
 
     @RequestMapping(value = "/api/tracks", method = POST)
