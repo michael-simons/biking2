@@ -16,6 +16,7 @@
 package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.config.DatastoreConfig;
+import ac.simons.biking2.config.SecurityConfig;
 import ac.simons.biking2.support.RegexMatcher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
@@ -30,11 +31,13 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -47,9 +50,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -67,9 +68,10 @@ import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -83,7 +85,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Michael J. Simons, 2014-02-15
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = TracksController.class, secure = false)
+@WebMvcTest(
+        includeFilters = @ComponentScan.Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
+        controllers = TracksController.class
+)
 public class TracksControllerTest {
 
 
@@ -219,7 +224,8 @@ public class TracksControllerTest {
             .andExpect(status().isNotFound());
     }
 
-    @Test   
+    @Test
+    @WithMockUser
     public void testDeleteTrack() throws IOException, Exception {
         final int validId = 23;
         final int validExistingId = 23 + 1;
@@ -262,6 +268,7 @@ public class TracksControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testCreateTrack() throws Exception {
         final TrackEntity track = new TrackEntity() {
             private static final long serialVersionUID = -3391535625175956488L;
@@ -312,6 +319,7 @@ public class TracksControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldNotCreateInvalidTracks() throws Exception {
         // Empty data
         final MockMultipartFile multipartFile = new MockMultipartFile("trackData", new byte[0]);
@@ -335,10 +343,11 @@ public class TracksControllerTest {
             )
             .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(trackRepository);
+        verifyNoInteractions(trackRepository);
     }
 
     @Test
+    @WithMockUser
     public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
         when(trackRepository.save(any(TrackEntity.class))).thenThrow(new DataIntegrityViolationException("fud"));
 
@@ -397,6 +406,7 @@ public class TracksControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldHandleInvalidTcxFiles() throws Exception {
         final TrackEntity track = Mockito.mock(TrackEntity.class);
         when(track.getTrackFile(this.datastoreBaseDirectory, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));

@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.1.6.RELEASE</version>
+    <version>2.2.0.RELEASE</version>
     <relativePath />
   </parent>
 
@@ -48,7 +48,7 @@
     <asciidoctor-maven-plugin.version>1.5.7.1</asciidoctor-maven-plugin.version>
     <bootstrap.version>3.1.1</bootstrap.version>
     <checkstyle.version>8.18</checkstyle.version>
-    <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     <java.version>11</java.version>
     <joor.version>0.9.9</joor.version>
     <jqassistant.version>1.6.0</jqassistant.version>
@@ -63,7 +63,7 @@
     <momentjs.version>2.10.6</momentjs.version>
     <sockjs-client.version>1.0.2</sockjs-client.version>
     <stomp-websocket.version>2.3.3</stomp-websocket.version>
-    <wro4j-spring-boot-starter.version>0.5.1</wro4j-spring-boot-starter.version>
+    <wro4j-spring-boot-starter.version>0.6.1</wro4j-spring-boot-starter.version>
 
     <start-class>ac.simons.biking2.Application</start-class>
 
@@ -160,6 +160,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -293,7 +298,12 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <excludeDevtools>true</excludeDevtools>
-          <excludeArtifactIds>lombok</excludeArtifactIds>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>

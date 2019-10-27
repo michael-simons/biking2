@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 michael-simons.eu.
+ * Copyright 2016-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -70,7 +70,7 @@ public class NewLocationMessageListenerTest {
         final NewLocationMessageListener listener = new NewLocationMessageListener(objectMapper, locationService);
         listener.onMessage(message);
 
-        verifyZeroInteractions(locationService);
+        verifyNoInteractions(locationService);
     }
     
     @Test
@@ -114,6 +114,6 @@ public class NewLocationMessageListenerTest {
         final NewLocationMessageListener listener = new NewLocationMessageListener(objectMapper, locationService);
         listener.onMessage(message);
 
-        verifyZeroInteractions(locationService);
+        verifyNoInteractions(locationService);
     }
 }

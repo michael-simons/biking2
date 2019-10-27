@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 /**
  * @author Michael J. Simons, 2014-03-20
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableScheduling
 public class SchedulingConfig implements SchedulingConfigurer {
 

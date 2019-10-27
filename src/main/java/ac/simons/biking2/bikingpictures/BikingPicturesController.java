@@ -45,7 +45,7 @@ class BikingPicturesController {
     @RequestMapping("/api/bikingPictures")
     @ResponseBody
     public List<BikingPictureEntity> getBikingPictures() {
-        return bikingPictureRepository.findAll(new Sort(Sort.Direction.ASC, "pubDate"));
+        return bikingPictureRepository.findAll(Sort.by("pubDate").ascending());
     }
 
     @RequestMapping({"/api/bikingPictures/{id:\\d+}.jpg"})

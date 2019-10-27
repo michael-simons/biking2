@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author Michael J. Simons, 2014-02-08
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class DatastoreConfig {
 
     public static final String BIKING_PICTURES_DIRECTORY = "data/bikingPictures";

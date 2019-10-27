@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.trips;
 
+import ac.simons.biking2.config.SecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,8 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -37,6 +41,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -54,8 +59,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(
-        controllers = TripsController.class,
-        secure = false
+        includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
+        controllers = TripsController.class
 )
 @AutoConfigureRestDocs(
         outputDir = "target/generated-snippets",
@@ -74,6 +79,7 @@ public class TripsControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser
     public void testCreateTrip() throws Exception {
         final AssortedTripEntity trip = Reflect
                 .on(new AssortedTripEntity(LocalDate.now(), BigDecimal.valueOf(23.42)))
