@@ -18,42 +18,42 @@ package ac.simons.biking2.tracker;
 import ac.simons.biking2.support.BeanTester;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-23
+ * @author Michael J. Simons
+ * 
+ * @since 2014-05-23
  */
-public class LocationEntityTest {
+class LocationEntityTest {
 
     @Test
-    public void beanShouldWorkAsExpected() {
+    void beanShouldWorkAsExpected() {
         final OffsetDateTime now = OffsetDateTime.now();
 
-        final Map<String, Object> values = new HashMap<>();
-        values.put("description", "description");
+        final Map<String, Object> values = Map.of("description", "description");
 
         values.forEach(new BeanTester(LocationEntity.class));
 
         final LocationEntity l1 = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, now);
         final LocationEntity otherL1 = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, now);
-        Assert.assertEquals(l1, otherL1);
-        Assert.assertEquals(l1.hashCode(), otherL1.hashCode());
-        Assert.assertNotEquals(l1, "something else");
-        Assert.assertNotEquals(l1, null);
-        Assert.assertEquals(BigDecimal.ONE, l1.getLatitude());
-        Assert.assertEquals(BigDecimal.TEN, l1.getLongitude());
-        Assert.assertEquals(now, l1.getCreatedAt());
-        Assert.assertNull(l1.getId());
+        Assertions.assertEquals(l1, otherL1);
+        Assertions.assertEquals(l1.hashCode(), otherL1.hashCode());
+        Assertions.assertNotEquals(l1, "something else");
+        Assertions.assertNotEquals(l1, null);
+        Assertions.assertEquals(BigDecimal.ONE, l1.getLatitude());
+        Assertions.assertEquals(BigDecimal.TEN, l1.getLongitude());
+        Assertions.assertEquals(now, l1.getCreatedAt());
+        Assertions.assertNull(l1.getId());
 
         final OffsetDateTime then = OffsetDateTime.now().plusYears(1);
         LocationEntity other = new LocationEntity(BigDecimal.ZERO, BigDecimal.TEN, now);
-        Assert.assertNotEquals(l1, other);
+        Assertions.assertNotEquals(l1, other);
         other = new LocationEntity(BigDecimal.ONE, BigDecimal.ZERO, now);
-        Assert.assertNotEquals(l1, other);
+        Assertions.assertNotEquals(l1, other);
         other = new LocationEntity(BigDecimal.ONE, BigDecimal.TEN, then);
-        Assert.assertNotEquals(l1, other);
+        Assertions.assertNotEquals(l1, other);
     }
 }

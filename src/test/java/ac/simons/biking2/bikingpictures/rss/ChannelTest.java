@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,19 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-23
+ * @author Michael J. Simons
+ *
+ * @since 2014-05-23
  */
-public class ChannelTest {
+class ChannelTest {
 
     @Test
-    public void beanShouldWorkAsExpected() {
+    void beanShouldWorkAsExpected() {
         final Map<String, Object> values = new HashMap<>();
         values.put("title", "title");
         values.put("link", "link");
@@ -42,7 +45,7 @@ public class ChannelTest {
     }
 
     @Test
-    public void previousAndNextShouldWorkAsExpected() {
+    void previousAndNextShouldWorkAsExpected() {
         final Channel channel = new Channel();
         channel.setLinks(new ArrayList<>());
 
@@ -68,7 +71,7 @@ public class ChannelTest {
         link.setHref("n2");
         channel.getLinks().add(link);
 
-        Assert.assertEquals("p1", channel.getPrevious());
-        Assert.assertEquals("n1", channel.getNext());
+        Assertions.assertEquals("p1", channel.getPrevious());
+        Assertions.assertEquals("n1", channel.getNext());
     }
 }

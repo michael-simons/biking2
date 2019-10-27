@@ -19,20 +19,16 @@ import ac.simons.biking2.config.SecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Calendar;
 import org.joor.Reflect;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -55,9 +51,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * @author Michael J. Simons, 2015-06-09
+ * @author Michael J. Simons
+ *
+ * @since 2015-06-09
  */
-@RunWith(SpringRunner.class)
 @WebMvcTest(
         includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
         controllers = TripsController.class
@@ -67,7 +64,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         uriHost = "biking.michael-simons.eu",
         uriPort = 80
 )
-public class TripsControllerTest {
+class TripsControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -80,7 +77,7 @@ public class TripsControllerTest {
 
     @Test
     @WithMockUser
-    public void testCreateTrip() throws Exception {
+    void testCreateTrip() throws Exception {
         final AssortedTripEntity trip = Reflect
                 .on(new AssortedTripEntity(LocalDate.now(), BigDecimal.valueOf(23.42)))
                 .set("id", 42)

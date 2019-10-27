@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -59,9 +59,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 
 /**
- * @author Michael J. Simons, 2014-03-07
+ * @author Michael J. Simons
+ *
+ * @since 2014-03-07
  */
-public class GalleryControllerTest {
+class GalleryControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper() // TODO Create a real WebMvcTest and made this go away.
             .registerModules(new JavaTimeModule(), new Jdk8Module())
@@ -79,7 +81,7 @@ public class GalleryControllerTest {
     }
 
     @Test
-    public void createGalleryPicture() throws Exception {
+    void createGalleryPicture() throws Exception {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         final LocalDate takenOn = LocalDate.of(2014, 2, 24);
         final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(takenOn, "description") {
@@ -109,7 +111,7 @@ public class GalleryControllerTest {
     }
 
     @Test
-    public void shouldHandleIOExceptionsGracefully() throws Exception {
+    void shouldHandleIOExceptionsGracefully() throws Exception {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         final LocalDate takenOn = LocalDate.of(2014, 2, 24);
         final GalleryPictureEntity galleryPicture = new GalleryPictureEntity(takenOn, "description") {
@@ -140,7 +142,7 @@ public class GalleryControllerTest {
     }
 
     @Test
-    public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
+    void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         when(repository.save(Mockito.any(GalleryPictureEntity.class))).thenThrow(new DataIntegrityViolationException("fud"));
 
@@ -162,7 +164,7 @@ public class GalleryControllerTest {
     }
 
     @Test
-    public void shouldNotCreateInvalidGalleryPicture() throws Exception {
+    void shouldNotCreateInvalidGalleryPicture() throws Exception {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
@@ -194,7 +196,7 @@ public class GalleryControllerTest {
     }
 
     @Test
-    public void shouldNotFindNonExistingPicture() throws Exception {
+    void shouldNotFindNonExistingPicture() throws Exception {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
@@ -211,7 +213,7 @@ public class GalleryControllerTest {
     }
 
     @Test
-    public void shouldFindPicture() throws Exception {
+    void shouldFindPicture() throws Exception {
         // Read an image resource into memory...
         final File imageFile = new File(this.galleryPictures, System.currentTimeMillis() + ".jpg");
         final byte[] imageData;
@@ -248,11 +250,11 @@ public class GalleryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(request().attribute("org.apache.tomcat.sendfile.filename", CoreMatchers.nullValue()))
                 .andReturn();
-        Assert.assertTrue(Arrays.equals(imageData, result.getResponse().getContentAsByteArray()));
+        Assertions.assertTrue(Arrays.equals(imageData, result.getResponse().getContentAsByteArray()));
         // Null request (Don't know how to make the request null using MockMvcBuilders)
         MockHttpServletResponse response = new MockHttpServletResponse();
         controller.getGalleryPicture(42, null, response);
-        Assert.assertTrue(Arrays.equals(imageData, response.getContentAsByteArray()));
+        Assertions.assertTrue(Arrays.equals(imageData, response.getContentAsByteArray()));
 
         // Test streaming of resources
         mockMvc
@@ -271,21 +273,21 @@ public class GalleryControllerTest {
     }
 
     @Test
-    public void shouldGetGalleryPictures() {
+    void shouldGetGalleryPictures() {
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         when(repository.findAll(Mockito.any(Sort.class))).thenReturn(new ArrayList<>());
         final GalleryController controller = new GalleryController(repository, this.tmpDir);
 
         final List<GalleryPictureEntity> galleryPictures = controller.getGalleryPictures();
-        Assert.assertNotNull(galleryPictures);
-        Assert.assertEquals(0, galleryPictures.size());
+        Assertions.assertNotNull(galleryPictures);
+        Assertions.assertEquals(0, galleryPictures.size());
 
         Mockito.verify(repository).findAll(Mockito.any(Sort.class));
         Mockito.verifyNoMoreInteractions(repository);
     }
 
     @Test
-    public void shouldGetGalleryPicturesInRange() throws Exception {
+    void shouldGetGalleryPicturesInRange() throws Exception {
 
         final GalleryPictureRepository repository = mock(GalleryPictureRepository.class);
         final GalleryController controller = new GalleryController(repository, this.tmpDir);

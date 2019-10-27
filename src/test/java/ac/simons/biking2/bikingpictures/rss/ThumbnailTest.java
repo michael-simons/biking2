@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,25 @@
 package ac.simons.biking2.bikingpictures.rss;
 
 import ac.simons.biking2.support.BeanTester;
-import java.util.HashMap;
 import java.util.Map;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-23
+ * @author Michael J. Simons
+ *
+ * @since 2014-05-23
  */
-public class ThumbnailTest {
+class ThumbnailTest {
 
     @Test
-    public void beanShouldWorkAsExpected() {
-        final Map<String, Object> values = new HashMap<>();
-        values.put("url", "https://dailyfratze.de/attachments/michael/2012/11/13535048936935471334.jpg");
-        values.put("width", 23);
-        values.put("height", 42);
+    void beanShouldWorkAsExpected() {
 
+        var values = Map.of(
+            "url", "https://dailyfratze.de/attachments/michael/2012/11/13535048936935471334.jpg",
+            "width", 23,
+            "height", 42
+        );
         values.forEach(new BeanTester(Thumbnail.class));
     }
 }

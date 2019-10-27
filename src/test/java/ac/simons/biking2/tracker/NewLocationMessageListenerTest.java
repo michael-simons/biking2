@@ -15,32 +15,38 @@
  */
 package ac.simons.biking2.tracker;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.math.BigDecimal;
+
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.TextMessage;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
- * @author Michael J. Simons, 2016-07-19
+ * @author Michael J. Simons
+ *
+ * @since 2016-07-19
  */
-@RunWith(MockitoJUnitRunner.class)
-public class NewLocationMessageListenerTest {
+@ExtendWith(MockitoExtension.class)
+class NewLocationMessageListenerTest {
 
     @Mock
     private LocationService locationService;
@@ -48,7 +54,7 @@ public class NewLocationMessageListenerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void onTextMessageShouldWork() throws IOException, JMSException {
+    void onTextMessageShouldWork() throws IOException, JMSException {
         final TextMessage message = Mockito.mock(TextMessage.class);
         when(message.getText()).thenReturn("{\"lon\":\"5\", \"lat\":\"50\"}");
 
@@ -63,7 +69,7 @@ public class NewLocationMessageListenerTest {
     }
 
     @Test
-    public void ioExceptionsShouldBeHandled() throws IOException, JMSException {
+    void ioExceptionsShouldBeHandled() throws IOException, JMSException {
         final TextMessage message = Mockito.mock(TextMessage.class);
         when(message.getText()).thenReturn("foobar");
 
@@ -72,9 +78,9 @@ public class NewLocationMessageListenerTest {
 
         verifyNoInteractions(locationService);
     }
-    
+
     @Test
-    public void dataExceptionsShouldBeHandled() throws IOException, JMSException {
+    void dataExceptionsShouldBeHandled() throws IOException, JMSException {
         final TextMessage message = Mockito.mock(TextMessage.class);
         when(message.getText()).thenReturn("{\"lon\":\"5\", \"lat\":\"50\"}");
         when(locationService.createAndSendNewLocation(any(NewLocationCmd.class))).thenThrow(new DataIntegrityViolationException("foobar"));
@@ -86,7 +92,7 @@ public class NewLocationMessageListenerTest {
     }
 
     @Test
-    public void onByteMessageShouldWork() throws IOException, JMSException {
+    void onByteMessageShouldWork() throws IOException, JMSException {
         final BytesMessage message = Mockito.mock(BytesMessage.class);
         final byte[] bytes = "{\"lon\":\"5\", \"lat\":\"50\"}".getBytes();
         when(message.getBodyLength()).thenReturn((long) bytes.length);
@@ -107,7 +113,7 @@ public class NewLocationMessageListenerTest {
     }
 
     @Test
-    public void onOtherMessageShouldWork() throws IOException, JMSException {
+    void onOtherMessageShouldWork() throws IOException, JMSException {
         final MapMessage message = Mockito.mock(MapMessage.class);
         when(message.getJMSType()).thenReturn("foobar");
 

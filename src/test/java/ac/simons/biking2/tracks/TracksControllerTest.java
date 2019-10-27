@@ -17,13 +17,9 @@ package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.config.SecurityConfig;
-import ac.simons.biking2.support.RegexMatcher;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -38,7 +34,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -46,7 +41,6 @@ import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -58,11 +52,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatIOException;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.rules.ExpectedException.none;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
@@ -82,15 +77,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * @author Michael J. Simons, 2014-02-15
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-15
  */
-@RunWith(SpringRunner.class)
 @WebMvcTest(
         includeFilters = @ComponentScan.Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
         controllers = TracksController.class
 )
-public class TracksControllerTest {
-
+class TracksControllerTest {
 
     private final List<TrackEntity> defaultTestData;
 
@@ -112,10 +107,7 @@ public class TracksControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Rule
-    public final ExpectedException expectedException = none();
-
-    public TracksControllerTest() {
+    TracksControllerTest() {
         final LocalDate now = LocalDate.now();
         final Random random = new Random(System.currentTimeMillis());
 
@@ -125,7 +117,7 @@ public class TracksControllerTest {
     }
 
     @Test
-    public void testGetTracks() throws Exception {
+    void testGetTracks() throws Exception {
         final Sort sort = Sort.by("coveredOn").ascending();
         when(trackRepository.findAll(sort)).thenReturn(defaultTestData);
 
@@ -138,7 +130,7 @@ public class TracksControllerTest {
     }
 
     @Test
-    public void testDownloadTrack() throws Exception {
+    void testDownloadTrack() throws Exception {
         final int validId = 23;
         final String validPrettyId = Integer.toString(validId, 36);
         when(trackIdParser.fromPrettyId(validPrettyId)).thenReturn(validId);
@@ -202,7 +194,7 @@ public class TracksControllerTest {
     }
 
     @Test
-    public void testGetTrack() throws Exception {
+    void testGetTrack() throws Exception {
         final int validId = 23;
         final String validPrettyId = Integer.toString(validId, 36);
         when(trackIdParser.fromPrettyId(validPrettyId)).thenReturn(validId);
@@ -226,7 +218,7 @@ public class TracksControllerTest {
 
     @Test
     @WithMockUser
-    public void testDeleteTrack() throws IOException, Exception {
+    void testDeleteTrack() throws Exception {
         final int validId = 23;
         final int validExistingId = 23 + 1;
         final String validPrettyId = Integer.toString(validId, 36);
@@ -269,7 +261,7 @@ public class TracksControllerTest {
 
     @Test
     @WithMockUser
-    public void testCreateTrack() throws Exception {
+    void testCreateTrack() throws Exception {
         final TrackEntity track = new TrackEntity() {
             private static final long serialVersionUID = -3391535625175956488L;
 
@@ -320,7 +312,7 @@ public class TracksControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldNotCreateInvalidTracks() throws Exception {
+    void shouldNotCreateInvalidTracks() throws Exception {
         // Empty data
         final MockMultipartFile multipartFile = new MockMultipartFile("trackData", new byte[0]);
         mockMvc
@@ -348,7 +340,7 @@ public class TracksControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
+    void shouldHandleDataIntegrityViolationsGracefully() throws Exception {
         when(trackRepository.save(any(TrackEntity.class))).thenThrow(new DataIntegrityViolationException("fud"));
 
         MockMultipartFile trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/test.tcx"));
@@ -368,27 +360,24 @@ public class TracksControllerTest {
     }
 
     @Test
-    public void shouldHandleIOExceptionsGracefully1() throws Exception {
+    void shouldHandleIOExceptionsGracefully1() {
         TrackEntity track = Mockito.mock(TrackEntity.class);
-        when(track.getId()).thenReturn(4223);
-        when(track.getPrettyId()).thenReturn(Integer.toString(4223, 36));
         // return a directory so that the controller cannot write to it
         when(track.getTrackFile(this.datastoreBaseDirectory, "tcx")).thenReturn(this.datastoreBaseDirectory);
 
         final TrackRepository trackRepository = mock(TrackRepository.class);
         final TracksController controller = new TracksController(null, trackRepository, this.datastoreBaseDirectory, null, null);
 
-        this.expectedException.expect(FileNotFoundException.class);
-        controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
+        assertThatExceptionOfType(FileNotFoundException.class)
+                .isThrownBy(() -> controller.storeFile(track, new ByteArrayInputStream(new byte[0])));
 
-        verify(track).getId();
-        verify(track).getPrettyId();
         verify(track).getTrackFile(this.datastoreBaseDirectory, "tcx");
+        verify(track).getTrackFile(this.datastoreBaseDirectory, "gpx");
         verifyNoMoreInteractions(track);
     }
 
     @Test
-    public void shouldHandleIOExceptionsGracefully2() throws Exception {
+    void shouldHandleIOExceptionsGracefully2() throws Exception {
         TrackEntity track = Mockito.mock(TrackEntity.class);
         when(track.getTrackFile(this.datastoreBaseDirectory, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));
         when(track.getTrackFile(this.datastoreBaseDirectory, "gpx")).thenReturn(File.createTempFile("4223", ".gpx"));
@@ -396,9 +385,9 @@ public class TracksControllerTest {
         final TrackRepository trackRepository = mock(TrackRepository.class);
         final TracksController controller = new TracksController(null, trackRepository, this.datastoreBaseDirectory, new File("/iam/not/gpsBabel").getAbsolutePath(), null);
 
-        this.expectedException.expect(IOException.class);
-        this.expectedException.expectMessage(new RegexMatcher("Cannot run program \"/iam/not/gpsBabel\": error=2,.+"));
-        controller.storeFile(track, new ByteArrayInputStream(new byte[0]));
+        assertThatIOException()
+                .isThrownBy(() -> controller.storeFile(track, new ByteArrayInputStream(new byte[0])))
+                .withMessageMatching("Cannot run program \"/iam/not/gpsBabel\": error=2,.+");
 
         verify(track).getTrackFile(this.datastoreBaseDirectory, "tcx");
         verify(track).getTrackFile(this.datastoreBaseDirectory, "gpx");
@@ -407,7 +396,7 @@ public class TracksControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldHandleInvalidTcxFiles() throws Exception {
+    void shouldHandleInvalidTcxFiles() throws Exception {
         final TrackEntity track = Mockito.mock(TrackEntity.class);
         when(track.getTrackFile(this.datastoreBaseDirectory, "tcx")).thenReturn(File.createTempFile("4223", ".tcx"));
         when(track.getTrackFile(this.datastoreBaseDirectory, "gpx")).thenReturn(File.createTempFile("4223", ".gpx"));
@@ -430,7 +419,7 @@ public class TracksControllerTest {
     }
 
     @Test
-    public void testGetHome() throws Exception {
+    void testGetHome() throws Exception {
         mockMvc.perform(get("http://biking.michael-simons.eu/api/home"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.longitude", is(home.getLongitude().doubleValue())))
@@ -439,6 +428,7 @@ public class TracksControllerTest {
 
     @TestConfiguration
     static class TracksControllerTestConfig implements EnvironmentAware {
+
         private ConfigurableEnvironment environment;
 
         @Bean

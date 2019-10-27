@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,21 @@
 package ac.simons.biking2.bikingpictures.rss;
 
 import ac.simons.biking2.support.BeanTester;
-import java.util.HashMap;
 import java.util.Map;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-23
+ * @author Michael J. Simons
+ *
+ * @since 2014-05-23
  */
-public class GuidTest {
+class GuidTest {
 
     @Test
-    public void beanShouldWorkAsExpected() {
-        final Map<String, Object> values = new HashMap<>();
-        values.put("isPermaLink", true);
-        values.put("value", "value");
+    void beanShouldWorkAsExpected() {
 
+        var values = Map.of("isPermaLink", true, "value", "value");
         values.forEach(new BeanTester(Guid.class));
     }
 }

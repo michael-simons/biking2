@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 package ac.simons.biking2.config;
 
 import ac.simons.biking2.support.TestConfig;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -32,18 +31,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 /**
- * @author Michael J. Simons, 2014-03-24
+ * @author Michael J. Simons
+ *
+ * @since 2014-03-24
  */
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 @SpringBootTest(classes = TestConfig.class)
-public class RoutingTest {
+class RoutingTest {
 
     @Autowired
     private WebApplicationContext applicationContext;
 
     @Test
-    public void testStaticRoutes() {
+    void testStaticRoutes() {
         final MockMvc mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .build();

@@ -15,25 +15,30 @@
  */
 package ac.simons.biking2.bikes;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-12-09
+ * @author Michael J. Simons
+ *
+ * @since 2014-12-09
  */
-public class BikeCmdTest {
+class BikeCmdTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
         BikeCmd bean = new BikeCmd();
 
         bean.setBoughtOn(ZonedDateTime.now());
-        Assert.assertEquals(LocalDate.now(), bean.boughtOnAsLocalDate());
-        Assert.assertNull(bean.getDecommissionedOn());
+        assertEquals(LocalDate.now(), bean.boughtOnAsLocalDate());
+        assertNull(bean.getDecommissionedOn());
         bean.setDecommissionedOn(ZonedDateTime.now().plusDays(1));
-        Assert.assertEquals(LocalDate.now().plusDays(1), bean.decommissionedOnAsLocalDate());
+        assertEquals(LocalDate.now().plusDays(1), bean.decommissionedOnAsLocalDate());
 
     }
 }

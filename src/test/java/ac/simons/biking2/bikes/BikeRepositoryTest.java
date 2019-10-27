@@ -24,33 +24,28 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 import javax.sql.DataSource;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.rules.ExpectedException.none;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 /**
  * This is an integration test of the generated JpaRepositry implementation
  *
- * @author Michael J. Simons, 2014-02-12
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-12
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestConfig.class)
 @ActiveProfiles("test")
-public class BikeRepositoryTest {
+class BikeRepositoryTest {
 
     @Autowired
     private BikeRepository bikeRepository;
@@ -58,32 +53,29 @@ public class BikeRepositoryTest {
     @Autowired
     private DataSource dataSource;
 
-    @Rule
-    public final ExpectedException expectedException = none();
-
     @Test
     @Transactional
     @Rollback
-    public void nameShouldBeUnique() {
+    void nameShouldBeUnique() {
         // There's a bike1 in the test data
-        this.expectedException.expect(DataIntegrityViolationException.class);
-        this.bikeRepository.save(new BikeEntity("bike1", LocalDate.now()));
+        assertThatExceptionOfType(DataIntegrityViolationException.class)
+                .isThrownBy(() -> this.bikeRepository.save(new BikeEntity("bike1", LocalDate.now())));
     }
 
     @Test
-    public void testFindActive() {
+    void testFindActive() {
         final LocalDate cutOffDate = LocalDate.of(2014, 1, 1);
         final List<BikeEntity> activeBikes = this.bikeRepository.findActive(cutOffDate);
 
-        assertThat(activeBikes.size(), is(equalTo(3)));
-        assertThat(activeBikes.get(0).getName(), is(equalTo("bike1")));
-        assertThat(activeBikes.get(1).getName(), is(equalTo("bike3")));
+        assertThat(activeBikes.size()).isEqualTo(3);
+        assertThat(activeBikes.get(0).getName()).isEqualTo("bike1");
+        assertThat(activeBikes.get(1).getName()).isEqualTo("bike3");
     }
 
     @Test
-    public void testFindByName() {
+    void testFindByName() {
         final BikeEntity bike = this.bikeRepository.findByName("bike1");
-        assertThat(bike, is(notNullValue()));
+        assertThat(bike).isNotNull();
     }
 
     /**
@@ -94,7 +86,7 @@ public class BikeRepositoryTest {
      * @throws SQLException
      */
     @Test
-    public void testAddMilage() throws SQLException {
+    void testAddMilage() throws SQLException {
         final BikeEntity bike = this.bikeRepository.findByName("testAddMilageBike");
 
         bike.addMilage(LocalDate.now(), 23).getBike()
@@ -106,13 +98,13 @@ public class BikeRepositoryTest {
                 final PreparedStatement statement = connection.prepareStatement("Select count(*) as cnt from milages where bike_id = " + bike.getId());
                 final ResultSet resultSet = statement.executeQuery();) {
             resultSet.next();
-            assertThat(resultSet.getInt(1), is(equalTo(2)));
+            assertThat(resultSet.getInt(1)).isEqualTo(2);
         }
     }
 
     @Test
-    public void testGetDateOfFirstRecord() {
+    void testGetDateOfFirstRecord() {
         final LocalDate dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();
-        assertThat(dateOfFirstRecord, is(equalTo(LocalDate.of(2012, Month.JANUARY, 1))));
+        assertThat(dateOfFirstRecord).isEqualTo(LocalDate.of(2012, Month.JANUARY, 1));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 michael-simons.eu.
+ * Copyright 2015-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,23 @@
  */
 package ac.simons.biking2.bikes;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2015-09-21
+ * @author Michael J. Simons
+ *
+ * @since 2015-09-21
  */
-public class StoryCmdTest {
+class StoryCmdTest {
 
     @Test
-    public void beanShouldWorkAsExpected() {
+    void beanShouldWorkAsExpected() {
         final StoryCmd bean = new StoryCmd();
 
         bean.setLabel("foobar");
         bean.setUrl("http://heise.de");
-        Assert.assertEquals("foobar", bean.getLabel());
-        Assert.assertEquals("http://heise.de", bean.getUrl());
+        Assertions.assertEquals("foobar", bean.getLabel());
+        Assertions.assertEquals("http://heise.de", bean.getUrl());
     }
 }

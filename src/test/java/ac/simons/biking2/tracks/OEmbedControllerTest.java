@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.support.TestConfig;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -47,11 +46,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author Michael J. Simons
  */
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 @SpringBootTest(classes = {TestConfig.class, OEmbedControllerTest.OEmbedControllerTestConfig.class})
 @DirtiesContext
-public class OEmbedControllerTest {
+class OEmbedControllerTest {
 
     private final static String expectedJsonResult = "{\"author_name\":\"Michael J. Simons\",\"author_url\":\"http://michael-simons.eu\",\"cache_age\":86400,\"html\":\"<iframe width='1024' height='576' src='http://biking.michael-simons.eu/tracks/n/embed?width=1024&height=576' class='bikingTrack'></iframe>\",\"provider_name\":\"biking2\",\"provider_url\":\"http://biking.michael-simons.eu\",\"title\":\"RR bis Simmerath\",\"type\":\"rich\",\"version\":\"1.0\"}";
     private final static String expectedXmlResult = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><oembed><type>rich</type><version>1.0</version><title>RR bis Simmerath</title><author_name>Michael J. Simons</author_name><author_url>http://michael-simons.eu</author_url><provider_name>biking2</provider_name><provider_url>http://biking.michael-simons.eu</provider_url><cache_age>86400</cache_age><html>&lt;iframe width='1024' height='576' src='http://biking.michael-simons.eu/tracks/n/embed?width=1024&amp;height=576' class='bikingTrack'&gt;&lt;/iframe&gt;</html></oembed>";
@@ -66,7 +64,7 @@ public class OEmbedControllerTest {
     private Coordinate home;
 
     @Test
-    public void getEmbeddableTrack_shouldBeValidJson() throws Exception {
+    void getEmbeddableTrack_shouldBeValidJson() throws Exception {
         final MockMvc mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .build();
@@ -76,7 +74,7 @@ public class OEmbedControllerTest {
     }
 
     @Test
-    public void getEmbeddableTrack_shouldBeValidXml() throws Exception {
+    void getEmbeddableTrack_shouldBeValidXml() throws Exception {
         final MockMvc mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .build();
@@ -86,7 +84,7 @@ public class OEmbedControllerTest {
     }
 
     @Test
-    public void getEmbeddableTrack_shouldHandleUnacceptableRequests() throws Exception {
+    void getEmbeddableTrack_shouldHandleUnacceptableRequests() throws Exception {
         final MockMvc mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .build();
@@ -102,7 +100,7 @@ public class OEmbedControllerTest {
     }
 
     @Test
-    public void getEmbeddableTrack_shouldHandleInvalidTracks() throws Exception {
+    void getEmbeddableTrack_shouldHandleInvalidTracks() throws Exception {
         final MockMvc mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .build();
@@ -112,7 +110,7 @@ public class OEmbedControllerTest {
     }
 
     @Test
-    public void embedTrack_shouldHandleUnacceptableRequests() throws Exception {
+    void embedTrack_shouldHandleUnacceptableRequests() throws Exception {
         final MockMvc mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .build();
@@ -122,7 +120,7 @@ public class OEmbedControllerTest {
     }
 
     @Test
-    public void embedTrack_shouldHandleInvalidTracks() throws Exception {
+    void embedTrack_shouldHandleInvalidTracks() throws Exception {
         final MockMvc mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .build();
@@ -132,7 +130,7 @@ public class OEmbedControllerTest {
     }
 
     @Test
-    public void embedTrack() throws Exception {
+    void embedTrack() throws Exception {
         final MockMvc mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .build();
@@ -152,7 +150,7 @@ public class OEmbedControllerTest {
                 .andExpect(model().attribute("height", is(equalTo(576))));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Profile("test")
     static class OEmbedControllerTestConfig {
 

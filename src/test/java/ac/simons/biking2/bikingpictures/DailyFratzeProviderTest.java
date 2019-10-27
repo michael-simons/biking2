@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,47 +17,51 @@
 package ac.simons.biking2.bikingpictures;
 
 import java.net.URLConnection;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-20
+ * @author Michael J. Simons
+ * 
+ * @since 2014-05-20
  */
-public class DailyFratzeProviderTest {
+class DailyFratzeProviderTest {
+    
     @Test
-    public void shouldGetRSSConnection() throws Exception {
+    void shouldGetRSSConnection() {
         final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
 
         URLConnection connection = dailyFratzeProvider.getRSSConnection(null);
-        Assert.assertNotNull(connection);
-        Assert.assertEquals("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d", connection.getURL().toExternalForm());
+        Assertions.assertNotNull(connection);
+        Assertions.assertEquals("https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=d", connection.getURL().toExternalForm());
 
         String customRss = "https://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=a";
         connection = dailyFratzeProvider.getRSSConnection(customRss);
-        Assert.assertNotNull(connection);
-        Assert.assertEquals(customRss, connection.getURL().toExternalForm());
+        Assertions.assertNotNull(connection);
+        Assertions.assertEquals(customRss, connection.getURL().toExternalForm());
     }
 
     @Test
-    public void shouldOpenConnectionAndAddAuthHeader() throws Exception {
+    void shouldOpenConnectionAndAddAuthHeader() throws Exception {
         final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
 
         final URLConnection connection = dailyFratzeProvider.getImageConnection(1);
-        Assert.assertNotNull(connection);
-        Assert.assertEquals("https://dailyfratze.de/api/images/s/1.jpg", connection.getURL().toExternalForm());
+        Assertions.assertNotNull(connection);
+        Assertions.assertEquals("https://dailyfratze.de/api/images/s/1.jpg", connection.getURL().toExternalForm());
     }
 
     @Test
-    public void shouldHandleInvalidURLsGracefully() {
+    void shouldHandleInvalidURLsGracefully() {
         final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef");
         URLConnection connection = dailyFratzeProvider.getRSSConnection("asd");
-        Assert.assertNull(connection);
+        Assertions.assertNull(connection);
     }
 
     @Test
-    public void shouldHandleImageUrlExceptionsGracefully() {
+    void shouldHandleImageUrlExceptionsGracefully() {
         final DailyFratzeProvider dailyFratzeProvider = new DailyFratzeProvider("poef", "size/%s/id/%d.jpg");
         URLConnection connection = dailyFratzeProvider.getImageConnection(23);
-        Assert.assertNull(connection);
+        Assertions.assertNull(connection);
     }
 }

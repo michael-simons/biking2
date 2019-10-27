@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,20 @@
  */
 package ac.simons.biking2.bikes.highcharts;
 
-import ac.simons.biking2.bikes.highcharts.Credits;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.jupiter.api.Test;
+
 /**
+ * @author Michael J. Simons
  *
- * @author Michael J. Simons, 2014-02-11
+ * @since 2014-02-11
  */
-public class CreditsTest {
+class CreditsTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
         Credits credits = new Credits.Builder<>(object -> object).build();
         assertThat(credits.isEnabled(), is(true));
 

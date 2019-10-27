@@ -20,42 +20,41 @@ import ac.simons.biking2.support.TestConfig;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * @author Michael J. Simons, 2014-02-18
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-18
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestConfig.class)
 @ActiveProfiles("test")
 @Transactional
-public class BikingPictureRepositoryTest {
+class BikingPictureRepositoryTest {
 
     @Autowired
     private BikingPictureRepository bikingPictureRepository;
 
     @Test
     @Rollback(true)
-    public void getMaxPubDate_shouldWork() {
+    void getMaxPubDate_shouldWork() {
         OffsetDateTime value = bikingPictureRepository.getMaxPubDate();
         OffsetDateTime expected = ZonedDateTime.of(2003, 9, 21, 14, 13, 0, 0, ZoneId.systemDefault()).toOffsetDateTime();
-        Assert.assertThat(value, is(equalTo(expected)));
+
+        assertEquals(expected, value);
 
         bikingPictureRepository.deleteAll();
 
         value = bikingPictureRepository.getMaxPubDate();
         expected = ZonedDateTime.of(2005, 8, 7, 18, 30, 42, 00, ZoneId.systemDefault()).toOffsetDateTime();
-        Assert.assertThat(value, is(equalTo(expected)));
+        assertEquals(expected, value);
     }
 }

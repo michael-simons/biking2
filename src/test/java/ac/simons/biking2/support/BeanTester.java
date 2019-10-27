@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Michael J. Simons.
+ * Copyright 2015-2019 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,12 @@ package ac.simons.biking2.support;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 import org.joor.Reflect;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 /**
- * @author Michael J. Simons, 2015-09-17
+ * @author Michael J. Simons
+ *
+ * @since 2015-09-17
  */
 public class BeanTester implements BiConsumer<String, Object> {
 
@@ -37,10 +39,10 @@ public class BeanTester implements BiConsumer<String, Object> {
         final String verbSet = "set";
         final String verbGet = v instanceof Boolean ? "is" : "get";
         try {
-            Assert.assertEquals(v, r.call(verbSet + property, v).call(verbGet + property).get());
+            Assertions.assertEquals(v, r.call(verbSet + property, v).call(verbGet + property).get());
         } catch(Exception e) {
             e.printStackTrace();
-            Assert.fail(e.getMessage());
+            Assertions.fail(e.getMessage());
         }
     }
 }

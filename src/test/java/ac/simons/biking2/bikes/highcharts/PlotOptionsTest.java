@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,20 @@
  */
 package ac.simons.biking2.bikes.highcharts;
 
-import ac.simons.biking2.bikes.highcharts.PlotOptions;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-02-11
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-11
  */
-public class PlotOptionsTest {
+class PlotOptionsTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
+
         PlotOptions plotOptions = new PlotOptions.Builder<>(object -> object)
                 .column()
                     .withPointPadding(0.2)
@@ -38,9 +38,9 @@ public class PlotOptionsTest {
                     .disableAnimation()
                 .build()
         .build();
-        assertThat(plotOptions.getColumn().getPointPadding(), is(equalTo(0.2)));
-        assertThat(plotOptions.getColumn().getBorderWidth(), is(equalTo(0)));
-        assertThat(plotOptions.getSeries().isAnimation(), is(false));
+        assertThat(plotOptions.getColumn().getPointPadding()).isEqualTo(0.2);
+        assertThat(plotOptions.getColumn().getBorderWidth()).isEqualTo(0);
+        assertThat(plotOptions.getSeries().isAnimation()).isFalse();
     }
 
 }

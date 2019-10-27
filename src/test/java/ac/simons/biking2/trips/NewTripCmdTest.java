@@ -18,21 +18,21 @@ package ac.simons.biking2.trips;
 import ac.simons.biking2.support.BeanTester;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2015-06-09
+ * @author Michael J. Simons
+ *
+ * @since 2015-06-09
  */
-public class NewTripCmdTest {
+class NewTripCmdTest {
 
     @Test
-    public void beanShouldWorkAsExpected() {
-        final Map<String, Object> values = new HashMap<>();
-        values.put("coveredOn", LocalDate.now());
-        values.put("distance", 2342.0);
+    void beanShouldWorkAsExpected() {
 
+        var values = Map.of("coveredOn", LocalDate.now(), "distance", 2342.0);
         values.forEach(new BeanTester(NewTripCmd.class));
     }
 }

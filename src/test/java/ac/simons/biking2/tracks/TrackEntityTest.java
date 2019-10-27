@@ -15,51 +15,57 @@
  */
 package ac.simons.biking2.tracks;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import ac.simons.biking2.tracks.TrackEntity.Type;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-23
+ * @author Michael J. Simons
+ * 
+ * @since 2014-05-23
  */
-public class TrackEntityTest {
+class TrackEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
         final LocalDate now = LocalDate.now();
 
         final TrackEntity bean = new TrackEntity("name", now);
-        Assert.assertNull(bean.getId());
-        Assert.assertEquals("name", bean.getName());
-        Assert.assertEquals(now, bean.getCoveredOn());
+        assertNull(bean.getId());
+        assertEquals("name", bean.getName());
+        assertEquals(now, bean.getCoveredOn());
         bean.setDescription("description");
-        Assert.assertEquals("description", bean.getDescription());
+        assertEquals("description", bean.getDescription());
         bean.setMinlat( BigDecimal.ZERO);
-        Assert.assertEquals( BigDecimal.ZERO, bean.getMinlat());
+        assertEquals( BigDecimal.ZERO, bean.getMinlat());
         bean.setMinlon(BigDecimal.ONE);
-        Assert.assertEquals(BigDecimal.ONE, bean.getMinlon());
+        assertEquals(BigDecimal.ONE, bean.getMinlon());
         bean.setMaxlat(BigDecimal.ZERO.add(BigDecimal.ZERO));
-        Assert.assertEquals(BigDecimal.ZERO.add(BigDecimal.ZERO), bean.getMaxlat());
+        assertEquals(BigDecimal.ZERO.add(BigDecimal.ZERO), bean.getMaxlat());
         bean.setMaxlon(BigDecimal.ZERO.add(BigDecimal.ZERO).add(BigDecimal.ZERO));
-        Assert.assertEquals(BigDecimal.ZERO.add(BigDecimal.ZERO).add(BigDecimal.ZERO), bean.getMaxlon());
+        assertEquals(BigDecimal.ZERO.add(BigDecimal.ZERO).add(BigDecimal.ZERO), bean.getMaxlon());
         bean.setType(Type.running);
-        Assert.assertEquals(Type.running, bean.getType());
-        Assert.assertEquals("", bean.getPrettyId());
+        assertEquals(Type.running, bean.getType());
+        assertEquals("", bean.getPrettyId());
 
         final TrackEntity t1 = new TrackEntity("t1", now);
         final TrackEntity otherT1 = new TrackEntity("t1", now);
-        Assert.assertEquals(t1, otherT1);
-        Assert.assertEquals(t1.hashCode(), otherT1.hashCode());
-        Assert.assertNotEquals(t1, "something else");
-        Assert.assertNotEquals(t1, null);
+        assertEquals(t1, otherT1);
+        assertEquals(t1.hashCode(), otherT1.hashCode());
+        assertNotEquals(t1, "something else");
+        assertNotEquals(t1, null);
 
         final TrackEntity t2 = new TrackEntity("t2", now);
-        Assert.assertNotEquals(t1, t2);
+        assertNotEquals(t1, t2);
 
         final LocalDate then = LocalDate.now().plusYears(1);
         final TrackEntity t3 = new TrackEntity("t1", then);
-        Assert.assertNotEquals(t1, t3);
+        assertNotEquals(t1, t3);
     }
 }
