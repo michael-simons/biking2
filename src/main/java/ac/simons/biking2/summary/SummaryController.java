@@ -27,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 /**
  * @author Michael J. Simons, 2014-02-17
  */
@@ -53,7 +52,7 @@ class SummaryController {
 
         summary.setWorstPeriod(BikeEntity.getWorstPeriod(summarizedPeriods));
         summary.setBestPeriod(BikeEntity.getBestPeriod(summarizedPeriods));
-        summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(Entry::getValue).average().orElseGet(() -> 0.0));
+        summary.setAverage(summarizedPeriods.entrySet().stream().mapToInt(Entry::getValue).average().orElse(0.0));
 
         return summary;
     }

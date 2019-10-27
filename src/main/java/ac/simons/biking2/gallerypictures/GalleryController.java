@@ -17,7 +17,6 @@ package ac.simons.biking2.gallerypictures;
 
 import ac.simons.biking2.config.DatastoreConfig;
 import ac.simons.biking2.support.FileBasedResource;
-import ac.simons.biking2.support.ResourceNotFoundException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
@@ -152,7 +152,7 @@ class GalleryController {
 
         final GalleryPictureEntity galleryPicture = this.galleryPictureRepository
                 .findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         final FileBasedResource resource = new FileBasedResource(new File(datastoreBaseDirectory, String.format("%s/%s", DatastoreConfig.GALLERY_PICTURES_DIRECTORY, galleryPicture.getFilename())), String.format("%s.jpg", id), 365);
         resource.send(request, response);

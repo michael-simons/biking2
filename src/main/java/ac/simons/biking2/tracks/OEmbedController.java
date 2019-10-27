@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.tracks;
 
-import ac.simons.biking2.support.ResourceNotFoundException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +34,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * @author Michael J. Simons, 2014-02-14
@@ -73,7 +73,8 @@ class OEmbedController {
         if (id == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
-            final TrackEntity track = this.trackRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+            final TrackEntity track = this.trackRepository.findById(id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
             final OEmbedResponse response = new OEmbedResponse();
 
             response.setType("rich");

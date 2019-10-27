@@ -16,7 +16,6 @@
 package ac.simons.biking2.tracks;
 
 import ac.simons.biking2.support.JAXBContextFactory;
-import ac.simons.biking2.support.ResourceNotFoundException;
 import ac.simons.biking2.tracks.TrackEntity.Type;
 import ac.simons.biking2.tracks.gpx.GPX;
 import lombok.SneakyThrows;
@@ -35,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -185,7 +185,7 @@ class TracksController {
         return requestedId == null ? new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE) : this.trackRepository
                 .findById(requestedId)
                 .map(track -> new ResponseEntity<>(track, HttpStatus.OK))
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
@@ -198,7 +198,7 @@ class TracksController {
         if (requestedId == null) {
             rv = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
-            final TrackEntity track = this.trackRepository.findById(requestedId).orElseThrow(ResourceNotFoundException::new);
+            final TrackEntity track = this.trackRepository.findById(requestedId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
             final File tcxFile = track.getTrackFile(datastoreBaseDirectory, "tcx");
             final File gpxFile = track.getTrackFile(datastoreBaseDirectory, "gpx");
             if (tcxFile.delete() && gpxFile.delete()) {
@@ -225,7 +225,7 @@ class TracksController {
         if (requestedId == null || !ACCEPTABLE_FORMATS.containsKey(requestedFormat)) {
             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
         } else {
-            final TrackEntity track = this.trackRepository.findById(requestedId).orElseThrow(ResourceNotFoundException::new);
+            final TrackEntity track = this.trackRepository.findById(requestedId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
             final File trackFile = track.getTrackFile(datastoreBaseDirectory, requestedFormat);
             response.setHeader("Content-Type", ACCEPTABLE_FORMATS.get(requestedFormat));
             response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", id, requestedFormat));

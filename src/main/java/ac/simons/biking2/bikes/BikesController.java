@@ -15,7 +15,6 @@
  */
 package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.support.ResourceNotFoundException;
 import ac.simons.biking2.bikes.BikeEntity.Link;
 import static ac.simons.biking2.bikes.Messages.ALREADY_DECOMMISSIONED;
 import static ac.simons.biking2.shared.Messages.INVALID_ARGUMENTS;
@@ -26,6 +25,7 @@ import javax.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -74,7 +75,7 @@ class BikesController {
         }
 
         final BikeEntity bike = bikeRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         MilageEntity rv;
         if (bike.getDecommissionedOn() != null) {
@@ -110,11 +111,9 @@ class BikesController {
         }
 
         final BikeEntity bike = bikeRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (bike == null) {
-            throw new ResourceNotFoundException();
-        } else if (bike.getDecommissionedOn() != null) {
+        if (bike.getDecommissionedOn() != null) {
             throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             bike.setColor(updatedBike.getColor());
@@ -132,11 +131,9 @@ class BikesController {
         }
 
         final BikeEntity bike = bikeRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (bike == null) {
-            throw new ResourceNotFoundException();
-        } else if (bike.getDecommissionedOn() != null) {
+        if (bike.getDecommissionedOn() != null) {
             throw new IllegalArgumentException(i18n.getMessage(ALREADY_DECOMMISSIONED.key));
         } else {
             bike.setStory(Optional.ofNullable(newStory).map(c -> new Link(c.getUrl(), c.getLabel())).orElse(null));
