@@ -11,7 +11,7 @@
 
   <groupId>eu.michael-simons</groupId>
   <artifactId>biking2</artifactId>
-  <version>2.6.2-SNAPSHOT</version>
+  <version>2.7.3-SNAPSHOT</version>
 
   <name>biking2</name>
   <url>https://biking.michael-simons.eu</url>
@@ -50,16 +50,17 @@
     <checkstyle.version>8.18</checkstyle.version>
     <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     <java.version>11</java.version>
-    <joor.version>0.9.9</joor.version>
-    <jqassistant.version>1.6.0</jqassistant.version>
-    <jqassistant.plugin.version>1.6.0</jqassistant.plugin.version>
+    <joor.version>0.9.12</joor.version>
+    <jqassistant.version>1.7.0</jqassistant.version>
+    <jqassistant.plugin.version>1.7.0</jqassistant.plugin.version>
     <jquery.version>1.11.0</jquery.version>
     <angularjs.version>1.2.29</angularjs.version>
     <highcharts.version>3.0.10</highcharts.version>
     <openlayers.version>2.13.1</openlayers.version>
     <angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
     <angular-file-upload.version>1.2.8</angular-file-upload.version>
-    <maven-checkstyle-plugin.version>3.0.1</maven-checkstyle-plugin.version>
+    <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
     <momentjs.version>2.10.6</momentjs.version>
     <sockjs-client.version>1.0.2</sockjs-client.version>
     <stomp-websocket.version>2.3.3</stomp-websocket.version>
@@ -282,6 +283,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${maven-checkstyle-plugin.version}</version>
           <dependencies>
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
@@ -393,7 +395,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.0.0</version>
         <executions>
           <execution>
             <id>validate</id>
