@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.bikes;
 
+import ac.simons.biking2.config.SecurityConfig;
 import ac.simons.biking2.shared.TestData;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import static java.util.stream.Collectors.toList;
@@ -36,13 +39,15 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasSize;
@@ -57,8 +62,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(
-        controllers = ChartsController.class,
-        secure = false
+        includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
+        controllers = ChartsController.class
 )
 @ImportAutoConfiguration(MessageSourceAutoConfiguration.class)
 public class ChartsControllerTest {
@@ -346,7 +351,7 @@ public class ChartsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.series", hasSize(2)))
                 .andExpect(jsonPath("$.series[0].data", is(equalTo(Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)))))
-                .andExpect(jsonPath("$.series[1].data", allOf(iterableWithSize(12), everyItem(allOf(iterableWithSize(2), everyItem(is(equalTo(0))))))));
+                .andExpect(jsonPath("$.series[1].data", allOf(iterableWithSize(12), everyItem(allOf(iterableWithSize(2), (Matcher)everyItem(is(equalTo(0))))))));
         verify(bikeRepository).findAll();
         verifyNoMoreInteractions(bikeRepository);
     }
@@ -359,7 +364,7 @@ public class ChartsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.series", hasSize(2)))
                 .andExpect(jsonPath("$.series[0].data", is(equalTo(Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)))))
-                .andExpect(jsonPath("$.series[1].data", allOf(iterableWithSize(12), everyItem(allOf(iterableWithSize(2), everyItem(is(equalTo(0))))))));
+                .andExpect(jsonPath("$.series[1].data", allOf(iterableWithSize(12), everyItem(allOf(iterableWithSize(2), (Matcher)everyItem(is(equalTo(0))))))));
         verify(bikeRepository).findAll();
         verifyNoMoreInteractions(bikeRepository);
     }

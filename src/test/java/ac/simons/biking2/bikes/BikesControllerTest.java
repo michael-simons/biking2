@@ -16,6 +16,7 @@
 package ac.simons.biking2.bikes;
 
 import ac.simons.biking2.bikes.BikeEntity.Link;
+import ac.simons.biking2.config.SecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.Month;
@@ -31,9 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -43,6 +46,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -73,8 +77,8 @@ import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfigura
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(
-        controllers = BikesController.class,
-        secure = false
+        includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
+        controllers = BikesController.class
 )
 @ImportAutoConfiguration(MessageSourceAutoConfiguration.class)
 @AutoConfigureRestDocs(
@@ -165,6 +169,7 @@ public class BikesControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testCreateMilage() throws Exception {
         LocalDate now = now();
 
@@ -254,6 +259,7 @@ public class BikesControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testCreateBike1() throws Exception {
         LocalDate now = now();
 
@@ -310,6 +316,7 @@ public class BikesControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testCreateBike2() throws Exception {
         when(repository.save(any(BikeEntity.class))).thenThrow(new DataIntegrityViolationException(""));
 
@@ -331,6 +338,7 @@ public class BikesControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testUpdateBike() throws Exception {
         LocalDate now = now();
 
@@ -406,6 +414,7 @@ public class BikesControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testUpdateBikeStory() throws Exception {
         LocalDate now = now();
 
