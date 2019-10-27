@@ -16,15 +16,14 @@
 package ac.simons.biking2.banner;
 
 import java.io.PrintStream;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -42,9 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ac.simons.biking2.config.SecurityConfig;
 
 /**
- * @author Michael J. Simons, 2016-04-15
+ * @author Michael J. Simons
+ *
+ * @since 2016-04-15
  */
-@RunWith(SpringRunner.class)
 @WebMvcTest(
         includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
         controllers = BannerController.class
@@ -54,7 +54,7 @@ import ac.simons.biking2.config.SecurityConfig;
         uriHost = "biking.michael-simons.eu",
         uriPort = 80
 )
-public class BannerControllerTest {
+class BannerControllerTest {
 
     @MockBean
     private Banner banner;
@@ -63,7 +63,7 @@ public class BannerControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void getShouldReturnBanner() throws Exception {
+    void getShouldReturnBanner() throws Exception {
         doAnswer(invocation -> {
             final PrintStream out = invocation.getArgument(2);
             out.write(bannerText.getBytes());

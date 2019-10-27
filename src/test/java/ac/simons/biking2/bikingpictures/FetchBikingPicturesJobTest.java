@@ -26,16 +26,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.rules.ExpectedException.none;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,20 +43,18 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Michael J. Simons
  */
-public class FetchBikingPicturesJobTest {
-    @Rule
-    public final ExpectedException expectedException = none();
+class FetchBikingPicturesJobTest {
 
     private final RSSDateTimeAdapter dateTimeAdapter = new RSSDateTimeAdapter();
     private final File tmpDir;
 
-    public FetchBikingPicturesJobTest() {
+    FetchBikingPicturesJobTest() {
         this.tmpDir = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
         this.tmpDir.deleteOnExit();
     }
 
     @Test
-    public void jobShouldAbortWhenOlderItemsThanMaxPubDateAreFoundOnPage1() throws Exception {
+    void jobShouldAbortWhenOlderItemsThanMaxPubDateAreFoundOnPage1() throws Exception {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
         when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
 
@@ -69,12 +65,12 @@ public class FetchBikingPicturesJobTest {
 
         final List<BikingPictureEntity> toDownload = job.createDownloadList();
 
-        assertThat(toDownload.size(), is(equalTo(5)));
+        assertEquals(5, toDownload.size());
         verify(dailyFratzeProvider).getRSSConnection(null);
     }
 
     @Test
-    public void jobShouldAbortWhenOlderItemsThanMaxPubDateAreFoundOnPage2() throws Exception {
+    void jobShouldAbortWhenOlderItemsThanMaxPubDateAreFoundOnPage2() throws Exception {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
         when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
         final String page2 = "http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2";
@@ -86,13 +82,13 @@ public class FetchBikingPicturesJobTest {
 
         final List<BikingPictureEntity> toDownload = job.createDownloadList();
 
-        assertThat(toDownload.size(), is(equalTo(46)));
+        assertEquals(46, toDownload.size());
         verify(dailyFratzeProvider).getRSSConnection(null);
         verify(dailyFratzeProvider).getRSSConnection(page2);
     }
 
     @Test
-    public void jobShouldHandleExceptionsGracefully() throws MalformedURLException, IOException, Exception {
+    void jobShouldHandleExceptionsGracefully() throws MalformedURLException, IOException, Exception {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
         when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(new File("/i/dont/exists").toURI().toURL().openConnection());
 
@@ -101,25 +97,26 @@ public class FetchBikingPicturesJobTest {
 
         final FetchBikingPicturesJob job = new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, tmpDir);
         final List<BikingPictureEntity> toDownload = job.createDownloadList();
-        assertThat(toDownload.size(), is(equalTo(0)));
+        assertEquals(0, toDownload.size());
     }
 
     @Test
-    public void jobShouldThrowExceptionOnInvalidStorageDir() throws IOException {
+    void jobShouldThrowExceptionOnInvalidStorageDir() throws IOException {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
         final BikingPictureRepository bikingPictureRepository = mock(BikingPictureRepository.class);
 
         final File someFile = new File(System.getProperty("java.io.tmpdir"), "deleteMeReally");
         someFile.deleteOnExit();
-        Assert.assertTrue(someFile.createNewFile());
+        assertTrue(someFile.createNewFile());
 
-        expectedException.expect(BikingPicturesStorageException.class);
-        expectedException.expectMessage("Could not create bikingPicturesStorage!");
-        new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, someFile);
+        var msg = Assertions.assertThrows(
+                BikingPicturesStorageException.class,
+                () -> new FetchBikingPicturesJob(dailyFratzeProvider, bikingPictureRepository, someFile)).getMessage();
+        Assertions.assertEquals("Could not create bikingPicturesStorage!", msg);
     }
 
     @Test
-    public void jobShouldAbortWhenNoMorePagesAreAvailable() throws Exception {
+    void jobShouldAbortWhenNoMorePagesAreAvailable() throws Exception {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
         when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
         final String page2 = "http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=2";
@@ -130,14 +127,14 @@ public class FetchBikingPicturesJobTest {
 
         final List<BikingPictureEntity> toDownload = job.createDownloadList();
 
-        assertThat(toDownload.size(), is(equalTo(48)));
+        assertEquals(48, toDownload.size());
         verify(dailyFratzeProvider).getRSSConnection(null);
         verify(dailyFratzeProvider).getRSSConnection(page2);
         verify(dailyFratzeProvider, times(0)).getRSSConnection("http://dailyfratze.de/michael/tags/Theme/Radtour?format=rss&dir=desc&page=3");
     }
 
     @Test
-    public void shouldDownloadStuff() throws Exception {
+    void shouldDownloadStuff() throws Exception {
 
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
         when(dailyFratzeProvider.getImageConnection(45644)).thenReturn(this.getClass().getResource("/45644.jpg").openConnection());
@@ -165,17 +162,17 @@ public class FetchBikingPicturesJobTest {
 
         final List<BikingPictureEntity> downloaded = job.download(downloadList);
 
-        assertThat(downloaded.size(), is(equalTo(1)));
-        assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/45644.jpg").isFile(), is(true));
-        assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/45325.jpg").isFile(), is(false));
-        assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/44142.jpg").isFile(), is(false));
-        assertThat(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/43461.jpg").isFile(), is(false));
+        assertEquals(1, downloaded.size());
+        assertTrue(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/45644.jpg").isFile());
+        assertFalse(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/45325.jpg").isFile());
+        assertFalse(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/44142.jpg").isFile());
+        assertFalse(new File(this.tmpDir, DatastoreConfig.BIKING_PICTURES_DIRECTORY + "/43461.jpg").isFile());
         // Verify number of calls with arbitrary ints
         verify(dailyFratzeProvider, times(3)).getImageConnection(anyInt());
     }
 
     @Test
-    public void runMethodShouldWorkAsExpected() throws IOException {
+    void runMethodShouldWorkAsExpected() throws IOException {
         final DailyFratzeProvider dailyFratzeProvider = mock(DailyFratzeProvider.class);
         when(dailyFratzeProvider.getRSSConnection(null)).thenReturn(this.getClass().getResource("/biking_pictures.rss").openConnection());
 
@@ -189,6 +186,5 @@ public class FetchBikingPicturesJobTest {
         verify(bikingPictureRepository).getMaxPubDate();
 
         Mockito.verifyNoMoreInteractions(dailyFratzeProvider, bikingPictureRepository);
-
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,19 @@ package ac.simons.biking2.bikes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-23
+ * @author Michael J. Simons
+ *
+ * @since 2014-05-23
  */
-public class MilageEntityTest {
+class MilageEntityTest {
 
     @Test
-    public void beanShouldWorkAsExpected() {
+    void beanShouldWorkAsExpected() {
         BikeEntity bike = new BikeEntity("poef", LocalDate.now().withDayOfMonth(1));
         MilageEntity milage = bike.addMilage(LocalDate.now().withDayOfMonth(1).plusMonths(1), 23);
         MilageEntity otherMilage = bike.addMilage(LocalDate.now().withDayOfMonth(1).plusMonths(2), 50);
@@ -44,17 +47,17 @@ public class MilageEntityTest {
         bike = new BikeEntity("bike3", LocalDate.now().withDayOfMonth(1));
         MilageEntity otherMilage3 = bike.addMilage(LocalDate.now().plusMonths(1), 22);
 
-        Assert.assertNull(milage.getId());
-        Assert.assertEquals(BigDecimal.valueOf(23d), milage.getAmount());
-        Assert.assertNotNull(milage.getCreatedAt());
-        Assert.assertEquals(poef, milage.getBike());
-        Assert.assertEquals(milage, milage2);
-        Assert.assertEquals(milage.hashCode(), milage2.hashCode());
-        Assert.assertNotEquals(milage, otherMilage);
-        Assert.assertNotEquals(milage, otherMilage2);
-        Assert.assertNotEquals(milage, otherMilage3);
-        Assert.assertNotEquals(milage, null);
-        Assert.assertNotEquals(milage, "something else");
-        Assert.assertTrue(milage.compareTo(otherMilage) < 0);
+        Assertions.assertNull(milage.getId());
+        Assertions.assertEquals(BigDecimal.valueOf(23d), milage.getAmount());
+        Assertions.assertNotNull(milage.getCreatedAt());
+        Assertions.assertEquals(poef, milage.getBike());
+        Assertions.assertEquals(milage, milage2);
+        Assertions.assertEquals(milage.hashCode(), milage2.hashCode());
+        Assertions.assertNotEquals(milage, otherMilage);
+        Assertions.assertNotEquals(milage, otherMilage2);
+        Assertions.assertNotEquals(milage, otherMilage3);
+        Assertions.assertNotEquals(milage, null);
+        Assertions.assertNotEquals(milage, "something else");
+        Assertions.assertTrue(milage.compareTo(otherMilage) < 0);
     }
 }

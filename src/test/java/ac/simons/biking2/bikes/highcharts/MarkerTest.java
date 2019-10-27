@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,22 @@
  */
 package ac.simons.biking2.bikes.highcharts;
 
-import ac.simons.biking2.bikes.highcharts.Marker;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import org.junit.jupiter.api.Test;
+
 /**
- * @author Michael J. Simons, 2014-08-26
+ * @author Michael J. Simons
+ *
+ * @since 2014-08-26
  */
-public class MarkerTest {
+class MarkerTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
         Marker marker = new Marker.Builder<>(object -> object)
                 .withLineWidth(1.0)
                 .withFillColor("#CCCCCC")

@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static java.time.LocalDate.now;
@@ -34,22 +33,26 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Test;
+
 /**
- * @author Michael J. Simons, 2015-12-17
+ * @author Michael J. Simons
+ *
+ * @since 2015-12-17
  */
-public class SummaryControllerTest {
+class SummaryControllerTest {
     private final AssortedTripRepository assortedTripRepository;
 
     private final TestData testData;
     
-    public SummaryControllerTest() {
+    SummaryControllerTest() {
         this.assortedTripRepository = mock(AssortedTripRepository.class);        
         when(this.assortedTripRepository.getTotalDistance()).thenReturn(BigDecimal.TEN);
         this.testData = new TestData();
     }
 
     @Test
-    public void testGetSummary() {
+    void testGetSummary() {
         final LocalDate now = LocalDate.now();
 
         final BikeRepository bikeRepository = mock(BikeRepository.class);
@@ -65,7 +68,7 @@ public class SummaryControllerTest {
     }
 
     @Test
-    public void testGetSummaryMinMaxPeriods() {
+    void testGetSummaryMinMaxPeriods() {
         final LocalDate now = LocalDate.now();
         final List<BikeEntity> bikes = new ArrayList<>();
         // A bike with no milage should not lead to an error
@@ -99,7 +102,7 @@ public class SummaryControllerTest {
     }
 
     @Test
-    public void testGetSummaryMinMaxPeriodsWithoutPeriods() {
+    void testGetSummaryMinMaxPeriodsWithoutPeriods() {
         final LocalDate now = LocalDate.now();
         final List<BikeEntity> bikes = new ArrayList<>();
         bikes.add(new BikeEntity("no-milage", now()));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 msimons.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,22 @@
  */
 package ac.simons.biking2.bikes.highcharts;
 
-import ac.simons.biking2.bikes.highcharts.Series;
-import java.util.Arrays;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 /**
  *
- * @author Michael J. Simons, 2014-02-12
+ * @author Michael J. Simons
+ * 
+ * @since 2014-02-12
  */
-public class SeriesTest {
+class SeriesTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
         Series series = new Series.Builder<>(object -> object)
                 .withData(1.0, 2, 3)
                 .withName("testName")
@@ -45,29 +43,29 @@ public class SeriesTest {
                 .marker()
                     .build()
                 .build();
-        assertThat(series.getData(), is(equalTo(Arrays.asList(1.0, 2, 3))));
-        assertThat(series.getName(), is(equalTo("testName")));
-        assertThat(series.getType(), is(equalTo("testType")));
-        assertThat(series.getColor(), is(equalTo("AABBCC")));
-        assertThat(series.getLineWidth(), is(equalTo(1.2)));
-        assertThat(series.getFillOpacity(), is(equalTo(0.666)));
-        assertThat(series.getzIndex(), is(equalTo(1)));
-        assertThat(series.getLinkedTo(), is(equalTo("fump")));
-        assertThat(series.getMarker(), is(not(nullValue())));
+        assertThat(series.getData()).isEqualTo(Arrays.asList(1.0, 2, 3));
+        assertThat(series.getName()).isEqualTo("testName");
+        assertThat(series.getType()).isEqualTo("testType");
+        assertThat(series.getColor()).isEqualTo("AABBCC");
+        assertThat(series.getLineWidth()).isEqualTo(1.2);
+        assertThat(series.getFillOpacity()).isEqualTo(0.666);
+        assertThat(series.getzIndex()).isEqualTo(1);
+        assertThat(series.getLinkedTo()).isEqualTo("fump");
+        assertThat(series.getMarker()).isNotNull();
 
         series = new Series.Builder<>(object -> object)
                 .withData(1.0, 2, 3)
                 .withName("testName")
                 .withType("testType")
                 .build();
-        assertThat(series.getData(), is(equalTo(Arrays.asList(1.0, 2, 3))));
-        assertThat(series.getName(), is(equalTo("testName")));
-        assertThat(series.getType(), is(equalTo("testType")));
-        assertThat(series.getColor(), is(nullValue()));
-        assertThat(series.getLineWidth(), is(nullValue()));
-        assertThat(series.getFillOpacity(), is(nullValue()));
-        assertThat(series.getzIndex(), is(nullValue()));
-        assertThat(series.getLinkedTo(), is(nullValue()));
-        assertThat(series.getMarker(), is(nullValue()));
+        assertThat(series.getData()).isEqualTo(Arrays.asList(1.0, 2, 3));
+        assertThat(series.getName()).isEqualTo("testName");
+        assertThat(series.getType()).isEqualTo("testType");
+        assertThat(series.getColor()).isNull();
+        assertThat(series.getLineWidth()).isNull();
+        assertThat(series.getFillOpacity()).isNull();
+        assertThat(series.getzIndex()).isNull();
+        assertThat(series.getLinkedTo()).isNull();
+        assertThat(series.getMarker()).isNull();
     }
 }

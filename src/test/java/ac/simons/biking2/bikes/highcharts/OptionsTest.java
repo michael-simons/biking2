@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,21 @@
  */
 package ac.simons.biking2.bikes.highcharts;
 
-import ac.simons.biking2.bikes.highcharts.Options;
-import java.util.Arrays;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-02-11
+ * @author Michael J. Simons
+ * 
+ * @since 2014-02-11
  */
-public class OptionsTest {
+class OptionsTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
         final Options options = new Options.Builder<>(object -> object)
             .chart()
                 .withBorderWidth(1)
@@ -70,22 +70,22 @@ public class OptionsTest {
                 .build()
         .build();
 
-        assertThat(options.getChart().getBorderWidth(), is(equalTo(1)));
-        assertThat(options.getCredits().isEnabled(), is(false));
-        assertThat(options.getTitle().getText(), is(equalTo("Michis milage")));
-        assertThat(options.getxAxis().getCategories(), is(equalTo(Arrays.asList("test1", "test2"))));
-        assertThat(options.getyAxis().getMin(), is(equalTo(0)));
-        assertThat(options.getyAxis().getMax(), is(equalTo(2109)));
-        assertThat(options.getyAxis().getTickInterval(), is(equalTo(100)));
-        assertThat(options.getyAxis().isEndOnTick(), is(true));
-        assertThat(options.getyAxis().getTitle().getText(), is(equalTo("test")));
-        assertThat(options.getTooltip().getHeaderFormat(), is(equalTo("th")));
-        assertThat(options.getTooltip().getPointFormat(), is(equalTo("pf")));
-        assertThat(options.getTooltip().getFooterFormat(), is(equalTo("ff")));
-        assertThat(options.getTooltip().isShared(), is(true));
-        assertThat(options.getTooltip().isUseHTML(), is(true));
-        assertThat(options.getPlotOptions().getColumn().getPointPadding(), is(equalTo(0.2)));
-        assertThat(options.getPlotOptions().getColumn().getBorderWidth(), is(equalTo(0)));
-        assertThat(options.getPlotOptions().getSeries().isAnimation(), is(false));
+        assertThat(options.getChart().getBorderWidth()).isEqualTo(1);
+        assertThat(options.getCredits().isEnabled()).isFalse();
+        assertThat(options.getTitle().getText()).isEqualTo("Michis milage");
+        assertThat(options.getxAxis().getCategories()).isEqualTo(Arrays.asList("test1", "test2"));
+        assertThat(options.getyAxis().getMin()).isEqualTo(0);
+        assertThat(options.getyAxis().getMax()).isEqualTo(2109);
+        assertThat(options.getyAxis().getTickInterval()).isEqualTo(100);
+        assertThat(options.getyAxis().isEndOnTick()).isTrue();
+        assertThat(options.getyAxis().getTitle().getText()).isEqualTo("test");
+        assertThat(options.getTooltip().getHeaderFormat()).isEqualTo("th");
+        assertThat(options.getTooltip().getPointFormat()).isEqualTo("pf");
+        assertThat(options.getTooltip().getFooterFormat()).isEqualTo("ff");
+        assertThat(options.getTooltip().isShared()).isTrue();
+        assertThat(options.getTooltip().isUseHTML()).isTrue();
+        assertThat(options.getPlotOptions().getColumn().getPointPadding()).isEqualTo(0.2);
+        assertThat(options.getPlotOptions().getColumn().getBorderWidth()).isEqualTo(0);
+        assertThat(options.getPlotOptions().getSeries().isAnimation()).isFalse();
     }
 }

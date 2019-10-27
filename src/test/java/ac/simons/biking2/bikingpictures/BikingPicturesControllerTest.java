@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,16 +49,18 @@ import static ac.simons.biking2.support.RegexMatcher.matches;
 import java.util.Optional;
 
 /**
- * @author Michael J. Simons, 2014-02-19
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-19
  */
-public class BikingPicturesControllerTest {
+class BikingPicturesControllerTest {
     
     private final RSSDateTimeAdapter dateTimeAdapter = new RSSDateTimeAdapter();
     private final File tmpDir;
     private final File bikingPictures;
     private final byte[] testData;
 
-    public BikingPicturesControllerTest() throws IOException {
+    BikingPicturesControllerTest() throws IOException {
         this.tmpDir = new File(System.getProperty("java.io.tmpdir"), Long.toString(System.currentTimeMillis()));
         this.tmpDir.deleteOnExit();
         this.bikingPictures = new File(this.tmpDir, BIKING_PICTURES_DIRECTORY);
@@ -79,7 +82,7 @@ public class BikingPicturesControllerTest {
     }
 
     @Test
-    public void testGetBikingPicture() throws Exception {
+    void testGetBikingPicture() throws Exception {
         final BikingPictureRepository repository = mock(BikingPictureRepository.class);
         when(repository.findById(1)).thenReturn(Optional.of(new BikingPictureEntity("http://dailyfratze.de/fratzen/m/45644.jpg", dateTimeAdapter.unmarshal("Sun, 12 Jan 2014 21:40:25 GMT"), "http://dailyfratze.de/michael/2014/1/12")));
 
@@ -112,14 +115,14 @@ public class BikingPicturesControllerTest {
     }
 
     @Test
-    public void shouldGetGalleryPictures() {
+    void shouldGetGalleryPictures() {
         final BikingPictureRepository repository = mock(BikingPictureRepository.class);
         when(repository.findAll(Mockito.any(Sort.class))).thenReturn(new ArrayList<>());
         final BikingPicturesController controller = new BikingPicturesController(repository, this.tmpDir);
 
         final List<BikingPictureEntity> pictures = controller.getBikingPictures();
-        Assert.assertNotNull(pictures);
-        Assert.assertEquals(0, pictures.size());
+        Assertions.assertNotNull(pictures);
+        Assertions.assertEquals(0, pictures.size());
 
         Mockito.verify(repository).findAll(Mockito.any(Sort.class));
         Mockito.verifyNoMoreInteractions(repository);

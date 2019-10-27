@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2018 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,32 @@
 package ac.simons.biking2.trips;
 
 import ac.simons.biking2.support.TestConfig;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
- * @author Michael J. Simons, 2014-02-16
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-16
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestConfig.class)
 @ActiveProfiles("test")
-public class AssortedTripRepositoryTest {
+class AssortedTripRepositoryTest {
 
     @Autowired
     private AssortedTripRepository assortedTripRepository;
 
     @Test
-    public void testGetTotalDistance() {
-        assertThat(this.assortedTripRepository.getTotalDistance().doubleValue(), is(equalTo(43.8)));
+    void testGetTotalDistance() {
+        Assertions.assertEquals(43.8, this.assortedTripRepository.getTotalDistance().doubleValue());
     }
 
     @Test
-    public void testGetTotalDistanceInYear() {
-        assertThat(this.assortedTripRepository.getTotalDistanceInYear(2013).doubleValue(), is(equalTo(21.9)));
+    void testGetTotalDistanceInYear() {
+        Assertions.assertEquals(21.9, this.assortedTripRepository.getTotalDistanceInYear(2013).doubleValue());
     }
 }

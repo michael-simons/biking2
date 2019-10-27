@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,29 @@
 
 package ac.simons.biking2.bikingpictures.rss;
 
-import ac.simons.biking2.bikingpictures.rss.RSSDateTimeAdapter;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 /**
- * @author Michael J. Simons, 2014-05-22
+ * @author Michael J. Simons
+ *
+ * @since 2014-05-22
  */
-public class RSSDateTimeAdapterTest {
+class RSSDateTimeAdapterTest {
+
     @Test
-    public void shouldMarshallStuff() throws Exception {
+    void shouldMarshallStuff() {
         final RSSDateTimeAdapter rSSDateTimeAdapter = new RSSDateTimeAdapter();
-        Assert.assertEquals("Thu, 22 May 2014 12:59:23 GMT", rSSDateTimeAdapter.marshal(ZonedDateTime.of(2014, 5, 22, 12, 59, 23, 0, ZoneId.of("GMT"))));
+        Assertions.assertEquals("Thu, 22 May 2014 12:59:23 GMT", rSSDateTimeAdapter.marshal(ZonedDateTime.of(2014, 5, 22, 12, 59, 23, 0, ZoneId.of("GMT"))));
     }
 
     @Test
-    public void shouldUnmarshallStuff() throws Exception {
+    void shouldUnmarshallStuff() {
         final RSSDateTimeAdapter rSSDateTimeAdapter = new RSSDateTimeAdapter();
-        Assert.assertEquals(ZonedDateTime.of(2014, 5, 22, 12, 59, 23, 0, ZoneId.of("GMT")), rSSDateTimeAdapter.unmarshal("Thu, 22 May 2014 12:59:23 GMT"));
+        Assertions.assertEquals(ZonedDateTime.of(2014, 5, 22, 12, 59, 23, 0, ZoneId.of("GMT")), rSSDateTimeAdapter.unmarshal("Thu, 22 May 2014 12:59:23 GMT"));
     }
 }

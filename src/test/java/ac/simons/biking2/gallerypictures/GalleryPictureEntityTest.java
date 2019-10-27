@@ -17,40 +17,42 @@ package ac.simons.biking2.gallerypictures;
 
 import ac.simons.biking2.support.BeanTester;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-23
+ * @author Michael J. Simons
+ * 
+ * @since 2014-05-23
  */
-public class GalleryPictureEntityTest {
+class GalleryPictureEntityTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
+
         final LocalDate now = LocalDate.now();
 
-        final Map<String, Object> values = new HashMap<>();
-        values.put("description", "description");
+        final Map<String, Object> values = Map.of("description", "description");
 
         values.forEach(new BeanTester(GalleryPictureEntity.class));
 
         final GalleryPictureEntity bean = new GalleryPictureEntity(now, "poef");
         final GalleryPictureEntity otherBean = new GalleryPictureEntity(now, "poef");
-        Assert.assertEquals(bean, otherBean);
-        Assert.assertEquals(bean.hashCode(), otherBean.hashCode());
-        Assert.assertNotEquals(bean, "something else");
-        Assert.assertNotEquals(bean, null);
-        Assert.assertEquals(now, bean.getTakenOn());
-        Assert.assertNotNull(bean.getCreatedAt());
-        Assert.assertEquals("poef", bean.getFilename());
-        Assert.assertNull(bean.getId());
+        Assertions.assertEquals(bean, otherBean);
+        Assertions.assertEquals(bean.hashCode(), otherBean.hashCode());
+        Assertions.assertNotEquals(bean, "something else");
+        Assertions.assertNotEquals(bean, null);
+        Assertions.assertEquals(now, bean.getTakenOn());
+        Assertions.assertNotNull(bean.getCreatedAt());
+        Assertions.assertEquals("poef", bean.getFilename());
+        Assertions.assertNull(bean.getId());
 
         final LocalDate then = now.plusYears(1);
         GalleryPictureEntity other = new GalleryPictureEntity(now, "something else");
-        Assert.assertNotEquals(bean, other);
+        Assertions.assertNotEquals(bean, other);
         other = new GalleryPictureEntity(then, "poef");
-        Assert.assertNotEquals(bean, other);
+        Assertions.assertNotEquals(bean, other);
     }
 }

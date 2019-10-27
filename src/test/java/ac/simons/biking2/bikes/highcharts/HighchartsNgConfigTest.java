@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 michael-simons.eu.
+ * Copyright 2014-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,27 @@
  */
 package ac.simons.biking2.bikes.highcharts;
 
-import ac.simons.biking2.bikes.highcharts.HighchartsNgConfig;
-import ac.simons.biking2.bikes.highcharts.Series;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import org.junit.jupiter.api.Test;
+
 /**
- * @author Michael J. Simons, 2014-02-11
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-11
  */
-public class HighchartsNgConfigTest {
+class HighchartsNgConfigTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
         final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
 
         assertThat(builder.computeCurrentMaxYValue(), is(equalTo(0)));
@@ -57,7 +58,7 @@ public class HighchartsNgConfigTest {
     }
 
     @Test
-    public void testJsonCreator() {
+    void testJsonCreator() {
         final HighchartsNgConfig config = new HighchartsNgConfig(null, null);
         // Make sure no user data can be injected
         assertThat(config.getUserData(), is(nullValue()));

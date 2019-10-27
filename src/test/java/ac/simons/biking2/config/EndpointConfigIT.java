@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 michael-simons.eu.
+ * Copyright 2017-2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,51 +15,53 @@
  */
 package ac.simons.biking2.config;
 
-import ac.simons.biking2.Application;
 import java.util.Map;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * @author Michael J. Simons, 2017-02-03
+ * @author Michael J. Simons
+ *
+ * @since 2017-02-03
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @TestPropertySource(locations = "/application-test.properties", properties = "spring.main.banner-mode = LOG")
-public class EndpointConfigIT {
+class EndpointConfigIT {
 
     @Autowired
     private TestRestTemplate template;
 
     @Test
-    public void someEndpointsShouldBeAccessible() throws Exception {
+    void someEndpointsShouldBeAccessible() {
+
         final ResponseEntity<Map> vmProperties = template.getForEntity("/api/system/env/java.runtime.version", Map.class);
-        assertThat(vmProperties.getStatusCode(), is(equalTo(HttpStatus.OK)));
-        assertThat(vmProperties.getBody().containsKey("property"), is(true));
+        assertEquals(HttpStatus.OK, vmProperties.getStatusCode());
+        assertTrue(vmProperties.getBody().containsKey("property"));
 
         final ResponseEntity<Map> metrics = template.getForEntity("/api/system/metrics", Map.class);
-        assertThat(metrics.getStatusCode(), is(equalTo(HttpStatus.OK)));
+        assertEquals(HttpStatus.OK, metrics.getStatusCode());
     }
     
     @Test
-    public void notAllEnvsShouldBeShown() throws Exception {
+    void notAllEnvsShouldBeShown() {
+
         ResponseEntity<Map> env = template.getForEntity("/api/system/env", Map.class);
-        assertThat(env.getStatusCode(), is(equalTo(HttpStatus.UNAUTHORIZED)));
+        assertEquals(HttpStatus.UNAUTHORIZED, env.getStatusCode());
+
         env = template.getForEntity("/api/system/env/server.*", Map.class);
-        assertThat(env.getStatusCode(), is(equalTo(HttpStatus.UNAUTHORIZED)));
+        assertEquals(HttpStatus.UNAUTHORIZED, env.getStatusCode());
     }
 }

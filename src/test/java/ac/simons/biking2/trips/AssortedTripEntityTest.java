@@ -18,26 +18,29 @@ package ac.simons.biking2.trips;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * @author Michael J. Simons, 2014-05-23
+ * @author Michael J. Simons
+ * 
+ * @since 2014-05-23
  */
-public class AssortedTripEntityTest {
+class AssortedTripEntityTest {
 
     @Test
-    public void beanShouldWorkAsExpected() {
+    void beanShouldWorkAsExpected() {
+
         LocalDate now = LocalDate.now();
         final AssortedTripEntity trip = new AssortedTripEntity(now, BigDecimal.TEN);
-        Assert.assertNull(trip.getId());
-        Assert.assertEquals(now, trip.getCoveredOn());
-        Assert.assertEquals(BigDecimal.TEN, trip.getDistance());
-        Assert.assertEquals(new AssortedTripEntity(), new AssortedTripEntity());
-        Assert.assertNotEquals(new AssortedTripEntity(), null);
-        Assert.assertNotEquals(new AssortedTripEntity(), "foobar");
+        Assertions.assertNull(trip.getId());
+        Assertions.assertEquals(now, trip.getCoveredOn());
+        Assertions.assertEquals(BigDecimal.TEN, trip.getDistance());
+        Assertions.assertEquals(new AssortedTripEntity(), new AssortedTripEntity());
+        Assertions.assertNotEquals(new AssortedTripEntity(), null);
+        Assertions.assertNotEquals(new AssortedTripEntity(), "foobar");
         LocalDate yesterday = LocalDate.now().minusDays(1);
-        Assert.assertNotEquals(trip, new AssortedTripEntity(yesterday, BigDecimal.TEN));
-        Assert.assertEquals(trip.hashCode(), new AssortedTripEntity(now, BigDecimal.TEN).hashCode());
+        Assertions.assertNotEquals(trip, new AssortedTripEntity(yesterday, BigDecimal.TEN));
+        Assertions.assertEquals(trip.hashCode(), new AssortedTripEntity(now, BigDecimal.TEN).hashCode());
     }
 }

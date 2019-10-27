@@ -24,9 +24,8 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import org.joor.Reflect;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -73,9 +72,10 @@ import static org.mockito.ArgumentMatchers.any;
 import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 
 /**
- * @author Michael J. Simons, 2014-02-20
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-20
  */
-@RunWith(SpringRunner.class)
 @WebMvcTest(
         includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
         controllers = BikesController.class
@@ -86,7 +86,7 @@ import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfigura
         uriHost = "biking.michael-simons.eu",
         uriPort = 80
 )
-public class BikesControllerTest {
+class BikesControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -98,7 +98,7 @@ public class BikesControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void shouldGetBikes() throws Exception {
+    void shouldGetBikes() throws Exception {
         final List<BikeEntity> allbikes = Arrays.asList(Reflect.on(BikeEntity.class).create()
                 .set("id", 4711)
                 .set("name", "Bike 1")
@@ -170,7 +170,7 @@ public class BikesControllerTest {
 
     @Test
     @WithMockUser
-    public void testCreateMilage() throws Exception {
+    void testCreateMilage() throws Exception {
         LocalDate now = now();
 
         final BikeEntity bike = new BikeEntity("testBike", now);
@@ -260,7 +260,7 @@ public class BikesControllerTest {
 
     @Test
     @WithMockUser
-    public void testCreateBike1() throws Exception {
+    void testCreateBike1() throws Exception {
         LocalDate now = now();
 
         when(repository.save(any(BikeEntity.class))).then(returnsFirstArg());
@@ -317,7 +317,7 @@ public class BikesControllerTest {
 
     @Test
     @WithMockUser
-    public void testCreateBike2() throws Exception {
+    void testCreateBike2() throws Exception {
         when(repository.save(any(BikeEntity.class))).thenThrow(new DataIntegrityViolationException(""));
 
         final BikeCmd newBikeCmd = new BikeCmd();
@@ -339,7 +339,7 @@ public class BikesControllerTest {
 
     @Test
     @WithMockUser
-    public void testUpdateBike() throws Exception {
+    void testUpdateBike() throws Exception {
         LocalDate now = now();
 
         final BikeEntity decommissionedBike = new BikeEntity("decommissioned", now.minusMonths(2).withDayOfMonth(1));
@@ -405,17 +405,17 @@ public class BikesControllerTest {
         verify(repository, times(1)).findById(2);
         verify(repository, times(1)).findById(3);
 
-        Assert.assertEquals("test", bike.getName());
-        Assert.assertEquals(boughtOn, bike.getBoughtOn());
-        Assert.assertEquals("FFFCCC", bike.getColor());
-        Assert.assertEquals(now, bike.getDecommissionedOn());
+        Assertions.assertEquals("test", bike.getName());
+        Assertions.assertEquals(boughtOn, bike.getBoughtOn());
+        Assertions.assertEquals("FFFCCC", bike.getColor());
+        Assertions.assertEquals(now, bike.getDecommissionedOn());
 
         verifyNoMoreInteractions(repository);
     }
 
     @Test
     @WithMockUser
-    public void testUpdateBikeStory() throws Exception {
+    void testUpdateBikeStory() throws Exception {
         LocalDate now = now();
 
         final BikeEntity decommissionedBike = new BikeEntity("decommissioned", now.minusMonths(2).withDayOfMonth(1));
@@ -485,12 +485,12 @@ public class BikesControllerTest {
                         )
                 );
 
-        Assert.assertEquals("test", bike.getName());
-        Assert.assertEquals(boughtOn, bike.getBoughtOn());
-        Assert.assertEquals("000000", bike.getColor());
-        Assert.assertNotNull(bike.getStory());
-        Assert.assertEquals(validNewStoryCmd.getLabel(), bike.getStory().getLabel());
-        Assert.assertEquals(validNewStoryCmd.getUrl(), bike.getStory().getUrl());
+        Assertions.assertEquals("test", bike.getName());
+        Assertions.assertEquals(boughtOn, bike.getBoughtOn());
+        Assertions.assertEquals("000000", bike.getColor());
+        Assertions.assertNotNull(bike.getStory());
+        Assertions.assertEquals(validNewStoryCmd.getLabel(), bike.getStory().getLabel());
+        Assertions.assertEquals(validNewStoryCmd.getUrl(), bike.getStory().getUrl());
 
         // Empty content
         mockMvc
@@ -504,7 +504,7 @@ public class BikesControllerTest {
                         )
                 );
 
-        Assert.assertNull(bike.getStory());
+        Assertions.assertNull(bike.getStory());
 
         // Decommisioned bike
         mockMvc

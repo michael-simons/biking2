@@ -25,23 +25,20 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.hamcrest.Matcher;
-import org.junit.Test;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.generate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.everyItem;
-import org.junit.runner.RunWith;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
@@ -58,15 +55,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
- * @author Michael J. Simons, 2014-02-15
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-15
  */
-@RunWith(SpringRunner.class)
 @WebMvcTest(
         includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
         controllers = ChartsController.class
 )
 @ImportAutoConfiguration(MessageSourceAutoConfiguration.class)
-public class ChartsControllerTest {
+class ChartsControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -77,7 +75,7 @@ public class ChartsControllerTest {
     private final TestData sharedTestData = new TestData();
 
     @Test
-    public void testGetCurrentYearDataAvailable() throws Exception {
+    void testGetCurrentYearDataAvailable() throws Exception {
         when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(sharedTestData.value);
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/currentYear"))
@@ -97,7 +95,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testGetCurrentYearNoData() throws Exception {
+    void testGetCurrentYearNoData() throws Exception {
         when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(new ArrayList<>());
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/currentYear"))
@@ -109,7 +107,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testGetCurrentYearNoMilages() throws Exception {
+    void testGetCurrentYearNoMilages() throws Exception {
         when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(Arrays.asList(new BikeEntity("bike1", LocalDate.now()), new BikeEntity("bike2", LocalDate.now())));
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/currentYear"))
@@ -121,7 +119,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testGetHistoryDataAvailable() throws Exception {
+    void testGetHistoryDataAvailable() throws Exception {
         // Default Testdata has no historical data
         when(bikeRepository.findAll()).thenReturn(sharedTestData.value);
         mockMvc
@@ -133,7 +131,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testCompleteData() throws Exception {
+    void testCompleteData() throws Exception {
         // Arrange
         final LocalDate startDate = sharedTestData.january1st.minusYears(2);
 
@@ -152,17 +150,7 @@ public class ChartsControllerTest {
             null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null
         });
 
-        final List<BikeEntity> bikes = testData.entrySet().stream().map(entry -> {
-            final BikeEntity bike = new BikeEntity(entry.getKey(), LocalDate.now());
-            final Integer[] amounts = entry.getValue();
-            for (int i = 0; i < amounts.length; ++i) {
-                if (amounts[i] == null) {
-                    continue;
-                }
-                bike.addMilage(startDate.plusMonths(i), amounts[i]);
-            }
-            return bike;
-        }).collect(toList());
+        final List<BikeEntity> bikes = prepareTestBikes(startDate, testData);
 
         when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(Arrays.asList(bikes.get(0)));
         when(bikeRepository.findAll()).thenReturn(bikes);
@@ -226,8 +214,22 @@ public class ChartsControllerTest {
                 )));
     }
 
+    private static List<BikeEntity> prepareTestBikes(LocalDate startDate, Map<String, Integer[]> testData) {
+        return testData.entrySet().stream().map(entry -> {
+            final BikeEntity bike = new BikeEntity(entry.getKey(), LocalDate.now());
+            final Integer[] amounts = entry.getValue();
+            for (int i = 0; i < amounts.length; ++i) {
+                if (amounts[i] == null) {
+                    continue;
+                }
+                bike.addMilage(startDate.plusMonths(i), amounts[i]);
+            }
+            return bike;
+        }).collect(toList());
+    }
+
     @Test
-    public void testCompleteDataFiltered() throws Exception {
+    void testCompleteDataFiltered() throws Exception {
         // Arrange
         final LocalDate startDate = sharedTestData.january1st.minusYears(2);
 
@@ -246,17 +248,7 @@ public class ChartsControllerTest {
             null, null, null, 40, 50, 60, 70, 80, 90, 100, null, null
         });
 
-        final List<BikeEntity> bikes = testData.entrySet().stream().map(entry -> {
-            final BikeEntity bike = new BikeEntity(entry.getKey(), LocalDate.now());
-            final Integer[] amounts = entry.getValue();
-            for (int i = 0; i < amounts.length; ++i) {
-                if (amounts[i] == null) {
-                    continue;
-                }
-                bike.addMilage(startDate.plusMonths(i), amounts[i]);
-            }
-            return bike;
-        }).collect(toList());
+        final List<BikeEntity> bikes = prepareTestBikes(startDate, testData);
 
         when(bikeRepository.findActive(sharedTestData.january1st)).thenReturn(Arrays.asList(bikes.get(0)));
         when(bikeRepository.findAll()).thenReturn(bikes);
@@ -296,7 +288,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testGetHistoryNoData() throws Exception {
+    void testGetHistoryNoData() throws Exception {
         when(bikeRepository.findAll()).thenReturn(new ArrayList<>());
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/history"))
@@ -307,7 +299,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testGetHistoryNoMilages() throws Exception {
+    void testGetHistoryNoMilages() throws Exception {
         when(bikeRepository.findAll()).thenReturn(Arrays.asList(new BikeEntity("bike1", LocalDate.now()), new BikeEntity("bike2", LocalDate.now())));
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/history"))
@@ -318,7 +310,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testGetMonthlyAverage() throws Exception {
+    void testGetMonthlyAverage() throws Exception {
         when(bikeRepository.findAll()).thenReturn(sharedTestData.value);
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/monthlyAverage"))
@@ -344,7 +336,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testGetMonthlyAverageNoData() throws Exception {
+    void testGetMonthlyAverageNoData() throws Exception {
         when(bikeRepository.findAll()).thenReturn(new ArrayList<>());
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/monthlyAverage"))
@@ -357,7 +349,7 @@ public class ChartsControllerTest {
     }
 
     @Test
-    public void testGetMonthlyAverageNoMilages() throws Exception {
+    void testGetMonthlyAverageNoMilages() throws Exception {
         when(bikeRepository.findAll()).thenReturn(Arrays.asList(new BikeEntity("bike1", LocalDate.now()), new BikeEntity("bike2", LocalDate.now())));
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/monthlyAverage"))
