@@ -13,15 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.trips;
+package ac.simons.biking2.statistics.highcharts;
 
-import org.springframework.data.repository.Repository;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Michael J. Simons
- * @since 2014-02-08
+ *
+ * @since 2014-02-11
  */
-public interface AssortedTripRepository extends Repository<AssortedTripEntity, Integer> {
+class ColumnTest {
 
-    AssortedTripEntity save(AssortedTripEntity assortedTrip);
+    @Test
+    void testBuilder() {
+        Column column = new Column.Builder<>(object -> object)
+                .withPointPadding(0.2)
+                .withBorderWidth(0)
+        .build();
+        assertThat(column.getPointPadding(), is(equalTo(0.2)));
+        assertThat(column.getBorderWidth(), is(equalTo(0)));
+    }
 }

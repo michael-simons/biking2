@@ -41,11 +41,23 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /**
- * @author Michael J. Simons, 2014-02-19
+ * @author Michael J. Simons
+ * @since 2014-02-19
  */
 @RestController
 @RequestMapping("/api")
 class BikesController {
+
+    enum Messages {
+
+        ALREADY_DECOMMISSIONED("alreadyDecommissioned");
+
+        public final String key;
+
+        Messages(final String key) {
+            this.key = "bikes." + key;
+        }
+    }
 
     private final BikeRepository bikeRepository;
 

@@ -13,15 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.trips;
+package ac.simons.biking2.statistics;
 
-import org.springframework.data.repository.Repository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Michael J. Simons
- * @since 2014-02-08
+ * @since 2014-02-17
  */
-public interface AssortedTripRepository extends Repository<AssortedTripEntity, Integer> {
+@RestController
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequestMapping("/api")
+class SummaryController {
 
-    AssortedTripEntity save(AssortedTripEntity assortedTrip);
+    private final StatisticService statisticService;
+
+    @RequestMapping("/summary")
+    public Summary getSummary() {
+
+        return this.statisticService.computeSummary();
+    }
 }

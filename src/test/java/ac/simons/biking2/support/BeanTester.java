@@ -30,7 +30,7 @@ public class BeanTester implements BiConsumer<String, Object> {
     private final Reflect r;
 
     public BeanTester(Class<?> clazz) {
-        this.r = Reflect.on(clazz).create();
+        this.r = Reflect.onClass(clazz).create();
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2016 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.trips;
-
-import org.springframework.data.repository.Repository;
-
 /**
- * @author Michael J. Simons
- * @since 2014-02-08
+ * Support module for `bikes` containing an API to generate
+ * <a href="http://www.highcharts.com">Highcharts</a> definitions.
  */
-public interface AssortedTripRepository extends Repository<AssortedTripEntity, Integer> {
-
-    AssortedTripEntity save(AssortedTripEntity assortedTrip);
-}
+package ac.simons.biking2.statistics.highcharts;

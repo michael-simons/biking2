@@ -24,7 +24,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 /**
- * @author Michael J. Simons, 2014-02-08
+ * @author Michael J. Simons
+ *
+ * @since 2014-02-08
  */
 public interface BikeRepository extends Repository<BikeEntity, Integer> {
 
@@ -39,9 +41,6 @@ public interface BikeRepository extends Repository<BikeEntity, Integer> {
     BikeEntity findByName(String name);
 
     List<BikeEntity> findByDecommissionedOnIsNull(Sort sort);
-
-    @Query("Select coalesce(min(m.recordedOn), current_date()) as dateOfFirstRecord from MilageEntity m")
-    LocalDate getDateOfFirstRecord();
 
     List<BikeEntity> findAll(Sort sort);
 
