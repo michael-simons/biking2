@@ -1,7 +1,8 @@
 [[structure:Default]]
 [role=group,includesConstraints="structure:packagesShouldConformToTheMainBuildingBlocks"]
 
-All the blackboxes above should correspond to Java packages. Those packages should have no dependencies to other packages outside themselves but for the support or shared package:
+All the blackboxes above should correspond to Java packages.
+Those packages should have no dependencies to other packages outside themselves but for the support or shared package:
 
 [[structure:packagesShouldConformToTheMainBuildingBlocks]]
 [source,cypher,role=constraint,requiresConcepts="structure:configPackages,structure:supportingPackages"]
@@ -12,6 +13,5 @@ MATCH (a) -[:CONTAINS]-> (p1:Package) -[:DEPENDS_ON]-> (p2:Package) <-[:CONTAINS
 WHERE not p1:Config
   and not (p1) -[:CONTAINS]-> (p2)
   and not p2:Support
-  and not p1.fqn = 'ac.simons.biking2.summary'
 RETURN p1, p2
 ----

@@ -13,15 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.trips;
+package ac.simons.biking2.statistics.highcharts;
 
-import org.springframework.data.repository.Repository;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Michael J. Simons
- * @since 2014-02-08
+ * 
+ * @since 2014-02-11
  */
-public interface AssortedTripRepository extends Repository<AssortedTripEntity, Integer> {
+class TitleTest {
 
-    AssortedTripEntity save(AssortedTripEntity assortedTrip);
+    @Test
+    void testBuilder() {
+
+        Title title = new Title.Builder<>(object -> object).build();
+        assertThat(title.getText()).isNull();
+
+        title = new Title.Builder<>(object -> object)
+            .withText("test 123")
+        .build();
+        assertThat(title.getText()).isEqualTo("test 123");
+    }
 }

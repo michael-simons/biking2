@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2019 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.trips;
 
-import org.springframework.data.repository.Repository;
-
-/**
- * @author Michael J. Simons
- * @since 2014-02-08
- */
-public interface AssortedTripRepository extends Repository<AssortedTripEntity, Integer> {
-
-    AssortedTripEntity save(AssortedTripEntity assortedTrip);
-}
+CREATE TABLE bikes (
+  id                  serial primary key,
+  name VARCHAR(255)   NOT NULL,
+  bought_on           DATE NOT NULL,
+  color               VARCHAR(6) DEFAULT 'CCCCCC' NOT NULL,
+  url                 VARCHAR(512),
+  label               VARCHAR(255),
+  decommissioned_on   DATE,
+  created_at          DATETIME NOT NULL,
+  CONSTRAINT bikes_unique_name UNIQUE(name)
+);

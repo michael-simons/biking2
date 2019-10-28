@@ -18,13 +18,9 @@ package ac.simons.biking2.bikes;
 import ac.simons.biking2.bikes.BikeEntity.Link;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -96,53 +92,9 @@ class BikeEntityTest {
     }
 
     @Test
-    void testGetMilageInYear() {
-        assertEquals(0, this.defaultTestBike.getMilageInYear(2013));
-        assertEquals(50, this.defaultTestBike.getMilageInYear(2014));
-    }
-
-    /**
-     * Test of getPeriods method, of class BikeEntity.
-     */
-    @Test
-    void testGetPeriods() {
-
-        BikeEntity instance = new BikeEntity();
-        Map<LocalDate, Integer> expResult = new HashMap<>();
-        Map<LocalDate, Integer> result = instance.getPeriods();
-        assertEquals(expResult, result);
-
-        instance.addMilage(LocalDate.now(), 0);
-        result = instance.getPeriods();
-        assertEquals(expResult, result);
-
-        instance = this.defaultTestBike;
-
-        expResult = new HashMap<>();
-        expResult.put(LocalDate.of(2014, 1, 1), 20);
-        expResult.put(LocalDate.of(2014, 2, 1), 30);
-
-        result = instance.getPeriods();
-        assertEquals(expResult, result);
-    }
-
-    @Test
     void testGetMilage() {
         assertEquals(50, defaultTestBike.getMilage());
         assertEquals(0, new BikeEntity("test", LocalDate.now()).getMilage());
-    }
-
-    @Test
-    void testGetMilagesInYear() {
-        assertThat(defaultTestBike.getMilagesInYear(2014)).isEqualTo(new Integer[]{20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
-    }
-
-    @Test
-    void testSummarizePeriods() {
-        // Assert, that an empty list doesn't result in an error
-        Map<LocalDate, Integer> summarizedPeriods = BikeEntity.summarizePeriods(new ArrayList<>(), null);
-        assertNotNull(summarizedPeriods);
-        assertEquals(0, summarizedPeriods.size());
     }
 
     @Test

@@ -15,20 +15,16 @@
  */
 package ac.simons.biking2.bikes;
 
-import ac.simons.biking2.support.TestConfig;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Month;
+import java.util.Collections;
 import java.util.List;
-import javax.sql.DataSource;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
@@ -40,18 +36,14 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * This is an integration test of the generated JpaRepositry implementation
  *
  * @author Michael J. Simons
- *
  * @since 2014-02-12
  */
-@SpringBootTest(classes = TestConfig.class)
+@DataJpaTest
 @ActiveProfiles("test")
 class BikeRepositoryTest {
 
     @Autowired
     private BikeRepository bikeRepository;
-
-    @Autowired
-    private DataSource dataSource;
 
     @Test
     @Transactional
@@ -86,25 +78,14 @@ class BikeRepositoryTest {
      * @throws SQLException
      */
     @Test
-    void testAddMilage() throws SQLException {
+    void testAddMilage(@Autowired NamedParameterJdbcTemplate jdbcTemplate) {
         final BikeEntity bike = this.bikeRepository.findByName("testAddMilageBike");
 
         bike.addMilage(LocalDate.now(), 23).getBike()
                 .addMilage(LocalDate.now().plusMonths(1).withDayOfMonth(1), 42);
         this.bikeRepository.save(bike);
 
-        try (
-                final Connection connection = this.dataSource.getConnection();
-                final PreparedStatement statement = connection.prepareStatement("Select count(*) as cnt from milages where bike_id = " + bike.getId());
-                final ResultSet resultSet = statement.executeQuery();) {
-            resultSet.next();
-            assertThat(resultSet.getInt(1)).isEqualTo(2);
-        }
-    }
-
-    @Test
-    void testGetDateOfFirstRecord() {
-        final LocalDate dateOfFirstRecord = this.bikeRepository.getDateOfFirstRecord();
-        assertThat(dateOfFirstRecord).isEqualTo(LocalDate.of(2012, Month.JANUARY, 1));
+        int cnt = jdbcTemplate.queryForObject("Select count(*) as cnt from milages where bike_id = :bike_id", Collections.singletonMap("bike_id", bike.getId()), Integer.class);
+        assertThat(cnt).isEqualTo(2);
     }
 }

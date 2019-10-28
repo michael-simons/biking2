@@ -15,16 +15,13 @@
  */
 package ac.simons.biking2.bikingpictures;
 
-import ac.simons.biking2.support.TestConfig;
-
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -35,9 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @since 2014-02-18
  */
-@SpringBootTest(classes = TestConfig.class)
+@DataJpaTest
 @ActiveProfiles("test")
-@Transactional
 class BikingPictureRepositoryTest {
 
     @Autowired

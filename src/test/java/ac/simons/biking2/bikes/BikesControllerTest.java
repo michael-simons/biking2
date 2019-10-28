@@ -99,7 +99,7 @@ class BikesControllerTest {
 
     @Test
     void shouldGetBikes() throws Exception {
-        final List<BikeEntity> allbikes = Arrays.asList(Reflect.on(BikeEntity.class).create()
+        final List<BikeEntity> allbikes = Arrays.asList(Reflect.onClass(BikeEntity.class).create()
                 .set("id", 4711)
                 .set("name", "Bike 1")
                 .set("color", "FF0000")
@@ -113,7 +113,7 @@ class BikesControllerTest {
                 .call("addMilage", LocalDate.of(2015, Month.MARCH, 1), 200.0)
                 .call("getBike")
                 .get(),
-                Reflect.on(BikeEntity.class).create()
+                Reflect.onClass(BikeEntity.class).create()
                 .set("id", 23)
                 .set("name", "Bike 2")
                 .set("color", "CCCCCC")

@@ -13,15 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.trips;
+package ac.simons.biking2.statistics;
 
-import org.springframework.data.repository.Repository;
+import java.time.LocalDate;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Michael J. Simons
- * @since 2014-02-08
+ * @since 2014-02-13
  */
-public interface AssortedTripRepository extends Repository<AssortedTripEntity, Integer> {
+@Getter @Setter
+@Builder
+public final class Summary {
 
-    AssortedTripEntity save(AssortedTripEntity assortedTrip);
+    private LocalDate dateOfFirstRecord;
+
+    private Double total;
+
+    private AccumulatedPeriod worstPeriod;
+
+    private AccumulatedPeriod bestPeriod;
+
+    private Double average;
 }
