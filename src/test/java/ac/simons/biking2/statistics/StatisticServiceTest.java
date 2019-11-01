@@ -28,13 +28,20 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
 
+import org.assertj.core.data.Offset;
+import org.jooq.DSLContext;
+import org.jooq.conf.RenderKeywordStyle;
+import org.jooq.conf.RenderNameStyle;
+import org.jooq.conf.Settings;
+import org.jooq.impl.DefaultConfiguration;
 import org.jooq.lambda.tuple.Tuple;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jooq.AutoConfigureJooq;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
@@ -47,9 +54,13 @@ import ac.simons.biking2.shared.TestData;
  * @since 2019-11-01
  */
 @DataJpaTest
+@AutoConfigureJooq
+@TestPropertySource(properties = {
+        "spring.datasource.initialization-mode=never",
+        "spring.jpa.properties.hibernate.show_sql=false",
+        "logging.level.org.jooq=DEBUG"
+})
 @ActiveProfiles("test")
-// We need fresh data
-@TestPropertySource(properties = "spring.datasource.initialization-mode=never")
 class StatisticServiceTest {
 
     private final TestData sharedTestData = new TestData();
@@ -59,6 +70,9 @@ class StatisticServiceTest {
      */
     @Autowired
     private BikeRepository bikeRepository;
+
+    @Autowired
+    DSLContext database;
 
     @Autowired
     NamedParameterJdbcTemplate jdbcTemplate;
@@ -72,7 +86,7 @@ class StatisticServiceTest {
         var bike2 = Tuple.tuple("bike2", "CCCCCC");
         var bike3 = Tuple.tuple("bike3", "CCCCCC");
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var currentYear = service.computeCurrentYear();
         var months = currentYear.getMonths();
 
@@ -87,7 +101,7 @@ class StatisticServiceTest {
     @Test
     void currentYearNoDataAvailable() {
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var currentYear = service.computeCurrentYear();
         var months = currentYear.getMonths();
 
@@ -101,7 +115,7 @@ class StatisticServiceTest {
 
         bikeRepository.save(new BikeEntity("a bike", LocalDate.now()));
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var currentYear = service.computeCurrentYear();
         var months = currentYear.getMonths();
 
@@ -116,7 +130,7 @@ class StatisticServiceTest {
         // Prepare testdata
         sharedTestData.value.forEach(bikeRepository::save);
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var history = service.computeHistory(Optional.empty(), Optional.empty());
 
         assertThat(history).isEmpty();
@@ -125,7 +139,7 @@ class StatisticServiceTest {
     @Test
     void historyNoDataAvailable() {
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var history = service.computeHistory(Optional.empty(), Optional.empty());
 
         assertThat(history).isEmpty();
@@ -136,7 +150,7 @@ class StatisticServiceTest {
 
         bikeRepository.save(new BikeEntity("a bike", LocalDate.now()));
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var history = service.computeHistory(Optional.empty(), Optional.empty());
 
         assertThat(history).isEmpty();
@@ -149,7 +163,7 @@ class StatisticServiceTest {
 
         prepareTestBikes(startDate).forEach(bikeRepository::save);
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
 
         var history = service.computeHistory(Optional.empty(), Optional.empty());
         assertThat(history).containsKeys(startDate.getYear(), startDate.getYear() + 1);
@@ -179,7 +193,7 @@ class StatisticServiceTest {
     @Test
     void monthlyAverageNoDataAvailable() {
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var monthlyAverage = service.computeMonthlyAverage();
 
         assertThat(monthlyAverage.size()).isEqualTo(12);
@@ -191,7 +205,7 @@ class StatisticServiceTest {
 
         bikeRepository.save(new BikeEntity("a bike", LocalDate.now()));
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var monthlyAverage = service.computeMonthlyAverage();
 
         assertThat(monthlyAverage.size()).isEqualTo(12);
@@ -205,7 +219,7 @@ class StatisticServiceTest {
 
         prepareTestBikes(startDate).forEach(bikeRepository::save);
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
 
         var expectedData = new double[][] {
                 {0, 50, (0 + 10 + 50) / 3.0},
@@ -230,7 +244,7 @@ class StatisticServiceTest {
 
         sharedTestData.value.forEach(bikeRepository::save);
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
 
         var expectedData = new double[][] {
                 {10, 10, 10.0},
@@ -253,7 +267,7 @@ class StatisticServiceTest {
     @Test
     void summaryNoDataAvailable() {
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var summary = service.computeSummary();
 
         assertThat(summary.getBestPeriod()).isNull();
@@ -269,7 +283,7 @@ class StatisticServiceTest {
         sharedTestData.value.forEach(bikeRepository::save);
         this.jdbcTemplate.update("INSERT INTO assorted_trips (covered_on, distance) values(:covered_on, :distance)", Map.of("covered_on", LocalDate.now(), "distance", BigDecimal.TEN));
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var summary = service.computeSummary();
 
         assertThat(summary.getBestPeriod().getStartOfPeriod()).isEqualTo(LocalDate.now().withMonth(9).withDayOfMonth(1));
@@ -278,7 +292,7 @@ class StatisticServiceTest {
         assertThat(summary.getWorstPeriod().getValue()).isEqualTo(10);
 
         assertThat(summary.getTotal()).isEqualTo(345.0);
-        assertThat(summary.getAverage()).isEqualTo(34.5);
+        assertThat(summary.getAverage()).isEqualTo(34.5, Offset.offset(0.1));
     }
 
     @Test
@@ -286,30 +300,30 @@ class StatisticServiceTest {
 
         final LocalDate now = LocalDate.now();
         final List<BikeEntity> bikes = List.of(
-        // A bike with no milage should not lead to an error
-        new BikeEntity("no-milage", now),
-        new BikeEntity("some-milage", now)
-                .addMilage(LocalDate.of(2009,1,1), 10).getBike()
-                .addMilage(LocalDate.of(2009,2,1), 30).getBike()
-                .addMilage(LocalDate.of(2009,3,1), 33).getBike(),
-        new BikeEntity("more-milage", now)
-                .addMilage(LocalDate.of(2009,1,1),  0).getBike()
-                .addMilage(LocalDate.of(2009,2,1), 30).getBike()
-                .addMilage(LocalDate.of(2009,3,1), 70).getBike()
+                // A bike with no milage should not lead to an error
+                new BikeEntity("no-milage", now),
+                new BikeEntity("some-milage", now)
+                        .addMilage(LocalDate.of(2009, 1, 1), 10).getBike()
+                        .addMilage(LocalDate.of(2009, 2, 1), 30).getBike()
+                        .addMilage(LocalDate.of(2009, 3, 1), 33).getBike(),
+                new BikeEntity("more-milage", now)
+                        .addMilage(LocalDate.of(2009, 1, 1), 0).getBike()
+                        .addMilage(LocalDate.of(2009, 2, 1), 30).getBike()
+                        .addMilage(LocalDate.of(2009, 3, 1), 70).getBike()
         );
         bikes.forEach(bikeRepository::save);
 
-        var service = new StatisticService(jdbcTemplate);
+        var service = new StatisticService(database);
         var summary = service.computeSummary();
 
         assertNotNull(summary.getWorstPeriod());
-        assertThat(summary.getWorstPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009,2,1));
+        assertThat(summary.getWorstPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009, 2, 1));
         assertThat(summary.getWorstPeriod().getValue()).isEqualTo(43);
 
         assertNotNull(summary.getBestPeriod());
-        assertThat(summary.getBestPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009,1,1));
+        assertThat(summary.getBestPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009, 1, 1));
         assertThat(summary.getBestPeriod().getValue()).isEqualTo(50);
-        assertThat(summary.getAverage()).isEqualTo(93.0/Period.between(LocalDate.of(2009,1,1), now).toTotalMonths());
+        assertThat(summary.getAverage()).isEqualTo(93.0 / Period.between(LocalDate.of(2009, 1, 1), now).toTotalMonths(), Offset.offset(0.1));
     }
 
     private static void assertMonthlyAverage(Map<Integer, MonthlyAverage> monthlyAverage, double[][] expectedData) {
@@ -350,5 +364,17 @@ class StatisticServiceTest {
             }
             return bike;
         }).collect(toList());
+    }
+
+    @TestConfiguration
+    static class JooQConfig {
+
+        @Bean
+        Settings settings() {
+            return new DefaultConfiguration().settings()
+                    .withRenderNameStyle(RenderNameStyle.LOWER)
+                    .withRenderKeywordStyle(RenderKeywordStyle.UPPER)
+                    .withRenderFormatted(true);
+        }
     }
 }

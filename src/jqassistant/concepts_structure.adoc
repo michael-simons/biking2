@@ -21,3 +21,15 @@ WHERE p.fqn in ['ac.simons.biking2.shared', 'ac.simons.biking2.support']
 SET p:Package:Support
 return p
 ----
+
+The `database` package contains generated code for accessing our database via jOOQ:
+
+[[structure:dbPackage]]
+[source,cypher,role="concept",requiresConcepts="dependency:Package"]
+.Returns the package containing generated jOOQ code
+----
+MATCH (p:Package)
+WHERE p.fqn in ['ac.simons.biking2.db']
+SET p:Package:Database
+return p
+----

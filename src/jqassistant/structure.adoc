@@ -8,10 +8,14 @@ Those packages should have no dependencies to other packages outside themselves 
 [source,cypher,role=constraint,requiresConcepts="structure:configPackages,structure:supportingPackages"]
 .Top level packages should conform to the main building blocks.
 ----
+MATCH (db:Package:Database)
+WITH db
 MATCH (a:Main:Artifact)
 MATCH (a) -[:CONTAINS]-> (p1:Package) -[:DEPENDS_ON]-> (p2:Package) <-[:CONTAINS]- (a)
 WHERE not p1:Config
   and not (p1) -[:CONTAINS]-> (p2)
   and not p2:Support
+  and p2 <> db
+  and not (db) - [:CONTAINS*] -> (p2)
 RETURN p1, p2
 ----

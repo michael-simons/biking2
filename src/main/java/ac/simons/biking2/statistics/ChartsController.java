@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,10 +38,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ac.simons.biking2.statistics.highcharts.HighchartsNgConfig;
 
 /**
- * @author Michael J. Simons, 2014-02-09
+ * @author Michael J. Simons
+ * @since 2014-02-09
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/charts")
 class ChartsController {
 
     enum Messages {
@@ -72,7 +74,7 @@ class ChartsController {
         this.i18n = new MessageSourceAccessor(messageSource, Locale.ENGLISH);
     }
 
-    @RequestMapping("/charts/currentYear")
+    @GetMapping("/currentYear")
     public HighchartsNgConfig getCurrentYear() {
         // Start of current year
         final LocalDate january1st = LocalDate.now().withMonth(1).withDayOfMonth(1);
@@ -158,7 +160,7 @@ class ChartsController {
                 .build();
     }
 
-    @RequestMapping("/charts/history")
+    @GetMapping("/history")
     public HighchartsNgConfig getHistory(
             @RequestParam(value = "start") final Optional<Integer> yearStart,
             @RequestParam(value = "end") final Optional<Integer> yearEnd
@@ -169,7 +171,7 @@ class ChartsController {
         final HighchartsNgConfig.Builder builder = HighchartsNgConfig.define();
 
         // Get statistics and create series in builder
-        final Map<Integer, YearlyStatistics> history = this.statisticService.computeHistory(yearStart, yearEnd);
+        final Map<Integer, HistoricYear> history = this.statisticService.computeHistory(yearStart, yearEnd);
         history.forEach((k, v) -> builder.series().withName(Integer.toString(k)).withData(v.getValues()).build());
 
         final StringBuilder title = new StringBuilder();
@@ -178,7 +180,7 @@ class ChartsController {
         } else {
             // Compute summed years
             final Map<Integer, Integer> summedYears = history.values().stream()
-                    .collect(Collectors.toMap(YearlyStatistics::getYear, YearlyStatistics::getYearlyTotal));
+                    .collect(Collectors.toMap(HistoricYear::getYear, HistoricYear::getYearlyTotal));
 
             // Computed worst and best year from summed years
             final Optional<Map.Entry<Integer, Integer>> worstYear = summedYears.entrySet().stream().min(Map.Entry.comparingByValue());
@@ -192,7 +194,7 @@ class ChartsController {
             // Preferred bikes...
             userData.put("preferredBikes",
                     history.values().stream()
-                            .collect(Collectors.toMap(YearlyStatistics::getYear, y -> Map.of("name", y.getPreferredBike())))
+                            .collect(Collectors.toMap(HistoricYear::getYear, y -> Map.of("name", y.getPreferredBike())))
 
             );
 
@@ -250,7 +252,7 @@ class ChartsController {
                 .build();
     }
 
-    @RequestMapping("/charts/monthlyAverage")
+    @GetMapping("/monthlyAverage")
     public HighchartsNgConfig getMonthlyAverage() {
 
         // Get statistics

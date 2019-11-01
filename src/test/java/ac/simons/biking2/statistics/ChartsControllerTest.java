@@ -202,13 +202,13 @@ class ChartsControllerTest {
     void history() throws Exception {
 
         final LocalDate startDate = sharedTestData.january1st.minusYears(2);
-        Map<Integer, YearlyStatistics> history = new TreeMap<>();
-        history.put(startDate.getYear(), YearlyStatistics.builder()
+        Map<Integer, HistoricYear> history = new TreeMap<>();
+        history.put(startDate.getYear(), HistoricYear.builder()
                 .values(new int[] {10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 35})
                 .year(startDate.getYear())
                 .preferredBike("bike1")
                 .build());
-        history.put(startDate.getYear() + 1, YearlyStatistics.builder()
+        history.put(startDate.getYear() + 1, HistoricYear.builder()
                 .values(new int[] {50, 70, 110, 110, 110, 110, 110, 110, 110, 610, 10, 10})
                 .year(startDate.getYear() + 1)
                 .preferredBike("bike2")

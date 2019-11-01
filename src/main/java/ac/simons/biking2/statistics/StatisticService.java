@@ -15,6 +15,26 @@
  */
 package ac.simons.biking2.statistics;
 
+import static ac.simons.biking2.db.Tables.ASSORTED_TRIPS;
+import static ac.simons.biking2.db.Tables.BIKES;
+import static ac.simons.biking2.db.Tables.MILAGES;
+import static org.jooq.impl.DSL.avg;
+import static org.jooq.impl.DSL.coalesce;
+import static org.jooq.impl.DSL.denseRank;
+import static org.jooq.impl.DSL.extract;
+import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.lead;
+import static org.jooq.impl.DSL.localDateAdd;
+import static org.jooq.impl.DSL.localDateDiff;
+import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.min;
+import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.partitionBy;
+import static org.jooq.impl.DSL.rank;
+import static org.jooq.impl.DSL.round;
+import static org.jooq.impl.DSL.sum;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
@@ -29,12 +49,16 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.jooq.CommonTableExpression;
+import org.jooq.DSLContext;
+import org.jooq.DatePart;
+import org.jooq.Field;
+import org.jooq.Record4;
+import org.jooq.impl.DSL;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -44,48 +68,72 @@ import lombok.RequiredArgsConstructor;
  * @since 2019-10-28
  */
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor
 class StatisticService {
 
-    private final NamedParameterJdbcTemplate jdbcTemplate;
+    /**
+     * The computed monthly milage value.
+     */
+    private static final Field<BigDecimal> MONTHLY_MILAGE_VALUE =
+            lead(MILAGES.AMOUNT).over(partitionBy(BIKES.ID).orderBy(MILAGES.RECORDED_ON)).minus(MILAGES.AMOUNT).as("value");
+
+    /**
+     * The cte for computing the monthly milage value.
+     */
+    private static final CommonTableExpression<Record4<String, String, LocalDate, BigDecimal>> MONTHLY_MILAGES =
+            name("monthlyMilages").as(DSL
+                    .select(BIKES.NAME, BIKES.COLOR, MILAGES.RECORDED_ON, MONTHLY_MILAGE_VALUE)
+                    .from(BIKES).join(MILAGES).onKey()
+                    .orderBy(MILAGES.RECORDED_ON.asc()));
+
+    private final DSLContext database;
 
     public Map<Integer, MonthlyAverage> computeMonthlyAverage() {
 
-        Map<Integer, MonthlyAverage> rv = new HashMap<>(12);
-        this.jdbcTemplate.query(
-                "with x as (\n"
-                        + "    select b.name, m.recorded_on, lead(m.amount) OVER (partition by b.id order by m.recorded_on) - m.amount as p\n"
-                        + "    from bikes b join milages m on m.bike_id = b.id\n"
-                        + "    order by m.recorded_on asc\n"
-                        + " ),\n"
-                        + " y as (\n"
-                        + "  select x.recorded_on, sum(p) as s\n"
-                        + "  from x\n"
-                        + " where x.p is not null\n"
-                        + "  group by x.recorded_on\n"
-                        + "), \n"
-                        + "ast as (\n"
-                        + "   select dateadd(DAY, -extract(day from a.covered_on) + 1, a.covered_on) as recorded_on, sum(a.distance) as s\n"
-                        + "   from assorted_trips a\n"
-                        + "   group by recorded_on\n"
-                        + " )\n"
-                        + "select extract(month from y.recorded_on) as month, \n"
-                        + "       round(min(y.s + COALESCE(a.s,0))) as minimum, \n"
-                        + "       round(max(y.s + COALESCE(a.s,0))) as maximum, \n"
-                        + "       round(avg(y.s + COALESCE(a.s,0))) as average\n"
-                        + "from y left outer join ast a on a.recorded_on = y.recorded_on\n"
-                        + "group by month order by month asc",
-                resultSet -> {
-                    var monthNumber = resultSet.getInt("month");
+        var rv = new HashMap<Integer, MonthlyAverage>(12);
+
+        var aggregatedMonthlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as("value");
+        var aggregatedMonthlyMilages = name("aggregatedMonthlyMilages").as(DSL
+                .select(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), aggregatedMonthlyValue)
+                .from(MONTHLY_MILAGES)
+                .where(MONTHLY_MILAGE_VALUE.isNotNull())
+                .groupBy(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON)));
+
+        var assortedTripRecordedOn = localDateAdd(
+                ASSORTED_TRIPS.COVERED_ON,
+                extract(ASSORTED_TRIPS.COVERED_ON, DatePart.DAY).neg().plus(inline(1)),
+                DatePart.DAY
+        ).as("recorded_on");
+        var assortedTripValue = sum(ASSORTED_TRIPS.DISTANCE).as("value");
+        var aggregatedAssortedTrips = name("aggregatedAssortedTrips").as(DSL
+                .select(assortedTripRecordedOn, assortedTripValue)
+                .from(ASSORTED_TRIPS)
+                .groupBy(assortedTripRecordedOn));
+
+        var value = aggregatedMonthlyMilages.field(aggregatedMonthlyValue).plus(coalesce(aggregatedAssortedTrips.field(assortedTripValue), inline(0)));
+        var minimum = round(min(value)).as("minimum");
+        var maximum = round(max(value)).as("maximum");
+        var average = round(avg(value)).as("average");
+        var month = extract(aggregatedMonthlyMilages.field(MILAGES.RECORDED_ON), DatePart.MONTH).as("month");
+        this.database
+                .with(MONTHLY_MILAGES)
+                .with(aggregatedMonthlyMilages)
+                .with(aggregatedAssortedTrips)
+                .select(month, minimum, maximum, average)
+                .from(aggregatedMonthlyMilages)
+                .leftOuterJoin(aggregatedAssortedTrips)
+                .on(aggregatedAssortedTrips.field(assortedTripRecordedOn).eq(aggregatedMonthlyMilages.field(MILAGES.RECORDED_ON)))
+                .groupBy(month).orderBy(month.asc())
+                .forEach(record -> {
+                    var monthNumber = record.get(month).intValue();
                     var monthlyAverage = MonthlyAverage.builder()
                             .month(Month.of(monthNumber))
-                            .minimum(resultSet.getInt("minimum"))
-                            .maximum(resultSet.getInt("maximum"))
-                            .value(resultSet.getDouble("average"))
+                            .minimum(record.get(minimum).intValue())
+                            .maximum(record.get(maximum).intValue())
+                            .value(record.getValue(average).doubleValue())
                             .build();
                     rv.put(monthNumber, monthlyAverage);
-                }
-        );
+                });
 
         // Fill up missing months
         IntStream.rangeClosed(1, 12)
@@ -93,64 +141,63 @@ class StatisticService {
         return Collections.unmodifiableMap(rv);
     }
 
-    public Map<Integer, YearlyStatistics> computeHistory(final Optional<Integer> yearStart, final Optional<Integer> yearEnd) {
+    public Map<Integer, HistoricYear> computeHistory(final Optional<Integer> yearStart, final Optional<Integer> yearEnd) {
 
-        var startAndEndParameters = Map.of(
-                "start", yearStart.orElse(Integer.MIN_VALUE),
-                "end", yearEnd.orElseGet(() -> LocalDate.now().getYear()) - 1);
+        var lowerBound = yearStart.orElse(Integer.MIN_VALUE);
+        var upperBound = yearEnd.orElseGet(() -> LocalDate.now().getYear()) - 1;
 
-        Map<Integer, int[]> yearlyValues = new HashMap<>();
-        this.jdbcTemplate.query(
-                "with x as (\n"
-                        + "    select b.name, m.recorded_on, lead(m.amount) OVER (partition by b.id order by m.recorded_on) - m.amount as p\n"
-                        + "    from bikes b join milages m on m.bike_id = b.id\n"
-                        + "    order by m.recorded_on asc),\n"
-                        + "  y as (\n"
-                        + "  select x.recorded_on, sum(p) as s\n"
-                        + "  from x\n"
-                        + "  where x.p is not null\n"
-                        + "  group by x.recorded_on\n"
-                        + "  )  \n"
-                        + "select y.recorded_on, round(sum(y.s)) as v \n"
-                        + "from y\n"
-                        + "where extract(year from y.recorded_on) between :start and :end\n"
-                        + "group by y.recorded_on\n"
-                        + "order by y.recorded_on asc\n",
-                startAndEndParameters,
-                resultSet -> {
-                    var recordedOn = resultSet.getDate("recorded_on").toLocalDate();
+        // Select yearly values
+        var yearlyValues = new HashMap<Integer, int[]>();
+
+        var aggregatedMonthlyValue = round(sum(MONTHLY_MILAGE_VALUE));
+        this.database
+                .with(MONTHLY_MILAGES)
+                .select(
+                        MONTHLY_MILAGES.field(MILAGES.RECORDED_ON),
+                        aggregatedMonthlyValue
+                )
+                .from(MONTHLY_MILAGES)
+                .where(extract(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), DatePart.YEAR).between(lowerBound).and(upperBound))
+                .groupBy(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON))
+                .orderBy(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON).asc())
+                .forEach(record -> {
+                    var recordedOn = record.get(MILAGES.RECORDED_ON);
                     var year = yearlyValues.computeIfAbsent(recordedOn.getYear(), y -> new int[12]);
-                    year[recordedOn.getMonthValue() - 1] = resultSet.getInt("v");
-                }
-        );
+                    year[recordedOn.getMonthValue() - 1] = record.get(aggregatedMonthlyValue).intValue();
+                });
 
-        Map<Integer, String> preferredBikes = new HashMap<>();
-        this.jdbcTemplate.query(
-                "with x as (\n"
-                        + "    select b.name, m.recorded_on, lead(m.amount) OVER (partition by b.id order by m.recorded_on) - m.amount as p\n"
-                        + "    from bikes b join milages m on m.bike_id = b.id\n"
-                        + "    order by m.recorded_on asc\n"
-                        + " ),\n"
-                        + " y as (\n"
-                        + "  select x.name, extract(year from x.recorded_on) as year, sum(p) as s\n"
-                        + "  from x\n"
-                        + " where x.p is not null\n"
-                        + "  group by x.name, year\n"
-                        + ") select s.name, s.year from (\n"
-                        + "  select y.name, y.year, dense_rank() over (partition by y.year order by max(y.s) desc) as r\n"
-                        + "  from y\n"
-                        + "  where y.year between :start and :end"
-                        + "  group by y.name, y.year\n"
-                        + ") s \n"
-                        + "where s.r = 1", startAndEndParameters,
-                resultSet -> {
-                    preferredBikes.putIfAbsent(resultSet.getInt("year"), resultSet.getString("name"));
-                }
-        );
+        // Select preferred bikes
+        var preferredBikes = new HashMap<Integer, String>();
+
+        var year = extract(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), DatePart.YEAR).as("year");
+        var aggregatedYearlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as("value");
+        var yearlyMilages = name("yearlyMilages").as(DSL
+                .select(MONTHLY_MILAGES.field(BIKES.NAME), year, aggregatedYearlyValue)
+                .from(MONTHLY_MILAGES)
+                .where(MONTHLY_MILAGE_VALUE.isNotNull())
+                .groupBy(MONTHLY_MILAGES.field(BIKES.NAME), year));
+        var bikeRank = denseRank().over(partitionBy(yearlyMilages.field(year)).orderBy(max(aggregatedYearlyValue).desc())).as("r");
+        var rankedYears = DSL
+                .select(
+                        yearlyMilages.field(BIKES.NAME),
+                        yearlyMilages.field(year),
+                        bikeRank
+                )
+                .from(yearlyMilages)
+                .where(yearlyMilages.field(year).between(lowerBound).and(upperBound))
+                .groupBy(yearlyMilages.field(BIKES.NAME), yearlyMilages.field(year));
+        this.database
+                .with(MONTHLY_MILAGES)
+                .with(yearlyMilages)
+                .select(rankedYears.field(BIKES.NAME), rankedYears.field(year))
+                .from(rankedYears)
+                .where(bikeRank.eq(inline(1)))
+                .forEach(record ->
+                        preferredBikes.putIfAbsent(record.get(yearlyMilages.field(year)), record.get(yearlyMilages.field(BIKES.NAME))));
 
         return yearlyValues.entrySet().stream()
-                .map(e -> YearlyStatistics.builder().year(e.getKey()).values(e.getValue()).preferredBike(preferredBikes.get(e.getKey())).build())
-                .collect(Collectors.toMap(YearlyStatistics::getYear, Function.identity()));
+                .map(e -> HistoricYear.builder().year(e.getKey()).values(e.getValue()).preferredBike(preferredBikes.get(e.getKey())).build())
+                .collect(Collectors.toMap(HistoricYear::getYear, Function.identity()));
     }
 
     public CurrentYear computeCurrentYear() {
@@ -161,37 +208,41 @@ class StatisticService {
         Arrays.fill(totals, -1);
         Map<Tuple2<String, String>, int[]> values = new LinkedHashMap<>();
 
-        this.jdbcTemplate.query(
-                "with x as (\n"
-                        + "    select b.name, b.color, m.recorded_on, lead(m.amount) OVER (partition by b.id order by m.recorded_on) - m.amount as p\n"
-                        + "    from bikes b join milages m on m.bike_id = b.id\n"
-                        + "    where (b.decommissioned_on is null or b.decommissioned_on >= :start_of_year)\n"
-                        + "      and extract(year from m.recorded_on) >= extract(year from :start_of_year)\n"
-                        + "    order by m.recorded_on asc, b.name\n"
-                        + "    )\n"
-                        + "select x.name, x.color, extract(month from x.recorded_on) - 1 as idx, x.p, sum(x.p) OVER (partition by x.recorded_on) as total\n"
-                        + "from x where p is not null\n"
-                        + "order by x.name asc ",
-                Map.of("start_of_year", startOfYear),
-                resultSet -> {
-                    var index = resultSet.getInt("idx");
+        var total = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).over(partitionBy(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON))).as("total");
+        var idxA = extract(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), DatePart.MONTH).minus(inline(1)).as("idx");
+        this.database
+                .with(MONTHLY_MILAGES)
+                .select(
+                        MONTHLY_MILAGES.field(BIKES.NAME), MONTHLY_MILAGES.field(BIKES.COLOR),
+                        idxA,
+                        MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE),
+                        total
+                )
+                .from(MONTHLY_MILAGES)
+                .where(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE).isNotNull())
+                .and(extract(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), DatePart.YEAR)
+                        .greaterOrEqual(extract(startOfYear, DatePart.YEAR)))
+                .orderBy(MONTHLY_MILAGES.field(BIKES.NAME).asc())
+                .forEach(record -> {
+                    var index = record.get(idxA).intValue();
                     if (totals[index] == -1) {
-                        totals[index] = resultSet.getInt("total");
+                        totals[index] = record.get(total).intValue();
                     }
-                    var bikeAndColor = Tuple.tuple(resultSet.getString("name"), resultSet.getString("color"));
+                    var bikeAndColor = Tuple.tuple(record.get(BIKES.NAME), record.get(BIKES.COLOR));
                     var milagesInYear = values.computeIfAbsent(bikeAndColor, k -> new int[12]);
-                    milagesInYear[index] = resultSet.getInt("p");
+                    milagesInYear[index] = record.get(MONTHLY_MILAGE_VALUE).intValue();
                 });
 
-        this.jdbcTemplate.query("select extract(month from t.covered_on) - 1 as idx, round(sum(t.distance)) as distance from assorted_trips t\n"
-                        + "where t.covered_on >= :start_of_year\n"
-                        + "group by extract(month from t.covered_on) - 1",
-                Map.of("start_of_year", startOfYear),
-                resultSet -> {
-                    var index = resultSet.getInt("idx");
-                    totals[index] = Math.max(totals[index], 0) + resultSet.getInt("distance");
-                }
-        );
+        var idxB = extract(ASSORTED_TRIPS.COVERED_ON, DatePart.MONTH).minus(inline(1)).as("idx");
+        this.database
+                .select(idxB, round(sum(ASSORTED_TRIPS.DISTANCE)).as("distance"))
+                .from(ASSORTED_TRIPS)
+                .where(ASSORTED_TRIPS.COVERED_ON.greaterOrEqual(startOfYear))
+                .groupBy(idxB)
+                .forEach(record -> {
+                    var index = record.component1();
+                    totals[index] = Math.max(totals[index], 0) + record.component2().intValue();
+                });
 
         var maxValue = Integer.MIN_VALUE;
         var minValue = Integer.MAX_VALUE;
@@ -234,51 +285,67 @@ class StatisticService {
 
     public Summary computeSummary() {
 
-        return this.jdbcTemplate.query("with x as (\n"
-                + "    select  b.name, m.recorded_on, lead(m.amount) OVER (partition by b.id order by m.recorded_on) - m.amount as p\n"
-                + "    from bikes b join milages m on m.bike_id = b.id\n"
-                + "    order by m.recorded_on asc),\n"
-                + "  y as (\n"
-                + "  select x.recorded_on, sum(p) as v, rank() over (order by sum(p) desc, x.recorded_on desc) as r\n"
-                + "  from x\n"
-                + "  where x.p is not null\n"
-                + "  group by x.recorded_on\n"
-                + "), \n"
-                + "ast as (\n"
-                + "  select sum(distance) v from assorted_trips\n"
-                + "),\n"
-                + "summary as (\n"
-                + "  select min(recorded_on) min_recorded_on, \n"
-                + "  sum(y.v) + coalesce(ast.v,0) as s\n"
-                + "  from y, ast\n"
-                + ") \n"
-                + "select\n"
-                + "  summary.min_recorded_on as min_recorded_on,\n"
-                + "  (summary.s / datediff(MONTH, summary.min_recorded_on, now())) as average,\n"
-                + "  summary.s as total,\n"
-                + "  b.recorded_on as best_recorded_on,\n"
-                + "  b.v as best,\n"
-                + "  w.recorded_on as worst_recorded_on,\n"
-                + "  w.v as worst\n"
-                + "from \n"
-                + "  summary,\n"
-                + "  (select recorded_on, v from y where y.r = 1) as b,\n"
-                + "  (select recorded_on, v from y where y.r = (select max(r) from y)) as w", resultSet -> {
+        var aggregatedMonthlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as("value");
+        var monthRank = rank().over().orderBy(sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).desc(), MONTHLY_MILAGES.field(MILAGES.RECORDED_ON).desc()).as("month_rank");
+        var aggregatedMonthlyMilages = name("aggregatedMonthlyMilages").as(DSL
+                .select(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), aggregatedMonthlyValue, monthRank)
+                .from(MONTHLY_MILAGES)
+                .where(MONTHLY_MILAGE_VALUE.isNotNull())
+                .groupBy(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON)));
 
-            if (!resultSet.next()) {
-                return Summary.builder().total(0.0).average(0.0).build();
-            }
+        var aggregatedTripsValue = sum(ASSORTED_TRIPS.DISTANCE).as("value");
+        var aggregatedTrips = name("aggregatedTrips").as(DSL
+                .select(aggregatedTripsValue)
+                .from(ASSORTED_TRIPS));
 
-            final AccumulatedPeriod worstPeriod = new AccumulatedPeriod(resultSet.getDate("worst_recorded_on").toLocalDate(), resultSet.getInt("worst"));
-            final AccumulatedPeriod bestPeriod = new AccumulatedPeriod(resultSet.getDate("best_recorded_on").toLocalDate(), resultSet.getInt("best"));
+        var minPeriod = min(aggregatedMonthlyMilages.field(MILAGES.RECORDED_ON)).as("min_period");
+        var summaryValue = sum(aggregatedMonthlyMilages.field(aggregatedMonthlyValue)).plus(coalesce(aggregatedTrips.field(aggregatedTripsValue), inline(0))).as("summaryValue");
+        var summary = name("summary").as(DSL
+                .select(minPeriod, summaryValue)
+                .from(aggregatedMonthlyMilages, aggregatedTrips)
+        );
 
-            return Summary.builder()
-                    .worstPeriod(worstPeriod)
-                    .bestPeriod(bestPeriod)
-                    .average(resultSet.getDouble("average"))
-                    .total(resultSet.getDouble("total"))
-                    .dateOfFirstRecord(resultSet.getDate("min_recorded_on").toLocalDate())
-                    .build();
-        });
+        var bestPeriod = DSL
+                .select(
+                        aggregatedMonthlyMilages.field(MILAGES.RECORDED_ON),
+                        aggregatedMonthlyMilages.field(aggregatedMonthlyValue))
+                .from(aggregatedMonthlyMilages)
+                .where(aggregatedMonthlyMilages.field(monthRank).eq(inline(1)))
+                .asTable("bestPeriod");
+        var worstPeriod = DSL
+                .select(
+                        aggregatedMonthlyMilages.field(MILAGES.RECORDED_ON),
+                        aggregatedMonthlyMilages.field(aggregatedMonthlyValue))
+                .from(aggregatedMonthlyMilages)
+                .where(aggregatedMonthlyMilages.field(monthRank).eq(DSL.select(max(aggregatedMonthlyMilages.field(monthRank))).from(aggregatedMonthlyMilages)))
+                .asTable("worstPeriod");
+
+        var bestPeriodRecordedOn = bestPeriod.field(MILAGES.RECORDED_ON);
+        var bestPeriodValue = bestPeriod.field(aggregatedMonthlyValue);
+        var worstPeriodRecordedOn = worstPeriod.field(MILAGES.RECORDED_ON);
+        var worstPeriodValue = worstPeriod.field(aggregatedMonthlyValue);
+        var average = summary.field(summaryValue).divide(localDateDiff(DSL.currentLocalDate(), summary.field(minPeriod)).div(inline(30.4167))).as("average");
+        return this.database
+                .with(MONTHLY_MILAGES)
+                .with(aggregatedMonthlyMilages)
+                .with(aggregatedTrips)
+                .with(summary)
+                .select(
+                        summary.field(minPeriod), average, summary.field(summaryValue),
+                        bestPeriodRecordedOn,
+                        bestPeriodValue,
+                        worstPeriodRecordedOn,
+                        worstPeriodValue
+                )
+                .from(summary, bestPeriod, worstPeriod)
+                .fetchOptional()
+                .map(record -> Summary.builder()
+                        .worstPeriod(new AccumulatedPeriod(record.get(worstPeriodRecordedOn), record.get(worstPeriodValue).intValue()))
+                        .bestPeriod(new AccumulatedPeriod(record.get(bestPeriodRecordedOn), record.get(bestPeriodValue).intValue()))
+                        .average(record.get(average).doubleValue())
+                        .total(record.get(summaryValue).doubleValue())
+                        .dateOfFirstRecord(record.get(minPeriod))
+                        .build()
+                ).orElse(Summary.builder().total(0.0).average(0.0).build());
     }
 }

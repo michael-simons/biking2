@@ -17,6 +17,8 @@ package ac.simons.biking2.statistics;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +33,7 @@ class SummaryController {
 
     private final StatisticService statisticService;
 
-    @RequestMapping("/summary")
+    @GetMapping("/summary")
     public Summary getSummary() {
 
         return this.statisticService.computeSummary();

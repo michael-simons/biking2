@@ -25,7 +25,7 @@ import lombok.Builder;
  * @author Michael J. Simons
  * @since 2019-11-01
  */
-final class YearlyStatistics {
+final class HistoricYear {
 
     private final int year;
 
@@ -36,7 +36,7 @@ final class YearlyStatistics {
     private final String preferredBike;
 
     @Builder
-    private YearlyStatistics(final int year, final int[] values, final String preferredBike) {
+    private HistoricYear(final int year, final int[] values, final String preferredBike) {
         this.year = year;
         this.values = values;
         this.yearlyTotal = Arrays.stream(values).sum();
