@@ -73,6 +73,9 @@
 
     <!-- Same exclusions as pure JaCoCo -->
     <sonar.coverage.exclusions>**/Application.java,**/JAXBContextFactory.java,src/main/java/ac/simons/biking2/config/*</sonar.coverage.exclusions>
+
+    <db.url>jdbc:h2:${project.build.directory}/flyway-code-gen</db.url>
+    <db.username>sa</db.username>
   </properties>
 
   <dependencies>
@@ -124,6 +127,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jooq</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -301,10 +308,76 @@
               <version>${checkstyle.version}</version>
             </dependency>
           </dependencies>
+          <configuration>
+            <configLocation>src/checkstyle/checkstyle.xml</configLocation>
+            <suppressionsLocation>src/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
+            <encoding>UTF-8</encoding>
+            <consoleOutput>true</consoleOutput>
+            <failsOnError>true</failsOnError>
+            <linkXRef>false</linkXRef>
+            <excludes>${project.build.directory}/generated-sources/**/*</excludes>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+        <version>${flyway.version}</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>migrate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <url>${db.url}</url>
+          <user>${db.username}</user>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen-maven</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <jdbc>
+            <url>${db.url}</url>
+            <user>${db.username}</user>
+          </jdbc>
+          <generator>
+            <database>
+              <name>org.jooq.meta.h2.H2Database</name>
+              <schemaVersionProvider>SELECT :schema_name || '_' || MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
+              <includes>.*</includes>
+              <excludes>schema_version</excludes>
+              <schemata>
+                <schema>
+                  <inputSchema>PUBLIC</inputSchema>
+                  <outputSchemaToDefault>true</outputSchemaToDefault>
+                </schema>
+              </schemata>
+            </database>
+            <generate>
+              <deprecated>false</deprecated>
+              <javaTimeTypes>true</javaTimeTypes>
+            </generate>
+            <target>
+              <packageName>ac.simons.biking2.db</packageName>
+              <directory>target/generated-sources/jooq</directory>
+            </target>
+          </generator>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -397,7 +470,7 @@
         <executions>
           <execution>
             <goals>
-              <goal>jar</goal>
+              <goal>jar-no-fork</goal>
             </goals>
           </execution>
         </executions>
@@ -409,14 +482,6 @@
           <execution>
             <id>validate</id>
             <phase>validate</phase>
-            <configuration>
-              <configLocation>src/checkstyle/checkstyle.xml</configLocation>
-              <suppressionsLocation>src/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
-              <encoding>UTF-8</encoding>
-              <consoleOutput>true</consoleOutput>
-              <failsOnError>true</failsOnError>
-              <linkXRef>false</linkXRef>
-            </configuration>
             <goals>
               <goal>check</goal>
             </goals>
@@ -435,6 +500,8 @@
             <exclude>ac/simons/biking2/misc/JAXBContextFactory.class</exclude>
             <!-- Configuration -->
             <exclude>ac/simons/biking2/config/*</exclude>
+            <!-- jOOQ Code -->
+            <exclude>ac/simons/biking2/db/**/*</exclude>
           </excludes>
         </configuration>
         <executions>
@@ -453,17 +520,15 @@
             </goals>
             <configuration>
               <rules>
-                <!-- implmentation is needed only for Maven 2 -->
-                <rule implementation="org.jacoco.maven.RuleConfiguration">
+                <rule>
                   <element>BUNDLE</element>
                   <limits>
-                    <limit implementation="org.jacoco.report.check.Limit">
+                    <limit>
                       <counter>INSTRUCTION</counter>
                       <value>COVEREDRATIO</value>
                       <minimum>0.95</minimum>
                     </limit>
-                    <!-- implmentation is needed only for Maven 2 -->
-                    <limit implementation="org.jacoco.report.check.Limit">
+                    <limit>
                       <counter>COMPLEXITY</counter>
                       <value>COVEREDRATIO</value>
                       <minimum>0.85</minimum>
@@ -515,16 +580,6 @@
 
   <reporting>
     <plugins>
-      <!-- Included a second time to make NetBeans aware of it -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${maven-checkstyle-plugin.version}</version>
-        <configuration>
-          <configLocation>src/checkstyle/checkstyle.xml</configLocation>
-          <suppressionsLocation>src/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>com.buschmais.jqassistant</groupId>
         <artifactId>jqassistant-maven-plugin</artifactId>
