@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 /**
- * Module for computing statistics, generating charts and providing version and summary information.
+ <!-- tag::intent[] -->
+    Module for computing statistics, generating charts and providing version and summary information.
+ <!-- end::intent[] -->
  */
 package ac.simons.biking2.statistics;

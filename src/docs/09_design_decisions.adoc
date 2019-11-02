@@ -43,3 +43,23 @@ _biking2_ needs to store "large" objects: Image data (biking and gallery picture
 .Decision
 
 I opted for local file system because I didn't want to put much effort into evaluating cloud services. If _biking2_ should runnable in cloud based setup, one has to create an abstraction over the local filesystem currently used. 
+
+=== Use a database centric approach
+
+.Problem
+
+_biking2_ was not received as database centric in the beginning.
+Hibernate entities had been modelled, the database was setup with Hibernates automatic DDL.
+Analytic functions had not been used, but computation has been done in memory.
+
+.Considered Alternatives
+
+Use a database centric approach as described in
+https://speakerdeck.com/michaelsimons/live-with-your-sql-fetish-and-choose-the-right-tool-for-the-job["Live with your SQL-fetish and choose the right tool for the job"]
+
+.Decision
+
+In late 2019, that decision has been implemented.
+Flyway has been introduced to create tables and other migrations via SQL scripts.
+Based on a database that is actually under our control, we generate a jOOQ schema, on which all SQL generation for computing statistics is done.
+For more information, have a look at the <<statistics (Whitebox),whitebox view of the statistics modul>>.
