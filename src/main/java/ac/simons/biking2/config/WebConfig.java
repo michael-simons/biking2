@@ -24,13 +24,14 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @author Michael J. Simons, 2014-02-15
+ * @author Michael J. Simons
+ * @since 2014-02-15
  */
 @Configuration(proxyBeanMethods = false)
 public class WebConfig implements WebMvcConfigurer {
@@ -50,7 +51,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Controller
     static class Routes {
 
-        @RequestMapping({
+        @GetMapping({
             "/",
             "/bikes",
             "/milages",

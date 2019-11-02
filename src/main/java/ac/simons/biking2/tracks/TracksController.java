@@ -28,9 +28,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,10 +58,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * @author Michael J. Simons, 2014-02-15
+ * @author Michael J. Simons
+ * @since 2014-02-15
  */
 @Controller
 @Slf4j
@@ -91,14 +92,14 @@ class TracksController {
         this.gpxContext = new JAXBContextFactory(GPX.class).createContext();
     }
 
-    @RequestMapping("/api/tracks")
+    @GetMapping("/api/tracks")
     @ResponseBody
     public
     List<TrackEntity> getTracks() {
         return trackRepository.findAll(Sort.by("coveredOn").ascending());
     }
 
-    @RequestMapping(value = "/api/tracks", method = POST)
+    @PostMapping(value = "/api/tracks")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TrackEntity> createTrack(
             @RequestParam(value = "name", required = true)
@@ -177,7 +178,7 @@ class TracksController {
         return track;
     }
 
-    @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.GET)
+    @GetMapping(path = "/api/tracks/{id:\\w+}")
     @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<TrackEntity> getTrack(@PathVariable final String id) {
         final Integer requestedId = trackIdParser.fromPrettyId(id);
@@ -188,7 +189,7 @@ class TracksController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @RequestMapping(path = "/api/tracks/{id:\\w+}", method = RequestMethod.DELETE)
+    @DeleteMapping(path = "/api/tracks/{id:\\w+}")
     @PreAuthorize("isAuthenticated()")
     @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<Void> deleteTrack(@PathVariable final String id) {
@@ -212,7 +213,7 @@ class TracksController {
         return rv;
     }
 
-    @RequestMapping({"/tracks/{id:\\w+}.{format}"})
+    @GetMapping({"/tracks/{id:\\w+}.{format}"})
     @SuppressWarnings({"checkstyle:innerassignment"})
     public void downloadTrack(
             @PathVariable final String id,
@@ -246,7 +247,7 @@ class TracksController {
         response.flushBuffer();
     }
 
-    @RequestMapping("/api/home")
+    @GetMapping("/api/home")
     @ResponseBody
     public Coordinate getHome() {
         return this.home;

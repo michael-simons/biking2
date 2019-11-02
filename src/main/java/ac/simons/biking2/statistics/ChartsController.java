@@ -94,14 +94,14 @@ class ChartsController {
         builder.withUserData(userData);
 
         // Add the bike charts as columns
-        currentYear.getMonths().getValues().forEach((bikeAndColor, milagesInYear) -> {
-            builder.series()
-                    .withName(bikeAndColor.v1)
-                    .withColor("#" + bikeAndColor.v2)
-                    .withType("column")
-                    .withData(milagesInYear)
-                    .build();
-        });
+        currentYear.getMonths().getValues().forEach((bikeAndColor, milagesInYear) ->
+                builder.series()
+                        .withName(bikeAndColor.v1)
+                        .withColor("#" + bikeAndColor.v2)
+                        .withType("column")
+                        .withData(milagesInYear)
+                        .build()
+        );
 
         // Add sum as spline and compute maximum y value
         final int currentMaxYValue =
@@ -199,9 +199,9 @@ class ChartsController {
             );
 
             title.append("Milage ")
-                    .append(history.keySet().stream().min(Integer::compare).get())
+                    .append(history.keySet().stream().min(Integer::compare).orElseThrow())
                     .append("-")
-                    .append(history.keySet().stream().max(Integer::compare).get());
+                    .append(history.keySet().stream().max(Integer::compare).orElseThrow());
         }
 
         final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);

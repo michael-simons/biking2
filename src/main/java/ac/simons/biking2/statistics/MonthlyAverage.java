@@ -39,6 +39,7 @@ final class MonthlyAverage {
      */
     private final double value;
 
+    @SuppressWarnings({"squid:UnusedPrivateMethodUnused"}) // Used by the lombok generated builder.
     private MonthlyAverage(final Month month, final int minimum, final int maximum, final double value) {
         this.month = month;
         this.minimum = minimum;

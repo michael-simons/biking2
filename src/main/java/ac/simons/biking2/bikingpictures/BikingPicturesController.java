@@ -27,13 +27,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * @author Michael J. Simons, 2014-02-19
+ * @author Michael J. Simons
+ * @since 2014-02-19
  */
 @Controller
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
@@ -42,13 +43,13 @@ class BikingPicturesController {
     private final BikingPictureRepository bikingPictureRepository;
     private final File datastoreBaseDirectory;
 
-    @RequestMapping("/api/bikingPictures")
+    @GetMapping("/api/bikingPictures")
     @ResponseBody
     public List<BikingPictureEntity> getBikingPictures() {
         return bikingPictureRepository.findAll(Sort.by("pubDate").ascending());
     }
 
-    @RequestMapping({"/api/bikingPictures/{id:\\d+}.jpg"})
+    @GetMapping({"/api/bikingPictures/{id:\\d+}.jpg"})
     public void getBikingPicture(
             @PathVariable final Integer id,
             final HttpServletRequest request,
