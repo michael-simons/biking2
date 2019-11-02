@@ -92,9 +92,9 @@ class BikeEntityTest {
     }
 
     @Test
-    void testGetMilage() {
-        assertEquals(50, defaultTestBike.getMilage());
-        assertEquals(0, new BikeEntity("test", LocalDate.now()).getMilage());
+    void testGetLastMilage() {
+        assertEquals(50, defaultTestBike.getLastMilage());
+        assertEquals(0, new BikeEntity("test", LocalDate.now()).getLastMilage());
     }
 
     @Test

@@ -73,11 +73,15 @@ import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfigura
 
 /**
  * @author Michael J. Simons
- *
  * @since 2014-02-20
  */
 @WebMvcTest(
-        includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = SecurityConfig.class),
+        // I made my life simple by including the service in the test slice after I introduced it
+        // Thus, the mocked repository bean below is passed to the service and the service
+        // acts accordingly. In the end, the controller and it's tests was somewhat broken anyway.
+        // The controller is now in a much better shape, when time permits, I shall tests both service
+        // and controller on its own.
+        includeFilters = @Filter(type = ASSIGNABLE_TYPE, value = {SecurityConfig.class, BikeService.class}),
         controllers = BikesController.class
 )
 @ImportAutoConfiguration(MessageSourceAutoConfiguration.class)
@@ -150,7 +154,6 @@ class BikesControllerTest {
                                 fieldWithPath("[].story").optional().description("The story of the bike"),
                                 fieldWithPath("[].story.url").description("Link to the story"),
                                 fieldWithPath("[].story.label").description("A title for the story"),
-                                fieldWithPath("[].milage").description("The total milage of the bike"),
                                 fieldWithPath("[].lastMilage").description("The last recorded milage of the bike")
                         )
                 )
