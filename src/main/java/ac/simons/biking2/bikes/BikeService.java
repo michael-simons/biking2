@@ -18,6 +18,7 @@ package ac.simons.biking2.bikes;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ class BikeService {
     private final BikeRepository bikeRepository;
 
     @Transactional
+    @CacheEvict(value = "statistics", allEntries = true)
     public BikeEntity createBike(final BikeCmd newBike) {
 
         final BikeEntity bike = new BikeEntity(newBike.getName(), newBike.boughtOnAsLocalDate());
@@ -58,6 +60,7 @@ class BikeService {
     }
 
     @Transactional
+    @CacheEvict(value = "statistics", allEntries = true)
     public MilageEntity createMilage(final Integer id, final NewMilageCmd cmd) {
 
         final BikeEntity bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
@@ -74,6 +77,7 @@ class BikeService {
     }
 
     @Transactional
+    @CacheEvict(value = "statistics", allEntries = true)
     public BikeEntity updateBike(final Integer id, final BikeCmd updatedBike) {
 
         final BikeEntity bike = bikeRepository.findById(id).orElseThrow(BikeNotFoundException::new);
