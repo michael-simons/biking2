@@ -57,6 +57,7 @@ import org.jooq.Record4;
 import org.jooq.impl.DSL;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -88,6 +89,7 @@ class StatisticService {
 
     private final DSLContext database;
 
+    @Cacheable(value = "statistics", key = "#root.methodName")
     public Map<Integer, MonthlyAverage> computeMonthlyAverage() {
 
         var rv = new HashMap<Integer, MonthlyAverage>(12);
@@ -141,6 +143,7 @@ class StatisticService {
         return Collections.unmodifiableMap(rv);
     }
 
+    @Cacheable(value = "statistics", key = "#root.methodName+#yearStart+#yearEnd")
     public Map<Integer, HistoricYear> computeHistory(final Optional<Integer> yearStart, final Optional<Integer> yearEnd) {
 
         var lowerBound = yearStart.orElse(Integer.MIN_VALUE);
@@ -200,6 +203,7 @@ class StatisticService {
                 .collect(Collectors.toMap(HistoricYear::getYear, Function.identity()));
     }
 
+    @Cacheable(value = "statistics", key = "#root.methodName")
     public CurrentYear computeCurrentYear() {
 
         var startOfYear = LocalDate.now().withMonth(1).withDayOfMonth(1);
@@ -283,6 +287,7 @@ class StatisticService {
                 .build();
     }
 
+    @Cacheable(value = "statistics", key = "#root.methodName")
     public Summary computeSummary() {
 
         var aggregatedMonthlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as("value");
