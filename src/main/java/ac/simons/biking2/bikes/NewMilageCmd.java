@@ -22,20 +22,26 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Michael J. Simons, 2014-02-19
+ * @author Michael J. Simons
+ * @since 2014-02-19
  */
 @Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 class NewMilageCmd {
+
     @DateTimeFormat(iso = DATE_TIME)
     @NotNull
     private ZonedDateTime recordedOn;
+
     @NotNull
+    @Positive
     private Double amount;
 
     public LocalDate recordedOnAsLocalDate() {

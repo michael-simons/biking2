@@ -16,6 +16,7 @@
 package ac.simons.biking2.bikes;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -113,10 +113,15 @@ public class BikeEntity implements Serializable {
     @Getter
     private LocalDate decommissionedOn;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bike")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bike")
     @OrderBy("recordedOn asc")
     @JsonIgnore
     private final List<MilageEntity> milages = new ArrayList<>();
+
+    @Column(name = "last_milage", nullable = false, precision = 8, scale = 2)
+    @NotNull
+    @JsonIgnore
+    private BigDecimal lastMilage = BigDecimal.ZERO;
 
     @Column(name = "created_at", nullable = false)
     @NotNull
@@ -151,49 +156,26 @@ public class BikeEntity implements Serializable {
     public synchronized MilageEntity addMilage(final LocalDate recordedOn, final double amount) {
 
         if (!this.milages.isEmpty()) {
-            final MilageEntity lastMilage = this.milages.get(this.milages.size() - 1);
-            LocalDate nextValidDate = lastMilage.getRecordedOn().plusMonths(1);
+            var lastRecordedMilage = this.milages.get(this.milages.size() - 1);
+            var nextValidDate = lastRecordedMilage.getRecordedOn().plusMonths(1);
             if (!recordedOn.equals(nextValidDate)) {
                 throw new IllegalArgumentException("Next valid date for milage is " + nextValidDate);
             }
-            if (lastMilage.getAmount().doubleValue() > amount) {
-                throw new IllegalArgumentException("New amount must be greater than or equal " + lastMilage.getAmount().toPlainString());
+            if (lastRecordedMilage.getAmount().doubleValue() > amount) {
+                throw new IllegalArgumentException("New amount must be greater than or equal " + lastRecordedMilage.getAmount().toPlainString());
             }
         }
-        final MilageEntity milage = new MilageEntity(this, recordedOn.withDayOfMonth(1), amount);
-        this.milages.add(milage);
-        return milage;
+        var newRecordedMilage = new MilageEntity(this, recordedOn.withDayOfMonth(1), amount);
+        this.milages.add(newRecordedMilage);
+        this.lastMilage = newRecordedMilage.getAmount();
+        return newRecordedMilage;
     }
 
     /**
-     * @return The total milage that has been recorded here.
-     */
-    @JsonProperty
-    public int getMilage() {
-
-        if (this.milages.isEmpty()) {
-            return 0;
-        }
-
-        return this.getLastMilage() - this.getFirstMilage();
-    }
-
-    /**
-     * @return The first milage recorded with this app.
-     */
-    int getFirstMilage() {
-        return this.milages.isEmpty() ? 0 : this.milages.get(0).getAmount().intValue();
-    }
-
-    /**
-     * @return The last milage recorded with this app.
+     * @return The last milage recorded for this bike.
      */
     @JsonProperty
     public int getLastMilage() {
-        return this.milages.isEmpty() ? 0 : this.milages.get(this.milages.size() - 1).getAmount().intValue();
-    }
-
-    public boolean hasMilages() {
-        return !this.milages.isEmpty();
+        return this.lastMilage.intValue();
     }
 }
