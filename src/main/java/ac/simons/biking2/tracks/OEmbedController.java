@@ -31,13 +31,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * @author Michael J. Simons, 2014-02-14
+ * @author Michael J. Simons
+ * @since 2014-02-14
  */
 @Controller
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
@@ -57,7 +58,7 @@ class OEmbedController {
     private final TrackRepository trackRepository;
     private final Coordinate home;
 
-    @RequestMapping(value = "/oembed", produces = {"application/json", "application/xml"})
+    @GetMapping(value = "/oembed", produces = {"application/json", "application/xml"})
     @SuppressWarnings({"checkstyle:innerassignment"})
     public ResponseEntity<OEmbedResponse> getEmbeddableTrack(
             @RequestParam(required = true) @URL final String url,
@@ -109,7 +110,7 @@ class OEmbedController {
         return rv;
     }
 
-    @RequestMapping(value = "/tracks/{id:\\w+}/embed")
+    @GetMapping(value = "/tracks/{id:\\w+}/embed")
     @SuppressWarnings({"checkstyle:innerassignment"})
     public String embedTrack(
             @PathVariable final String id,

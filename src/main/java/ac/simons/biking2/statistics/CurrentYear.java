@@ -43,6 +43,7 @@ final class CurrentYear {
 
     private final String preferredBike;
 
+    @SuppressWarnings({"squid:UnusedPrivateMethodUnused"}) // Used by the lombok generated builder.
     private CurrentYear(final LocalDate startOfYear, final MonthlyStatistics months, final int yearlyTotal, final double monthlyAverage, final AccumulatedPeriod worstPeriod, final AccumulatedPeriod bestPeriod, final String preferredBike) {
         this.startOfYear = startOfYear == null ? LocalDate.now().withMonth(1).withDayOfMonth(1) : startOfYear;
         this.months = months == null ? new MonthlyStatistics(new int[12], Collections.emptyMap()) : months;

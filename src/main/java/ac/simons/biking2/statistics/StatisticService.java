@@ -72,11 +72,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class StatisticService {
 
+    private static final String ALIAS_FOR_VALUE = "value";
+
     /**
      * The computed monthly milage value.
      */
     private static final Field<BigDecimal> MONTHLY_MILAGE_VALUE =
-            lead(MILAGES.AMOUNT).over(partitionBy(BIKES.ID).orderBy(MILAGES.RECORDED_ON)).minus(MILAGES.AMOUNT).as("value");
+            lead(MILAGES.AMOUNT).over(partitionBy(BIKES.ID).orderBy(MILAGES.RECORDED_ON)).minus(MILAGES.AMOUNT).as(ALIAS_FOR_VALUE);
 
     /**
      * The cte for computing the monthly milage value.
@@ -94,7 +96,7 @@ class StatisticService {
 
         var rv = new HashMap<Integer, MonthlyAverage>(12);
 
-        var aggregatedMonthlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as("value");
+        var aggregatedMonthlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as(ALIAS_FOR_VALUE);
         var aggregatedMonthlyMilages = name("aggregatedMonthlyMilages").as(DSL
                 .select(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), aggregatedMonthlyValue)
                 .from(MONTHLY_MILAGES)
@@ -106,7 +108,7 @@ class StatisticService {
                 extract(ASSORTED_TRIPS.COVERED_ON, DatePart.DAY).neg().plus(inline(1)),
                 DatePart.DAY
         ).as("recorded_on");
-        var assortedTripValue = sum(ASSORTED_TRIPS.DISTANCE).as("value");
+        var assortedTripValue = sum(ASSORTED_TRIPS.DISTANCE).as(ALIAS_FOR_VALUE);
         var aggregatedAssortedTrips = name("aggregatedAssortedTrips").as(DSL
                 .select(assortedTripRecordedOn, assortedTripValue)
                 .from(ASSORTED_TRIPS)
@@ -173,7 +175,7 @@ class StatisticService {
         var preferredBikes = new HashMap<Integer, String>();
 
         var year = extract(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), DatePart.YEAR).as("year");
-        var aggregatedYearlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as("value");
+        var aggregatedYearlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as(ALIAS_FOR_VALUE);
         var yearlyMilages = name("yearlyMilages").as(DSL
                 .select(MONTHLY_MILAGES.field(BIKES.NAME), year, aggregatedYearlyValue)
                 .from(MONTHLY_MILAGES)
@@ -280,7 +282,7 @@ class StatisticService {
                 .startOfYear(startOfYear)
                 .months(new MonthlyStatistics(totals, values))
                 .yearlyTotal(currentYearSum)
-                .monthlyAverage(currentYearSum / Period.between(startOfYear, LocalDate.now()).toTotalMonths())
+                .monthlyAverage((double) currentYearSum / Period.between(startOfYear, LocalDate.now()).toTotalMonths())
                 .worstPeriod(new AccumulatedPeriod(startOfYear.withMonth(minIndex + 1), minValue))
                 .bestPeriod(new AccumulatedPeriod(startOfYear.withMonth(maxIndex + 1), maxValue))
                 .preferredBike(preferredBike)
@@ -290,7 +292,7 @@ class StatisticService {
     @Cacheable(value = "statistics", key = "#root.methodName")
     public Summary computeSummary() {
 
-        var aggregatedMonthlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as("value");
+        var aggregatedMonthlyValue = sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).as(ALIAS_FOR_VALUE);
         var monthRank = rank().over().orderBy(sum(MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE)).desc(), MONTHLY_MILAGES.field(MILAGES.RECORDED_ON).desc()).as("month_rank");
         var aggregatedMonthlyMilages = name("aggregatedMonthlyMilages").as(DSL
                 .select(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON), aggregatedMonthlyValue, monthRank)
@@ -298,7 +300,7 @@ class StatisticService {
                 .where(MONTHLY_MILAGE_VALUE.isNotNull())
                 .groupBy(MONTHLY_MILAGES.field(MILAGES.RECORDED_ON)));
 
-        var aggregatedTripsValue = sum(ASSORTED_TRIPS.DISTANCE).as("value");
+        var aggregatedTripsValue = sum(ASSORTED_TRIPS.DISTANCE).as(ALIAS_FOR_VALUE);
         var aggregatedTrips = name("aggregatedTrips").as(DSL
                 .select(aggregatedTripsValue)
                 .from(ASSORTED_TRIPS));

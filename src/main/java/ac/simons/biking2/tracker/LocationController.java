@@ -25,15 +25,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 /**
- * @author Michael J. Simons, 2014-03-20
+ * @author Michael J. Simons
+ * @since 2014-03-20
  */
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
@@ -43,17 +43,17 @@ class LocationController {
 
     private final LocationService locationService;
 
-    @RequestMapping(value = "/locations", method = GET)
+    @GetMapping("/locations")
     public List<LocationEntity> getLocations() {
         return this.locationService.getLocationsForTheLastNHours(1);
     }
 
-    @RequestMapping(value = "/locations/count", method = GET)
+    @GetMapping("/locations/count")
     public long getLocationCount() {
         return this.locationService.getLocationCount();
     }
 
-    @RequestMapping(value = "/locations", method = POST)
+    @PostMapping("/locations")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LocationEntity> createLocation(@RequestBody @Valid final NewLocationCmd newLocationCmd, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

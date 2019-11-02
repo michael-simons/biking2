@@ -25,16 +25,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 /**
  * Api for creating new {@link AssortedTripEntity assorted trips}.
  *
- * @author Michael J. Simons, 2015-06-09
+ * @author Michael J. Simons
+ * @since 2015-06-09
  */
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
@@ -44,7 +44,7 @@ class TripsController {
 
     private final AssortedTripRepository assortedTripRepository;
 
-    @RequestMapping(value = "", method = POST)
+    @PostMapping("")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Object> createTrip(@RequestBody @Valid final NewTripCmd newTrip, final BindingResult bindingResult) {
         ResponseEntity<Object> rv;
