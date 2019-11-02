@@ -18,3 +18,8 @@ The internal single page application shall be implemented using AngularJS. The d
 For real time tracking the MQTT protocol will be used which is part of Apache ActiveMQ, supported out of the box by Spring Messaging.
 
 Graphing should not be implemented here but instead the http://www.highcharts.com[Highcharts] library should be used. The configuration for all charts should be computed server side.
+
+NOTE: The original installment of this project used Java 8 streams and api heavily to compute statistics (everything under https://biking.michael-simons.eu/milages).
+      Back in 2014 and 2015, when Java 8 was new, it helped a lot to learn that API.
+      Nearly 5 years later, thinking about my history with database and looking at a tons of talk about SQL I gave, I decided it was time to go back to my roots.
+      All the charts are now created with a dedicated statistics service, that is based on jOOQ and typesafe SQL.

@@ -29,6 +29,7 @@ Contained blackboxes::
 | <<locations (Blackbox), locations>> | MQTT and STOMP interface for creating new locations and providing them in real time on websockets via stomp.
 | <<bikingPictures (Blackbox), bikingPictures>> | Reading biking pictures from an RSS feed provided by _Daily Fratze_ and providing an API to them.
 | <<galleryPictures (Blackbox), galleryPictures>> | Uploading and managing arbitrary pictures
+| <<statistics (Blackbox), statistics>> | Provides an API for statistics
 |===
 
 include::{rules}/structure.adoc[]
@@ -161,9 +162,24 @@ Interfaces::
 | REST interface `/api/galleryPictures/*` | Contains all methods for adding and reading arbitrary pictures.
 |===
 
+==== statistics (Blackbox)
+
+Intent/Responsibility::
+
+include::../main/java/ac/simons/biking2/statistics/package-info.java[tags=intent]
+
+Interfaces::
+
+[cols="1,3" options="header"]
+|===
+| Interface | Description
+| REST interface `/api/charts/*` | Contains all methods for generating https://www.highcharts.com/[Highcharts Charts].
+| REST interface `/api/summary/*` | Aggregated values.
+|===
+
 Files::
 
-The `galleryPictures` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.gallerypictures`.
+The `statistics` module and all of its dependencies are contained inside the Java package `ac.simons.biking2.statistics`.
 
 === Building Blocks - Level 2
 
@@ -225,3 +241,47 @@ Contained blackboxes::
 image::5.2_level2-galleryPictures.png[align="center"]
 
 The `GalleryPictureRepository` is a Spring Data JPA based repository for `GalleryPictureEntities`. The `GalleryController` accesses it to retrieve and store instances of `GalleryPictureEntity` and provide external interfaces.
+
+==== statistics (Whitebox)
+
+The `StatisticService` is a database centric service that uses an instance of jOOQ's `DSLContext` for creating SQL.
+That SQL is not generated SQL, but handcrafted.
+jOOQ is used only to do this in a types safe way.
+
+During build, jOOQ reads a temporary database, created from SQL based migration scripts, and provides several Java classes reassembling a schema.
+Those classes along with the DSL are used to write SQL.
+
+The statements make heavily use of analytic functions.
+This is necessary, as the original decision for storing milages has been not storing the amount biked each month, but the accumulated milage on a bike.
+Therefore, the monthly values need to be computed.
+
+This is done by queries like the following
+
+[source,sql]
+[[generate-maven-project]]
+.Query that provides the statistics for the current year
+----
+WITH mm AS (
+  SELECT
+    bikes.name,
+    bikes.color,
+    milages.recorded_on,
+    (lead(milages.amount) OVER (PARTITION BY bikes.id ORDER BY milages.recorded_on) - milages.amount) value
+  FROM bikes
+    JOIN milages
+      ON milages.bike_id = bikes.id
+  ORDER BY milages.recorded_on ASC
+)
+SELECT
+  mm.name,
+  mm.color,
+  (EXTRACT(MONTH FROM mm.recorded_on) - 1) idx,
+  mm.value,
+  sum(mm.value) OVER (PARTITION BY mm.recorded_on) total
+FROM mm
+WHERE (
+  mm.value IS NOT NULL
+  AND EXTRACT(YEAR FROM mm.recorded_on) >= EXTRACT(YEAR FROM DATE '2019-01-01')
+)
+ORDER BY mm.name ASC
+----
