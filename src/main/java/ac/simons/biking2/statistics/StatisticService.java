@@ -19,6 +19,7 @@ import static ac.simons.biking2.db.Tables.ASSORTED_TRIPS;
 import static ac.simons.biking2.db.Tables.BIKES;
 import static ac.simons.biking2.db.Tables.MILAGES;
 import static org.jooq.impl.DSL.avg;
+import static org.jooq.impl.DSL.ceil;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.denseRank;
 import static org.jooq.impl.DSL.extract;
@@ -331,7 +332,7 @@ class StatisticService {
         var bestPeriodValue = bestPeriod.field(aggregatedMonthlyValue);
         var worstPeriodRecordedOn = worstPeriod.field(MILAGES.RECORDED_ON);
         var worstPeriodValue = worstPeriod.field(aggregatedMonthlyValue);
-        var average = summary.field(summaryValue).divide(localDateDiff(DSL.currentLocalDate(), summary.field(minPeriod)).div(inline(30.4167))).as("average");
+        var average = summary.field(summaryValue).divide(ceil(localDateDiff(DSL.currentLocalDate(), summary.field(minPeriod)).div(inline(30.4167)))).as("average");
         return this.database
                 .with(MONTHLY_MILAGES)
                 .with(aggregatedMonthlyMilages)
