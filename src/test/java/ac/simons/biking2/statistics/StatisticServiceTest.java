@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -292,7 +292,7 @@ class StatisticServiceTest {
         assertThat(summary.getWorstPeriod().getValue()).isEqualTo(10);
 
         assertThat(summary.getTotal()).isEqualTo(345.0);
-        assertThat(summary.getAverage()).isEqualTo(34.5, Offset.offset(1.0));
+        assertThat(summary.getAverage()).isEqualTo(summary.getTotal() / Math.ceil(ChronoUnit.DAYS.between(sharedTestData.january1st, LocalDate.now()) / 30.4167), Offset.offset(0.1));
     }
 
     @Test
@@ -323,7 +323,7 @@ class StatisticServiceTest {
         assertNotNull(summary.getBestPeriod());
         assertThat(summary.getBestPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009, 1, 1));
         assertThat(summary.getBestPeriod().getValue()).isEqualTo(50);
-        assertThat(summary.getAverage()).isEqualTo(93.0 / Period.between(LocalDate.of(2009, 1, 1), now).toTotalMonths(), Offset.offset(1.0));
+        assertThat(summary.getAverage()).isEqualTo(93.0 / Math.ceil(ChronoUnit.DAYS.between(LocalDate.of(2009, 1, 1), LocalDate.now()) / 30.4167), Offset.offset(0.1));
     }
 
     private static void assertMonthlyAverage(Map<Integer, MonthlyAverage> monthlyAverage, double[][] expectedData) {
