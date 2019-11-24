@@ -134,6 +134,12 @@ public class BikeEntity implements Serializable {
     @Setter
     private Link story;
 
+    @Column(nullable = false)
+    @JsonIgnore
+    @Getter
+    @Setter
+    private boolean miscellaneous = false;
+
     public BikeEntity(final String name, final LocalDate boughtOn) {
 
         this.name = name;

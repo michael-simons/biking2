@@ -29,7 +29,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Michael J. Simons, 2014-02-20
+ * @author Michael J. Simons
+ * @since 2014-02-20
  */
 @Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -49,6 +50,8 @@ class BikeCmd {
 
     @DateTimeFormat(iso = DATE_TIME)
     private ZonedDateTime decommissionedOn;
+
+    private boolean miscellaneous;
 
     public LocalDate boughtOnAsLocalDate() {
         return this.boughtOn.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();

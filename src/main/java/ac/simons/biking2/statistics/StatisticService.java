@@ -54,7 +54,7 @@ import org.jooq.CommonTableExpression;
 import org.jooq.DSLContext;
 import org.jooq.DatePart;
 import org.jooq.Field;
-import org.jooq.Record4;
+import org.jooq.Record5;
 import org.jooq.impl.DSL;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
@@ -84,9 +84,9 @@ class StatisticService {
     /**
      * The cte for computing the monthly milage value.
      */
-    private static final CommonTableExpression<Record4<String, String, LocalDate, BigDecimal>> MONTHLY_MILAGES =
+    private static final CommonTableExpression<Record5<String, String, Boolean, LocalDate, BigDecimal>> MONTHLY_MILAGES =
             name("monthlyMilages").as(DSL
-                    .select(BIKES.NAME, BIKES.COLOR, MILAGES.RECORDED_ON, MONTHLY_MILAGE_VALUE)
+                    .select(BIKES.NAME, BIKES.COLOR, BIKES.MISCELLANEOUS, MILAGES.RECORDED_ON, MONTHLY_MILAGE_VALUE)
                     .from(BIKES).join(MILAGES).onKey()
                     .orderBy(MILAGES.RECORDED_ON.asc()));
 
@@ -220,7 +220,7 @@ class StatisticService {
         this.database
                 .with(MONTHLY_MILAGES)
                 .select(
-                        MONTHLY_MILAGES.field(BIKES.NAME), MONTHLY_MILAGES.field(BIKES.COLOR),
+                        MONTHLY_MILAGES.field(BIKES.NAME), MONTHLY_MILAGES.field(BIKES.COLOR), MONTHLY_MILAGES.field(BIKES.MISCELLANEOUS),
                         idxA,
                         MONTHLY_MILAGES.field(MONTHLY_MILAGE_VALUE),
                         total
@@ -235,9 +235,12 @@ class StatisticService {
                     if (totals[index] == -1) {
                         totals[index] = record.get(total).intValue();
                     }
-                    var bikeAndColor = Tuple.tuple(record.get(BIKES.NAME), record.get(BIKES.COLOR));
-                    var milagesInYear = values.computeIfAbsent(bikeAndColor, k -> new int[12]);
-                    milagesInYear[index] = record.get(MONTHLY_MILAGE_VALUE).intValue();
+                    // Only include non miscellaneous bikes
+                    if (!record.get(BIKES.MISCELLANEOUS).booleanValue()) {
+                        var bikeAndColor = Tuple.tuple(record.get(BIKES.NAME), record.get(BIKES.COLOR));
+                        var milagesInYear = values.computeIfAbsent(bikeAndColor, k -> new int[12]);
+                        milagesInYear[index] = record.get(MONTHLY_MILAGE_VALUE).intValue();
+                    }
                 });
 
         var idxB = extract(ASSORTED_TRIPS.COVERED_ON, DatePart.MONTH).minus(inline(1)).as("idx");
