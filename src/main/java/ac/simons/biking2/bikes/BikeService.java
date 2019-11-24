@@ -87,6 +87,7 @@ class BikeService {
         } else {
             bike.setColor(updatedBike.getColor());
             bike.decommission(updatedBike.decommissionedOnAsLocalDate());
+            bike.setMiscellaneous(updatedBike.isMiscellaneous());
         }
         return bike;
     }

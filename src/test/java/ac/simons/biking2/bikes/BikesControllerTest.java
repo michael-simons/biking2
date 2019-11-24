@@ -310,6 +310,7 @@ class BikesControllerTest {
                                 fieldWithPath("name").description("The name of the new bike"),
                                 fieldWithPath("boughtOn").description("The date the new bike was bought"),
                                 fieldWithPath("color").description("The color of the new bike"),
+                                fieldWithPath("miscellaneous").description("Whether it's a miscellaneous bike or not"),
                                 fieldWithPath("decommissionedOn").ignored()
                         )
                 )
