@@ -52,7 +52,7 @@ class BikeService {
 
         List<BikeEntity> rv;
         if (all) {
-            rv = bikeRepository.findAll(Sort.by("boughtOn", "decommissionedOn", "name").ascending());
+            rv = bikeRepository.findAll(Sort.by("lastMilage").descending().and(Sort.by("boughtOn", "decommissionedOn", "name").ascending()));
         } else {
             rv = bikeRepository.findByDecommissionedOnIsNull(Sort.by("name").ascending());
         }

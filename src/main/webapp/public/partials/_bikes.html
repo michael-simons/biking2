@@ -22,7 +22,7 @@
 			</tr>
 		    </thead>
 		    <tbody>
-			<tr ng-repeat="bike in bikes | orderBy:['boughtOn', 'decommissionedOn', 'name']">
+			<tr ng-repeat="bike in bikes">
 			    <td>{{ bike.name }}</td>
 			    <td>{{ bike.boughtOn | date: 'dd.MM.yyyy' }}</td>
 			    <td>{{ bike.decommissionedOn | date: 'dd.MM.yyyy' }}</td>
