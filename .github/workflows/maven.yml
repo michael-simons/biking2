@@ -1,0 +1,45 @@
+name: build
+
+on:
+  push:
+    branches:
+      - public
+  pull_request:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install GPS Babel
+        run: sudo apt-get install -y gpsbabel
+      - uses: actions/checkout@v1
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Build with Maven
+        run: ./mvnw --no-transfer-progress clean verify
+
+  sonar:
+    name: sonar analyse
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - run: sudo apt-get install -y gpsbabel
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Run SonarCloud analyse
+        run: >
+          ./mvnw --batch-mode --no-transfer-progress clean
+          org.jacoco:jacoco-maven-plugin:prepare-agent verify
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.organization=michael-simons-github
+          -Dsonar.projectKey=eu.michael-simons:biking2
+          -Dsonar.branch.name=${GITHUB_REF##*/}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
