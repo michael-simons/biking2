@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2020 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,8 +134,8 @@ class TracksController {
                     log.warn("Could not store track... Maybe an invalid GPX file? Handling as a bad request.", e);
 
                     this.trackRepository.delete(track);
-                    track.getTrackFile(datastoreBaseDirectory, "tcx").delete();
-                    track.getTrackFile(datastoreBaseDirectory, "gpx").delete();
+                    deleteTrackFile(track.getTrackFile(datastoreBaseDirectory, "tcx"));
+                    deleteTrackFile(track.getTrackFile(datastoreBaseDirectory, "gpx"));
 
                     rv = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
@@ -146,6 +146,13 @@ class TracksController {
         }
 
         return rv;
+    }
+
+    private static void deleteTrackFile(final File trackFile) {
+
+        if (trackFile != null && trackFile.isFile() && !trackFile.delete()) {
+            log.warn("Could not delete tcx file {} during storage exception.", trackFile.getAbsolutePath());
+        }
     }
 
     @SneakyThrows({IOException.class, JAXBException.class, InterruptedException.class})
