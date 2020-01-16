@@ -39,6 +39,7 @@ jobs:
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.organization=michael-simons-github
           -Dsonar.projectKey=eu.michael-simons:biking2
+          -Dsonar.branch.name=${GITHUB_REF##*/}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
