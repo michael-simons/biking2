@@ -30,8 +30,11 @@ import java.util.stream.IntStream;
 
 import org.assertj.core.data.Offset;
 import org.jooq.DSLContext;
+import org.jooq.conf.RenderKeywordCase;
 import org.jooq.conf.RenderKeywordStyle;
+import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.RenderNameStyle;
+import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.lambda.tuple.Tuple;
@@ -372,8 +375,9 @@ class StatisticServiceTest {
         @Bean
         Settings settings() {
             return new DefaultConfiguration().settings()
-                    .withRenderNameStyle(RenderNameStyle.LOWER)
-                    .withRenderKeywordStyle(RenderKeywordStyle.UPPER)
+                    .withRenderQuotedNames(RenderQuotedNames.NEVER)
+                    .withRenderNameCase(RenderNameCase.LOWER)
+                    .withRenderKeywordCase(RenderKeywordCase.UPPER)
                     .withRenderFormatted(true);
         }
     }
