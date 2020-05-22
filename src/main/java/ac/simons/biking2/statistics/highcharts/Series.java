@@ -24,7 +24,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * @author Michael J. Simons., 2014-02-12
+ * @author Michael J. Simons
+ * @since 2014-02-12
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
@@ -34,7 +35,7 @@ public final class Series<T> {
     @SuppressWarnings({"checkstyle:hiddenfield"})
     public static final class Builder<P, T> {
 
-        private final Sink<P, Series> sink;
+        private final Sink<P, Series<T>> sink;
 
         private Collection<T> data;
 
@@ -54,7 +55,7 @@ public final class Series<T> {
 
         private Marker marker;
 
-        Builder(final Sink<P, Series> sink) {
+        Builder(final Sink<P, Series<T>> sink) {
             this.sink = sink;
         }
 
@@ -64,8 +65,9 @@ public final class Series<T> {
             return this;
         }
 
+        @SuppressWarnings("unchecked")
         public Builder<P, T> withData(final int... data) {
-            this.data = (Collection<T>) Arrays.stream(data).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            this.data = Arrays.stream(data).boxed().map(i -> (T) i).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
             return this;
         }
 

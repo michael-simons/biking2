@@ -42,6 +42,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
@@ -131,6 +132,7 @@ class ChartsControllerTest {
     }
 
     @Test
+    @SuppressWarnings({"unchecked"})
     void emptyMonthlyAverage() throws Exception {
 
         Map<Integer, MonthlyAverage> monthlyStatistics = new HashMap<>();
@@ -138,12 +140,14 @@ class ChartsControllerTest {
                 .forEach(i -> monthlyStatistics.put(i, MonthlyAverage.builder().month(Month.of(i)).build()));
         when(statisticService.computeMonthlyAverage()).thenReturn(monthlyStatistics);
 
+        var listHasSize12 = iterableWithSize(12);
+        var listHasSize2 = iterableWithSize(2);
         mockMvc
                 .perform(get("http://biking.michael-simons.eu/api/charts/monthlyAverage"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.series", hasSize(2)))
                 .andExpect(jsonPath("$.series[0].data", is(equalTo(Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)))))
-                .andExpect(jsonPath("$.series[1].data", allOf(iterableWithSize(12), everyItem(allOf(iterableWithSize(2), (Matcher) everyItem(is(equalTo(0))))))));
+                .andExpect(jsonPath("$.series[1].data", allOf(listHasSize12, everyItem(allOf(listHasSize2, (Matcher) everyItem(is(equalTo(0))))))));
 
         verify(statisticService).computeMonthlyAverage();
         verifyNoMoreInteractions(statisticService);

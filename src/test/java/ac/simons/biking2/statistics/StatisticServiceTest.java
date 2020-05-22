@@ -17,7 +17,6 @@ package ac.simons.biking2.statistics;
 
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,8 +29,11 @@ import java.util.stream.IntStream;
 
 import org.assertj.core.data.Offset;
 import org.jooq.DSLContext;
+import org.jooq.conf.RenderKeywordCase;
 import org.jooq.conf.RenderKeywordStyle;
+import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.RenderNameStyle;
+import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.lambda.tuple.Tuple;
@@ -316,11 +318,11 @@ class StatisticServiceTest {
         var service = new StatisticService(database);
         var summary = service.computeSummary();
 
-        assertNotNull(summary.getWorstPeriod());
+        assertThat(summary.getWorstPeriod()).isNotNull();
         assertThat(summary.getWorstPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009, 2, 1));
         assertThat(summary.getWorstPeriod().getValue()).isEqualTo(43);
 
-        assertNotNull(summary.getBestPeriod());
+        assertThat(summary.getBestPeriod()).isNotNull();
         assertThat(summary.getBestPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009, 1, 1));
         assertThat(summary.getBestPeriod().getValue()).isEqualTo(50);
         assertThat(summary.getAverage()).isEqualTo(93.0 / Math.ceil(ChronoUnit.DAYS.between(LocalDate.of(2009, 1, 1), LocalDate.now()) / 30.4167), Offset.offset(0.1));
@@ -372,8 +374,9 @@ class StatisticServiceTest {
         @Bean
         Settings settings() {
             return new DefaultConfiguration().settings()
-                    .withRenderNameStyle(RenderNameStyle.LOWER)
-                    .withRenderKeywordStyle(RenderKeywordStyle.UPPER)
+                    .withRenderQuotedNames(RenderQuotedNames.NEVER)
+                    .withRenderNameCase(RenderNameCase.LOWER)
+                    .withRenderKeywordCase(RenderKeywordCase.UPPER)
                     .withRenderFormatted(true);
         }
     }

@@ -21,6 +21,8 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import ac.simons.biking2.support.Sink;
+
 /**
  *
  * @author Michael J. Simons
@@ -31,8 +33,8 @@ class SeriesTest {
 
     @Test
     void testBuilder() {
-        Series series = new Series.Builder<>(object -> object)
-                .withData(1.0, 2, 3)
+        Series<Double> series = new Series.Builder<Series<Double>, Double>(object -> object)
+                .withData(1.0, 2.0, 3.0)
                 .withName("testName")
                 .withType("testType")
                 .withColor("AABBCC")
@@ -43,7 +45,7 @@ class SeriesTest {
                 .marker()
                     .build()
                 .build();
-        assertThat(series.getData()).isEqualTo(Arrays.asList(1.0, 2, 3));
+        assertThat(series.getData()).isEqualTo(Arrays.asList(1.0, 2.0, 3.0));
         assertThat(series.getName()).isEqualTo("testName");
         assertThat(series.getType()).isEqualTo("testType");
         assertThat(series.getColor()).isEqualTo("AABBCC");
@@ -53,12 +55,12 @@ class SeriesTest {
         assertThat(series.getLinkedTo()).isEqualTo("fump");
         assertThat(series.getMarker()).isNotNull();
 
-        series = new Series.Builder<>(object -> object)
-                .withData(1.0, 2, 3)
+        series = new Series.Builder<Series<Double>, Double>(object -> object)
+                .withData(1.0, 2.0, 3.0)
                 .withName("testName")
                 .withType("testType")
                 .build();
-        assertThat(series.getData()).isEqualTo(Arrays.asList(1.0, 2, 3));
+        assertThat(series.getData()).isEqualTo(Arrays.asList(1.0, 2.0, 3.0));
         assertThat(series.getName()).isEqualTo("testName");
         assertThat(series.getType()).isEqualTo("testType");
         assertThat(series.getColor()).isNull();

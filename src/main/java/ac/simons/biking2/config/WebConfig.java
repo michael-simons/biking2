@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -64,17 +63,6 @@ public class WebConfig implements WebMvcConfigurer {
         public String index() {
             return "forward:/index.html";
         }
-    }
-
-    /**
-     * This makes mapping of
-     * {@code TracksController#downloadTrack(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
-     * and the default mapping in separate methods possible.
-     * @param configurer
-     */
-    @Override
-    public void configurePathMatch(final PathMatchConfigurer configurer) {
-        configurer.setUseRegisteredSuffixPatternMatch(true);
     }
 
     /**
