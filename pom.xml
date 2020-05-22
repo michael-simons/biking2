@@ -50,7 +50,7 @@
     <checkstyle.version>8.29</checkstyle.version>
     <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     <java.version>11</java.version>
-    <joor.version>0.9.12</joor.version>
+    <joor.version>0.9.13</joor.version>
     <jool.version>0.9.14</jool.version>
     <jqassistant.version>1.7.0</jqassistant.version>
     <jqassistant.plugin.version>1.7.0</jqassistant.plugin.version>
