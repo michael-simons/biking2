@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2020 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -38,13 +36,9 @@ class NewMilageCmd {
 
     @DateTimeFormat(iso = DATE_TIME)
     @NotNull
-    private ZonedDateTime recordedOn;
+    private LocalDate recordedOn;
 
     @NotNull
     @Positive
     private Double amount;
-
-    public LocalDate recordedOnAsLocalDate() {
-        return this.recordedOn.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();
-    }
 }

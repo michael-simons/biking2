@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 michael-simons.eu.
+ * Copyright 2019-2020 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ class BikeService {
         if (bike.getDecommissionedOn() != null) {
             throw new BikeAlreadyDecommissionedException();
         } else {
-            rv = bike.addMilage(cmd.recordedOnAsLocalDate(), cmd.getAmount());
+            rv = bike.addMilage(cmd.getRecordedOn(), cmd.getAmount());
             this.bikeRepository.save(bike);
         }
 
