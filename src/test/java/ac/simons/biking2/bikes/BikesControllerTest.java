@@ -184,7 +184,7 @@ class BikesControllerTest {
 
         final NewMilageCmd newMilageCmd = new NewMilageCmd();
         newMilageCmd.setAmount(23.0);
-        newMilageCmd.setRecordedOn(ZonedDateTime.now());
+        newMilageCmd.setRecordedOn(LocalDate.now());
 
         // Empty content
         mockMvc
