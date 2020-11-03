@@ -193,7 +193,7 @@ public class TrackerConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/ws").withSockJS();
+        registry.addEndpoint("/api/ws").setAllowedOrigins("*").withSockJS();
     }
 
     @Override
