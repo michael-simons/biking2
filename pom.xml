@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.5.RELEASE</version>
+    <version>2.4.0</version>
     <relativePath />
   </parent>
 
   <groupId>eu.michael-simons</groupId>
   <artifactId>biking2</artifactId>
-  <version>3.0.7-SNAPSHOT</version>
+  <version>3.0.11-SNAPSHOT</version>
 
   <name>biking2</name>
   <url>https://biking.michael-simons.eu</url>
@@ -65,7 +65,7 @@
     <momentjs.version>2.10.6</momentjs.version>
     <sockjs-client.version>1.0.2</sockjs-client.version>
     <stomp-websocket.version>2.3.3</stomp-websocket.version>
-    <wro4j-spring-boot-starter.version>0.7.1</wro4j-spring-boot-starter.version>
+    <wro4j-spring-boot-starter.version>0.8.1</wro4j-spring-boot-starter.version>
 
     <start-class>ac.simons.biking2.Application</start-class>
 
