@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2020 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,12 +52,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIOException;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
@@ -253,10 +252,12 @@ class TracksControllerTest {
         mockMvc.perform(delete("http://biking.michael-simons.eu/api/tracks/{id}", validPrettyId))
             .andExpect(status().isInternalServerError());
         
-        assertTrue(gpx.exists() && gpx.exists());
+        assertThat(gpx.exists()).isTrue();
+        assertThat(tcx.exists()).isTrue();
         mockMvc.perform(delete("http://biking.michael-simons.eu/api/tracks/{id}", validPrettyExistingId))
             .andExpect(status().isNoContent());
-        assertFalse(gpx.exists() && gpx.exists());                
+        assertThat(gpx.exists()).isFalse();
+        assertThat(tcx.exists()).isFalse();
     }
 
     @Test
@@ -291,8 +292,8 @@ class TracksControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(track)));
-        assertTrue(new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
-        assertTrue(new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
+        assertThat(new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile()).isTrue();
+        assertThat(new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile()).isTrue();
 
         trackData = new MockMultipartFile("trackData", this.getClass().getResourceAsStream("/biking_pictures.rss"));
         mockMvc
@@ -305,8 +306,12 @@ class TracksControllerTest {
                             .param("type", "biking")
                 )
                 .andExpect(status().isBadRequest());
-        assertFalse("There must not be any files leftover", new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile());
-        assertFalse("There must not be any files leftover", new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile());
+        assertThat(new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "tcx")).isFile())
+            .withFailMessage("There must not be any files leftover")
+            .isFalse();
+        assertThat(new File(datastoreBaseDirectory, String.format("%s/%d.%s", DatastoreConfig.TRACK_DIRECTORY, track.getId(), "gpx")).isFile())
+            .withFailMessage("There must not be any files leftover")
+            .isFalse();
         verify(trackRepository, times(1)).delete(track);
     }
 
