@@ -214,7 +214,9 @@ public class CreateGalleries implements Callable<Integer> {
 									<h2>Part of biking.michael-simons.eu</h2>
 									<p>
 										This gallery is part of <a href="https://biking.michael-simons.eu">biking.michael-simons.eu</a>. The full source code of this application is available on <a href="https://github.com/michael-simons/biking2">GitHub</a>,\s
-										including the generator used for building this gallery.
+										including the generator used for building this gallery.<br />
+										Gallery created with <a href="https://github.com/michael-simons/biking2/blob/public/src/cli/CreateGalleries.java">CreateGalleries.java</a>,
+										a small Java CLI powered by <a href="https://www.jbang.dev">jbang</a> and the mighty <a href="https://drewnoakes.com/code/exif/">Metadata Extractor</a>.
 									</p>
 								</section>
 								<p class="copyright">
