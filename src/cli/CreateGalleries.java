@@ -1,4 +1,5 @@
 ///usr/bin/env jbang "$0" "$@" ; exit $?
+//JAVA 15
 //JAVAC_OPTIONS --enable-preview -source 15
 //JAVA_OPTIONS --enable-preview
 //DEPS com.drewnoakes:metadata-extractor:2.15.0
@@ -46,6 +47,7 @@ public class CreateGalleries implements Callable<Integer> {
 				var takenOn = metadata.getDirectoriesOfType(ExifSubIFDDirectory.class)
 					.stream()
 					.map(d -> d.getDateOriginal())
+					.filter(d -> d != null)
 					.map(d -> d.toInstant().atZone(ZoneId.of("Europe/Berlin")).toLocalDateTime())
 					.findFirst().get();
 				var geolocation = metadata.getDirectoriesOfType(GpsDirectory.class)
@@ -216,7 +218,9 @@ public class CreateGalleries implements Callable<Integer> {
 									</p>
 								</section>
 								<p class="copyright">
-									&copy; 2020 by Michael J. Simons, Design by <a href="http://html5up.net">HTML5 UP</a>.
+									&copy; 2020 by Michael J. Simons, Design by <a href="http://html5up.net">HTML5 UP</a>.<br />
+									While the sourcecode of this application and the gallery generator is licensed under Apache-2.0 License,
+									the images are published under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Attribution-NonCommercial-ShareAlike 4.0 International</a>.
 								</p>
 							</div>
 							<div>
