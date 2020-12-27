@@ -4,6 +4,7 @@
 //JAVA_OPTIONS --enable-preview
 //DEPS com.drewnoakes:metadata-extractor:2.15.0
 //DEPS info.picocli:picocli:4.5.2
+//DEPS net.coobird:thumbnailator:0.4.13
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
@@ -35,6 +36,10 @@ import com.drew.lang.GeoLocation;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.resizers.configurations.Dithering;
+import net.coobird.thumbnailator.resizers.configurations.Rendering;
+
 @Command(name = "createGalleries", description = "Creates a gallery page for every year with images.")
 public class CreateGalleries implements Callable<Integer> {
 
@@ -63,12 +68,13 @@ public class CreateGalleries implements Callable<Integer> {
 		}
 
 		void resize(int width, Path name) throws IOException, InterruptedException {
-			var convertProcess = new ProcessBuilder(
-				"convert", "-resize", width + "x",
-				path.toAbsolutePath().normalize().toString(),
-				name.toAbsolutePath().normalize().toString()
-			).start();
-			convertProcess.waitFor();
+			Thumbnails.of(path.toFile())
+				.width(width)
+				.outputQuality(0.95)
+				.outputFormat("jpg")
+				.rendering(Rendering.QUALITY)
+				.dithering(Dithering.DISABLE)
+				.toFile(name.toFile());
 		}
 
 		String store(Integer index, Path outputFolder) throws IOException, InterruptedException {
@@ -195,18 +201,18 @@ public class CreateGalleries implements Callable<Integer> {
 				<noscript><link rel="stylesheet" href="/css/noscript.css" /></noscript>
 			</head>
 			<body class="is-preload">
-		  
+
 				<div id="wrapper">
-		  
+
 					<header id="header">
 						<h1><a href="index.html"><strong>Gallery $year</a></h1>
 						<nav><ul><li><a href="#footer" class="icon solid fa-info-circle">About</a></li></ul></nav>
 					</header>
-		  
+
 					<div id="main">
 		  				$content
 					</div>
-		  
+
 					<footer id="footer" class="panel">
 						<div class="inner split">
 							<div>
@@ -236,9 +242,9 @@ public class CreateGalleries implements Callable<Integer> {
 								</section>
 							</div>
 						</div>
-					</footer>	
+					</footer>
 				</div>
-		  
+
 				<script src="/js/gallery/jquery.min.js"></script>
 				<script src="/js/gallery/jquery.poptrox.min.js"></script>
 				<script src="/js/gallery/browser.min.js"></script>
