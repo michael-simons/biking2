@@ -67,7 +67,7 @@ public class CreateGalleries implements Callable<Integer> {
 			return Optional.empty();
 		}
 
-		void resize(int width, Path name) throws IOException, InterruptedException {
+		void resize(int width, Path name) throws IOException {
 			Thumbnails.of(path.toFile())
 				.width(width)
 				.outputQuality(0.95)
