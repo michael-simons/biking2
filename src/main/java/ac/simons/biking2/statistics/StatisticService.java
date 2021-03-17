@@ -286,7 +286,7 @@ class StatisticService {
                 .startOfYear(startOfYear)
                 .months(new MonthlyStatistics(totals, values))
                 .yearlyTotal(currentYearSum)
-                .monthlyAverage((double) currentYearSum / Period.between(startOfYear, LocalDate.now()).toTotalMonths())
+                .monthlyAverage((double) currentYearSum / Period.between(startOfYear, LocalDate.now().plusMonths(1).withDayOfMonth(1)).toTotalMonths())
                 .worstPeriod(new AccumulatedPeriod(startOfYear.withMonth(minIndex + 1), minValue))
                 .bestPeriod(new AccumulatedPeriod(startOfYear.withMonth(maxIndex + 1), maxValue))
                 .preferredBike(preferredBike)
