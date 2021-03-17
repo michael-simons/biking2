@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,12 +47,12 @@ class BikeEntityTest {
         Link l2 = new Link("http://heise.de", "h");
         Link l3 = new Link("http://heise.de", "H");
 
-        assertEquals(l2, l3);
-        assertEquals(l2.hashCode(), l3.hashCode());
-        assertNotEquals(l2, l1);
-        assertNotEquals(l2.hashCode(), l1.hashCode());
-        assertNotEquals(l2, null);
-        assertNotEquals(l2, "asds");
+        assertEquals(l3, l2);
+        assertEquals(l3.hashCode(), l2.hashCode());
+        assertNotEquals(l1, l2);
+        assertNotEquals(l1.hashCode(), l2.hashCode());
+        assertNotEquals(null, l2);
+        assertNotEquals("asds", l2);
 
         assertEquals("http://heise.de", l2.getUrl());
         assertEquals("h", l2.getLabel());
@@ -76,10 +76,10 @@ class BikeEntityTest {
         assertNull(bike.getStory());
         assertNull(bike.getId());
         assertNotNull(bike.getCreatedAt());
-        assertEquals(bike, same);
-        assertNotEquals(bike, other);
-        assertNotEquals(bike, null);
-        assertNotEquals(bike, "somethingElse");
+        assertEquals(same, bike);
+        assertNotEquals(other, bike);
+        assertNotEquals(null, bike);
+        assertNotEquals("somethingElse", bike);
         assertNull(bike.getDecommissionedOn());
         assertEquals(now.withDayOfMonth(1), bike.getBoughtOn());
 

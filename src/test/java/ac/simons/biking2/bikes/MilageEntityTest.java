@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,13 +51,13 @@ class MilageEntityTest {
         Assertions.assertEquals(BigDecimal.valueOf(23d), milage.getAmount());
         Assertions.assertNotNull(milage.getCreatedAt());
         Assertions.assertEquals(poef, milage.getBike());
-        Assertions.assertEquals(milage, milage2);
-        Assertions.assertEquals(milage.hashCode(), milage2.hashCode());
-        Assertions.assertNotEquals(milage, otherMilage);
-        Assertions.assertNotEquals(milage, otherMilage2);
-        Assertions.assertNotEquals(milage, otherMilage3);
-        Assertions.assertNotEquals(milage, null);
-        Assertions.assertNotEquals(milage, "something else");
+        Assertions.assertEquals(milage2, milage);
+        Assertions.assertEquals(milage2.hashCode(), milage.hashCode());
+        Assertions.assertNotEquals(otherMilage, milage);
+        Assertions.assertNotEquals(otherMilage2, milage);
+        Assertions.assertNotEquals(otherMilage3, milage);
+        Assertions.assertNotEquals(null, milage);
+        Assertions.assertNotEquals("something else", milage);
         Assertions.assertTrue(milage.compareTo(otherMilage) < 0);
     }
 }
