@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,6 @@ package ac.simons.biking2.bikes;
 
 import static ac.simons.biking2.bikes.BikesController.Messages.ALREADY_DECOMMISSIONED;
 import static ac.simons.biking2.shared.Messages.INVALID_ARGUMENTS;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +28,10 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,13 +66,13 @@ class BikesController {
         this.i18n = new MessageSourceAccessor(messageSource, Locale.ENGLISH);
     }
 
-    @RequestMapping(value = "/bikes", method = GET)
+    @GetMapping(value = "/bikes")
     public List<BikeEntity> getBikes(@RequestParam(required = false, defaultValue = "false") final boolean all) {
 
         return this.bikeService.getBikes(all);
     }
 
-    @RequestMapping(value = "/bikes/{id:\\d+}/milages", method = POST)
+    @PostMapping(value = "/bikes/{id:\\d+}/milages")
     @PreAuthorize("isAuthenticated()")
     public MilageEntity createMilage(@PathVariable final Integer id, @RequestBody @Valid final NewMilageCmd cmd, final BindingResult bindingResult) {
 
@@ -89,7 +89,7 @@ class BikesController {
         }
     }
 
-    @RequestMapping(value = "/bikes", method = POST)
+    @PostMapping(value = "/bikes")
     @PreAuthorize("isAuthenticated()")
     public BikeEntity createBike(@RequestBody @Valid final BikeCmd newBike, final BindingResult bindingResult) {
 
@@ -100,7 +100,7 @@ class BikesController {
         return bikeService.createBike(newBike);
     }
 
-    @RequestMapping(value = "/bikes/{id:\\d+}", method = PUT)
+    @PutMapping(value = "/bikes/{id:\\d+}")
     @PreAuthorize("isAuthenticated()")
     public BikeEntity updateBike(@PathVariable final Integer id, @RequestBody @Valid final BikeCmd updatedBike, final BindingResult bindingResult) {
 
@@ -117,7 +117,7 @@ class BikesController {
         }
     }
 
-    @RequestMapping(value = "/bikes/{id:\\d+}/story", method = PUT)
+    @PutMapping(value = "/bikes/{id:\\d+}/story")
     @PreAuthorize("isAuthenticated()")
     public BikeEntity updateBikeStory(@PathVariable final Integer id, @RequestBody(required = false) @Valid final StoryCmd newStory, final BindingResult bindingResult) {
 
