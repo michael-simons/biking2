@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.bikes;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +53,8 @@ class BikeService {
 
         List<BikeEntity> rv;
         if (all) {
-            // TODO add lent_milages to sort order, too
-            rv = bikeRepository.findAll(Sort.by("lastMilage").descending().and(Sort.by("boughtOn", "decommissionedOn", "name").ascending()));
+            rv = bikeRepository.findAll(Sort.by("boughtOn", "decommissionedOn", "name").ascending());
+            rv.sort(Comparator.comparing(BikeEntity::getLastMilage).reversed());
         } else {
             rv = bikeRepository.findByDecommissionedOnIsNull(Sort.by("name").ascending());
         }
