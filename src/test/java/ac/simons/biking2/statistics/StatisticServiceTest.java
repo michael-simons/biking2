@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 michael-simons.eu.
+ * Copyright 2019-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,7 @@ import java.util.stream.IntStream;
 import org.assertj.core.data.Offset;
 import org.jooq.DSLContext;
 import org.jooq.conf.RenderKeywordCase;
-import org.jooq.conf.RenderKeywordStyle;
 import org.jooq.conf.RenderNameCase;
-import org.jooq.conf.RenderNameStyle;
 import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DefaultConfiguration;
@@ -58,7 +56,7 @@ import ac.simons.biking2.shared.TestData;
 @DataJpaTest
 @AutoConfigureJooq
 @TestPropertySource(properties = {
-        "spring.datasource.initialization-mode=never",
+        "spring.flyway.locations=classpath:db/migration",
         "spring.jpa.properties.hibernate.show_sql=false",
         "logging.level.org.jooq=DEBUG"
 })
