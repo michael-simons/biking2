@@ -54,6 +54,12 @@ class EndpointConfigIT {
         final ResponseEntity<Map> metrics = template.getForEntity("/api/system/metrics", Map.class);
         assertEquals(HttpStatus.OK, metrics.getStatusCode());
     }
+
+    @Test
+    void jvmMetricsShouldBeThere() {
+        final ResponseEntity<Map> metrics = template.getForEntity("/api/system/metrics/jvm.memory.max", Map.class);
+        assertEquals(HttpStatus.OK, metrics.getStatusCode());
+    }
     
     @Test
     void notAllEnvsShouldBeShown() {
