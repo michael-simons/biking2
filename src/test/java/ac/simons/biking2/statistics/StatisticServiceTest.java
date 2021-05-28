@@ -56,7 +56,7 @@ import ac.simons.biking2.shared.TestData;
 @DataJpaTest
 @AutoConfigureJooq
 @TestPropertySource(properties = {
-        "spring.flyway.locations=classpath:db/migration",
+        "spring.flyway.skip-default-callbacks=true",
         "spring.jpa.properties.hibernate.show_sql=false",
         "logging.level.org.jooq=DEBUG"
 })
