@@ -1,6 +1,5 @@
 # biking2
 
-
 [![Build Status](https://github.com/michael-simons/biking2/workflows/build/badge.svg)](https://github.com/michael-simons/biking2/actions) [![Test coverage](https://sonarcloud.io/api/project_badges/measure?project=eu.michael-simons%3Abiking2&metric=coverage)](https://sonarcloud.io/dashboard?id=eu.michael-simons%3Abiking2) [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=eu.michael-simons%3Abiking2&metric=alert_status)](https://sonarcloud.io/dashboard?id=eu.michael-simons%3Abiking2)
 
 ## Abstract
@@ -24,6 +23,11 @@ Per default, biking2 looks at `/opt/local/bin/gpsbabel` for the GPSBabel binary.
     biking2.gpsBabel = path/to/gpsbabel/binary
 
 GPSBabel is available for all major operating systems, including windows. So please check if it's available on your platform if biking2 doesn't compile for you.
+
+Also you should use the provided `mvnw` respectively `mvnw.cmd` script for building.
+If not, you need to export the following Java opts:
+
+    --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-exports java.base/sun.nio.ch=ALL-UNNAMED
 
 [1]: http://biking.michael-simons.eu
 [2]: http://biking.michael-simons.eu/about

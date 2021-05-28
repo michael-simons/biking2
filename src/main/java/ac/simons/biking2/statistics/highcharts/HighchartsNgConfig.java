@@ -59,8 +59,8 @@ public class HighchartsNgConfig {
         public Number computeCurrentMaxYValue() {
             return series.stream()
                     .flatMap(serie -> serie.getData().stream())
-                    .filter(val -> val instanceof Number)
-                    .map(val -> (Number) val)
+                    .filter(Number.class::isInstance)
+                    .map(Number.class::cast)
                     .max(Comparator.comparingDouble(Number::doubleValue)).orElse(0);
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2020 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,20 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Michael J. Simons
  * @since 2014-02-19
  */
-@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-class NewMilageCmd {
+record NewMilageCmd(
 
     @DateTimeFormat(iso = DATE_TIME)
     @NotNull
-    private LocalDate recordedOn;
+    LocalDate recordedOn,
 
     @NotNull
     @Positive
-    private Double amount;
+    Double amount
+) {
 }

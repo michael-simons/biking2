@@ -53,7 +53,7 @@ class TripsController {
             rv = new ResponseEntity<>("Invalid arguments.", HttpStatus.BAD_REQUEST);
         } else {
             try {
-                final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(newTrip.getCoveredOn(), BigDecimal.valueOf(newTrip.getDistance())));
+                final AssortedTripEntity trip = this.assortedTripRepository.save(new AssortedTripEntity(newTrip.coveredOn(), BigDecimal.valueOf(newTrip.distance())));
                 rv = new ResponseEntity<>(trip, HttpStatus.OK);
             } catch (DataIntegrityViolationException e) {
                 log.debug("Data integrity violation while uploading a new trip", e);

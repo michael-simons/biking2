@@ -47,9 +47,9 @@
 
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
     <bootstrap.version>3.1.1</bootstrap.version>
-    <checkstyle.version>8.29</checkstyle.version>
-    <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
-    <java.version>11</java.version>
+    <checkstyle.version>8.42</checkstyle.version>
+    <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
+    <java.version>16</java.version>
     <joor.version>0.9.13</joor.version>
     <jool.version>0.9.14</jool.version>
     <jqassistant.version>1.9.1</jqassistant.version>
@@ -60,7 +60,7 @@
     <openlayers.version>2.13.1</openlayers.version>
     <angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
     <angular-file-upload.version>1.2.8</angular-file-upload.version>
-    <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
     <momentjs.version>2.10.6</momentjs.version>
     <sockjs-client.version>1.0.2</sockjs-client.version>
@@ -399,6 +399,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
+          <release>${java.version}</release>
           <compilerArgs>
             <arg>-parameters</arg>
             <arg>-Xlint:unchecked</arg>
@@ -564,6 +565,13 @@
         <groupId>com.buschmais.jqassistant</groupId>
         <artifactId>jqassistant-maven-plugin</artifactId>
         <version>${jqassistant.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>9.0</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <goals>

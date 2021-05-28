@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2019 michael-simons.eu.
+ * Copyright 2015-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,9 @@ class StoryCmdTest {
 
     @Test
     void beanShouldWorkAsExpected() {
-        final StoryCmd bean = new StoryCmd();
+        final StoryCmd bean = new StoryCmd("http://heise.de", "foobar");
 
-        bean.setLabel("foobar");
-        bean.setUrl("http://heise.de");
-        Assertions.assertEquals("foobar", bean.getLabel());
-        Assertions.assertEquals("http://heise.de", bean.getUrl());
+        Assertions.assertEquals("foobar", bean.label());
+        Assertions.assertEquals("http://heise.de", bean.url());
     }
 }

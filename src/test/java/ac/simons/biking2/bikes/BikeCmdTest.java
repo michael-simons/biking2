@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,13 +32,11 @@ class BikeCmdTest {
 
     @Test
     public void beanShouldWorkAsExpected() {
-        BikeCmd bean = new BikeCmd();
-
-        bean.setBoughtOn(ZonedDateTime.now());
+        BikeCmd bean = new BikeCmd(null, ZonedDateTime.now(), null, null, false);
         assertEquals(LocalDate.now(), bean.boughtOnAsLocalDate());
-        assertNull(bean.getDecommissionedOn());
-        bean.setDecommissionedOn(ZonedDateTime.now().plusDays(1));
-        assertEquals(LocalDate.now().plusDays(1), bean.decommissionedOnAsLocalDate());
+        assertNull(bean.decommissionedOn());
 
+        bean = new BikeCmd(null, ZonedDateTime.now(), null, ZonedDateTime.now().plusDays(1), false);
+        assertEquals(LocalDate.now().plusDays(1), bean.decommissionedOnAsLocalDate());
     }
 }

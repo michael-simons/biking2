@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,33 +25,31 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Michael J. Simons
  * @since 2014-02-20
  */
-@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-class BikeCmd {
+record BikeCmd(
 
     @NotBlank
     @Size(max = 255)
-    private String name;
+    String name,
 
     @DateTimeFormat(iso = DATE_TIME)
     @NotNull
-    private ZonedDateTime boughtOn;
+    ZonedDateTime boughtOn,
 
     @NotBlank
     @Size(max = 6)
-    private String color;
+    String color,
 
     @DateTimeFormat(iso = DATE_TIME)
-    private ZonedDateTime decommissionedOn;
+    ZonedDateTime decommissionedOn,
 
-    private boolean miscellaneous;
+    boolean miscellaneous
+) {
 
     public LocalDate boughtOnAsLocalDate() {
         return this.boughtOn.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();

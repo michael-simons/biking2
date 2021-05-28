@@ -130,10 +130,10 @@ include::{snippets}/api/trips/post/http-response.adoc[]
 
 The application provides a nice banner during startup in the logs. It would be a shame not providing an API for that. To retrieve your ASCII art banner, just juse the following API:
 
-===== Example request
+==== Example request
 
 include::{snippets}/api/banner/curl-request.adoc[]
 
-===== Example response
+==== Example response
 
 include::{snippets}/api/banner/http-response.adoc[]

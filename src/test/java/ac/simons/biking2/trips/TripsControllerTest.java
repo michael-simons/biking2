@@ -83,12 +83,8 @@ class TripsControllerTest {
                 .set("id", 42)
                 .get();
 
-        final NewTripCmd newTripCmd1 = new NewTripCmd();
-        newTripCmd1.setCoveredOn(trip.getCoveredOn());
-        newTripCmd1.setDistance(23.42);
-        final NewTripCmd newTripCmd2 = new NewTripCmd();
-        newTripCmd2.setCoveredOn(trip.getCoveredOn());
-        newTripCmd2.setDistance(666.0);
+        final NewTripCmd newTripCmd1 = new NewTripCmd(trip.getCoveredOn(), 23.42);
+        final NewTripCmd newTripCmd2 = new NewTripCmd(trip.getCoveredOn(), 666.0);
 
         when(repository.save(any(AssortedTripEntity.class))).then(invocation -> {
             final AssortedTripEntity arg = invocation.getArgument(0);

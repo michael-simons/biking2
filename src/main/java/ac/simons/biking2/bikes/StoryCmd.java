@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 michael-simons.eu.
+ * Copyright 2015-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,20 @@
  */
 package ac.simons.biking2.bikes;
 
-import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
 /**
- * @author Michael J. Simons, 2015-09-21
+ * @author Michael J. Simons
+ * @since 2015-09-21
  */
-@Getter @Setter
-class StoryCmd implements Serializable {
-
-    private static final long serialVersionUID = -3074796999424910373L;
+record StoryCmd(
 
     @NotBlank
     @URL
-    private String url;
+    String url,
 
     @NotBlank
-    private String label;
+    String label
+) {
 }

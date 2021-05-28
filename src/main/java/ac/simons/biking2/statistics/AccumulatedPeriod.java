@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package ac.simons.biking2.statistics;
 
 import java.time.LocalDate;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Represents a accumulated period value
@@ -25,10 +23,9 @@ import lombok.RequiredArgsConstructor;
  * @author Michael J. Simons
  * @since 2014-05-05
  */
-@RequiredArgsConstructor
-@Getter
-final class AccumulatedPeriod {
-    private final LocalDate startOfPeriod;
+final record AccumulatedPeriod(
+    LocalDate startOfPeriod,
 
-    private final int value;
+    int value
+) {
 }

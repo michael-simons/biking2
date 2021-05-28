@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -182,9 +182,7 @@ class BikesControllerTest {
         decommissionedBike.decommission(now.minusMonths(1));
         when(repository.findById(3)).thenReturn(Optional.of(decommissionedBike));
 
-        final NewMilageCmd newMilageCmd = new NewMilageCmd();
-        newMilageCmd.setAmount(23.0);
-        newMilageCmd.setRecordedOn(LocalDate.now());
+        final NewMilageCmd newMilageCmd = new NewMilageCmd(LocalDate.now(), 23.0);
 
         // Empty content
         mockMvc
@@ -268,10 +266,7 @@ class BikesControllerTest {
 
         when(repository.save(any(BikeEntity.class))).then(returnsFirstArg());
 
-        final BikeCmd newBikeCmd = new BikeCmd();
-        newBikeCmd.setBoughtOn(ZonedDateTime.now());
-        newBikeCmd.setColor("cccccc");
-        newBikeCmd.setName("test");
+        final BikeCmd newBikeCmd = new BikeCmd("test", ZonedDateTime.now(), "cccccc", null, false);
 
         final BikeEntity bike = new BikeEntity("test", now);
         bike.setColor("cccccc");
@@ -324,10 +319,7 @@ class BikesControllerTest {
     void testCreateBike2() throws Exception {
         when(repository.save(any(BikeEntity.class))).thenThrow(new DataIntegrityViolationException(""));
 
-        final BikeCmd newBikeCmd = new BikeCmd();
-        newBikeCmd.setBoughtOn(ZonedDateTime.now());
-        newBikeCmd.setColor("cccccc");
-        newBikeCmd.setName("test");
+        final BikeCmd newBikeCmd = new BikeCmd("test", ZonedDateTime.now(), "cccccc", null, false);
 
         mockMvc
                 .perform(
@@ -355,11 +347,7 @@ class BikesControllerTest {
         LocalDate boughtOn = bike.getBoughtOn();
         when(repository.findById(2)).thenReturn(Optional.of(bike));
 
-        final BikeCmd updatedBikeCmd = new BikeCmd();
-        updatedBikeCmd.setBoughtOn(ZonedDateTime.now());
-        updatedBikeCmd.setDecommissionedOn(ZonedDateTime.now());
-        updatedBikeCmd.setColor("FFFCCC");
-        updatedBikeCmd.setName("neuer name");
+        final BikeCmd updatedBikeCmd = new BikeCmd("neuer name", ZonedDateTime.now(), "FFFCCC", ZonedDateTime.now(), false);
 
         // Empty content
         mockMvc
@@ -431,11 +419,8 @@ class BikesControllerTest {
         LocalDate boughtOn = bike.getBoughtOn();
         when(repository.findById(2)).thenReturn(Optional.of(bike));
 
-        final StoryCmd validNewStoryCmd = new StoryCmd();
-        validNewStoryCmd.setLabel("Nie wieder Stadtschlampe");
-        validNewStoryCmd.setUrl("http://planet-punk.de/2015/08/11/nie-wieder-stadtschlampe/");
-        final StoryCmd invalidNewStoryCmd = new StoryCmd();
-        invalidNewStoryCmd.setUrl("asdasd");
+        final StoryCmd validNewStoryCmd = new StoryCmd("http://planet-punk.de/2015/08/11/nie-wieder-stadtschlampe/", "Nie wieder Stadtschlampe");
+        final StoryCmd invalidNewStoryCmd = new StoryCmd("asdasd", null);
 
         // Invalid content
         mockMvc
@@ -493,8 +478,8 @@ class BikesControllerTest {
         Assertions.assertEquals(boughtOn, bike.getBoughtOn());
         Assertions.assertEquals("000000", bike.getColor());
         Assertions.assertNotNull(bike.getStory());
-        Assertions.assertEquals(validNewStoryCmd.getLabel(), bike.getStory().getLabel());
-        Assertions.assertEquals(validNewStoryCmd.getUrl(), bike.getStory().getUrl());
+        Assertions.assertEquals(validNewStoryCmd.label(), bike.getStory().getLabel());
+        Assertions.assertEquals(validNewStoryCmd.url(), bike.getStory().getUrl());
 
         // Empty content
         mockMvc
