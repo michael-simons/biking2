@@ -1,3 +1,4 @@
+[[coding-rules]]
 = Coding Rules
 
 The following rules are checked during a build:
@@ -7,5 +8,12 @@ The following rules are checked during a build:
 - <<naming:Default>>
 - <<structure:Default>>
 
-include::naming.adoc[]
+[[coding-rules.naming]]
+== Naming things
+
+include::conventions_naming.adoc[]
+
+[[coding-rules.structure]]
+== Structuring things
+
 include::structure.adoc[]
