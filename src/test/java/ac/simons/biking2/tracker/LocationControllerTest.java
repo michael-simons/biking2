@@ -65,7 +65,7 @@ class LocationControllerTest {
 
     @Test
     void shouldCreateLocation() {
-        final NewLocationCmd newLocationCmd = new NewLocationCmd();
+        final NewLocationCmd newLocationCmd = new NewLocationCmd(null, null, null, null);
         final LocationEntity l = new LocationEntity(BigDecimal.ZERO, BigDecimal.ZERO, OffsetDateTime.now());
         when(locationService.createAndSendNewLocation(newLocationCmd)).thenReturn(l);
         final BindingResult bindingResult = Mockito.mock(BindingResult.class);
@@ -81,7 +81,7 @@ class LocationControllerTest {
 
     @Test
     void shouldNotCreateInvalidLocation() {
-        final NewLocationCmd newLocationCmd = new NewLocationCmd();
+        final NewLocationCmd newLocationCmd = new NewLocationCmd(null, null, null, null);
         final BindingResult bindingResult = Mockito.mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
 
@@ -95,10 +95,7 @@ class LocationControllerTest {
 
     @Test
     void shouldNotCreateDuplicateLocation() {
-        final NewLocationCmd newLocationCmd = Reflect
-                .on(new NewLocationCmd())
-                .set("latitude", new BigDecimal("1"))
-                .set("longitude", new BigDecimal("2")).get();
+        final NewLocationCmd newLocationCmd = new NewLocationCmd(new BigDecimal("1"), new BigDecimal("2"), null, System.currentTimeMillis());
         
         when(locationService.createAndSendNewLocation(newLocationCmd)).thenThrow(new DataIntegrityViolationException("foobar"));
         final BindingResult bindingResult = Mockito.mock(BindingResult.class);

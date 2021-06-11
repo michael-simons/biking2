@@ -47,24 +47,24 @@ class NewLocationCmdTest {
     void beanShouldWorkAsExpected() throws IOException {
 
         var invalidNewLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\"}");
-        assertEquals(BigDecimal.valueOf(5l), invalidNewLocationCmd.getLongitude());
-        assertEquals(BigDecimal.valueOf(50l), invalidNewLocationCmd.getLatitude());
+        assertEquals(BigDecimal.valueOf(5l), invalidNewLocationCmd.longitude());
+        assertEquals(BigDecimal.valueOf(50l), invalidNewLocationCmd.latitude());
         var msg = assertThrows(IllegalStateException.class,
-                () -> invalidNewLocationCmd.getCreatedAt()).getMessage();
+                () -> invalidNewLocationCmd.createdAt()).getMessage();
         assertEquals("Either timestampSeconds or timestampMillis must be set.", msg);
 
         var newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\"}");
         final ZoneId berlin = ZoneId.of("Europe/Berlin");
         final ZoneId systemDefault = ZoneId.systemDefault();
         assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, berlin)
-                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.getCreatedAt());
+                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.createdAt());
 
         newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tstMillis\": \"1400578694000\"}");
         assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 38, 14, 0, berlin)
-                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.getCreatedAt());
+                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.createdAt());
 
         newLocationCmd = json.parseObject("{\"lon\":\"5\", \"lat\":\"50\", \"tst\": \"1400577777\", \"tstMillis\": \"1400578694000\"}");
         assertEquals(ZonedDateTime.of(2014, 5, 20, 11, 22, 57, 0, berlin)
-                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.getCreatedAt());
+                .withZoneSameInstant(systemDefault).toOffsetDateTime(), newLocationCmd.createdAt());
     }
 }
