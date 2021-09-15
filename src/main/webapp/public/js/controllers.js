@@ -525,8 +525,10 @@ biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', 
     });
 
     $scope.refresh = function() {
-	var formatKibiBytes = function(bytes) {
-	    return Math.round((bytes / Math.pow(1024, Math.floor(1))) * 10) / 10;
+	var formatBytes = function(bytes) {
+		const number = Math.floor(Math.log(bytes) / Math.log(1024))
+		const precision = 1;
+	    return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision);
 	};
 
 	$q.all([
@@ -549,8 +551,8 @@ biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', 
             $scope.memoryConfig.series[1].data.splice(0, 1);
             $scope.memoryConfig.xAxis.categories.splice(0, 1);
         }
-        $scope.memoryConfig.series[0].data.push(formatKibiBytes($scope.metrics["mem.free"]));
-        $scope.memoryConfig.series[1].data.push(formatKibiBytes($scope.metrics["mem.used"]));
+        $scope.memoryConfig.series[0].data.push(formatBytes($scope.metrics["mem.free"]));
+        $scope.memoryConfig.series[1].data.push(formatBytes($scope.metrics["mem.used"]));
         $scope.memoryConfig.xAxis.categories.push($filter('date')(new Date(), "HH:mm:ss"));
     });
     };

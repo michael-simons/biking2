@@ -46,7 +46,7 @@
 	    Running build <strong>{{info.versions.app || 'n/a'}}</strong> from <strong>{{info.buildDate || 'unknown'}}</strong>
 	    for <strong>{{ humanizedUptime || 'n/a'}}</strong>
 	    on Java <strong>{{ info.versions.java || 'n/a'}}</strong>,
-	    using <strong>{{ metrics["mem.used"] | kibibytes }}</strong> of <strong>{{ metrics["mem.max"] | kibibytes }}</strong>.
+	    using <strong>{{ metrics["mem.used"] | bytes }}</strong> of <strong>{{ metrics["mem.max"] | bytes }}</strong>.
 	</p>
 
 	<div data-ng-highchart id="chart-memory"  config="memoryConfig" ></div>
