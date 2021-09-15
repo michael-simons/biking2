@@ -525,10 +525,8 @@ biking2Controllers.controller('AboutCtrl', ['$scope', '$q', '$http', '$filter', 
     });
 
     $scope.refresh = function() {
-	var formatBytes = function(bytes) {
-		const number = Math.floor(Math.log(bytes) / Math.log(1024))
-		const precision = 1;
-	    return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision);
+	const formatBytes = function(bytes) {
+		return Math.round((bytes / 1024) * 10) / 10;
 	};
 
 	$q.all([
