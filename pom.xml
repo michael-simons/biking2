@@ -11,7 +11,7 @@
 
   <groupId>eu.michael-simons</groupId>
   <artifactId>biking2</artifactId>
-  <version>3.2.4-SNAPSHOT</version>
+  <version>3.2.4</version>
 
   <name>biking2</name>
   <url>https://biking.michael-simons.eu</url>
