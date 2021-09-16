@@ -58,6 +58,7 @@ import lombok.Setter;
 @Table(name = "bikes")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@SuppressWarnings("JpaObjectClassSignatureInspection")
 @EqualsAndHashCode(of = "name")
 public class BikeEntity implements Serializable {
 

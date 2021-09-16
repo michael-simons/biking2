@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,13 +36,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * @author Michael J. Simons, 2014-02-08
+ * @author Michael J. Simons
+ * @since 2014-02-08
  */
 @Entity
 @Table(name = "milages", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"bike_id", "recorded_on"})
 })
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@SuppressWarnings("JpaObjectClassSignatureInspection")
 @Getter
 @EqualsAndHashCode(of = {"bike", "recordedOn"})
 public class MilageEntity implements Serializable, Comparable<MilageEntity> {

@@ -39,13 +39,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * Represents a period in which a bike was lent and the amount of milage travelled in that period
- * @author Michael J. Simons, 2021-04-04
+ * @author Michael J. Simons
+ * @since 2021-04-04
  */
 @Entity
 @Table(name = "lent_milages", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"bike_id", "lent_on"})
 })
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@SuppressWarnings("JpaObjectClassSignatureInspection")
 @Getter
 @EqualsAndHashCode(of = {"bike", "lentOn"})
 public class LentMilageEntity implements Serializable, Comparable<LentMilageEntity> {
