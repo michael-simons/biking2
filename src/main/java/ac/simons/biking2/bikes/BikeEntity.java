@@ -126,7 +126,7 @@ public class BikeEntity implements Serializable {
     private BigDecimal lastMilage = BigDecimal.ZERO;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bike")
-    @OrderBy("from asc")
+    @OrderBy("lentOn asc, returnedOn asc")
     @JsonIgnore
     private final List<LentMilageEntity> lentMilages = new ArrayList<>();
 
