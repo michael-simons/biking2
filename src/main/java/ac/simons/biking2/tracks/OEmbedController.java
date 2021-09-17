@@ -84,7 +84,7 @@ class OEmbedController {
             response.setAuthorName("Michael J. Simons");
             response.setAuthorUrl("http://michael-simons.eu");
             response.setProviderName("biking2");
-            response.setProviderUrl("http://biking.michael-simons.eu");
+            response.setProviderUrl("https://biking.michael-simons.eu");
             response.setCacheAge((long) (24 * 60 * 60));
             response.setHtml(new StringBuilder()
                     .append("<iframe ")
