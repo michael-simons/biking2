@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.URL;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -57,6 +58,7 @@ import lombok.Setter;
 @Table(name = "bikes")
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@SuppressWarnings("JpaObjectClassSignatureInspection")
 @EqualsAndHashCode(of = "name")
 public class BikeEntity implements Serializable {
 
@@ -123,6 +125,15 @@ public class BikeEntity implements Serializable {
     @JsonIgnore
     private BigDecimal lastMilage = BigDecimal.ZERO;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bike")
+    @OrderBy("lentOn asc, returnedOn asc")
+    @JsonIgnore
+    private final List<LentMilageEntity> lentMilages = new ArrayList<>();
+
+    @Formula("SELECT coalesce(sum(l.amount), 0.0) FROM lent_milages l WHERE l.bike_id = id")
+    @JsonIgnore
+    private BigDecimal lentMilage = BigDecimal.ZERO;
+
     @Column(name = "created_at", nullable = false)
     @NotNull
     @JsonIgnore
@@ -177,11 +188,35 @@ public class BikeEntity implements Serializable {
         return newRecordedMilage;
     }
 
+    public synchronized LentMilageEntity lent(final LocalDate lentOn) {
+
+        boolean isLent = !this.lentMilages.isEmpty() && this.lentMilages.stream().anyMatch(LentMilageEntity::isLent);
+        if (isLent) {
+            throw new IllegalStateException("Bike is already lent");
+        }
+
+        var lentMilageEntity = new LentMilageEntity(this, lentOn);
+        this.lentMilages.add(lentMilageEntity);
+        return lentMilageEntity;
+    }
+
+    public synchronized LentMilageEntity returnIt(final LocalDate returnedOn, final double amount) {
+
+        return this.lentMilages.stream()
+                .filter(LentMilageEntity::isLent).findFirst()
+                .map(l -> {
+                    l.setReturnedOn(returnedOn);
+                    l.setAmount(BigDecimal.valueOf(amount));
+                    this.lentMilage = this.lentMilages.stream().map(LentMilageEntity::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+                    return l;
+                }).orElseThrow(() -> new IllegalStateException("Bike is not lent."));
+    }
+
     /**
      * @return The last milage recorded for this bike.
      */
     @JsonProperty
     public int getLastMilage() {
-        return this.lastMilage.intValue();
+        return this.lastMilage.add(this.lentMilage).intValue();
     }
 }

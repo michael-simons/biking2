@@ -15,16 +15,18 @@
  */
 package ac.simons.biking2.tracker;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+import java.time.OffsetDateTime;
+import java.util.List;
+
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+
 /**
- * @author Michael J. Simons, 2014-03-20
+ * @author Michael J. Simons
+ * @since 2014-03-20
  */
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
@@ -34,7 +36,7 @@ public class LocationService {
     private final SimpMessagingTemplate messagingTemplate;
 
     public LocationEntity createAndSendNewLocation(final NewLocationCmd newLocation) {
-        final LocationEntity location = this.locationRepository.save(new LocationEntity(newLocation.getLatitude(), newLocation.getLongitude(), newLocation.getCreatedAt()));
+        final LocationEntity location = this.locationRepository.save(new LocationEntity(newLocation.latitude(), newLocation.longitude(), newLocation.createdAt()));
         this.messagingTemplate.convertAndSend("/topic/currentLocation", location);
         return location;
     }
@@ -44,7 +46,7 @@ public class LocationService {
     }
 
     /**
-     * @return The total number of locations tracked
+     * {@return The total number of locations tracked}
      */
     public long getLocationCount() {
         return locationRepository.count();

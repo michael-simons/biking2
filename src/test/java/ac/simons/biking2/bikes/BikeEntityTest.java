@@ -22,6 +22,7 @@ import java.time.Month;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -95,6 +96,34 @@ class BikeEntityTest {
     void testGetLastMilage() {
         assertEquals(50, defaultTestBike.getLastMilage());
         assertEquals(0, new BikeEntity("test", LocalDate.now()).getLastMilage());
+    }
+
+    @Test
+    void shouldBeLentable() {
+        var b = new BikeEntity();
+        assertEquals(0, b.getLastMilage());
+
+        b.lent(LocalDate.of(2021, 4, 4));
+        assertEquals(0, b.getLastMilage());
+
+        b.returnIt(LocalDate.of(2021, 4, 5), 23.0);
+        assertEquals(23.0, b.getLastMilage());
+    }
+
+    @Test
+    void shouldNotBeDoubleLentable() {
+        var b = new BikeEntity();
+        var lent = b.lent(LocalDate.of(2021, 4, 4));
+
+        assertNotNull(lent);
+        assertThatIllegalStateException().isThrownBy(() -> b.lent(LocalDate.now()));
+    }
+
+    @Test
+    void shouldNotBeReturnableWhenNotLent() {
+        var b = new BikeEntity();
+
+        assertThatIllegalStateException().isThrownBy(() -> b.returnIt(LocalDate.now(), 4711));
     }
 
     @Test

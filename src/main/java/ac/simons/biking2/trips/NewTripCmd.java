@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2019 michael-simons.eu.
+ * Copyright 2015-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,21 @@
 package ac.simons.biking2.trips;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
 import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Command class for creating new assorted trips.
  *
- * @author Michael J. Simons, 2015-06-09
+ * @author Michael J. Simons
+ * @since 2015-06-09
  */
-@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class NewTripCmd implements Serializable {
-
-    private static final long serialVersionUID = 2711961034108614560L;
+public record NewTripCmd(
 
     @NotNull
-    private LocalDate coveredOn;
+    LocalDate coveredOn,
     @NotNull
-    private Double distance;
+    Double distance
+) {
 }

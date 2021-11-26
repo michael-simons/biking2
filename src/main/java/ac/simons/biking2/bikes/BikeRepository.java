@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,12 @@ import org.springframework.data.repository.Repository;
  */
 public interface BikeRepository extends Repository<BikeEntity, Integer> {
 
-    @Query(value
-            = "Select b from BikeEntity b "
-            + " where b.decommissionedOn is null "
-            + "    or b.decommissionedOn >= :cutoffDate "
-            + " order by b.name asc "
+    @Query(value = """
+        Select b from BikeEntity b
+         where b.decommissionedOn is null
+            or b.decommissionedOn >= :cutoffDate
+         order by b.name asc
+        """
     )
     List<BikeEntity> findActive(LocalDate cutoffDate);
 
@@ -43,8 +44,6 @@ public interface BikeRepository extends Repository<BikeEntity, Integer> {
     List<BikeEntity> findByDecommissionedOnIsNull(Sort sort);
 
     List<BikeEntity> findAll(Sort sort);
-
-    List<BikeEntity> findAll();
 
     Optional<BikeEntity> findById(Integer id);
 

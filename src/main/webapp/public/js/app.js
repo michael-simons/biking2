@@ -112,21 +112,11 @@ var biking2 = angular
 		return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  '' + units[number];
 	    };
 	})
-	.filter('kibibytes', function() {
-	    return function(bytes, precision) {
-		if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
-		if (bytes === 0) return '0 bytes';
-		if (typeof precision === 'undefined') precision = 1;
-		var units = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB'],
-			number = Math.floor(Math.log(bytes) / Math.log(1024));
-		return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  '' + units[number];
-	    };
-	})
-        .filter('ansi_to_html', ['$sce', function($sce) {
-            return function(ansi) {                
-                return $sce.trustAsHtml(ansi !== undefined ? ansi_up.ansi_to_html(ansi) : ansi);
-            };
-        }])
+	.filter('ansi_to_html', ['$sce', function($sce) {
+		return function(ansi) {
+			return $sce.trustAsHtml(ansi !== undefined ? ansi_up.ansi_to_html(ansi) : ansi);
+		};
+	}])
 	.run(['$rootScope', function($rootScope) {
 	    $rootScope.currentYear = new Date().getFullYear();
 	}]);    

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2019 michael-simons.eu.
+ * Copyright 2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ac.simons.biking2.trips;
 
-import ac.simons.biking2.support.BeanTester;
-
-import java.time.LocalDate;
-import java.util.Map;
-
-import org.junit.jupiter.api.Test;
-
-/**
- * @author Michael J. Simons
- *
- * @since 2015-06-09
- */
-class NewTripCmdTest {
-
-    @Test
-    void beanShouldWorkAsExpected() {
-
-        var values = Map.of("coveredOn", LocalDate.now(), "distance", 2342.0);
-        values.forEach(new BeanTester(NewTripCmd.class));
-    }
-}
+CREATE TABLE lent_milages (
+  id                  serial primary key,
+  lent_on             DATE NOT NULL,
+  returned_on         DATE,
+  amount              DECIMAL(8, 2) NOT NULL,
+  created_at          DATETIME NOT NULL,
+  bike_id             INTEGER NOT NULL,
+  CONSTRAINT lent_milage_unique UNIQUE(bike_id, lent_on),
+  CONSTRAINT lent_milage_bike_fk FOREIGN KEY(bike_id) REFERENCES bikes(id) ON DELETE CASCADE
+);

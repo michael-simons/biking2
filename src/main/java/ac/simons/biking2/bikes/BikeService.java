@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 michael-simons.eu.
+ * Copyright 2019-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package ac.simons.biking2.bikes;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,8 +41,8 @@ class BikeService {
     @CacheEvict(value = "statistics", allEntries = true)
     public BikeEntity createBike(final BikeCmd newBike) {
 
-        final BikeEntity bike = new BikeEntity(newBike.getName(), newBike.boughtOnAsLocalDate());
-        bike.setColor(newBike.getColor());
+        final BikeEntity bike = new BikeEntity(newBike.name(), newBike.boughtOnAsLocalDate());
+        bike.setColor(newBike.color());
         bike.addMilage(newBike.boughtOnAsLocalDate().withDayOfMonth(1), 0);
 
         return this.bikeRepository.save(bike);
@@ -52,7 +53,8 @@ class BikeService {
 
         List<BikeEntity> rv;
         if (all) {
-            rv = bikeRepository.findAll(Sort.by("lastMilage").descending().and(Sort.by("boughtOn", "decommissionedOn", "name").ascending()));
+            rv = bikeRepository.findAll(Sort.by("boughtOn", "decommissionedOn", "name").ascending());
+            rv.sort(Comparator.comparing(BikeEntity::getLastMilage).reversed());
         } else {
             rv = bikeRepository.findByDecommissionedOnIsNull(Sort.by("name").ascending());
         }
@@ -69,7 +71,7 @@ class BikeService {
         if (bike.getDecommissionedOn() != null) {
             throw new BikeAlreadyDecommissionedException();
         } else {
-            rv = bike.addMilage(cmd.getRecordedOn(), cmd.getAmount());
+            rv = bike.addMilage(cmd.recordedOn(), cmd.amount());
             this.bikeRepository.save(bike);
         }
 
@@ -85,9 +87,9 @@ class BikeService {
         if (bike.getDecommissionedOn() != null) {
             throw new BikeAlreadyDecommissionedException();
         } else {
-            bike.setColor(updatedBike.getColor());
+            bike.setColor(updatedBike.color());
             bike.decommission(updatedBike.decommissionedOnAsLocalDate());
-            bike.setMiscellaneous(updatedBike.isMiscellaneous());
+            bike.setMiscellaneous(updatedBike.miscellaneous());
         }
         return bike;
     }
@@ -100,7 +102,7 @@ class BikeService {
         if (bike.getDecommissionedOn() != null) {
             throw new BikeAlreadyDecommissionedException();
         } else {
-            bike.setStory(Optional.ofNullable(newStory).map(c -> new BikeEntity.Link(c.getUrl(), c.getLabel())).orElse(null));
+            bike.setStory(Optional.ofNullable(newStory).map(c -> new BikeEntity.Link(c.url(), c.label())).orElse(null));
         }
         return bike;
     }

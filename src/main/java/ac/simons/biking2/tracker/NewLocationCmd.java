@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,36 +26,30 @@ import java.time.ZoneId;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author Michael J. Simons, 2014-03-20
+ * @author Michael J. Simons,
+ * @since 2014-03-20
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class NewLocationCmd {
+public record NewLocationCmd(
 
     @JsonProperty(value = "lat")
     @NotNull
-    private BigDecimal latitude;
+    BigDecimal latitude,
 
     @JsonProperty(value = "lon")
     @NotNull
-    private BigDecimal longitude;
+    BigDecimal longitude,
 
     @JsonProperty(value = "tst")
-    private Long timestampSeconds;
+    Long timestampSeconds,
 
     @JsonProperty(value = "tstMillis")
-    private Long timestampMillis;
+    Long timestampMillis
+) {
 
-    public BigDecimal getLatitude() {
-        return latitude;
-    }
-
-    public BigDecimal getLongitude() {
-        return longitude;
-    }
-
-    public OffsetDateTime getCreatedAt() {
+    public OffsetDateTime createdAt() {
 
         Instant createdAt;
         if (this.timestampSeconds != null) {

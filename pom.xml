@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.4.3</version>
+    <version>2.5.5</version>
     <relativePath />
   </parent>
 
   <groupId>eu.michael-simons</groupId>
   <artifactId>biking2</artifactId>
-  <version>3.0.15-SNAPSHOT</version>
+  <version>3.2.6-SNAPSHOT</version>
 
   <name>biking2</name>
   <url>https://biking.michael-simons.eu</url>
@@ -45,27 +45,27 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <build-date>${maven.build.timestamp}</build-date>
 
-    <asciidoctor-maven-plugin.version>1.5.7.1</asciidoctor-maven-plugin.version>
+    <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
     <bootstrap.version>3.1.1</bootstrap.version>
-    <checkstyle.version>8.29</checkstyle.version>
-    <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
-    <java.version>11</java.version>
-    <joor.version>0.9.13</joor.version>
+    <checkstyle.version>8.42</checkstyle.version>
+    <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+    <java.version>17</java.version>
+    <joor.version>0.9.14</joor.version>
     <jool.version>0.9.14</jool.version>
-    <jqassistant.version>1.7.0</jqassistant.version>
-    <jqassistant.plugin.version>1.7.0</jqassistant.plugin.version>
+    <jqassistant.version>1.10.1</jqassistant.version>
+    <jqassistant.plugin.version>1.10.1</jqassistant.plugin.version>
     <jquery.version>1.11.0</jquery.version>
     <angularjs.version>1.2.29</angularjs.version>
     <highcharts.version>3.0.10</highcharts.version>
     <openlayers.version>2.13.1</openlayers.version>
     <angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
     <angular-file-upload.version>1.2.8</angular-file-upload.version>
-    <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
     <momentjs.version>2.10.6</momentjs.version>
     <sockjs-client.version>1.0.2</sockjs-client.version>
     <stomp-websocket.version>2.3.3</stomp-websocket.version>
-    <wro4j-spring-boot-starter.version>0.8.1</wro4j-spring-boot-starter.version>
+    <wro4j-spring-boot-starter.version>0.9.2</wro4j-spring-boot-starter.version>
 
     <start-class>ac.simons.biking2.Application</start-class>
 
@@ -77,6 +77,29 @@
     <db.url>jdbc:h2:${project.build.directory}/flyway-code-gen</db.url>
     <db.username>sa</db.username>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- ActiveMQ seems to have this in different versions in provided scope and our enforcer rules fail... -->
+      <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>3.4.14</version>
+      </dependency>
+      <!-- Zookeeper and Hibernate Java 8 issues -->
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+      </dependency>
+      <!-- Again ActiveMQ -->
+      <dependency>
+        <groupId>org.linkedin</groupId>
+        <artifactId>org.linkedin.util-core</artifactId>
+        <version>1.7.1</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -131,6 +154,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.querydsl</groupId>
+          <artifactId>querydsl-apt</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -399,6 +428,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
+          <release>${java.version}</release>
           <compilerArgs>
             <arg>-parameters</arg>
             <arg>-Xlint:unchecked</arg>
@@ -457,7 +487,7 @@
               <rules>
                 <DependencyConvergence />
                 <requireMavenVersion>
-                  <version>3.6.3</version>
+                  <version>3.8.2</version>
                 </requireMavenVersion>
               </rules>
             </configuration>

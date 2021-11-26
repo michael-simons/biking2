@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 michael-simons.eu.
+ * Copyright 2019-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,7 @@ import java.util.stream.IntStream;
 import org.assertj.core.data.Offset;
 import org.jooq.DSLContext;
 import org.jooq.conf.RenderKeywordCase;
-import org.jooq.conf.RenderKeywordStyle;
 import org.jooq.conf.RenderNameCase;
-import org.jooq.conf.RenderNameStyle;
 import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DefaultConfiguration;
@@ -58,7 +56,7 @@ import ac.simons.biking2.shared.TestData;
 @DataJpaTest
 @AutoConfigureJooq
 @TestPropertySource(properties = {
-        "spring.datasource.initialization-mode=never",
+        "spring.flyway.skip-default-callbacks=true",
         "spring.jpa.properties.hibernate.show_sql=false",
         "logging.level.org.jooq=DEBUG"
 })
@@ -288,10 +286,10 @@ class StatisticServiceTest {
         var service = new StatisticService(database);
         var summary = service.computeSummary();
 
-        assertThat(summary.getBestPeriod().getStartOfPeriod()).isEqualTo(LocalDate.now().withMonth(9).withDayOfMonth(1));
-        assertThat(summary.getBestPeriod().getValue()).isEqualTo(65);
-        assertThat(summary.getWorstPeriod().getStartOfPeriod()).isEqualTo(LocalDate.now().withMonth(1).withDayOfMonth(1));
-        assertThat(summary.getWorstPeriod().getValue()).isEqualTo(10);
+        assertThat(summary.getBestPeriod().startOfPeriod()).isEqualTo(LocalDate.now().withMonth(9).withDayOfMonth(1));
+        assertThat(summary.getBestPeriod().value()).isEqualTo(65);
+        assertThat(summary.getWorstPeriod().startOfPeriod()).isEqualTo(LocalDate.now().withMonth(1).withDayOfMonth(1));
+        assertThat(summary.getWorstPeriod().value()).isEqualTo(10);
 
         assertThat(summary.getTotal()).isEqualTo(345.0);
         assertThat(summary.getAverage()).isEqualTo(summary.getTotal() / Math.ceil(ChronoUnit.DAYS.between(sharedTestData.january1st, LocalDate.now()) / 30.4167), Offset.offset(0.1));
@@ -319,12 +317,12 @@ class StatisticServiceTest {
         var summary = service.computeSummary();
 
         assertThat(summary.getWorstPeriod()).isNotNull();
-        assertThat(summary.getWorstPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009, 2, 1));
-        assertThat(summary.getWorstPeriod().getValue()).isEqualTo(43);
+        assertThat(summary.getWorstPeriod().startOfPeriod()).isEqualTo(LocalDate.of(2009, 2, 1));
+        assertThat(summary.getWorstPeriod().value()).isEqualTo(43);
 
         assertThat(summary.getBestPeriod()).isNotNull();
-        assertThat(summary.getBestPeriod().getStartOfPeriod()).isEqualTo(LocalDate.of(2009, 1, 1));
-        assertThat(summary.getBestPeriod().getValue()).isEqualTo(50);
+        assertThat(summary.getBestPeriod().startOfPeriod()).isEqualTo(LocalDate.of(2009, 1, 1));
+        assertThat(summary.getBestPeriod().value()).isEqualTo(50);
         assertThat(summary.getAverage()).isEqualTo(93.0 / Math.ceil(ChronoUnit.DAYS.between(LocalDate.of(2009, 1, 1), LocalDate.now()) / 30.4167), Offset.offset(0.1));
     }
 

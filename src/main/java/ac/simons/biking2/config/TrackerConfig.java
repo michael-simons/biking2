@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,8 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
- * @author Michael J. Simons, 2014-03-19
+ * @author Michael J. Simons
+ * @since 2014-03-19
  */
 @Configuration(proxyBeanMethods = false)
 @EnableWebSocketMessageBroker
@@ -193,7 +194,7 @@ public class TrackerConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/ws").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/api/ws").setAllowedOriginPatterns("*").withSockJS();
     }
 
     @Override

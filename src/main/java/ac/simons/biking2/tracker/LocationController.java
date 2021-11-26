@@ -65,7 +65,7 @@ class LocationController {
         try {
             rv = new ResponseEntity<>(this.locationService.createAndSendNewLocation(newLocationCmd), HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
-            log.debug("Data integrity violation while storing a new location (" + newLocationCmd.getLatitude().doubleValue() + "," + newLocationCmd.getLongitude().doubleValue() + ")", e);
+            log.debug("Data integrity violation while storing a new location (" + newLocationCmd.latitude().doubleValue() + "," + newLocationCmd.longitude().doubleValue() + ")", e);
             rv = new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 

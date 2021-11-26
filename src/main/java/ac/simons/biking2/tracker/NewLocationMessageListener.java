@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 michael-simons.eu.
+ * Copyright 2016-2021 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,8 @@ import org.springframework.stereotype.Component;
 /**
  * Takes care of incoming messages that may contain new locations.
  *
- * @author Michael J. Simons, 2016-07-19
+ * @author Michael J. Simons
+ * @since 2016-07-19
  */
 @Component
 @Slf4j
@@ -46,12 +47,11 @@ public final class NewLocationMessageListener implements MessageListener {
     public void onMessage(final Message message) {
         try {
             final String hlp;
-            if (message instanceof TextMessage) {
-                hlp = ((TextMessage) message).getText();
-            } else if (message instanceof BytesMessage) {
-                final BytesMessage bytesMessage = (BytesMessage) message;
-                byte[] bytes = new byte[(int) bytesMessage.getBodyLength()];
-                bytesMessage.readBytes(bytes);
+            if (message instanceof TextMessage m) {
+                hlp = m.getText();
+            } else if (message instanceof BytesMessage m) {
+                byte[] bytes = new byte[(int) m.getBodyLength()];
+                m.readBytes(bytes);
                 hlp = new String(bytes);
             } else {
                 throw new JMSException("Unsupported message type: " + message.getJMSType());

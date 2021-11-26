@@ -64,8 +64,8 @@ class NewLocationMessageListenerTest {
         final ArgumentCaptor<NewLocationCmd> locationArg = ArgumentCaptor.forClass(NewLocationCmd.class);
         verify(locationService).createAndSendNewLocation(locationArg.capture());
         final NewLocationCmd sentCmd = locationArg.getValue();
-        assertThat(sentCmd.getLatitude(), is(new BigDecimal("50")));
-        assertThat(sentCmd.getLongitude(), is(new BigDecimal("5")));
+        assertThat(sentCmd.latitude(), is(new BigDecimal("50")));
+        assertThat(sentCmd.longitude(), is(new BigDecimal("5")));
     }
 
     @Test
@@ -108,8 +108,8 @@ class NewLocationMessageListenerTest {
         final ArgumentCaptor<NewLocationCmd> locationArg = ArgumentCaptor.forClass(NewLocationCmd.class);
         verify(locationService).createAndSendNewLocation(locationArg.capture());
         final NewLocationCmd sentCmd = locationArg.getValue();
-        assertThat(sentCmd.getLatitude(), is(new BigDecimal("50")));
-        assertThat(sentCmd.getLongitude(), is(new BigDecimal("5")));
+        assertThat(sentCmd.latitude(), is(new BigDecimal("50")));
+        assertThat(sentCmd.longitude(), is(new BigDecimal("5")));
     }
 
     @Test
