@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 michael-simons.eu.
+ * Copyright 2019-2022 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,6 +96,9 @@ class StatisticServiceTest {
         assertThat(months.getValues().get(bike2)).isEqualTo(new int[] {0, 30, 10, 10, 10, 10, 10, 10, 45, 0, 0, 0});
         assertThat(months.getValues().get(bike3)).isEqualTo(new int[] {0, 0, 0, 10, 10, 10, 10, 10, 10, 0, 0, 0});
         assertThat(months.getTotals()).isEqualTo(new int[] {10, 40, 20, 30, 30, 30, 30, 30, 65, 10, 10, 30});
+
+        assertThat(currentYear.getBestPeriod().value()).isEqualTo(65);
+        assertThat(currentYear.getWorstPeriod().value()).isEqualTo(10);
     }
 
     @Test
@@ -108,6 +111,8 @@ class StatisticServiceTest {
         assertThat(currentYear.getYearlyTotal()).isEqualTo(0);
         assertThat(months).isNotNull();
         assertThat(months.getTotals()).isEqualTo(IntStream.generate(() -> 0).limit(12).toArray());
+        assertThat(currentYear.getBestPeriod().value()).isEqualTo(0);
+        assertThat(currentYear.getWorstPeriod().value()).isEqualTo(0);
     }
 
     @Test
