@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.6.1</version>
+    <version>2.6.2</version>
     <relativePath />
   </parent>
 
@@ -66,7 +66,6 @@
     <sockjs-client.version>1.0.2</sockjs-client.version>
     <stomp-websocket.version>2.3.3</stomp-websocket.version>
     <wro4j-spring-boot-starter.version>0.10.1</wro4j-spring-boot-starter.version>
-    <logback.version>1.2.8</logback.version>
 
     <start-class>ac.simons.biking2.Application</start-class>
 
