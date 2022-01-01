@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 michael-simons.eu.
+ * Copyright 2019-2022 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -335,7 +335,10 @@ class StatisticService {
         var bestPeriodValue = bestPeriod.field(aggregatedMonthlyValue);
         var worstPeriodRecordedOn = worstPeriod.field(MILAGES.RECORDED_ON);
         var worstPeriodValue = worstPeriod.field(aggregatedMonthlyValue);
-        var average = summary.field(summaryValue).divide(ceil(localDateDiff(DSL.currentLocalDate(), summary.field(minPeriod)).div(inline(30.4167)))).as("average");
+        var dateDiff = localDateDiff(DSL.currentLocalDate(), summary.field(minPeriod));
+        var average = DSL.if_(dateDiff.eq(0), inline(Double.POSITIVE_INFINITY), summary.field(summaryValue).div(ceil(dateDiff.div(inline(30.4167)))))
+            .cast(Double.class)
+            .as("average");
         return this.database
                 .with(MONTHLY_MILAGES)
                 .with(aggregatedMonthlyMilages)
@@ -353,7 +356,7 @@ class StatisticService {
                 .map(record -> Summary.builder()
                         .worstPeriod(new AccumulatedPeriod(record.get(worstPeriodRecordedOn), record.get(worstPeriodValue).intValue()))
                         .bestPeriod(new AccumulatedPeriod(record.get(bestPeriodRecordedOn), record.get(bestPeriodValue).intValue()))
-                        .average(record.get(average).doubleValue())
+                        .average(record.get(average))
                         .total(record.get(summaryValue).doubleValue())
                         .dateOfFirstRecord(record.get(minPeriod))
                         .build()
