@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.6.2</version>
+    <version>2.6.3</version>
     <relativePath />
   </parent>
 
@@ -97,6 +97,16 @@
         <groupId>org.linkedin</groupId>
         <artifactId>org.linkedin.util-core</artifactId>
         <version>1.7.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging-annotations</artifactId>
+        <version>2.2.1.Final</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging-processor</artifactId>
+        <version>2.2.1.Final</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
