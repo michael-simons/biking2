@@ -1,5 +1,5 @@
 /* 
- * Copyright 2014-2018 Michael J. Simons.
+ * Copyright 2014-2022 Michael J. Simons.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,6 +155,7 @@ biking2Controllers.controller('MilagesCtrl', ['$scope', '$http', '$modal', 'empt
     };
     $scope.updateHistory();
 
+    $scope.bikes = [];
     $http.get('/api/bikes').success(function(data) {
 	$scope.bikes = data;
     });
