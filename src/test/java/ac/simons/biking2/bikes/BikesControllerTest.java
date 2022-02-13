@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021 michael-simons.eu.
+ * Copyright 2014-2022 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,6 +102,7 @@ class BikesControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser
     void shouldGetBikes() throws Exception {
         final List<BikeEntity> allbikes = Arrays.asList(Reflect.onClass(BikeEntity.class).create()
                 .set("id", 4711)

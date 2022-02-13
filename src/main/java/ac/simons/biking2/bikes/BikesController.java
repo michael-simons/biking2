@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021 michael-simons.eu.
+ * Copyright 2014-2022 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,7 @@ class BikesController {
     }
 
     @GetMapping(value = "/bikes")
+    @PreAuthorize("isAuthenticated()")
     public List<BikeEntity> getBikes(@RequestParam(required = false, defaultValue = "false") final boolean all) {
 
         return this.bikeService.getBikes(all);
