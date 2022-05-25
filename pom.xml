@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.6.2</version>
+    <version>2.7.0</version>
     <relativePath />
   </parent>
 
   <groupId>eu.michael-simons</groupId>
   <artifactId>biking2</artifactId>
-  <version>3.3.5-SNAPSHOT</version>
+  <version>3.4.2-SNAPSHOT</version>
 
   <name>biking2</name>
   <url>https://biking.michael-simons.eu</url>
@@ -50,8 +50,9 @@
     <checkstyle.version>8.42</checkstyle.version>
     <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
     <java.version>17</java.version>
-    <joor.version>0.9.14</joor.version>
     <jool.version>0.9.14</jool.version>
+    <jooq.version>3.16.6</jooq.version>
+    <joor.version>0.9.14</joor.version>
     <jqassistant.version>1.10.1</jqassistant.version>
     <jqassistant.plugin.version>1.10.1</jqassistant.plugin.version>
     <jquery.version>1.11.0</jquery.version>
@@ -65,7 +66,7 @@
     <momentjs.version>2.10.6</momentjs.version>
     <sockjs-client.version>1.0.2</sockjs-client.version>
     <stomp-websocket.version>2.3.3</stomp-websocket.version>
-    <wro4j-spring-boot-starter.version>0.10.1</wro4j-spring-boot-starter.version>
+    <wro4j-spring-boot-starter.version>0.11.1</wro4j-spring-boot-starter.version>
 
     <start-class>ac.simons.biking2.Application</start-class>
 
@@ -97,6 +98,16 @@
         <groupId>org.linkedin</groupId>
         <artifactId>org.linkedin.util-core</artifactId>
         <version>1.7.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging-annotations</artifactId>
+        <version>2.2.1.Final</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging-processor</artifactId>
+        <version>2.2.1.Final</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
