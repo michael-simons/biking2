@@ -29,12 +29,8 @@ import java.util.stream.IntStream;
 
 import org.assertj.core.data.Offset;
 import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
 import org.jooq.conf.RenderKeywordCase;
-import org.jooq.conf.RenderNameCase;
-import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
-import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.lambda.tuple.Tuple;
 import org.junit.jupiter.api.Test;

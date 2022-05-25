@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2022 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@ import static org.springframework.boot.actuate.autoconfigure.security.servlet.En
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 /**
- * @author Michael J. Simons, 2014-02-19
+ * @author Michael J. Simons
+ * @since 2014-02-19
  */
 @Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
