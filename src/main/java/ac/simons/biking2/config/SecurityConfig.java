@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest.to;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -38,36 +38,32 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     @Bean
-    WebSecurityConfigurerAdapter defaultWebSecurityConfigurerAdapter(@Value("${biking2.require-ssl:false}") final boolean requireSSL) {
-        return new WebSecurityConfigurerAdapter() {
-            @Override
-            protected void configure(final HttpSecurity http) throws Exception {
-                // @formatter:off
-                http
-                    .httpBasic()
-                        .and()
-                    .authorizeRequests()
-                        .antMatchers("/api/system/env/java.runtime.version")
-                            .permitAll()
-                        .requestMatchers(to(HealthEndpoint.class, InfoEndpoint.class, MetricsEndpoint.class))
-                            .permitAll()
-                        .requestMatchers(to(EnvironmentEndpoint.class))
-                            .authenticated()
-                        .antMatchers("/**").permitAll()
-                        .and()
-                    .sessionManagement()
-                        .sessionCreationPolicy(STATELESS)
-                        .and()
-                    .csrf()
-                        .disable()
-                    .headers()
-                        .frameOptions() // OEmbedController#embedTrack uses an iframe
-                        .disable();
-                // @formatter:on
-                if (requireSSL) {
-                    http.requiresChannel().anyRequest().requiresSecure();
-                }
-            }
-        };
+    SecurityFilterChain filterChain(@Value("${biking2.require-ssl:false}") final boolean requireSSL, final HttpSecurity http) throws Exception {
+        // @formatter:off
+        HttpSecurity builder = http
+            .httpBasic()
+                .and()
+            .authorizeRequests()
+                .antMatchers("/api/system/env/java.runtime.version")
+                    .permitAll()
+                .requestMatchers(to(HealthEndpoint.class, InfoEndpoint.class, MetricsEndpoint.class))
+                    .permitAll()
+                .requestMatchers(to(EnvironmentEndpoint.class))
+                    .authenticated()
+                .antMatchers("/**").permitAll()
+                .and()
+            .sessionManagement()
+                .sessionCreationPolicy(STATELESS)
+                .and()
+            .csrf()
+                .disable()
+            .headers()
+                .frameOptions() // OEmbedController#embedTrack uses an iframe
+                .disable().and();
+        // @formatter:on
+        if (requireSSL) {
+            builder = builder.requiresChannel().anyRequest().requiresSecure().and();
+        }
+        return builder.build();
     }
 }
