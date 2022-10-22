@@ -19,8 +19,8 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import org.springframework.format.annotation.DateTimeFormat;
 

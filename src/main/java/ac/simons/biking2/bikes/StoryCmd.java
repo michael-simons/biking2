@@ -15,7 +15,7 @@
  */
 package ac.simons.biking2.bikes;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
 /**

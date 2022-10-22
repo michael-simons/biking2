@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ac.simons.biking2.support.JAXBContextFactory;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 import org.junit.jupiter.api.Test;
 

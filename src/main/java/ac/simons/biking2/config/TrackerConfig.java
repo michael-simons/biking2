@@ -17,17 +17,12 @@ package ac.simons.biking2.config;
 
 import ac.simons.biking2.config.TrackerConfig.TrackerProperties;
 import ac.simons.biking2.tracker.NewLocationMessageListener;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.jms.ConnectionFactory;
-import org.apache.activemq.broker.BrokerFactory;
-import org.apache.activemq.broker.BrokerPlugin;
-import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.hooks.SpringContextHook;
-import org.apache.activemq.security.AuthenticationUser;
-import org.apache.activemq.security.SimpleAuthenticationPlugin;
+import jakarta.jms.ConnectionFactory;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jms.artemis.ArtemisConfigurationCustomizer;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -140,32 +135,16 @@ public class TrackerConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     @Bean
-    public SpringContextHook springContextHook() {
-        return new SpringContextHook();
-    }
-
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    public BrokerService brokerService(final SpringContextHook springContextHook) throws Exception {
-        final BrokerService rv = BrokerFactory.createBroker(
-                String.format("broker:("
-                        + "vm://localhost,"
-                        + "stomp://localhost:%d,"
-                        + "mqtt+nio://%s:%d"
-                        + ")?persistent=false&useJmx=%s&useShutdownHook=true",
-                        properties.getStompPort(),
-                        properties.getHost(),
-                        properties.getMqttPort(),
-                        properties.isUseJMX()
-                )
-        );
-
-        final SimpleAuthenticationPlugin authenticationPlugin = new SimpleAuthenticationPlugin();
-        authenticationPlugin.setAnonymousAccessAllowed(false);
-        authenticationPlugin.setUsers(Arrays.asList(new AuthenticationUser(user.getName(), user.getPassword(), "")));
-
-        rv.addShutdownHook(springContextHook);
-        rv.setPlugins(new BrokerPlugin[]{authenticationPlugin});
-        return rv;
+    public ArtemisConfigurationCustomizer artemisConfigurationCustomizer() {
+        return cfg -> {
+            try {
+                cfg.addAcceptorConfiguration("tcp", String.format("tcp://localhost:%d?protocols=STOMP", properties.getStompPort()));
+                cfg.addAcceptorConfiguration("tcp", String.format("tcp://%s:%d?protocols=MQTT", properties.getHost(), properties.getMqttPort()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            cfg.setSecurityEnabled(true);
+        };
     }
 
     @Bean

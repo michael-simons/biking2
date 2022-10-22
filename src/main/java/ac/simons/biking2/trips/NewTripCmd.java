@@ -17,7 +17,7 @@ package ac.simons.biking2.trips;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Command class for creating new assorted trips.

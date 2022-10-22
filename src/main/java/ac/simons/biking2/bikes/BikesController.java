@@ -21,7 +21,7 @@ import static ac.simons.biking2.shared.Messages.INVALID_ARGUMENTS;
 import java.util.List;
 import java.util.Locale;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
