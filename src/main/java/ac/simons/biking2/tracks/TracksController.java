@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2020 michael-simons.eu.
+ * Copyright 2014-2022 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,8 +51,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -67,14 +65,7 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME
 @Slf4j
 class TracksController {
 
-    private static final Map<String, String> ACCEPTABLE_FORMATS;
-
-    static {
-        final Map<String, String> hlp = new HashMap<>();
-        hlp.put("gpx", "application/gpx+xml");
-        hlp.put("tcx", "application/xml");
-        ACCEPTABLE_FORMATS = Collections.unmodifiableMap(hlp);
-    }
+    private static final Map<String, String> ACCEPTABLE_FORMATS = Map.of("gpx", "application/gpx+xml", "tcx", "application/xml");
 
     private final TrackIdParser trackIdParser;
     private final TrackRepository trackRepository;
@@ -93,6 +84,7 @@ class TracksController {
     }
 
     @GetMapping("/api/tracks")
+    @PreAuthorize("isAuthenticated()")
     @ResponseBody
     public
     List<TrackEntity> getTracks() {

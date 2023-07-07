@@ -116,6 +116,7 @@ class TracksControllerTest {
     }
 
     @Test
+    @WithMockUser
     void testGetTracks() throws Exception {
         final Sort sort = Sort.by("coveredOn").ascending();
         when(trackRepository.findAll(sort)).thenReturn(defaultTestData);

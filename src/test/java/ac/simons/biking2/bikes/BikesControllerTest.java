@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.joor.Reflect;
 import org.junit.jupiter.api.Assertions;
@@ -36,7 +37,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -127,7 +127,7 @@ class BikesControllerTest {
                 .call("getBike")
                 .get()
         );
-        final List<BikeEntity> activeBikes = Arrays.asList(allbikes.get(0));
+        final List<BikeEntity> activeBikes = Collections.singletonList(allbikes.get(0));
 
         when(repository.findAll(any(Sort.class))).thenReturn(allbikes);
         when(repository.findByDecommissionedOnIsNull(any(Sort.class))).thenReturn(activeBikes);
