@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 michael-simons.eu.
+ * Copyright 2014-2023 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package ac.simons.biking2.support;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +34,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * @author Michael J. Simons, 2014-02-16
  */
-@Configuration
 @ComponentScan("ac.simons.biking2.config")
 @EnableAutoConfiguration
 @EntityScan("ac.simons.biking2")
@@ -42,7 +43,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class TestConfig {
 
     @Bean(destroyMethod = "shutdown")
-    public Executor taskScheduler() {
+    public ScheduledExecutorService taskScheduler() {
         return Executors.newSingleThreadScheduledExecutor();
     }
 }

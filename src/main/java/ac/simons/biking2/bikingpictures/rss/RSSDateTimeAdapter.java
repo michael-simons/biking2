@@ -18,7 +18,7 @@ package ac.simons.biking2.bikingpictures.rss;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * @author Michael J. Simons, 2014-02-17

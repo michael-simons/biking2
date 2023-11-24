@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 michael-simons.eu.
+ * Copyright 2015-2023 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package ac.simons.biking2.trips;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Command class for creating new assorted trips.

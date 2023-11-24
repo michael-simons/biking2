@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 michael-simons.eu.
+ * Copyright 2019-2023 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import static org.jooq.impl.DSL.localDateDiff;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.partitionBy;
 import static org.jooq.impl.DSL.rank;
 import static org.jooq.impl.DSL.round;
@@ -155,7 +156,7 @@ class StatisticService {
         // Select yearly values
         var yearlyValues = new HashMap<Integer, int[]>();
 
-        var aggregatedMonthlyValue = round(sum(MONTHLY_MILAGE_VALUE));
+        var aggregatedMonthlyValue = nvl(round(sum(MONTHLY_MILAGE_VALUE)), BigDecimal.ZERO);
         this.database
                 .with(MONTHLY_MILAGES)
                 .select(

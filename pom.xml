@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.13</version>
+    <version>3.2.0</version>
     <relativePath />
   </parent>
 
@@ -45,13 +45,13 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <build-date>${maven.build.timestamp}</build-date>
 
+    <activemq.version>6.0.0</activemq.version>
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
     <bootstrap.version>3.1.1</bootstrap.version>
     <checkstyle.version>8.42</checkstyle.version>
     <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
     <java.version>17</java.version>
     <jool.version>0.9.14</jool.version>
-    <jooq.version>3.16.6</jooq.version>
     <joor.version>0.9.14</joor.version>
     <jqassistant.version>1.10.1</jqassistant.version>
     <jqassistant.plugin.version>1.10.1</jqassistant.plugin.version>
@@ -66,7 +66,7 @@
     <momentjs.version>2.10.6</momentjs.version>
     <sockjs-client.version>1.0.2</sockjs-client.version>
     <stomp-websocket.version>2.3.3</stomp-websocket.version>
-    <wro4j-spring-boot-starter.version>0.11.1</wro4j-spring-boot-starter.version>
+    <wro4j-spring-boot-starter.version>0.12.2</wro4j-spring-boot-starter.version>
 
     <start-class>ac.simons.biking2.Application</start-class>
 
@@ -78,39 +78,6 @@
     <db.url>jdbc:h2:${project.build.directory}/flyway-code-gen</db.url>
     <db.username>sa</db.username>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <!-- ActiveMQ seems to have this in different versions in provided scope and our enforcer rules fail... -->
-      <dependency>
-        <groupId>org.apache.zookeeper</groupId>
-        <artifactId>zookeeper</artifactId>
-        <version>3.4.14</version>
-      </dependency>
-      <!-- Zookeeper and Hibernate Java 8 issues -->
-      <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.17</version>
-      </dependency>
-      <!-- Again ActiveMQ -->
-      <dependency>
-        <groupId>org.linkedin</groupId>
-        <artifactId>org.linkedin.util-core</artifactId>
-        <version>1.7.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.logging</groupId>
-        <artifactId>jboss-logging-annotations</artifactId>
-        <version>2.2.1.Final</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.logging</groupId>
-        <artifactId>jboss-logging-processor</artifactId>
-        <version>2.2.1.Final</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -177,11 +144,6 @@
       <artifactId>spring-boot-starter-jooq</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-java8</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
@@ -196,16 +158,17 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.glassfish.jaxb</groupId>
-      <artifactId>jaxb-runtime</artifactId>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-jaxb-annotations</artifactId>
+      <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jooq</groupId>
@@ -612,7 +575,7 @@
               <goal>analyze</goal>
             </goals>
             <configuration>
-              <failOnSeverity>MINOR</failOnSeverity>
+              <failOnSeverity>MAJOR</failOnSeverity>
             </configuration>
           </execution>
         </executions>

@@ -37,7 +37,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;

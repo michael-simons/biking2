@@ -15,8 +15,8 @@
  */
 @XmlSchema(
         namespace = "http://www.topografix.com/GPX/1/0",
-        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
+        elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED
 )
 package ac.simons.biking2.tracks.gpx;
 
-import javax.xml.bind.annotation.XmlSchema;
+import jakarta.xml.bind.annotation.XmlSchema;

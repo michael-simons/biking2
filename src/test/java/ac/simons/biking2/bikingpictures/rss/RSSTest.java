@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 michael-simons.eu.
+ * Copyright 2014-2023 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ac.simons.biking2.support.JAXBContextFactory;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021 michael-simons.eu.
+ * Copyright 2014-2023 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package ac.simons.biking2.config;
 
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule.Priority;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -27,6 +25,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule.Priority;
 
 /**
  * @author Michael J. Simons
@@ -67,13 +68,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     /**
      * {@code OEmbedResponse} uses XmlElement annotations to be configured for
-     * JAXB as well as JSON so we need the {@link JaxbAnnotationModule} as well
+     * JAXB as well as JSON, so we need the {@link JakartaXmlBindAnnotationModule} as well
      *
      * @return
      */
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
-        return builder -> builder.modulesToInstall(new JaxbAnnotationModule().setPriority(Priority.SECONDARY));
+        return builder -> builder.modulesToInstall(new JakartaXmlBindAnnotationModule().setPriority(Priority.SECONDARY));
     }
 
     @Bean

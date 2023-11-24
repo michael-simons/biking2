@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2022 michael-simons.eu.
+ * Copyright 2014-2023 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,11 @@ import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest.to;
@@ -34,36 +37,30 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
  * @since 2014-02-19
  */
 @Configuration(proxyBeanMethods = false)
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 @SuppressWarnings({"squid:S1118"}) // This is not a utility class. It cannot have a private constructor.
 public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(@Value("${biking2.require-ssl:false}") final boolean requireSSL, final HttpSecurity http) throws Exception {
         // @formatter:off
-        HttpSecurity builder = http
-            .httpBasic()
-                .and()
-            .authorizeRequests()
-                .antMatchers("/api/system/env/java.runtime.version")
+        var builder = http
+            .httpBasic(Customizer.withDefaults())
+            .authorizeHttpRequests(cfg -> { cfg
+                .requestMatchers("/api/system/env/java.runtime.version")
                     .permitAll()
                 .requestMatchers(to(HealthEndpoint.class, InfoEndpoint.class, MetricsEndpoint.class))
                     .permitAll()
                 .requestMatchers(to(EnvironmentEndpoint.class))
                     .authenticated()
-                .antMatchers("/**").permitAll()
-                .and()
-            .sessionManagement()
-                .sessionCreationPolicy(STATELESS)
-                .and()
-            .csrf()
-                .disable()
-            .headers()
-                .frameOptions() // OEmbedController#embedTrack uses an iframe
-                .disable().and();
+                .requestMatchers("/**").permitAll();
+            })
+            .sessionManagement(cfg -> cfg.sessionCreationPolicy(STATELESS))
+            .csrf(AbstractHttpConfigurer::disable)
+            .headers(cfg -> cfg.frameOptions(FrameOptionsConfig::disable));
         // @formatter:on
         if (requireSSL) {
-            builder = builder.requiresChannel().anyRequest().requiresSecure().and();
+            builder = builder.requiresChannel(cfg -> cfg.anyRequest().requiresSecure());
         }
         return builder.build();
     }

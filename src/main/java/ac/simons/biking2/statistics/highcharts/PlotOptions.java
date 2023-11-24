@@ -70,8 +70,8 @@ public final class PlotOptions {
 
     @JsonCreator
     PlotOptions(
-            @JsonProperty("categories") final Column column,
-            @JsonProperty("categories") final SeriesOptions series
+            @JsonProperty("column") final Column column,
+            @JsonProperty("series") final SeriesOptions series
     ) {
         this.column = column;
         this.series = series;

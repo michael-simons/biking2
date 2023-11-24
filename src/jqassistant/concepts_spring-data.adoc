@@ -1,5 +1,22 @@
 ==== Concepts related to Spring-Data
 
+Teaching old jQAssistant about Jakarta persistence
+
+[[concept:jakartaPersistence]]
+[source,cypher,role="concept",requiresConcepts="dependency:Package"]
+.Labels all types annotated with @jakarta.persistence.Entity with "Jpa" and "Entity".
+----
+MATCH
+  (t:Type)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(a:Type)
+WHERE
+  a.fqn="jakarta.persistence.Entity"
+SET
+  t:Jpa:Entity
+RETURN
+  t AS JpaEntity
+----
+
+
 [[spring-data:Repository]]
 [source,cypher,role="concept",requiresConcepts="spring-data:ImplementedRepository"]
 .Returns all repositories.
