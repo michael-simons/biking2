@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.5</version>
     <relativePath />
   </parent>
 
   <groupId>eu.michael-simons</groupId>
   <artifactId>biking2</artifactId>
-  <version>3.4.10-SNAPSHOT</version>
+  <version>3.5.2-SNAPSHOT</version>
 
   <name>biking2</name>
   <url>https://biking.michael-simons.eu</url>
@@ -45,7 +45,6 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <build-date>${maven.build.timestamp}</build-date>
 
-    <activemq.version>6.0.0</activemq.version>
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
     <bootstrap.version>3.1.1</bootstrap.version>
     <checkstyle.version>8.42</checkstyle.version>
@@ -66,7 +65,7 @@
     <momentjs.version>2.10.6</momentjs.version>
     <sockjs-client.version>1.0.2</sockjs-client.version>
     <stomp-websocket.version>2.3.3</stomp-websocket.version>
-    <wro4j-spring-boot-starter.version>0.12.2</wro4j-spring-boot-starter.version>
+    <wro4j-spring-boot-starter.version>0.15.1</wro4j-spring-boot-starter.version>
 
     <start-class>ac.simons.biking2.Application</start-class>
 
