@@ -1,6 +1,7 @@
 # biking2
 
-*NOTE:* The successor to this project is [biking3][9], which is what my [instance][1] is running these days. I might update dependencies here some time, but I am not doing any further development in here.
+> [!NOTE]
+> The successor to this project is [biking3][9], which is what my [instance][1] is running these days. I might update dependencies here some time, but I am not doing any further development in here.
 
 ## Abstract
 
