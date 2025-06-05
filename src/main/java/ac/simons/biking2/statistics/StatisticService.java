@@ -315,6 +315,7 @@ class StatisticService {
         var summary = name("summary").as(DSL
                 .select(minPeriod, summaryValue)
                 .from(aggregatedMonthlyMilages, aggregatedTrips)
+                .groupBy(aggregatedTrips.field(aggregatedTripsValue))
         );
 
         var bestPeriod = DSL
